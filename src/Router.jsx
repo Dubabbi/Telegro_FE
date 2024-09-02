@@ -4,8 +4,6 @@ import Navbar from './components/Nav/Navbar';
 import Footer from './components/Footer/Footer';
 import MainPage from './pages/Main';
 import LoginPage from './pages/Login';
-import SignupStdPage from './pages/SignupStd';
-import SignupTchrPage from './pages/SignupTchr';
 
 export default function Router() {
   return (
@@ -14,8 +12,6 @@ export default function Router() {
       <Routes>
         <Route path="/" element={<MainPage />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/signupstd" element={<SignupStdPage />} />
-        <Route path="/signuptchr" element={<SignupTchrPage />} />
       </Routes>
       <Footer />
     </BrowserRouter>
