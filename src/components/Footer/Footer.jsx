@@ -48,7 +48,7 @@ export default function Footer() {
         <StyledFooter>
             <FooterContent>
                 <FooterContent className="below">
-                    <FooterText>&copy; 마음말</FooterText>
+                    <FooterText>&copy; Telego</FooterText>
                 </FooterContent>
             </FooterContent>
         </StyledFooter>

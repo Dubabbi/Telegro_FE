@@ -5,7 +5,7 @@ const NavWrapper = styled.div`
   position: fixed;
   top: 0;
   width: 100%;
-  background: rgba(0, 0, 0, 0.80);
+  background: #333;
   display: flex;
   align-items: center;
   z-index: 1000;
@@ -27,18 +27,22 @@ const Logo = styled.a`
 const NavContainer = styled.div`
   flex-grow: 1;
   display: flex;
+  height: 70px;
+  align-items: center;
   justify-content: center;
 `;
 
 const MainNav = styled.ul`
   list-style: none;
+  height: 100%;
   display: flex;
   margin: 0;
-  padding: 0;
   align-items: center;
   li {
     position: relative;
     padding: 0 25px;
+    padding-top: 22px;
+    height: 100%;
     transition: background 0.3s;
     &:hover {
       background-color: #126d9b;
@@ -85,7 +89,7 @@ export default function Navbar() {
       <Logo href="#">Telegro</Logo>
       <NavContainer>
         <MainNav>
-        <li><a href="#">Home</a></li>
+        <li><a href="#"style={{fontWeight: 'bold'}}>Home</a></li>
           <li><a href="#">Company<i className='fa fa-angle-down'></i></a>
             <ul>
               <li><a href="album.html" target="_blank">Best</a></li>
