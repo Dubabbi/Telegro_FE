@@ -9,6 +9,8 @@ const NavWrapper = styled.div`
   display: flex;
   align-items: center;
   z-index: 1000;
+  padding-bottom: 100px;
+  padding-top: 5px;
 `;
 
 const Logo = styled.a`
@@ -19,7 +21,6 @@ const Logo = styled.a`
   color: white;
   text-align: center;
   font-weight: bold;
-  background-color: #126d9b;
   flex-shrink: 0;
 `;
 
@@ -38,17 +39,16 @@ const MainNav = styled.ul`
   li {
     position: relative;
     padding: 0 25px;
+    transition: background 0.3s;
+    &:hover {
+      background-color: #126d9b;
+    }
   }
   a {
     font-size: 17px;
     color: white;
     text-decoration: none;
     display: block;
-    padding: 1px;
-    transition: background 0.3s;
-    &:hover {
-      background-color: #126d9b;
-    }
   }
 
   ul {
