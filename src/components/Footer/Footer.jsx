@@ -2,7 +2,7 @@ import React from "react";
 import styled from 'styled-components';
 
 const StyledFooter = styled.div`
-    background: rgba(0, 0, 0, 0.80);
+    background: #fff;
     margin-bottom: 0;
 `;
 
@@ -23,7 +23,7 @@ const FooterContent = styled.div`
 const FooterText = styled.p`
     font-size: 13px;
     line-height: 15px;
-    color: rgb(255, 255, 255);
+    color: #000;
     font-weight: 600;
 `;
 

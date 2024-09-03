@@ -5,7 +5,7 @@ const NavWrapper = styled.div`
   position: fixed;
   top: 0;
   width: 100%;
-  background: rgba(30, 30, 30, 0.8);
+  background: rgba(20, 20, 20, 0.9);
   display: flex;
   align-items: center;
   z-index: 1000;
@@ -74,20 +74,23 @@ const MainNav = styled.ul`
     visibility: hidden;            
     opacity: 0;                    
     transform: translateY(20px);   
-    transition: visibility 0s, opacity 0.3s ease, transform 0.3s ease; 
+    transition: visibility 0s, opacity 0.5s ease, transform 0.5s ease; 
 
     li {
       display: block;
       width: 100%;
       margin: 2%;
       padding: 10px;
+      font-size: 1rem;
       &:hover {
         background-color: transparent;
-        color: #ddd;
+        transition: color 0.5s, margin-left 0.5s;
+        color: #aaa;
         align-items: center;
-        margin-left: 3%;
+        margin-left: 4%;
       }
       a {
+      font-size: 1.3rem;
         display: block;
         color: inherit;
       }    
@@ -98,30 +101,30 @@ const MainNav = styled.ul`
 export default function Navbar() {
   return (
     <NavWrapper>
-      <Logo href="#">Telegro</Logo>
+      <Logo href="/">Telegro</Logo>
       <NavContainer>
         <MainNav>
-        <li><a href="#"style={{fontWeight: 'bold'}}>Home</a></li>
-          <li><a href="#">Company<i className='fa fa-angle-down'></i></a>
+        <li><a href="/"style={{fontWeight: 'bold'}}>Home</a></li>
+          <li><a href="">주문관리<i className='fa fa-angle-down'></i></a>
             <ul>
-              <li><a href="album.html" target="_blank">Best</a></li>
-              <li><a href="latest.html" target="_blank">Latest</a></li>
+              <li><a href="">헤드셋</a></li>
+              <li><a href="">전화/증폭기</a></li>
+              <li><a href="">라인코드</a></li>
+              <li><a href="">녹음기기</a></li>
+              <li><a href="">헤드셋</a></li>
+              <li><a href="">악세사리</a></li>
             </ul>
           </li>
-          <li><a href="#">Products<i className='fa fa-angle-down'></i></a>
+          <li><a href="/Notice">공지사항<i className='fa fa-angle-down'></i></a>
+          </li>
+          <li><a href="#">제안문의<i className='fa fa-angle-down'></i></a>
             <ul>
-              <li><a href="https://www.imdb.com/title/tt26934645/?ref_=tt_mv_close" target="_blank">Movie</a></li>
-              <li><a href="tour.html" target="_blank">Tour</a></li>
+              <li><a href="">History</a></li>
+              <li><a href="">Member</a></li>
             </ul>
           </li>
-          <li><a href="#">SOLUTION<i className='fa fa-angle-down'></i></a>
-            <ul>
-              <li><a href="history.html" target="_blank">History</a></li>
-              <li><a href="member.html" target="_blank">Member</a></li>
-            </ul>
-          </li>
-          <li><a href="follow.html">Host</a></li>
-          <li><a href="contact.html" target="_blank">Contact Us</a></li>
+          <li><a href="">주문확인</a></li>
+          <li><a href="">Contact Us</a></li>
         </MainNav>
       </NavContainer>
     </NavWrapper>
