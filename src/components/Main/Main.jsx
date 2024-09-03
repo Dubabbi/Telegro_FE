@@ -27,19 +27,15 @@ export default function Main() {
     };
 
     return (
-        <div style={{ marginTop: '12%', position: 'relative', alignItems: 'center', width: '100%', maxHeight: '100vh', overflow: 'hidden' }}>
+        <>
+        <div style={{width: '100%', minHeight: '23vh', backgroundColor: '#000', border: 'none'}}>
+        </div>
+        <div style={{ position: 'relative', alignItems: 'center', width: '100%', maxHeight: '100vh', overflow: 'hidden' }}>
             <img src={arrowleft} alt="Previous" onClick={goToPrevious} style={{ cursor: 'pointer', position: 'absolute', top: '50%', left: '32px', zIndex: 1000, transform: 'translateY(-50%)' }} />
             <img src={images[currentIndex]} alt={`Slide ${currentIndex}`} style={{ width: '100%', height: '100%', transition: 'transform 0.5s ease-in-out' }} />
             <img src={arrowright} alt="Next" onClick={goToNext} style={{ cursor: 'pointer', position: 'absolute', top: '50%', right: '32px', zIndex: 1000, transform: 'translateY(-50%)' }} />
         </div>
+        </>
     );
 }
 
-
-{/*
-        <div style={{ marginTop: '12%', position: 'relative', alignItems: 'center', width: '100%', maxHeight: '100vh', overflow: 'hidden' }}>
-            <button onClick={goToPrevious} style={{ position: 'absolute', top: '50%', left: '32px', zIndex: 1000 }}><img src={arrowleft} /></button>
-            <img src={images[currentIndex]} alt={`Slide ${currentIndex}`} style={{ width: '100%', height: '100%', transition: 'transform 0.5s ease-in-out' }} />
-            <button onClick={goToNext} style={{ position: 'absolute', top: '50%', right: '32px', zIndex: 1000 }}><img src={arrowright} /></button>
-        </div>
-    */}

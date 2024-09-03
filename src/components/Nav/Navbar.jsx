@@ -5,7 +5,7 @@ const NavWrapper = styled.div`
   position: fixed;
   top: 0;
   width: 100%;
-  background: #333;
+  background: rgba(30, 30, 30, 0.8);
   display: flex;
   align-items: center;
   z-index: 1000;
@@ -49,9 +49,9 @@ const MainNav = styled.ul`
     &:hover {
       background-color: #6C6D6D;
       > ul {
-        visibility: visible;       // 하위 ul을 보이게 함
-        opacity: 1;                // 투명도를 1로 설정
-        transform: translateY(0);  // 위로 슬라이드
+        visibility: visible;       
+        opacity: 1;                
+        transform: translateY(0);  
       }
     }
   }
@@ -71,10 +71,10 @@ const MainNav = styled.ul`
     background: #ffffff;
     width: 250%;
     margin: 0;
-    visibility: hidden;             // 기본적으로 숨김
-    opacity: 0;                     // 투명도 0
-    transform: translateY(20px);    // 초기 위치를 조금 아래로 설정
-    transition: visibility 0s, opacity 0.3s ease, transform 0.3s ease;  // 부드러운 전환 효과
+    visibility: hidden;            
+    opacity: 0;                    
+    transform: translateY(20px);   
+    transition: visibility 0s, opacity 0.3s ease, transform 0.3s ease; 
 
     li {
       display: block;
