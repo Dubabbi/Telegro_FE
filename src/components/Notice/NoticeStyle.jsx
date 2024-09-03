@@ -181,45 +181,43 @@ export const Search_Container=styled.div`
     display: flex;
     justify-content: center;
 `
-
 export const StyledButton = styled(Button)`
     position: absolute;
     top: 50%;
-    right: 10px; /* 오른쪽 여백 설정 */
+    right: 8px; 
     transform: translateY(-50%);
-
-    height: 40px; 
-    width: 40px; 
-    font-size: 16px; 
-    background-color: #FFE665; 
+    height: 30px; 
+    width: 30px; 
+    font-size: 1rem; 
+    background-color: #fefefe; 
     border-radius: 50px; 
     display: flex;
     justify-content: center;
     align-items: center;
     
     &:hover {
-        background: #FFFAE0;
+        background: #F8F9FA;
         transition: 0.5s;
       }
 `;
 
 
 export const StyledForm = styled(Form)`
-    width: 700px;
-    height: 46px; 
+    width: 300px;
+    height: 37px; 
     font-size: 16px; 
-    border-radius: 25px;
-    border: 2px solid black;
+    border-radius: 7px;
+    border: 1px solid #ACAACC;
     display: flex;
     align-items: center;
     position: relative;
     
     .form-control {
-        height: 42px; 
-        font-size: 16px; 
-        border-radius: 25px;
+        margin-left: 10px;
+        height: 35px; 
+        font-size: 1.5rem; 
+        border-radius: 5px;
         padding-right: 80px; 
-        padding-left: 20px;
+        padding-left: 10px;
     }
 `;
-

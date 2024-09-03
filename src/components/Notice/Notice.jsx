@@ -29,7 +29,10 @@ const Notice = () => {
     <CommonTableRow key={notice.id}>
       <CommonTableColumn>{notice.id}</CommonTableColumn>
       <CommonTableColumn>
+      <Link to={'/noticedetail'}>{notice.title}</Link>
+        {/*
         <Link to={`./${notice.id}`}>{notice.title}</Link>
+         */}
       </CommonTableColumn>
       <CommonTableColumn>{new Date(notice.created_at).toLocaleDateString()}</CommonTableColumn>
       <CommonTableColumn>{notice.view_count}</CommonTableColumn>
@@ -46,10 +49,14 @@ const Notice = () => {
         <N.BoardSearchArea>
           <N.SearchWindow>
             <N.SearchWrap>
-              <N.StyledForm onSubmit={handleSubmit}>
-                <Form.Control type="text" placeholder="게시글 검색" size="lg" value={searchValue}
-                    onChange={(e) => setSearchValue(e.target.value)} />
-                <N.StyledButton type="submit" variant="none"><FaSearch size={20} /></N.StyledButton>
+            <N.StyledForm onSubmit={handleSubmit}>
+                <Form.Control
+                  type="text"
+                  placeholder="게시글 검색"
+                  value={searchValue}
+                  onChange={(e) => setSearchValue(e.target.value)}
+                />
+              <N.StyledButton type="submit" variant="none"><FaSearch size={15} /></N.StyledButton>
               </N.StyledForm>
             </N.SearchWrap>
           </N.SearchWindow>
