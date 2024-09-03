@@ -38,48 +38,60 @@ const MainNav = styled.ul`
   display: flex;
   margin: 0;
   align-items: center;
+  
   li {
     position: relative;
     padding: 0 25px;
     padding-top: 22px;
     height: 100%;
-    transition: background 0.3s;
+    align-items: center;
+    transition: background 0.5s;
     &:hover {
-      background-color: #126d9b;
+      background-color: #6C6D6D;
+      > ul {
+        visibility: visible;       // 하위 ul을 보이게 함
+        opacity: 1;                // 투명도를 1로 설정
+        transform: translateY(0);  // 위로 슬라이드
+      }
     }
   }
+
   a {
     font-size: 17px;
     color: white;
+    align-items: center;
     text-decoration: none;
     display: block;
   }
 
   ul {
-    display: none;
     position: absolute;
     left: 0;
     top: 100%;
     background: #ffffff;
-    width: 100%;
-    margin: 0%;
+    width: 250%;
+    margin: 0;
+    visibility: hidden;             // 기본적으로 숨김
+    opacity: 0;                     // 투명도 0
+    transform: translateY(20px);    // 초기 위치를 조금 아래로 설정
+    transition: visibility 0s, opacity 0.3s ease, transform 0.3s ease;  // 부드러운 전환 효과
 
     li {
       display: block;
       width: 100%;
       margin: 2%;
+      padding: 10px;
       &:hover {
-        background: #218ec5;
-        width: 100%;
+        background-color: transparent;
+        color: #ddd;
+        align-items: center;
+        margin-left: 3%;
       }
       a {
         display: block;
-        color: #000;
-      }
+        color: inherit;
+      }    
     }
-  }
-  li:hover > ul {
-    display: block;
   }
 `;
 
@@ -104,7 +116,6 @@ export default function Navbar() {
           </li>
           <li><a href="#">SOLUTION<i className='fa fa-angle-down'></i></a>
             <ul>
-              <li><a href="genre.html" target="_blank"></a></li>
               <li><a href="history.html" target="_blank">History</a></li>
               <li><a href="member.html" target="_blank">Member</a></li>
             </ul>
