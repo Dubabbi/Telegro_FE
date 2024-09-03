@@ -5,6 +5,7 @@ import Footer from './components/Footer/Footer';
 import MainPage from './pages/Main';
 import LoginPage from './pages/Login';
 
+
 export default function Router() {
   return (
     <BrowserRouter>
