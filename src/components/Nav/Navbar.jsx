@@ -101,10 +101,10 @@ const MainNav = styled.ul`
 export default function Navbar() {
   return (
     <NavWrapper>
-      <Logo href="/">Telegro</Logo>
+      <Logo href="/main">Telegro</Logo>
       <NavContainer>
         <MainNav>
-        <li><a href="/"style={{fontWeight: 'bold'}}>Home</a></li>
+        <li><a href="/main"style={{fontWeight: 'bold'}}>Home</a></li>
           <li><a href="">주문관리<i className='fa fa-angle-down'></i></a>
             <ul>
               <li><a href="">헤드셋</a></li>
