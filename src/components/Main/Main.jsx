@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import * as M from './MainStyle';
-import * as L from '../Login/LoginStyle';
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
 import image1 from '/src/assets/image/Main/image1.svg';
@@ -13,37 +12,60 @@ import arrowright from '/src/assets/image/Main/arrowright.svg';
 export default function Main() {
     const images = [image1, image2, image3, image4];
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [slideIn, setSlideIn] = useState(true);
+    const [showArrows, setShowArrows] = useState(false);
 
     const goToPrevious = () => {
-        const isFirstSlide = currentIndex === 0;
-        const newIndex = isFirstSlide ? images.length - 1 : currentIndex - 1;
-        setCurrentIndex(newIndex);
+        setSlideIn(false);
+        setTimeout(() => {
+            const isFirstSlide = currentIndex === 0;
+            const newIndex = isFirstSlide ? images.length - 1 : currentIndex - 1;
+            setCurrentIndex(newIndex);
+            setSlideIn(true);
+        }, 200); // 200ms는 슬라이드 애니메이션 지속 시간과 일치해야 합니다.
     };
 
     const goToNext = () => {
-        const isLastSlide = currentIndex === images.length - 1;
-        const newIndex = isLastSlide ? 0 : currentIndex + 1;
-        setCurrentIndex(newIndex);
+        setSlideIn(false);
+        setTimeout(() => {
+            const isLastSlide = currentIndex === images.length - 1;
+            const newIndex = isLastSlide ? 0 : currentIndex + 1;
+            setCurrentIndex(newIndex);
+            setSlideIn(true);
+        }, 200); // 200ms는 슬라이드 애니메이션 지속 시간과 일치해야 합니다.
     };
 
     return (
         <>
         <div style={{width: '100%', minHeight: '22.6vh', backgroundColor: '#000', border: 'none'}}>
         </div>
-        <div style={{ position: 'relative', alignItems: 'center', width: '100%', maxHeight: '100vh', overflow: 'hidden' }}>
-            <img src={arrowleft} alt="Previous" onClick={goToPrevious} style={{ cursor: 'pointer', position: 'absolute', top: '50%', left: '32px', zIndex: 1000, transform: 'translateY(-50%)' }} />
-            <img src={images[currentIndex]} alt={`Slide ${currentIndex}`} style={{ width: '100%', height: '100%', transition: 'transform 0.5s ease-in-out' }} />
-            <img src={arrowright} alt="Next" onClick={goToNext} style={{ cursor: 'pointer', position: 'absolute', top: '50%', right: '32px', zIndex: 1000, transform: 'translateY(-50%)' }} />
+        <div style={{ position: 'relative', alignItems: 'center', width: '100%', maxHeight: '100vh', overflow: 'hidden' }}
+             onMouseEnter={() => setShowArrows(true)}
+             onMouseLeave={() => setShowArrows(false)}>
+            {showArrows && (
+                <>
+                <img src={arrowleft} alt="Previous" onClick={goToPrevious}
+                     style={{ cursor: 'pointer', position: 'absolute', top: '50%', left: '32px', zIndex: 1000, transform: 'translateY(-50%)' }} />
+                <img src={arrowright} alt="Next" onClick={goToNext}
+                     style={{ cursor: 'pointer', position: 'absolute', top: '50%', right: '32px', zIndex: 1000, transform: 'translateY(-50%)' }} />
+                </>
+            )}
+            <div style={{
+                display: 'flex',
+                transition: 'transform 0.5s ease-in-out',
+                transform: `translateX(-${currentIndex * 100}%)`
+            }}>
+                {images.map((image, index) => (
+                    <img key={index} src={image} alt={`Slide ${index}`} style={{ width: '100%', height: '100%' }} />
+                ))}
+            </div>
         </div>
-        <div style={{width: '100%', minHeight: '200vh', backgroundColor: '#fff', border: 'none'}}>
-
+        <div style={{width: '100%', minHeight: '20vh', backgroundColor: '#fff', border: 'none'}}>
         </div>
         <M.ContactWrapper>
             <div><h1>LET'S TALK</h1><p>Welcome to inquire or leave us a message, we will serve you wholeheartedly!</p></div>
             <M.Contact>Contact Us!</M.Contact>
         </M.ContactWrapper>
-
         </>
     );
 }
-

@@ -207,7 +207,7 @@ export const StyledForm = styled(Form)`
     height: 37px; 
     font-size: 16px; 
     border-radius: 7px;
-    border: 1px solid #ACAACC;
+    border: 1.5px solid #777;
     display: flex;
     align-items: center;
     position: relative;
