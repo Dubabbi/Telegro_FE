@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import * as S from './MainStyle';
+import * as M from './MainStyle';
 import * as L from '../Login/LoginStyle';
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
@@ -28,13 +28,21 @@ export default function Main() {
 
     return (
         <>
-        <div style={{width: '100%', minHeight: '23vh', backgroundColor: '#000', border: 'none'}}>
+        <div style={{width: '100%', minHeight: '22.6vh', backgroundColor: '#000', border: 'none'}}>
         </div>
         <div style={{ position: 'relative', alignItems: 'center', width: '100%', maxHeight: '100vh', overflow: 'hidden' }}>
             <img src={arrowleft} alt="Previous" onClick={goToPrevious} style={{ cursor: 'pointer', position: 'absolute', top: '50%', left: '32px', zIndex: 1000, transform: 'translateY(-50%)' }} />
             <img src={images[currentIndex]} alt={`Slide ${currentIndex}`} style={{ width: '100%', height: '100%', transition: 'transform 0.5s ease-in-out' }} />
             <img src={arrowright} alt="Next" onClick={goToNext} style={{ cursor: 'pointer', position: 'absolute', top: '50%', right: '32px', zIndex: 1000, transform: 'translateY(-50%)' }} />
         </div>
+        <div style={{width: '100%', minHeight: '200vh', backgroundColor: '#fff', border: 'none'}}>
+
+        </div>
+        <M.ContactWrapper>
+            <div><h1>LET'S TALK</h1><p>Welcome to inquire or leave us a message, we will serve you wholeheartedly!</p></div>
+            <M.Contact>Contact Us!</M.Contact>
+        </M.ContactWrapper>
+
         </>
     );
 }

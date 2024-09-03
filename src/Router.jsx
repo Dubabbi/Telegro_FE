@@ -4,6 +4,7 @@ import Navbar from './components/Nav/Navbar';
 import Footer from './components/Footer/Footer';
 import MainPage from './pages/Main';
 import LoginPage from './pages/Login';
+import NoticePage from './pages/Notice';
 
 
 export default function Router() {
@@ -13,6 +14,7 @@ export default function Router() {
       <Routes>
         <Route path="/" element={<MainPage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/notice" element={<NoticePage />} />
       </Routes>
       <Footer />
     </BrowserRouter>

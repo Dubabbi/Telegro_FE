@@ -1,25 +1,51 @@
-//SelectStyle.jsx
+//MainStyle.jsx
 
 import styled from 'styled-components';
 
-export const SelectWrapper = styled.div`
-    color: black;
-    font-size: 4rem;
+export const ContactWrapper = styled.div`
+    color: white;
+    font-size: 2rem;
     text-align: center;
-    margin: 5%;
+    align-items: center;
+    padding: 4% 11%;
+    display: flex;
+    width: 100%;
+    minHeight: 20vh;
+    background-color: #333;
+    flex-direction: row;
+    justify-content: space-around;
+    @media (max-width: 1024px) {
+        max-width: 90%;
+        padding: 0 2%;
+        margin: 5%;
+    }
+    p{
+        font-size: 1.5rem;
+        color: grey;
+        text-align: left;
+    }
+    h1{
+        font-size: 3rem;
+        color: white;
+        text-align: left;
+    }
+`
+
+export const Contact = styled.div`
+    background-color: #000;
+    text-align: center;
+    align-items: center;
+    padding: 1% 3%;
+    display: flex;
+    &:hover{
+        background-color: #555;
+    }
     @media (max-width: 1024px) {
         max-width: 90%;
         padding: 0 2%;
         margin: 5%;
     }
 `
-
-export const ChoiceBox = styled.div`
-    display: flex;
-    justify-content: center;
-    gap: 3%;
-    margin-top: 5%;
-`;
 
 
 export const TitleWrap = styled.div`
