@@ -117,14 +117,10 @@ export default function Navbar() {
           </li>
           <li><a href="/Notice">공지사항<i className='fa fa-angle-down'></i></a>
           </li>
-          <li><a href="#">제안문의<i className='fa fa-angle-down'></i></a>
-            <ul>
-              <li><a href="">History</a></li>
-              <li><a href="">Member</a></li>
-            </ul>
+          <li><a href="/inquiryform">제안문의<i className='fa fa-angle-down'></i></a>
           </li>
           <li><a href="">주문확인</a></li>
-          <li><a href="">Contact Us</a></li>
+          <li><a href="mailto:ykjroom@naver.com">Contact Us</a></li>
         </MainNav>
       </NavContainer>
     </NavWrapper>
