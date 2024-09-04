@@ -1,4 +1,3 @@
-// InquiryForm.jsx
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FaSearch } from 'react-icons/fa';
@@ -10,18 +9,17 @@ import * as N from '../Notice/NoticeStyle';
 
 const InquiryForm = () => {
   const [inquiry, setInquiry] = useState([
-    { id: 1, title: "제안 문의 1", created_at: "2023-01-01", view_count: 150 },
-    { id: 2, title: "제안 문의 2", created_at: "2023-01-02", view_count: 80 },
-    { id: 3, title: "제안 문의 3", created_at: "2023-01-01", view_count: 150 },
-    { id: 4, title: "제안 문의 4", created_at: "2023-01-02", view_count: 80 },
-    { id: 5, title: "제안 문의 5", created_at: "2023-01-03", view_count: 90 }
+    { id: 1, title: "제안문의 1", created_at: "2023-01-01", view_count: 150, author: "Admin", attachment: "File.pdf" },
+    { id: 2, title: "제안문의 2", created_at: "2023-01-02", view_count: 80, author: "Manager", attachment: "Image.jpg" },
+    { id: 3, title: "제안문의 3", created_at: "2023-01-01", view_count: 150, author: "Admin", attachment: "Document.docx" },
+    { id: 4, title: "제안문의 4", created_at: "2023-01-02", view_count: 80, author: "Staff", attachment: "No File" },
+    { id: 5, title: "제안문의 5", created_at: "2023-01-03", view_count: 90, author: "Coordinator", attachment: "Chart.xlsx" }
   ]);
 
   const [searchValue, setSearchValue] = useState('');
 
   const handleSubmit = (e) => {
       e.preventDefault();
-      // 검색 기능을 여기서 구현하거나 검색 조건을 적용할 수 있습니다.
       console.log("검색어:", searchValue);
       setSearchValue('');
   };
@@ -30,11 +28,10 @@ const InquiryForm = () => {
     <CommonTableRow key={inquiry.id}>
       <CommonTableColumn>{inquiry.id}</CommonTableColumn>
       <CommonTableColumn>
-      <Link to={'/inquirydetail'}>{inquiry.title}</Link>
-        {/*
-        <Link to={`./${inquiry.id}`}>{inquiry.title}</Link>
-         */}
+        <Link to={`/Inquirydetail`}>{inquiry.title}</Link>
       </CommonTableColumn>
+      <CommonTableColumn>{inquiry.attachment}</CommonTableColumn>
+      <CommonTableColumn>{inquiry.author}</CommonTableColumn>
       <CommonTableColumn>{new Date(inquiry.created_at).toLocaleDateString()}</CommonTableColumn>
       <CommonTableColumn>{inquiry.view_count}</CommonTableColumn>
     </CommonTableRow>
@@ -45,8 +42,9 @@ const InquiryForm = () => {
       <div style={{width: '100%', minHeight: '22.6vh', border: 'none'}}></div>
       <N.Section>
         <N.PageTitle>
-          <N.TitleText>제안 문의</N.TitleText>
+          <N.TitleText>제안문의</N.TitleText>
         </N.PageTitle>
+        <div style={{textAlign: 'right'}}> 총 게시물 수 : 58  현재 페이지 : 1 / 6</div>
         <N.BoardSearchArea>
           <N.SearchWindow>
             <N.SearchWrap>
@@ -63,7 +61,7 @@ const InquiryForm = () => {
           </N.SearchWindow>
         </N.BoardSearchArea>
         <div><hr/>
-          <CommonTable headersName={['No', '제목', '등록일', '조회수']}>{items}</CommonTable><hr/>
+          <CommonTable headersName={['No', '제목', '첨부', '작성자', '등록일', '조회수']}>{items}</CommonTable><hr/>
         </div>
       </N.Section>
     </N.MainWrapper>
