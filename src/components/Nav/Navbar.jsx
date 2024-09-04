@@ -10,12 +10,11 @@ export default function Navbar() {
         <li><a href="/main"style={{fontWeight: 'bold'}}>Home</a></li>
           <li><a href="">주문관리<i className='fa fa-angle-down'></i></a>
             <ul>
-              <li><a href="">헤드셋</a></li>
-              <li><a href="">전화/증폭기</a></li>
-              <li><a href="">라인코드</a></li>
-              <li><a href="">녹음기기</a></li>
-              <li><a href="">헤드셋</a></li>
-              <li><a href="">악세사리</a></li>
+              <li><a href="/headset">헤드셋</a></li>
+              <li><a href="/phoneAmplifier">전화/증폭기</a></li>
+              <li><a href="/lineCord">라인코드</a></li>
+              <li><a href="/recording">녹음기기</a></li>
+              <li><a href="/accessory">악세사리</a></li>
             </ul>
           </li>
           <li><a href="/Notice">공지사항<i className='fa fa-angle-down'></i></a>

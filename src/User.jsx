@@ -17,7 +17,11 @@ import AdminNoticePage from './pages/AdminNotice';
 import AdminInquiryPage from './pages/AdminInquiry';
 import OrderPage from './pages/Order';
 import CheckPage from './pages/Check';
-
+import Headset from './components/Check/Headset';
+import PhoneAmplifier from './components/Check/PhoneAmplifier';
+import LineCord from './components/Check/LineCord';
+import Recording from './components/Check/Recording';
+import Accessory from './components/Check/Accessory';
 
 export default function User() {
   return (
@@ -39,6 +43,11 @@ export default function User() {
         <Route path="/admininquiry" element={<AdminInquiryPage />} /> 
         <Route path="/order" element={<OrderPage />} />
         <Route path="/check" element={<CheckPage />} />
+        <Route path="/headset" element={<Headset />} />
+        <Route path="/phoneAmplifier" element={<PhoneAmplifier />} />
+        <Route path="/lineCord" element={<LineCord />} />
+        <Route path="/recording" element={<Recording />} />
+        <Route path="/accessory" element={<Accessory />} />
       </Routes>
       <Footer />
     </div>
