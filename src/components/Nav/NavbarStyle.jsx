@@ -39,6 +39,7 @@ export const MainNav = styled.ul`
   align-items: center;
   
   li {
+
     position: relative;
     padding: 0 25px;
     padding-top: 22px;
