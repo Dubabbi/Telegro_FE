@@ -21,7 +21,7 @@ export default function Navbar() {
           </li>
           <li><a href="/inquiryform">제안문의<i className='fa fa-angle-down'></i></a>
           </li>
-          <li><a href="">주문확인</a></li>
+          <li><a href="/order">주문확인</a></li>
           <li><a href="mailto:ykjroom@naver.com">Contact Us</a></li>
         </N.MainNav>
       </N.NavContainer>

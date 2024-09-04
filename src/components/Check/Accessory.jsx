@@ -6,7 +6,7 @@ import Form from 'react-bootstrap/Form';
 import CommonTable from './Table/CommonTable';
 import CommonTableColumn from './Table/CommonTableColumn';
 import CommonTableRow from './Table/CommonTableRow';
-import * as N from './Table/NoticeStyle';  // 스타일 수정 필요
+import * as N from './Table/NoticeStyle';  
 
 const Accessory = () => {
   const [products, setProducts] = useState([
