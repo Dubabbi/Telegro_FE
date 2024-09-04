@@ -12,44 +12,35 @@ import arrowright from '/src/assets/image/Main/arrowright.svg';
 export default function Main() {
     const images = [image1, image2, image3, image4];
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [slideIn, setSlideIn] = useState(true);
     const [showArrows, setShowArrows] = useState(false);
 
     const goToPrevious = () => {
-        setSlideIn(false);
-        setTimeout(() => {
-            const isFirstSlide = currentIndex === 0;
-            const newIndex = isFirstSlide ? images.length - 1 : currentIndex - 1;
-            setCurrentIndex(newIndex);
-            setSlideIn(true);
-        }, 200); // 200ms는 슬라이드 애니메이션 지속 시간과 일치해야 합니다.
+        const isFirstSlide = currentIndex === 0;
+        const newIndex = isFirstSlide ? images.length - 1 : currentIndex - 1;
+        setCurrentIndex(newIndex);
     };
 
     const goToNext = () => {
-        setSlideIn(false);
-        setTimeout(() => {
-            const isLastSlide = currentIndex === images.length - 1;
-            const newIndex = isLastSlide ? 0 : currentIndex + 1;
-            setCurrentIndex(newIndex);
-            setSlideIn(true);
-        }, 200); // 200ms는 슬라이드 애니메이션 지속 시간과 일치해야 합니다.
+        const isLastSlide = currentIndex === images.length - 1;
+        const newIndex = isLastSlide ? 0 : currentIndex + 1;
+        setCurrentIndex(newIndex);
     };
 
     return (
         <>
         <div style={{width: '100%', minHeight: '22.6vh', backgroundColor: '#000', border: 'none'}}>
         </div>
-        <div style={{ position: 'relative', alignItems: 'center', width: '100%', maxHeight: '100vh', overflow: 'hidden' }}
-             onMouseEnter={() => setShowArrows(true)}
-             onMouseLeave={() => setShowArrows(false)}>
-            {showArrows && (
-                <>
-                <img src={arrowleft} alt="Previous" onClick={goToPrevious}
-                     style={{ cursor: 'pointer', position: 'absolute', top: '50%', left: '32px', zIndex: 1000, transform: 'translateY(-50%)' }} />
-                <img src={arrowright} alt="Next" onClick={goToNext}
-                     style={{ cursor: 'pointer', position: 'absolute', top: '50%', right: '32px', zIndex: 1000, transform: 'translateY(-50%)' }} />
-                </>
-            )}
+        <div 
+          style={{ position: 'relative', alignItems: 'center', width: '100%', maxHeight: '100vh', overflow: 'hidden' }}
+          onMouseEnter={() => setShowArrows(true)}
+          onMouseLeave={() => setShowArrows(false)}
+        >
+            <img src={arrowleft} alt="Previous" onClick={goToPrevious}
+                 style={{ cursor: 'pointer', position: 'absolute', top: '50%', left: '32px', zIndex: 1000, transform: 'translateY(-50%)', 
+                          opacity: showArrows ? 1 : 0, transition: 'opacity 1s ease-in-out', transitionDelay: showArrows ? '0.5s' : '0s' }} />
+            <img src={arrowright} alt="Next" onClick={goToNext}
+                 style={{ cursor: 'pointer', position: 'absolute', top: '50%', right: '32px', zIndex: 1000, transform: 'translateY(-50%)',
+                          opacity: showArrows ? 1 : 0, transition: 'opacity 1s ease-in-out', transitionDelay: showArrows ? '0.5s' : '0s' }} />
             <div style={{
                 display: 'flex',
                 transition: 'transform 0.5s ease-in-out',
