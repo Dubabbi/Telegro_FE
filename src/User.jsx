@@ -11,7 +11,10 @@ import InquiryDetailPage from './pages/InquiryDetail';
 import OrderManagerPage from './pages/OrderManager';
 import OrderReviewPage from './pages/OrderReview';
 import AdminPage from './pages/Admin';
-
+import ProductPage from './pages/Product';
+import ClientPage from './pages/Client';
+import AdminNoticePage from './pages/AdminNotice';
+import AdminInquiryPage from './pages/AdminInquiry';
 
 
 export default function User() {
@@ -28,6 +31,10 @@ export default function User() {
         <Route path="/orderManager" element={<OrderManagerPage />} />
         <Route path="/orderReview" element={<OrderReviewPage />} />
         <Route path="/admin" element={<AdminPage />} />
+        <Route path="/product" element={<ProductPage />} />
+        <Route path="/client" element={<ClientPage />} />
+        <Route path="/adminnotice" element={<AdminNoticePage />} />
+        <Route path="/admininquiry" element={<AdminInquiryPage />} /> Product
       </Routes>
       <Footer />
     </div>
