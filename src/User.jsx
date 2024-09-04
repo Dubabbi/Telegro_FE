@@ -22,6 +22,7 @@ import PhoneAmplifier from './components/Check/PhoneAmplifier';
 import LineCord from './components/Check/LineCord';
 import Recording from './components/Check/Recording';
 import Accessory from './components/Check/Accessory';
+import ProductDetailPage from './pages/ProductDetail';
 
 export default function User() {
   return (
@@ -38,6 +39,7 @@ export default function User() {
         <Route path="/orderReview" element={<OrderReviewPage />} />
         <Route path="/admin" element={<AdminPage />} />
         <Route path="/product" element={<ProductPage />} />
+        <Route path="/productdetail" element={<ProductDetailPage />} />
         <Route path="/client" element={<ClientPage />} />
         <Route path="/adminnotice" element={<AdminNoticePage />} />
         <Route path="/admininquiry" element={<AdminInquiryPage />} /> 

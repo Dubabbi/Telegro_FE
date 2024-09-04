@@ -53,8 +53,7 @@ export default function Main() {
         </div>
         <M.Layer className="company-synopses">
       <M.List>
-        {/* 각 리스트 아이템 */}
-        <M.SynopsisItem className="synopsis-item wow fadeInUpA animated" data-wow-delay="0s">
+      <M.SynopsisItem className="synopsis-item wow fadeInUpA animated" data-wow-delay="0s">
           <M.ItemWrap>
             <M.ItemImg href="">
               <img src="https://cdn.globalso.com/inbertec/th-2.png" alt="Free Sample"/>
@@ -67,7 +66,6 @@ export default function Main() {
             </M.ItemInfo>
           </M.ItemWrap>
         </M.SynopsisItem>
-        {/* 다른 아이템들도 반복 */}
         <M.SynopsisItem className="synopsis-item wow fadeInUpA animated" data-wow-delay="0s">
           <M.ItemWrap>
             <M.ItemImg href="">

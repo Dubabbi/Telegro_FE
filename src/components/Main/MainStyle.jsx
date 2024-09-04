@@ -2,22 +2,19 @@
 
 import styled from 'styled-components';
 import { keyframes } from 'styled-components';
-export const fadeInUpA = keyframes`
-  from {
-    opacity: 0;
-    transform: translate3d(0, 100%, 0);
-  }
 
-  to {
-    opacity: 1;
-    transform: none;
+export const bounceTwice = keyframes`
+  0%, 100% {
+    transform: translateY(0);
+  }
+  25%, 75% {
+    transform: translateY(-20px);
+  }
+  50% {
+    transform: translateY(0);
   }
 `;
 
-export const icojump = keyframes`
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-`;
 
 
 export const ContactWrapper = styled.div`
@@ -140,7 +137,7 @@ export const SynopsisItem = styled.li`
     }
 
     .item-img {
-      animation: ${icojump}. 6s ease;
+      animation: ${bounceTwice}. 6s ease;
     }
   }
 
@@ -213,14 +210,3 @@ export const ItemDesc = styled.div`
   color: #909090;
 `;
 
-export const bounceTwice = keyframes`
-  0%, 100% {
-    transform: translateY(0);
-  }
-  25%, 75% {
-    transform: translateY(-20px);
-  }
-  50% {
-    transform: translateY(0);
-  }
-`;
