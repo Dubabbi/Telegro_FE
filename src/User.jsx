@@ -15,6 +15,8 @@ import ProductPage from './pages/Product';
 import ClientPage from './pages/Client';
 import AdminNoticePage from './pages/AdminNotice';
 import AdminInquiryPage from './pages/AdminInquiry';
+import OrderPage from './pages/Order';
+import CheckPage from './pages/Check';
 
 
 export default function User() {
@@ -34,7 +36,9 @@ export default function User() {
         <Route path="/product" element={<ProductPage />} />
         <Route path="/client" element={<ClientPage />} />
         <Route path="/adminnotice" element={<AdminNoticePage />} />
-        <Route path="/admininquiry" element={<AdminInquiryPage />} /> Product
+        <Route path="/admininquiry" element={<AdminInquiryPage />} /> 
+        <Route path="/order" element={<OrderPage />} />
+        <Route path="/check" element={<CheckPage />} />
       </Routes>
       <Footer />
     </div>
