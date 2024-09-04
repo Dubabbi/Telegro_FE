@@ -1,6 +1,24 @@
 //MainStyle.jsx
 
 import styled from 'styled-components';
+import { keyframes } from 'styled-components';
+export const fadeInUpA = keyframes`
+  from {
+    opacity: 0;
+    transform: translate3d(0, 100%, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+`;
+
+export const icojump = keyframes`
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+`;
+
 
 export const ContactWrapper = styled.div`
     color: white;
@@ -84,3 +102,125 @@ export const ImageWrap = styled.div`
     }
 `
 
+export const Layer = styled.section`
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  padding-top: .6rem;
+  padding-bottom: .6rem;
+  color: #333;
+`;
+
+export const List = styled.ul`
+  margin: 0 -.4rem;
+  font-size: 0;
+`;
+
+export const SynopsisItem = styled.li`
+  position: relative;
+  width: 33.33%;
+  margin-top: 2%;
+  margin-bottom: 2%;
+  text-align: center;
+  border-right: 1px solid #d9d9d9;
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: middle;
+
+  &:last-child {
+    border-right: 0;
+  }
+
+  &:hover {
+    &:before {
+      left: 0;
+      opacity: 1;
+      filter: alpha(opacity=100);
+      transition: all 1.2s ease;
+    }
+
+    .item-img {
+      animation: ${icojump}. 6s ease;
+    }
+  }
+
+  &:before {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: -20%;
+    top: 0;
+    transition: all .5s ease;
+    opacity: 0;
+    filter: alpha(opacity=0);
+  }
+`;
+
+export const ItemWrap = styled.figure`
+  position: relative;
+  padding: 2.5rem 1.4rem;
+  text-align: center;
+  z-index: 2;
+  max-width: 500px;
+  margin: 0 auto;
+`;
+
+export const ItemImg = styled.a`
+  position: relative;
+  display: inline-block;
+  margin: 0 auto;
+  padding: 0 0 2rem;
+
+  img {
+    transition: all .5s ease;
+    padding: 1%;
+
+    &:hover {
+      animation: ${bounceTwice} 1s ease-in-out; // 애니메이션 적용
+    }
+  }
+`;
+
+export const ItemInfo = styled.figcaption`
+  max-width: 500px;
+  margin: 0 auto;
+`;
+
+export const ItemTitle = styled.h2`
+  position: relative;
+  font-weight: bold;
+  padding: 0.5rem;
+  font-size: 1.8rem;
+  text-transform: uppercase;
+  color: #333;
+
+  a {
+    color: inherit;
+
+    &:hover {
+      color: #000;
+      font-weight: bold;
+    }
+  }
+`;
+
+export const ItemDesc = styled.div`
+  display: block;
+  line-height: 1.7;
+  font-size: 16px;
+  color: #909090;
+`;
+
+export const bounceTwice = keyframes`
+  0%, 100% {
+    transform: translateY(0);
+  }
+  25%, 75% {
+    transform: translateY(-20px);
+  }
+  50% {
+    transform: translateY(0);
+  }
+`;

@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FaShoppingCart } from 'react-icons/fa';
+import { FaSearch } from 'react-icons/fa';
 import Form from 'react-bootstrap/Form';
 import CommonTable from './Table/CommonTable';
 import CommonTableColumn from './Table/CommonTableColumn';
@@ -57,7 +58,7 @@ const Headset = () => {
                   value={searchValue}
                   onChange={(e) => setSearchValue(e.target.value)}
                 />
-                <N.StyledButton type="submit" variant="none"><FaShoppingCart size={15} /></N.StyledButton>
+                <N.StyledButton type="submit" variant="none"><FaSearch size={15} /></N.StyledButton>
               </N.StyledForm>
             </N.SearchWrap>
           </N.SearchWindow>

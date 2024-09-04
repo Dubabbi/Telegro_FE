@@ -7,6 +7,7 @@ import CommonTable from './Table/CommonTable';
 import CommonTableColumn from './Table/CommonTableColumn';
 import CommonTableRow from './Table/CommonTableRow';
 import * as N from './Table/NoticeStyle';  
+import { FaSearch } from 'react-icons/fa';
 
 const LineCord = () => {
   const [products, setProducts] = useState([
@@ -57,7 +58,7 @@ const LineCord = () => {
                   value={searchValue}
                   onChange={(e) => setSearchValue(e.target.value)}
                 />
-                <N.StyledButton type="submit" variant="none"><FaShoppingCart size={15} /></N.StyledButton>
+                <N.StyledButton type="submit" variant="none"><FaSearch size={15} /></N.StyledButton>
               </N.StyledForm>
             </N.SearchWrap>
           </N.SearchWindow>

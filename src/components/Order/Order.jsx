@@ -2,11 +2,12 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FaInfoCircle } from 'react-icons/fa';
+import { FaSearch } from 'react-icons/fa';
 import Form from 'react-bootstrap/Form';
 import CommonTable from './Table/CommonTable';
 import CommonTableColumn from './Table/CommonTableColumn';
 import CommonTableRow from './Table/CommonTableRow';
-import * as N from './Table/NoticeStyle';  // 스타일 파일 경로를 확인하고 필요에 맞게 수정하세요
+import * as N from './Table/NoticeStyle';  
 
 const Order = () => {
   const [orders, setOrders] = useState([
@@ -59,13 +60,13 @@ const Order = () => {
                   value={searchValue}
                   onChange={(e) => setSearchValue(e.target.value)}
                 />
-                <N.StyledButton type="submit" variant="none"><FaInfoCircle size={15} /></N.StyledButton>
+                <N.StyledButton type="submit" variant="none"><FaSearch size={15} /></N.StyledButton>
               </N.StyledForm>
             </N.SearchWrap>
           </N.SearchWindow>
         </N.BoardSearchArea>
         <div><hr/>
-          <CommonTable headersName={['No.', '주문상품', '옵션선택', '수량', '가격', '총 금액(적립금)', '주문정보']}>{items}</CommonTable><hr/>
+          <CommonTable headersName={['No', '주문상품', '옵션선택', '수량', '가격', '총 금액(적립금)', '주문정보']}>{items}</CommonTable><hr/>
         </div>
       </N.Section>
       <h1 style={{textAlign: 'right', fontSize: '1.5rem', marginRight: '1%', color: '#94A3D8', fontWeight: 'bold'}}>총 주문 금액 (적립금) : \0 (\0) </h1>
