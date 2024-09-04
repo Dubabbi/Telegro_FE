@@ -10,6 +10,7 @@ import InquiryFormPage from './pages/InquiryForm';
 import InquiryDetailPage from './pages/InquiryDetail';
 import OrderManagerPage from './pages/OrderManager';
 import OrderReviewPage from './pages/OrderReview';
+import AdminPage from './pages/Admin';
 
 
 
@@ -26,6 +27,7 @@ export default function User() {
         <Route path="/inquiryform" element={<InquiryFormPage />} />
         <Route path="/orderManager" element={<OrderManagerPage />} />
         <Route path="/orderReview" element={<OrderReviewPage />} />
+        <Route path="/admin" element={<AdminPage />} />
       </Routes>
       <Footer />
     </div>
