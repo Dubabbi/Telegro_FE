@@ -12,15 +12,15 @@ const FooterContent = styled.div`
     padding: 2rem 2rem;
     &.below {
         align-items: center;
-        justify-content: center;
         display: flex;
         flex-direction: row;
         margin-top: 0.2rem;
-        font-style: italic;
+        margin-left: 3%;
     }
 `;
 
 const FooterText = styled.p`
+    text-align: left;
     font-size: 13px;
     line-height: 15px;
     color: #000;
@@ -48,7 +48,7 @@ export default function Footer() {
         <StyledFooter>
             <FooterContent>
                 <FooterContent className="below">
-                    <FooterText>&copy; Telego</FooterText>
+                    <FooterText>© Copyright 2024 Telego</FooterText>
                 </FooterContent>
             </FooterContent>
         </StyledFooter>

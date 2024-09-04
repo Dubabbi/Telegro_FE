@@ -6,9 +6,11 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 5% 0;
+  position: fix;
+  padding: 6% 0;
+  margin: 0;
   justify-content: center;
-  background-color: #ddd;
+  background-color: #ccc;
 `;
 
 const LoginSection = styled.section`
@@ -27,7 +29,8 @@ const LoginSection = styled.section`
 const Title = styled.h3`
   font-size: 30px;
   font-weight: bold;
-  margin-bottom: 8px;
+  margin-top: 20px;
+  margin-bottom: 20px;
   text-align: center;
 `;
 
@@ -62,6 +65,7 @@ const Span = styled.span`
 const Form = styled.form`
   display: flex;
   flex-direction: column;
+  margin-top: 25px;
 `;
 
 const InputBox = styled.div`
@@ -151,13 +155,6 @@ function Login() {
     <Wrapper>
       <LoginSection>
         <Title>Telegro</Title>
-        <div style={{marginLeft: '70%'}}>
-          <Text>일반고객</Text>
-          <Account>            
-            <Span color="#94A3D8">ID: guest</Span>
-            <Span color="#94A3D8">PW: 0000</Span>
-          </Account>
-        </div>
         <Form onSubmit={handleSubmit}>
           <InputBox>
             <label htmlFor="idText">아이디</label>
@@ -172,7 +169,13 @@ function Login() {
             <Checkbox type="checkbox" id="checkId" />
             <CheckboxLabel htmlFor="checkId">아이디 저장</CheckboxLabel>
           </CheckboxContainer>
-          <Link onClick={() => navigate('/forgot-password')}>아이디와 비밀번호를 잊으셨나요?</Link>
+          <div>
+          <Text>일반고객</Text>
+          <Account>            
+            <Span color="#94A3D8">ID: guest</Span>
+            <Span color="#94A3D8">PW: 0000</Span>
+          </Account>
+        </div>
           </div>
           <Button primary type="submit">로그인</Button>
           <Button onClick={() => navigate('/register')}>회원가입</Button>
