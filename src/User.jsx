@@ -23,6 +23,7 @@ import LineCord from './components/Check/LineCord';
 import Recording from './components/Check/Recording';
 import Accessory from './components/Check/Accessory';
 import ProductDetailPage from './pages/ProductDetail';
+import ChatButton from './components/ChatButton/ChatButton';
 
 export default function User() {
   return (
@@ -51,6 +52,7 @@ export default function User() {
         <Route path="/recording" element={<Recording />} />
         <Route path="/accessory" element={<Accessory />} />
       </Routes>
+      <ChatButton />
       <Footer />
     </div>
   );
