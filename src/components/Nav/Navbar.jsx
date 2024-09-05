@@ -1,8 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import * as N from './NavbarStyle';
+import * as T from '../Notice/NoticeStyle'
+import { FaSearch } from 'react-icons/fa';
+import Form from 'react-bootstrap/Form';
 
 export default function Navbar() {
+  const [searchValue, setSearchValue] = useState('');
+
+  const handleSubmit = (e) => {
+      e.preventDefault();
+      console.log("검색어:", searchValue);
+      setSearchValue('');
+  };
   return (
+    <>
     <N.NavWrapper>
       <N.Logo href="/main">Telegro</N.Logo>
       <N.NavContainer>
@@ -25,6 +36,26 @@ export default function Navbar() {
           <li><a href="mailto:ykjroom@naver.com">Contact Us</a></li>
         </N.MainNav>
       </N.NavContainer>
+      <N.StyledButton><FaSearch /></N.StyledButton>
     </N.NavWrapper>
+  </>
   );
 }
+
+{/*
+            <T.BoardSearchArea>
+          <T.SearchWindow>
+            <T.SearchWrap>
+            <T.StyledForm onSubmit={handleSubmit}>
+                <Form.Control
+                  type="text"
+                  placeholder="게시글 검색"
+                  value={searchValue}
+                  onChange={(e) => setSearchValue(e.target.value)}
+                />
+              <T.StyledButton type="submit" variant="none"><FaSearch size={15} /></T.StyledButton>
+              </T.StyledForm>
+            </T.SearchWrap>
+          </T.SearchWindow>
+        </T.BoardSearchArea>
+  */}

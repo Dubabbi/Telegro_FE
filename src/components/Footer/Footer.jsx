@@ -9,7 +9,7 @@ const StyledFooter = styled.div`
 const FooterContent = styled.div`
     display: flex;
     flex-direction: column;
-    padding: 2rem 2rem;
+    padding: 1rem 2rem;
     &.below {
         align-items: center;
         display: flex;
@@ -47,6 +47,7 @@ export default function Footer() {
     return (
         <StyledFooter>
             <FooterContent>
+            <hr style={{width: '90%'}}/>
                 <FooterContent className="below">
                     <FooterText>© Copyright 2024 Telego</FooterText>
                 </FooterContent>

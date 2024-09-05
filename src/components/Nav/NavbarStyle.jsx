@@ -97,3 +97,23 @@ export const MainNav = styled.ul`
     }
   }
 `;
+
+export const StyledButton = styled(Button)`
+    position: absolute;
+    top: 50%;
+    margin-right: 20%; 
+    transform: translateY(-50%);
+    height: 30px; 
+    width: 30px; 
+    font-size: 1rem; 
+    background-color: #fefefe; 
+    border-radius: 50px; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    &:hover {
+        background: #F8F9FA;
+        transition: 0.5s;
+      }
+`;
