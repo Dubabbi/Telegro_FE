@@ -6,11 +6,13 @@ import image1 from '/src/assets/image/Main/image1.svg';
 import image2 from '/src/assets/image/Main/image2.svg';
 import image3 from '/src/assets/image/Main/image3.svg';
 import image4 from '/src/assets/image/Main/image4.svg';
+import image5 from '/src/assets/image/Main/image5.svg';
+import image6 from '/src/assets/image/Main/image6.svg';
 import arrowleft from '/src/assets/image/Main/arrowleft.svg';
 import arrowright from '/src/assets/image/Main/arrowright.svg';
 
 export default function Main() {
-    const images = [image1, image2, image3, image4];
+    const images = [image1, image2, image3, image4, image5, image6];
     const [currentIndex, setCurrentIndex] = useState(0);
     const [showArrows, setShowArrows] = useState(false);
 
@@ -47,7 +49,7 @@ export default function Main() {
                 transform: `translateX(-${currentIndex * 100}%)`
             }}>
                 {images.map((image, index) => (
-                    <img key={index} src={image} alt={`Slide ${index}`} style={{ width: '100%', height: '100%' }} />
+                    <img key={index} src={image} alt={`Slide ${index}`} style={{ minWidth: '100%', height: '100%' }} />
                 ))}
             </div>
         </div>
