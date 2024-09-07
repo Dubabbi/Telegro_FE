@@ -38,7 +38,6 @@ export default function User() {
         <Route path="/inquiryform" element={<InquiryFormPage />} />
         <Route path="/orderManager" element={<OrderManagerPage />} />
         <Route path="/orderReview" element={<OrderReviewPage />} />
-        <Route path="/admin" element={<AdminPage />} />
         <Route path="/admin/product" element={<ProductPage />} />
         <Route path="/productdetail" element={<ProductDetailPage />} />
         <Route path="/admin/client" element={<ClientPage />} />

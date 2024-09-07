@@ -1,71 +1,186 @@
 import React, { useState } from 'react';
-import * as M from '../Main/MainStyle';
-import "slick-carousel/slick/slick.css"; 
-import "slick-carousel/slick/slick-theme.css";
-import image1 from '/src/assets/image/Main/image1.svg';
-import image2 from '/src/assets/image/Main/image2.svg';
-import image3 from '/src/assets/image/Main/image3.svg';
-import image4 from '/src/assets/image/Main/image4.svg';
-import arrowleft from '/src/assets/image/Main/arrowleft.svg';
-import arrowright from '/src/assets/image/Main/arrowright.svg';
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
 
-export default function Admin() {
-    const images = [image1, image2, image3, image4];
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const [slideIn, setSlideIn] = useState(true);
-    const [showArrows, setShowArrows] = useState(false);
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: fix;
+  padding: 6% 0;
+  margin: 0;
+  justify-content: center;
+  background-color: #ccc;
+`;
 
-    const goToPrevious = () => {
-        setSlideIn(false);
-        setTimeout(() => {
-            const isFirstSlide = currentIndex === 0;
-            const newIndex = isFirstSlide ? images.length - 1 : currentIndex - 1;
-            setCurrentIndex(newIndex);
-            setSlideIn(true);
-        }, 200); 
-    };
+const LoginSection = styled.section`
+  width: 38%;
+  max-width: 558px;
+  height: 80vh;
+  box-shadow: 0 0.4rem 0.8rem rgba(0, 0, 0, 0.1);
+  background: #fff;
+  padding: 60px 80px;
+  border-radius: 10px;
+  position: relative;
+  border-radius: 1rem;
+  z-index: 2;
+`;
 
-    const goToNext = () => {
-        setSlideIn(false);
-        setTimeout(() => {
-            const isLastSlide = currentIndex === images.length - 1;
-            const newIndex = isLastSlide ? 0 : currentIndex + 1;
-            setCurrentIndex(newIndex);
-            setSlideIn(true);
-        }, 200);
-    };
+const Title = styled.h3`
+  font-size: 30px;
+  font-weight: bold;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  text-align: center;
+`;
 
-    return (
-        <>
-        <div style={{width: '100%', minHeight: '22.6vh', backgroundColor: '#000', border: 'none'}}>
+const Text = styled.p`
+  text-align: right;
+  font-size: 12px;
+  margin-top: 5px;
+  margin-bottom: 9px;
+  white-space: nowrap;
+  color: #94A3D8;
+  cursor: pointer;
+  text-decoration : underline;
+`;
+
+const Account = styled.div`
+  margin-bottom: 17px;
+  border-radius: 0.7rem;
+  color: white;
+  padding: 3% 4%;
+  display: inline-block;
+  white-space: nowrap;
+`;
+
+const Span = styled.span`
+  background-color: ${props => props.color};
+  font-size: 13px;
+  white-space: nowrap;
+  padding: 2px 5px;
+  border-radius: 4px;
+  margin-right: 5px;
+`;
+
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  margin-top: 25px;
+`;
+
+const InputBox = styled.div`
+  margin-bottom: 14px;
+  label {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 6px;
+  }
+  input {
+    display: block;
+    width: 100%;
+    height: 48px;
+    border: 1px solid #E0E0E0;
+    padding: 12px 20px;
+    font-size: 18px;
+    border-radius: 4px;
+    &:focus {
+      outline: 2.5px solid #94A3D8;
+      border: none;
+    }
+    &::placeholder {
+      color: #B4B4B4;
+      font-size: 16px;
+    }
+  }
+`;
+
+const Button = styled.button`
+  width: 100%;
+  height: 48px;
+  border-radius: 4px;
+  font-size: 16px;
+  margin-bottom: 14px;
+  background-color: ${props => props.primary ? '#94A3D8' : '#FFFFFF'};
+  color: ${props => props.primary ? '#FFFFFF' : '#000000'};
+  border: ${props => props.primary ? 'none' : '1px solid #E0E0E0'};
+`;
+
+const CheckboxContainer = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 40px;
+`;
+
+const CheckboxLabel = styled.label`
+  font-size: 16px;
+  cursor: pointer;
+`;
+
+const Checkbox = styled.input`
+  margin-right: 6px;
+  margin-top: 6px;
+  width: 23px;
+  border: 1px solid #ddd;
+  height: 23px;
+  border-radius: 8px;
+  &:checked {
+    background-color: #94A3D8;
+  }
+`;
+
+const Link = styled.a`
+  margin-top: -35px;
+  color: #94A3D8;
+  text-decoration: underline;
+  cursor: pointer;
+  &:hover {
+    text-decoration: none;
+  }
+`;
+
+// 로그인 컴포넌트
+function Admin() {
+  const navigate = useNavigate();
+  const [id, setId] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    // 로그인 처리 로직
+    console.log('Login Attempt', id, password);
+    // navigate('/dashboard'); // 로그인 성공 후 리다이렉트
+  };
+
+  return (
+    <Wrapper>
+      <LoginSection>
+        <Title>Telegro</Title>
+        <Form onSubmit={handleSubmit}>
+          <InputBox>
+            <label htmlFor="idText">아이디</label>
+            <input id="idText" type="text" placeholder="아이디를 입력하세요" value={id} onChange={e => setId(e.target.value)} />
+          </InputBox>
+          <InputBox>
+            <label htmlFor="passwordText">비밀번호</label>
+            <input id="passwordText" type="password" placeholder="숫자, 문자, 특수문자를 포함한 10자 이상" value={password} onChange={e => setPassword(e.target.value)} />
+          </InputBox>
+          <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+          <CheckboxContainer style={{alignItems: 'center'}}>
+            <Checkbox type="checkbox" id="checkId" />
+            <CheckboxLabel htmlFor="checkId">아이디 저장</CheckboxLabel>
+          </CheckboxContainer>
+          <div>
+          <Text><a href="/">일반고객으로 로그인</a></Text>
+
         </div>
-        <div style={{ position: 'relative', alignItems: 'center', width: '100%', maxHeight: '100vh', overflow: 'hidden' }}
-             onMouseEnter={() => setShowArrows(true)}
-             onMouseLeave={() => setShowArrows(false)}>
-            {showArrows && (
-                <>
-                <img src={arrowleft} alt="Previous" onClick={goToPrevious}
-                     style={{ cursor: 'pointer', position: 'absolute', top: '50%', left: '32px', zIndex: 1000, transform: 'translateY(-50%)' }} />
-                <img src={arrowright} alt="Next" onClick={goToNext}
-                     style={{ cursor: 'pointer', position: 'absolute', top: '50%', right: '32px', zIndex: 1000, transform: 'translateY(-50%)' }} />
-                </>
-            )}
-            <div style={{
-                display: 'flex',
-                transition: 'transform 0.5s ease-in-out',
-                transform: `translateX(-${currentIndex * 100}%)`
-            }}>
-                {images.map((image, index) => (
-                    <img key={index} src={image} alt={`Slide ${index}`} style={{ width: '100%', height: '100%' }} />
-                ))}
-            </div>
-        </div>
-        <div style={{width: '100%', minHeight: '20vh', backgroundColor: '#fff', border: 'none'}}>
-        </div>
-        <M.ContactWrapper>
-            <div><h1>LET'S TALK</h1><p>Welcome to inquire or leave us a message, we will serve you wholeheartedly!</p></div>
-            <M.Contact>Contact Us!</M.Contact>
-        </M.ContactWrapper>
-        </>
-    );
+          </div>
+          <Button primary type="submit">로그인</Button>
+          <Button onClick={() => navigate('/register')}>회원가입</Button>
+        </Form>
+      </LoginSection>
+    </Wrapper>
+  );
 }
+
+export default Admin;
