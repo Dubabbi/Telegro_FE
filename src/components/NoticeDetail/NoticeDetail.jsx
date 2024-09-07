@@ -8,6 +8,7 @@ const NoticeDetail = () => {
     id: 1,
     title: "공지사항 제목",
     created_at: "2023-01-01",
+    creator: "홍길동",
     view_count: 150,
     content: "공지사항의 내용입니다. 여기에 자세한 설명이 포함됩니다."
   };
@@ -22,18 +23,23 @@ const NoticeDetail = () => {
         </N.PageTitle>
         <D.BoardViewWrap>
           <D.BoardView>
-            <D.Title>{notice.title}</D.Title>
+            <D.Title>제목 <span style={{marginLeft:'1%', marginRight: '1%', color: '#aaa', fontSize: '1.6rem'}}>|</span> {notice.title}</D.Title>
             <D.Info>
               <D.InfoItem>
-                <D.InfoItemText>{notice.id}</D.InfoItemText>
+              <D.InfoItemText>No</D.InfoItemText>
+                <D.InfoItemText>: {notice.id}</D.InfoItemText>
               </D.InfoItem>
               <D.InfoItem>
                 <D.InfoItemText>작성일</D.InfoItemText>
                 <D.InfoItemText>: {new Date(notice.created_at).toLocaleDateString()}</D.InfoItemText>
               </D.InfoItem>
               <D.InfoItem>
+                <D.InfoItemText>작성자</D.InfoItemText>
+                <D.InfoItemText>: {notice.creator}</D.InfoItemText>
+              </D.InfoItem>
+              <D.InfoItem>
                 <D.InfoItemText>조회</D.InfoItemText>
-                <D.InfoItemText>{notice.view_count}</D.InfoItemText>
+                <D.InfoItemText>: {notice.view_count}</D.InfoItemText>
               </D.InfoItem>
             </D.Info>
             <D.Cont>

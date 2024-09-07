@@ -24,10 +24,44 @@ export const BoardView = styled.div`
   width: 100%;
 `;
 
-export const Title = styled.div`
-  padding: 20px 15px;
+
+export const Titlde = styled.div`
+  position: relative; // 선을 위한 상대 위치 지정
+  padding-right:30px;
+  margin-right: 30px; // 선과 내용 사이의 간격
   border-bottom: 1px dashed #ddd;
-  font-size: 2rem;
+    padding: 20px 15px;
+    font-size: 2rem;
+  &::after {
+    content: ""; // 선을 만들기 위한 가상 요소
+    position: absolute; // 선의 위치를 제목 요소 기준으로 설정
+    top: 0; // 선의 상단 위치
+    right: 0; // 선의 오른쪽 위치
+    display: block; // 선을 블록 요소로 표시
+    width: 1px; // 선의 두께
+    height: 100%; // 선의 높이를 제목의 높이와 동일하게 설정
+    background: #ddd; // 선의 색상
+  }
+`;
+
+export const Title = styled.div`
+  position: relative; // 선을 위한 상대 위치 지정
+  padding-right: 30px; // 제목과 선 사이의 간격
+  margin-right: 30px; // 선과 내용 사이의 추가 간격
+  font-size: 2rem; // 제목의 글자 크기
+  padding: 20px 15px; // 상하, 좌우 패딩
+  display: flex; // Flexbox 레이아웃 적용
+  align-items: center; // 중앙 정렬
+  border-bottom: 1px dashed #ddd;
+  &::after {
+    content: ""; // 선을 만들기 위한 가상 요소
+    position: absolute; // 선의 위치를 제목 요소 기준으로 설정
+    top: 0; // 선의 상단 위치
+    right: -30px; // 오른쪽 여백을 고려한 위치 조정
+    bottom: 0; // 하단 위치 조정
+    width: 1px; // 선의 두께
+    background: #ddd; // 선의 색상
+  }
 `;
 
 export const Info = styled.div`
@@ -47,7 +81,7 @@ export const InfoItem = styled.dl`
   &::before {
     content: "";
     position: absolute;
-    top: 1px;
+    top: 3px;
     left: 0;
     display: block;
     width: 1px;
@@ -66,7 +100,7 @@ export const InfoItemText = styled.div`
 `;
 
 export const Cont = styled.div`
-  padding: 15px;
+  padding: 100px 15px;
   border-bottom: 1px solid #000;
   line-height: 2;
   font-size: 1.3rem;
