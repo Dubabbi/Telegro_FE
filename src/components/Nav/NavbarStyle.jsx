@@ -1,5 +1,6 @@
 import styled from 'styled-components';
-
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
 export const NavWrapper = styled.div`
   position: fixed;
   top: 0;
@@ -101,7 +102,7 @@ export const MainNav = styled.ul`
 export const StyledButton = styled(Button)`
     position: absolute;
     top: 50%;
-    margin-right: 20%; 
+    right: 10%; 
     transform: translateY(-50%);
     height: 30px; 
     width: 30px; 
