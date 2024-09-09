@@ -52,7 +52,7 @@ export default function Landing() {
             <img src={Mail} />
             <p>Telegro@telegro.com</p>
           </L.FooterEnd>
-          <L.Contact>Contact Us</L.Contact>
+          <L.Contact><a href="mailto:ykjroom@naver.com">Contact Us</a></L.Contact>
           </L.FooterBox>
         </L.FooterInline>
         <hr style={{margin: '2%', width: '90%', marginLeft: '5%', color: '#C1C7CD'}}/>

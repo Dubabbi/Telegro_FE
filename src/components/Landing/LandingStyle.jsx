@@ -169,7 +169,7 @@ export const FooterInline = styled.div`
     flex-direction: row;
     justify-content: space-between;
     width: 80%;
-    margin-left: 10%;
+    margin-left: 5%;
 
 `
 
