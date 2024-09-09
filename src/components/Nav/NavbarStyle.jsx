@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+
 export const NavWrapper = styled.div`
   position: fixed;
   top: 0;
@@ -40,7 +41,6 @@ export const MainNav = styled.ul`
   align-items: center;
   
   li {
-
     position: relative;
     padding: 0 25px;
     padding-top: 22px;
@@ -102,7 +102,7 @@ export const MainNav = styled.ul`
 export const StyledButton = styled(Button)`
     position: absolute;
     top: 50%;
-    right: 10%; 
+    right: 5%; 
     transform: translateY(-50%);
     height: 30px; 
     width: 30px; 
@@ -118,3 +118,52 @@ export const StyledButton = styled(Button)`
         transition: 0.5s;
       }
 `;
+
+export const SearchWindow = styled.div`
+  position: absolute;
+  top: 70px;
+  transform: translateX(-10%);
+  right: 0;
+  justify-content: flex-end;
+  width: 100%;
+  max-width: 350px;
+  padding: 10px;
+  color: #fff;
+  z-index: 1001;
+`;
+
+export const SearchWrap = styled.div`
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  color: #fff;
+  align-items: center;
+  max-width: 300px;
+  padding: 1%;
+`;
+
+export const StyledForm = styled.form`
+  display: flex;
+  width: 100%;
+
+  input::placeholder {
+    color: #eee;
+  }
+`;
+
+export const SearchInput = styled.input`
+  width: 100%;
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  &:focus {
+    outline: none;
+    border-color: #fff;
+  }
+`;
+
+export const BoardSearchArea = styled.div`
+  justify-content: flex-end;
+  margin: 15px 0;
+  max-height: 3%;
+`

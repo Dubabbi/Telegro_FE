@@ -55,7 +55,6 @@ const NoticeDetail = () => {
             <D.BtLink as={Link} to="/notice">
               목록
             </D.BtLink>
-            <D.BtLink href="edit.html">수정</D.BtLink>
           </D.BtWrap>
         </D.BoardViewWrap>
       </N.Section>
