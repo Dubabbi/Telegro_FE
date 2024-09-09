@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import * as N from './NavbarStyle';
 import { FaSearch } from 'react-icons/fa';
 import Form from 'react-bootstrap/Form';
+import Avvvatars from 'avvvatars-react'
 
 export default function Navbar() {
   const [searchValue, setSearchValue] = useState('');
