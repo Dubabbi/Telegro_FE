@@ -1,6 +1,6 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-//import AdminNavbar from './components/AdminNav/AdminNavbar';  // 관리자용 내비게이션 바
+import AdminNav from './components/AdminNav/AdminNav'; 
 import Footer from './components/Footer/Footer';
 import ClientPage from './pages/Client';
 import StatPage from './pages/Stat';
@@ -10,14 +10,15 @@ import AdminInquiryPage from './pages/AdminInquiry';
 export default function Admin() {
   return (
     <div>
-     {/* <AdminNavbar />  관리자 페이지용 내비게이션 바 */}
+      {/* 관리자 전용 네비게이션 바 */}
+      <AdminNav /> 
       <Routes>
-      <Route path="/admin/client" element={<ClientPage />} />
-        <Route path="/admin/adminnotice" element={<AdminNoticePage />} />
-        <Route path="/admin/admininquiry" element={<AdminInquiryPage />} /> 
-        <Route path="/admin/stat" element={<StatPage />} /> 
+        {/* 각 관리자 페이지로의 서브 라우트 설정 */}
+        <Route path="client" element={<ClientPage />} />
+        <Route path="adminnotice" element={<AdminNoticePage />} />
+        <Route path="admininquiry" element={<AdminInquiryPage />} /> 
+        <Route path="stat" element={<StatPage />} /> 
       </Routes>
-      <Footer />
     </div>
   );
 }

@@ -26,6 +26,7 @@ export const Inline = styled.div`
     align-items: center;
     margin: 10%;
     margin-bottom: 5%;
+    margin-top: 5%;
     flex-wrap: wrap;
 `
 

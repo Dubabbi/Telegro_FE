@@ -48,15 +48,15 @@ export const SearchWrap = styled.div`
   position: relative;
   display: flex;
   justify-content: flex-end;
-  margin-left: 770px;
+  margin-left: 600px;
   width: 100%;
   max-width: 350px;
   align-items: center;
 `
 
 export const SearchButton = styled.button`
-  position: absolute; /* 수정된 부분 */
-  right: 10px; /* 수정된 부분 */
+  position: absolute; 
+  right: 10px;
   height: 40px;
   width: 100px;
   padding: 0;

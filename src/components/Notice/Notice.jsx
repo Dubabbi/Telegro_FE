@@ -6,6 +6,7 @@ import CommonTable from './CommonTable';
 import CommonTableColumn from './CommonTableColumn';
 import CommonTableRow from './CommonTableRow';
 import * as N from './NoticeStyle';
+import Pagination from './Pagination';
 
 const Notice = () => {
   const [notice, setNotice] = useState([
@@ -38,6 +39,7 @@ const Notice = () => {
   ));
 
   return (
+    <>
     <N.MainWrapper>
       <div style={{width: '100%', minHeight: '22.6vh', border: 'none'}}></div>
       <N.Section>
@@ -65,6 +67,8 @@ const Notice = () => {
         </div>
       </N.Section>
     </N.MainWrapper>
+    <Pagination />
+    </>
   );
 };
 
