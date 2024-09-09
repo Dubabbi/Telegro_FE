@@ -156,6 +156,7 @@ function Admin() {
     <Wrapper>
       <LoginSection>
         <Title>Telegro</Title>
+        <Title style={{fontSize: '1.5rem', color: '#94A3D8'}}>관리자 모드</Title>
         <Form onSubmit={handleSubmit}>
           <InputBox>
             <label htmlFor="idText">아이디</label>
@@ -175,8 +176,8 @@ function Admin() {
 
         </div>
           </div>
-          <Button primary type="submit">로그인</Button>
-          <Button onClick={() => navigate('/register')}>회원가입</Button>
+          <Button primary type="submit" onClick={() => navigate('/admin/stat')}>로그인</Button>
+          
         </Form>
       </LoginSection>
     </Wrapper>
