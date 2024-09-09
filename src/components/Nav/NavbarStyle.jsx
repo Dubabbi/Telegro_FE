@@ -148,12 +148,14 @@ export const StyledForm = styled.form`
 
   input::placeholder {
     color: #eee;
+    padding-left: 2%;
   }
 `;
 
 export const SearchInput = styled.input`
   width: 100%;
   padding: 8px;
+  color: #fff;
   border-radius: 5px;
   border: 1px solid #ccc;
   &:focus {

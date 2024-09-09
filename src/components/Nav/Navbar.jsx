@@ -11,10 +11,11 @@ export default function Navbar() {
     e.preventDefault();
     console.log('검색어:', searchValue);
     setSearchValue('');
+    // 검색 실행 로직 추가 가능
   };
 
   const toggleSearch = () => {
-    setIsSearchOpen(!isSearchOpen); // FaSearch 클릭 시 상태 토글
+    setIsSearchOpen(true); // 검색창을 열기만 하고 닫기 기능은 없음
   };
 
   return (
@@ -41,23 +42,31 @@ export default function Navbar() {
           </N.MainNav>
         </N.NavContainer>
 
-        {/* FaSearch 아이콘 클릭 시 검색 창이 보이도록 상태에 따라 조건부 렌더링 */}
-        {isSearchOpen ? (
-            <N.SearchWindow>
-              <N.SearchWrap>
-                <N.StyledForm onSubmit={handleSubmit}>
-                  <N.SearchInput
-                    type="text"
-                    placeholder="게시글 검색"
-                    value={searchValue}
-                    onChange={(e) => setSearchValue(e.target.value)}
-                  />
-                  <N.StyledButton type="submit" variant="none"><FaSearch size={15} /></N.StyledButton>
-                </N.StyledForm>
-              </N.SearchWrap>
-            </N.SearchWindow>
-        ) : (
+        {/* 검색 버튼이 검색창을 열도록 설정 */}
+        {!isSearchOpen && (
           <N.StyledButton onClick={toggleSearch}><FaSearch /></N.StyledButton>
+        )}
+
+        {/* 검색창이 열리면 검색 기능을 제공 */}
+        {isSearchOpen && (
+          <N.SearchWindow style={{
+            visibility: isSearchOpen ? 'visible' : 'hidden',
+            opacity: isSearchOpen ? 1 : 0,
+            transform: isSearchOpen ? 'translateY(0)' : 'translateY(-10px)',
+            transition: 'visibility 0s linear 0.5s, opacity 0.5s ease, transform 0.5s ease'
+          }}>
+            <N.SearchWrap>
+              <N.StyledForm onSubmit={handleSubmit}>
+                <N.SearchInput
+                  type="text"
+                  placeholder="검색"
+                  value={searchValue}
+                  onChange={(e) => setSearchValue(e.target.value)}
+                />
+                <N.StyledButton type="submit" variant="none"><FaSearch size={15} /></N.StyledButton>
+              </N.StyledForm>
+            </N.SearchWrap>
+          </N.SearchWindow>
         )}
       </N.NavWrapper>
     </>
