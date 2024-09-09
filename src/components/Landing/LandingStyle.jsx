@@ -67,7 +67,7 @@ export const FirstButton = styled.button`
     color: #fff;
     border-radius: 0.2rem;
     font-size: 1.7rem;
-    padding: 5% 6%;
+    padding: 2% 3%;
     white-space: nowrap;
     align-items: center;
     display: flex;
@@ -91,7 +91,7 @@ export const SecondButton = styled.button`
     border: 1px solid #0F62FE;
     white-space: nowrap;
     font-size: 1.7rem;
-    padding: 5% 6%;
+    padding: 2% 3%;
     align-items: center;
     display: flex;
     flex-direction: row;

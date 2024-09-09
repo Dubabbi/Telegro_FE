@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import * as L from '../Login/LoginStyle';
 
-function GeneralLogin() {
+function Signup() {
   const navigate = useNavigate();
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
@@ -33,19 +33,14 @@ function GeneralLogin() {
             <L.CheckboxLabel htmlFor="checkId">아이디 저장</L.CheckboxLabel>
           </L.CheckboxContainer>
           <div>
-          <L.Text>일반고객</L.Text>
-          <L.Account>            
-            <L.Span color="#94A3D8">ID: guest</L.Span>
-            <L.Span color="#94A3D8">PW: 0000</L.Span>
-          </L.Account>
+          <L.Text><a style={{color: '#0F62FE',  textDecoration: 'underline', textDecorationColor: '#0F62FE' }} href="/generallogin">일반고객으로 로그인</a></L.Text>
         </div>
           </div>
           <L.Button primary type="submit">로그인</L.Button>
-          <L.Button onClick={() => navigate('/signup')}>회원가입</L.Button>
         </L.Form>
       </L.LoginSection>
     </L.Wrapper>
   );
 }
 
-export default GeneralLogin;
+export default Signup;
