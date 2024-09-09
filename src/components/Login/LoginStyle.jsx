@@ -1,236 +1,150 @@
 //LoginStyle.jsx
 import styled from 'styled-components';
 
-export const AppContainer = styled.div`
+export const Wrapper = styled.div`
   display: flex;
-  justify-content: flex-end;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 6% 0;
+  margin: 0;
+  background-color: #ccc;
+  width: 100%; /* 화면 너비에 맞춰 배경이 줄어들도록 설정 */
+  min-height: 100vh; /* 화면 높이에 맞춰 Wrapper가 줄어들도록 설정 */
 `;
 
-export const Logo = styled.div`
-  font-size: 2.6rem;
-  font-weight: bold;
-  text-align: center;
-  color: #262626;
-  display: flex;
-  flex-direction: column; // 수직 스택을 위해 방향 변경
-  justify-content: center; // 수직 중심 정렬
-  align-items: center; // 가로 중심 정렬
-  width: 100%; // 전체 너비 사용
+export const LoginSection = styled.section`
+  width: 38%;
+  max-width: 558px;
+  height: auto;
+  box-shadow: 0 0.4rem 0.8rem rgba(0, 0, 0, 0.1);
+  background: #fff;
+  padding: 50px 50px;
+  border-radius: 10px;
+  position: relative;
+  border-radius: 1rem;
+  z-index: 2;
+    @media (max-width: 768px) {
+    width: 80%; /* 화면 크기가 768px 이하일 때 너비를 80%로 조정 */
+    padding: 40px 30px; /* 작은 화면에서는 패딩을 줄여 공간 확보 */
+  }
 
-  img {
-    height: 35%; // 로고 이미지의 높이를 조절
-    margin-top: 5%;
+  @media (max-width: 480px) {
+    width: 90%; /* 모바일 화면에서는 너비를 90%로 조정 */
+    padding: 30px 20px; /* 패딩을 더 줄여 모바일에서 더 깔끔하게 표시 */
   }
 `;
 
-/*
-export const Logo = styled.div`
-  font-size: 2.6rem;
+export const Title = styled.h3`
+  font-size: 30px;
   font-weight: bold;
+  margin-top: 20px;
+  margin-bottom: 20px;
   text-align: center;
-  color: #262626;
+`;
+
+export const Text = styled.p`
+  text-align: right;
+  font-size: 12px;
+  margin-top: 5px;
+  margin-bottom: 9px;
+  white-space: nowrap;
+  color: #777;
+  text-decoration : underline;
+`;
+
+export const Account = styled.div`
+  margin-bottom: 17px;
+  border-radius: 0.7rem;
+  color: white;
+  padding: 3% 4%;
+  display: inline-block;
+  white-space: nowrap;
+`;
+
+export const Span = styled.span`
+  background-color: ${props => props.color};
+  font-size: 13px;
+  white-space: nowrap;
+  padding: 2px 5px;
+  border-radius: 4px;
+  margin-right: 5px;
+`;
+
+export const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  margin-top: 25px;
+`;
+
+export const InputBox = styled.div`
+  margin-bottom: 14px;
+  white-space: nowrap;
+  label {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 6px;
+  }
+  input {
+    display: block;
+    width: 100%;
+    height: 48px;
+    border: 1px solid #E0E0E0;
+    padding: 12px 20px;
+    font-size: 18px;
+    border-radius: 4px;
+    &:focus {
+      outline: 2.5px solid #94A3D8;
+      border: none;
+    }
+    &::placeholder {
+      color: #B4B4B4;
+      font-size: 16px;
+    }
+  }
+`;
+
+export const Button = styled.button`
+  width: 100%;
+  height: 48px;
+  border-radius: 4px;
+  font-size: 16px;
+  margin-bottom: 14px;
+  background-color: ${props => props.primary ? '#94A3D8' : '#FFFFFF'};
+  color: ${props => props.primary ? '#FFFFFF' : '#000000'};
+  border: ${props => props.primary ? 'none' : '1px solid #E0E0E0'};
+`;
+
+export const CheckboxContainer = styled.div`
   display: flex;
   align-items: center;
-`
-
-export const LoginWrapper = styled.div`
-  padding-top: 0.5%;  // 위쪽 패딩
-  padding-bottom: 0.5%;  // 아래쪽 패딩
-  padding-left: 0;  // 좌측 패딩 제거
-  padding-right: 0;  // 우측 패딩 제거
-`;
-*/
-
-export const LoginWrapper = styled.div`
-  width: 100%; // 전체 너비를 사용
-  height: 100vh; // 뷰포트 높이와 동일하게 설정
-  display: flex;
-  justify-content: flex-end; // 자식 요소를 오른쪽으로 정렬
-  align-items: center; // 수직 중심 정렬
-  padding: 0; // 패딩 제거
+  margin-bottom: 40px;
+  white-space: nowrap;
 `;
 
-/*
-export const Page = styled.div`
-  position: relative;
-  width: 700px;
-  margin: 0% auto 0; 
-  flex-direction: column;
-  border-radius: 2rem; 
-  height: 98vh;
-  background-color: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 0.4rem 0.8rem rgba(0, 0, 0, 0.1);
-  
-  @media (max-width: 1024px) { // 태블릿
-    padding: 0 2rem; 
-    height: auto; 
-    margin-top: 3%; 
-    min-height: 550px;
-  }
-
-  @media (max-width: 768px) { // 중간 크기 모바일
-    padding: 0 1.5rem; // 좀 더 적은 패딩
-    margin-top: 7%; // 상단 여백 더 크게
-  }
-
-  @media (max-width: 480px) { // 작은 모바일
-    padding: 5 5rem; 
-    margin-top: 10%; 
-    font-size: 0.8rem; 
-    border-radius: 1rem; 
-  }
-`;*/
-export const Page = styled.div`
-  position: fixed; // 고정 위치
-  right: 0; // 화면의 오른쪽에 고정
-  top: 0; // 화면의 상단부터 시작
-  width: 700px; // 고정 너비
-  height: 98vh; // 높이를 뷰포트의 98%로 설정
-  margin: 0; // 자동 마진 제거
-  flex-direction: column;
-  border-radius: 5rem;
-  background-color: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 0.4rem 0.8rem rgba(0, 0, 0, 0.1);
-  
-  @media (max-width: 1024px) { // 태블릿
-    padding: 0 2rem;
-    min-height: 550px;
-  }
-
-  @media (max-width: 768px) { // 중간 크기 모바일
-    padding: 0 1.5rem;
-    margin-top: 7%;
-  }
-
-  @media (max-width: 480px) { // 작은 모바일
-    padding: 0 1rem;
-    font-size: 0.8rem;
-    border-radius: 1rem;
-  }
-`;
-
-export const TitleWrap = styled.div`
-  font-size: 2.6rem;
-  padding-top: 25%;
-  margin-bottom: 7%;
-  font-weight: bold;
-  text-align: center;
-  color: #262626;
-  letter-spacing: 0px;
-  line-height: 1.5;
-`;
-
-
-export const LostPwMessage = styled.div`
-  position: relative;
-  margin-top: 8px;
+export const CheckboxLabel = styled.label`
+  font-size: 16px;
   cursor: pointer;
-  width: 60%;
-  color: red;
-  font-size: 14px;
-  text-align: right;
 `;
 
-export const InputTitle = styled.div`
-  margin-left: 21%;
-  max-width: 60%;
-  margin-bottom: 1%;
-  font-size: 1.5rem;
-`
-
-export const InputWrap = styled.div`
-  display: flex;
-  border-radius: 10px;
-  padding: 1.3rem;
-  margin-bottom: 4%;
-  margin-left: 20%;
-  max-width: 60%;
-  background-color: #EFF0F2;
-  border: 2px solid #e2e0e0;
-
-  &:focus-within {
-    border: 2px solid #ACAACC;
+export const Checkbox = styled.input`
+  margin-right: 6px;
+  margin-top: 6px;
+  width: 23px;
+  border: 1px solid #ddd;
+  height: 23px;
+  border-radius: 8px;
+  &:checked {
+    background-color: #94A3D8;
   }
-
-  @media (max-width: 500px) { // 작은 모바일
-    padding: 1.2rem;
-  }
-
 `;
 
-export const Input = styled.input`
-  width: 100%;
-  outline: none;
-  border: none;
-  height: 2.5rem;
-  font-size: 1.5rem;
-  font-weight: 400;
-
-  &::placeholder {
-    color: #aaaaaa;
-  }
-  
-`;
-
-export const BottomButton = styled.button`
-  margin-left: 20%;
-  width: 60%;
-  padding: 1.5rem;
-  height: 5.5rem;
-  border: none;
-  font-weight: bold;
-  border-radius: 10px;
-  background-color: #ACAACC;
-  color: white;
-  font-size: 1.8rem;
-  cursor: pointer;
-
-  @media (max-width: 500px) { // 작은 모바일
-    padding: 1.2rem;
-  } 
-  &:hover {
-    background-color: #8C84B0;
-}
-`;
-
-
-export const ErrorMessageWrap = styled.div`
-  position: fixed;
-  margin-left: 20%;
-  width: 60%;
-  margin-top: 1%;
-  color: red;
-  font-size: 1.3rem;
-`;
-
-
-export const NoAccount = styled.div`
-  display: flex;
-  justify-content: space-around;  // 각 항목 사이에 균일한 공간 배분
-  align-items: center;           // 세로 중심 정렬
-  margin-top: 4%;
-  margin-bottom: 2%;
-  max-width: 60%;
-  margin-left: 20%;
-  font-size: 1.3rem;             // 폰트 크기 유지
-  color: white;                  // 폰트 색상 지정 (선택적)
-  @media (max-width: 500px) {   // 작은 모바일
-    margin-top: 8%;
-  } 
-  p {
-    color: #ACAACC;              // 링크 색상 조정
-    }
-  a {
-    color: #ACAACC;              // 링크 색상 조정
-    text-decoration: none;       // 밑줄 제거
-    font-weight: bold;           // 폰트 굵기
-    &:hover {
-      text-decoration: underline; // 호버 시 밑줄 추가
-    }
-    
-  }
-`
-
-export const UnderlinedText = styled.span`
+export const Link = styled.a`
+  margin-top: -35px;
+  color: #94A3D8;
   text-decoration: underline;
+  cursor: pointer;
+  &:hover {
+    text-decoration: none;
+  }
 `;

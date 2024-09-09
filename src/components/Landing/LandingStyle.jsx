@@ -59,27 +59,27 @@ export const ButtonWrapper = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
-    gap: 3%;
+    gap: 2%;
 `
 
 export const FirstButton = styled.button`
     background-color: #0F62FE;
     color: #fff;
-    border: 1px solid #0F62FE;
     border-radius: 0.2rem;
     font-size: 1.7rem;
-    padding: 2% 3%;
+    padding: 5% 6%;
+    white-space: nowrap;
     align-items: center;
     display: flex;
     flex-direction: row;
     justify-content: space-around;
     p{
         align-items: center;
-        margin: 1%;
+        margin: 3%;
     }
     img{
         max-width: 25%;
-        margin: 1%;
+        margin: 3%;
         align-items: center;
     }
 `
@@ -89,19 +89,20 @@ export const SecondButton = styled.button`
     color: #0F62FE;
     border-radius: 0.2rem;
     border: 1px solid #0F62FE;
+    white-space: nowrap;
     font-size: 1.7rem;
-    padding: 2% 3%;
+    padding: 5% 6%;
     align-items: center;
     display: flex;
     flex-direction: row;
     justify-content: space-around;
     p{
         align-items: center;
-        margin: 1%;
+        margin: 3%;
     }
     img{
         max-width: 25%;
-        margin: 1%;
+        margin: 3%;
         align-items: center;
     }
 `
