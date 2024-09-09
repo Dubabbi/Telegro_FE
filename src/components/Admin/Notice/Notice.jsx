@@ -46,7 +46,7 @@ const Notice = () => {
         </N.PageTitle>
         <div style={{textAlign: 'right'}}> 총 게시물 수 : 58  현재 페이지 : 1 / 6</div>
         <N.BoardSearchArea>
-          <N.SearchWindow>
+          <N.SearchWindow marginLeft>
             <N.SearchWrap>
             <N.StyledForm onSubmit={handleSubmit}>
                 <Form.Control

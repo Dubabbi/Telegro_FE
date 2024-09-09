@@ -38,9 +38,9 @@ const InquiryForm = () => {
   ));
 
   return (
-    <N.MainWrapper>
-      <div style={{width: '100%', minHeight: '22.6vh', border: 'none'}}></div>
-      <N.Section>
+    <N.MainWrapper style={{marginLeft: "22%"}}>
+      <div style={{width: '90%', minHeight: '2.6vh', border: 'none'}}></div>
+      <N.Section style={{width: '90%', minHeight: '2.6vh', border: 'none'}}>
         <N.PageTitle>
           <N.TitleText>제안문의</N.TitleText>
         </N.PageTitle>
