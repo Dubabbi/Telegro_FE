@@ -18,7 +18,7 @@ export const Logo = styled.a`
   width: 300px;
   height: 70px;
   line-height: 60px;
-  font-size: 4.5rem;
+  font-size: 4rem;
   color: white;
   text-align: center;
   font-weight: bold;
