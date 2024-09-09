@@ -19,7 +19,7 @@ export const LoginSection = styled.section`
   height: auto;
   box-shadow: 0 0.4rem 0.8rem rgba(0, 0, 0, 0.1);
   background: #fff;
-  padding: 50px 50px;
+  padding: 5% 6%;
   border-radius: 10px;
   position: relative;
   border-radius: 1rem;
