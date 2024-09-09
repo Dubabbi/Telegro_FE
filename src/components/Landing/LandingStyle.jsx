@@ -25,7 +25,6 @@ export const Inline = styled.div`
     justify-content: space-around;
     align-items: center;
     margin: 10%;
-
     margin-bottom: 5%;
     flex-wrap: wrap;
 `
@@ -168,7 +167,7 @@ export const FooterInline = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    width: 80%;
+    width: 90%;
     margin-left: 5%;
 
 `
