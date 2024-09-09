@@ -6,6 +6,8 @@ import ClientPage from './pages/Client';
 import StatPage from './pages/Stat';
 import AdminNoticePage from './pages/AdminNotice';
 import AdminInquiryPage from './pages/AdminInquiry';
+import NoticeCreatePage from './pages/NoticeCreate';
+import AdminNoticeDetailPage from './pages/AdminNoticeDetail';
 
 export default function Admin() {
   return (
@@ -18,6 +20,8 @@ export default function Admin() {
         <Route path="adminnotice" element={<AdminNoticePage />} />
         <Route path="admininquiry" element={<AdminInquiryPage />} /> 
         <Route path="stat" element={<StatPage />} /> 
+        <Route path="noticecreate" element={<NoticeCreatePage />} />
+        <Route path="adminnoticedetail" element={<AdminNoticeDetailPage />} />
       </Routes>
     </div>
   );
