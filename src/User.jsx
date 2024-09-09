@@ -15,6 +15,7 @@ import ProductPage from './pages/Product';
 import ClientPage from './pages/Client';
 import AdminNoticePage from './pages/AdminNotice';
 import AdminInquiryPage from './pages/AdminInquiry';
+import StatPage from './pages/Stat';
 import OrderPage from './pages/Order';
 import CheckPage from './pages/Check';
 import Headset from './components/Check/Headset';
@@ -43,6 +44,7 @@ export default function User() {
         <Route path="/admin/client" element={<ClientPage />} />
         <Route path="/admin/adminnotice" element={<AdminNoticePage />} />
         <Route path="/admin/admininquiry" element={<AdminInquiryPage />} /> 
+        <Route path="/admin/stat" element={<StatPage />} /> 
         <Route path="/order" element={<OrderPage />} />
         <Route path="/check" element={<CheckPage />} />
         <Route path="/headset" element={<Headset />} />
