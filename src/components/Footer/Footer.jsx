@@ -1,57 +1,36 @@
 import React from "react";
 import styled from 'styled-components';
+import * as L from '../Landing/LandingStyle';
+import Logo from '/src/assets/image/Landing/logo.svg';
+import Mail from '/src/assets/image/Landing/mail.svg';
 
-const StyledFooter = styled.div`
-    background: #fff;
-    margin-bottom: 0;
-`;
-
-const FooterContent = styled.div`
-    display: flex;
-    flex-direction: column;
-    padding: 1rem 2rem;
-    &.below {
-        align-items: center;
-        display: flex;
-        flex-direction: row;
-        margin-top: 0.2rem;
-        margin-left: 3%;
-    }
-`;
-
-const FooterText = styled.p`
-    text-align: left;
-    font-size: 13px;
-    line-height: 15px;
-    color: #000;
-    font-weight: 600;
-`;
-
-const responsive = {
-    large: `@media (max-width: 850px)`,
-    small: `@media (max-width: 550px)`
-};
-
-const FooterHeading = styled.h1`
-    ${responsive.large} {
-        font-size: 44px;
-        line-height: 50px;
-    }
-    ${responsive.small} {
-        font-size: 34px;
-        line-height: 42px;
-    }
-`;
 
 export default function Footer() {
     return (
-        <StyledFooter>
-            <FooterContent>
-            <hr style={{width: '90%'}}/>
-                <FooterContent className="below">
-                    <FooterText>© Copyright 2024 Telego</FooterText>
-                </FooterContent>
-            </FooterContent>
-        </StyledFooter>
+        <L.FooterWrapper style={{backgroundColor: 'rgba(20, 20, 20, 0.9)'}}>
+        <L.Footerline>
+          <L.FooterTitle>
+            <img src={Logo} />
+            <p>Telegro</p>
+          </L.FooterTitle>
+          <L.FooterBox>
+          <L.FooterEnd>
+            <img src={Mail} />
+            <p>Telegro@telegro.com</p>
+          </L.FooterEnd>
+          <L.Contact>Contact Us</L.Contact>
+          </L.FooterBox>
+        </L.Footerline>
+        <hr style={{margin: '2%', width: '90%', marginLeft: '5%', color: '#C1C7CD'}}/>
+        <L.TextWrapper>
+          <h1>회사명: 서연전자</h1>
+          <p>주소: 서울특별시 광진구 광나루로56길 85 테크노마트 21 8층 A30, 31호</p>
+          <p>고객센터: 070-4240-7422</p>
+          <p>대표이사: 연경진</p>
+          <p>사업자 등록번호: 215-18-12286</p>
+        </L.TextWrapper>
+        <hr style={{margin: '2%', width: '90%', marginLeft: '5%', color: '#C1C7CD'}}/>
+        <L.Copyright>Telegro @ 2024. All rights reserved.</L.Copyright>
+      </L.FooterWrapper>
     );
 }

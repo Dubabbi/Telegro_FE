@@ -173,6 +173,15 @@ export const FooterInline = styled.div`
 
 `
 
+export const Footerline = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 80%;
+    margin-left: 5%;
+
+`
+
 export const FooterTitle = styled.div`
     display: flex;
     flex-direction: row;
