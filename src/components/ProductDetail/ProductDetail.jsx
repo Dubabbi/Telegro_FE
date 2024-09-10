@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import img from '../Check/image.svg'; 
+import { Navigate, useNavigate } from 'react-router-dom';
 const ProductPageWrapper = styled.div`
   display: flex;
   justify-content: center;
@@ -192,6 +193,7 @@ const Title = styled.div`
 `;
 
 const ProductDetail = () => {
+  const navigate = useNavigate();
   return (
     <>
       <div style={{ width: '100%', minHeight: '22.6vh', border: 'none' }}></div>
@@ -204,7 +206,7 @@ const ProductDetail = () => {
             <ProductInfo>
               <ProductTitle>상품명</ProductTitle>
               <ProductSubtitle>제품명</ProductSubtitle>
-              <BuyButton>구매하기</BuyButton>
+              <BuyButton onClick={() => navigate('/orderproduct')}>구매하기</BuyButton>
             </ProductInfo>
           </ProductInfoWrapper>
           {/* 우측 추가 상품 이미지 */}

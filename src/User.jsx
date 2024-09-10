@@ -2,13 +2,13 @@ import React from 'react';
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
 import Navbar from './components/Nav/Navbar';
 import Footer from './components/Footer/Footer';
+import NotificationBar from './components/NotificationBar/NotificationBar';
 import MainPage from './pages/Main';
 import LoginPage from './pages/Login';
 import NoticePage from './pages/Notice';
 import NoticeDetailPage from './pages/NoticeDetail';
 import InquiryFormPage from './pages/InquiryForm';
 import InquiryDetailPage from './pages/InquiryDetail';
-import OrderManagerPage from './pages/OrderProduct';
 import OrderReviewPage from './pages/OrderReview';
 import ProductPage from './pages/Product';
 import OrderPage from './pages/Order';
@@ -45,6 +45,7 @@ export default function User() {
         <Route path="/recording" element={<Recording />} />
         <Route path="/accessory" element={<Accessory />} />
       </Routes>
+      <NotificationBar />
       <ChatButton />
       <Footer />
     </div>
