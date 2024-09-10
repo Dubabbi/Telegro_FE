@@ -36,7 +36,7 @@ function Login() {
           <L.Text><a style={{color: '#0F62FE',  textDecoration: 'underline', textDecorationColor: '#0F62FE' }} href="/generallogin">일반고객으로 로그인</a></L.Text>
         </div>
           </div>
-          <L.Button primary type="submit">로그인</L.Button>
+          <L.Button primary type="submit" onClick={() => navigate('/main')}>로그인</L.Button>
         </L.Form>
       </L.LoginSection>
     </L.Wrapper>

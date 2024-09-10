@@ -11,7 +11,6 @@ function GeneralLogin() {
     event.preventDefault();
     // 로그인 처리 로직
     console.log('Login Attempt', id, password);
-    // navigate('/dashboard'); // 로그인 성공 후 리다이렉트
   };
 
   return (
@@ -40,7 +39,7 @@ function GeneralLogin() {
           </L.Account>
         </div>
           </div>
-          <L.Button primary type="submit">로그인</L.Button>
+          <L.Button primary type="submit" onClick={() => navigate('/main')}>로그인</L.Button>
           <L.Button onClick={() => navigate('/signup')}>회원가입</L.Button>
         </L.Form>
       </L.LoginSection>
