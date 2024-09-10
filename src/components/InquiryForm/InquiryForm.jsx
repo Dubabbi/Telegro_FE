@@ -6,6 +6,7 @@ import CommonTable from './CommonTable';
 import CommonTableColumn from './CommonTableColumn';
 import CommonTableRow from './CommonTableRow';
 import * as N from '../Notice/NoticeStyle';
+import Pagination from '../Pagination/Pagination';
 
 const InquiryForm = () => {
   const [inquiry, setInquiry] = useState([
@@ -38,6 +39,7 @@ const InquiryForm = () => {
   ));
 
   return (
+    <>
     <N.MainWrapper>
       <div style={{width: '100%', minHeight: '22.6vh', border: 'none'}}></div>
       <N.Section>
@@ -65,6 +67,8 @@ const InquiryForm = () => {
         </div>
       </N.Section>
     </N.MainWrapper>
+    <Pagination />
+    </>
   );
 };
 

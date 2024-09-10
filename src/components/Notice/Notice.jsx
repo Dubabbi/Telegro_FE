@@ -6,7 +6,7 @@ import CommonTable from './CommonTable';
 import CommonTableColumn from './CommonTableColumn';
 import CommonTableRow from './CommonTableRow';
 import * as N from './NoticeStyle';
-import Pagination from './Pagination';
+import Pagination from '../Pagination/Pagination';
 
 const Notice = () => {
   const [notice, setNotice] = useState([

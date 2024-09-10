@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import image from './image.svg';
 import { useNavigate } from 'react-router-dom';
 import * as P from './ProductStyle'
+import Pagination from '../Pagination/Pagination';
 
 const products = [
   { id: 1, name: '상품명', model: '모델명', price: '880,000원', img: image },
@@ -37,6 +38,7 @@ const Recording = () => {
         </P.ProductBox>
       ))}
     </P.ProductGrid>
+    <Pagination />
     </>
   );
 };
