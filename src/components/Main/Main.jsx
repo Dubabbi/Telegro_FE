@@ -96,10 +96,13 @@ export default function Main() {
         </M.SynopsisItem>
       </M.List>
     </M.Layer>
-        <M.ContactWrapper>
-            <div><h1>LET'S TALK</h1><p>Welcome to inquire or leave us a message, we will serve you wholeheartedly!</p></div>
-            <M.Contact>Contact Us!</M.Contact>
-        </M.ContactWrapper>
+    {/*
+      <M.ContactWrapper>
+        <div><h1>LET'S TALK</h1><p>Welcome to inquire or leave us a message, we will serve you wholeheartedly!</p></div>
+        <M.Contact>Contact Us!</M.Contact>
+      </M.ContactWrapper>
+    */}
         </>
+
     );
 }

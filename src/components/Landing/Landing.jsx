@@ -15,7 +15,7 @@ export default function Landing() {
     <>
     <L.LandingWrapper>
     <L.NavWrapper>
-      <L.Logo href="/main">Telegro</L.Logo>
+      <L.Logo href="">Telegro</L.Logo>
     </L.NavWrapper>
     <L.Inline>
     <L.Content>

@@ -7,8 +7,8 @@ import Mail from '/src/assets/image/Landing/mail.svg';
 
 export default function Footer() {
     return (
-        <L.FooterWrapper style={{backgroundColor: 'rgba(20, 20, 20, 0.9)'}}>
-        <L.Footerline>
+        <L.FooterWrapper>
+        <L.Footerline style={{width: '90%'}}>
           <L.FooterTitle>
             <img src={Logo} />
             <p>Telegro</p>
