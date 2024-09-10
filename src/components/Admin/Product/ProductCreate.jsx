@@ -6,7 +6,7 @@ import * as N from '../Notice/NoticeStyle';
 
 // Main container for the entire form
 const MainWrapper = styled.div`
-  width: 78%;
+  width: 78%; 
   margin-left: 22%;
   padding: 20px;
 `;
@@ -14,31 +14,32 @@ const MainWrapper = styled.div`
 // Form container with a gray background for the section title
 const FormWrapper = styled.div`
   width: 100%;
-  padding: 2%;
   background-color: #f9f9f9;
   border: 1px solid #e5e5e5;
   border-radius: 8px;
 `;
 
+const SectionTitleWrapper = styled.div`
+  background-color: #f2f2f2; /* 회색 배경 */
+  padding: 1%;
+`;
+
 const SectionTitle = styled.h3`
   font-size: 1.5rem;
   font-weight: bold;
-  margin-bottom: 20px;
-  background-color: #f0f0f0;
-  padding: 10px;
-  border-radius: 5px;
 `;
 
+
 const Label = styled.label`
-  font-size: 1rem;
+  font-size: 1.2rem;
   font-weight: bold;
-  margin-bottom: 10px;
 `;
 
 const Input = styled.input`
   width: 100%;
   padding: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 10%;
+  margin-top: 3%;
   border: 1px solid #ddd;
   border-radius: 5px;
   font-size: 1rem;
@@ -48,8 +49,9 @@ const Input = styled.input`
 const Select = styled.select`
   width: 100%;
   padding: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 10%;
   border: 1px solid #ddd;
+  margin-top: 3%;
   border-radius: 5px;
   font-size: 1rem;
   box-sizing: border-box;
@@ -64,13 +66,15 @@ const Textarea = styled.textarea`
   min-height: 150px;
   box-sizing: border-box;
   resize: none;
-  margin-bottom: 20px;
+  margin-bottom: 10%;
+  margin-top: 3%;
 `;
 
 const FileInput = styled.input`
   width: 100%;
   padding: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 10%;
+  margin-top: 3%;
   border: 1px solid #ddd;
   border-radius: 5px;
   font-size: 1rem;
@@ -149,10 +153,12 @@ const ProductCreate = () => {
 
   return (
     <MainWrapper>
-      <h2>상품 등록</h2>
+      <SectionTitle style={{margin: '1%', marginBottom: '4%', marginTop: '3%'}}>상품 등록</SectionTitle>
       <FormWrapper>
+        <SectionTitleWrapper>
         <SectionTitle>상품 등록</SectionTitle>
-
+        </SectionTitleWrapper>
+        <div style={{padding: '2%'}}>
         {/* 모델명 & 상품명 한 줄로 배치 */}
         <NameRowContainer>
           <div>
@@ -314,6 +320,7 @@ const ProductCreate = () => {
             </div>
           </RightColumn>
         </SplitContainer>
+        </div>
       </FormWrapper>
       <N.Section style={{margin: '0'}}>
       <D.BtWrap>
