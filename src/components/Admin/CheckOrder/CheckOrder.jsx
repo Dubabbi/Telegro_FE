@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Pagination from '../../Pagination/Pagination';
+
 // Wrapper for the whole page
 const MainWrapper = styled.div`
   width: 78%;
@@ -68,6 +69,7 @@ const TableCell = styled.td`
   border: 1px solid #ccc;
   padding: 10px;
   text-align: center;
+  vertical-align: middle; /* This will vertically align content to the middle */
 `;
 
 // Table row
@@ -100,7 +102,18 @@ const CheckOrder = () => {
       totalPrice: '₩280,000',
       orderDate: '2024-09-06',
       point: '₩0'
-    }
+    },
+    {
+        id: 2,
+        productImage: 'https://via.placeholder.com/100',  // 실제 이미지 URL로 변경
+        productName: '단방향 자브라 마이크 (KJ 337 QD)',
+        option: '17mm 전용',
+        quantity: 1,
+        unitPrice: '1',
+        totalPrice: '₩280,000',
+        orderDate: '2024-09-06',
+        point: '₩0'
+      }
   ]);
 
   return (
@@ -147,7 +160,6 @@ const CheckOrder = () => {
           ))}
         </tbody>
       </OrderTable>
-
       <Pagination />
     </MainWrapper>
   );
