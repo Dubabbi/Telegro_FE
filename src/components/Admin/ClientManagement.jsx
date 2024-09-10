@@ -6,6 +6,7 @@ import { FaPencilAlt, FaTrash } from 'react-icons/fa';
 const MainWrapper = styled.div`
   width: 78%;
   margin-left: 22%;
+  margin-top: 3%;
   padding: 20px;
 `;
 
@@ -14,6 +15,7 @@ const Table = styled.table`
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 20px;
+  margin-top: 3%;
 `;
 
 const TableHead = styled.thead`
@@ -112,7 +114,7 @@ const ClientManagement = () => {
 
   return (
     <MainWrapper>
-      <h2 style={{fontSize: '1.5vw'}}>회원관리</h2>
+      <h2 style={{fontSize: '1.5vw', fontWeight: 'bold'}}>회원관리</h2>
       <Table>
         <TableHead>
           <TableRow>

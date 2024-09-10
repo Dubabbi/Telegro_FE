@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { FaSearch, FaCog, FaSignOutAlt, FaChevronDown, FaChevronRight } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Logo from '/src/assets/image/Landing/logo.svg';
 
 const Sidebar = styled.div`
@@ -162,10 +162,16 @@ const LogoutButton = styled.div`
 const AdminNav = () => {
   const [isSubMenuOpen, setIsSubMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation(); // 현재 위치 정보를 가져옴
 
   const toggleSubMenu = () => {
     setIsSubMenuOpen(!isSubMenuOpen);
   };
+
+  // 페이지 이동 시 하위 메뉴를 자동으로 닫음
+  useEffect(() => {
+    setIsSubMenuOpen(false);  // 라우트가 변경될 때 하위 메뉴를 닫음
+  }, [location.pathname]); // 경로 변경을 감지
 
   return (
     <Sidebar>
@@ -180,7 +186,7 @@ const AdminNav = () => {
       </SearchBar>
 
       <MenuWrapper>
-        <MenuItem  onClick={() => navigate('/admin/stat')} className="active">
+        <MenuItem onClick={() => navigate('/admin/stat')} className="active">
           <FaCog />
           Dashboard
         </MenuItem>
@@ -189,14 +195,14 @@ const AdminNav = () => {
           <FaCog />
           고객 관리
         </MenuItem>
- 
+
         <MenuItem onClick={() => navigate('/admin/stat')}>
-          <FaCog/>
+          <FaCog />
           상점 접속 현황
         </MenuItem>
 
-        <MenuItem  onClick={() => navigate('/admin/adminnotice')}>
-          <FaCog/>
+        <MenuItem onClick={() => navigate('/admin/adminnotice')}>
+          <FaCog />
           자료실
         </MenuItem>
 
