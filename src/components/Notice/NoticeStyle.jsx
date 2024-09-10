@@ -48,7 +48,7 @@ export const SearchWrap = styled.div`
   position: relative;
   display: flex;
   justify-content: flex-end;
-  margin-left: 770px;
+  margin-left: 67%;
   width: 100%;
   max-width: 350px;
   align-items: center;
