@@ -9,6 +9,7 @@ import AdminInquiryPage from './pages/AdminInquiry';
 import NoticeCreatePage from './pages/NoticeCreate';
 import AdminNoticeDetailPage from './pages/AdminNoticeDetail';
 import AdminInquiryDetailPage from './pages/AdminInquiryDetail';
+import ProductCreatePage from './pages/ProductCreate';
 export default function Admin() {
   return (
     <div>
@@ -18,11 +19,12 @@ export default function Admin() {
         {/* 각 관리자 페이지로의 서브 라우트 설정 */}
         <Route path="client" element={<ClientPage />} />
         <Route path="adminnotice" element={<AdminNoticePage />} />
-        <Route path="admininquiry" element={<AdminInquiryPage />} /> 
-        <Route path="stat" element={<StatPage />} /> 
         <Route path="noticecreate" element={<NoticeCreatePage />} />
         <Route path="adminnoticedetail" element={<AdminNoticeDetailPage />} />
+        <Route path="stat" element={<StatPage />} /> 
+        <Route path="admininquiry" element={<AdminInquiryPage />} /> 
         <Route path="admininquirydetail" element={<AdminInquiryDetailPage />} />
+        <Route path="productcreate" element={<ProductCreatePage />} /> 
       </Routes>
     </div>
   );
