@@ -10,6 +10,8 @@ import NoticeCreatePage from './pages/NoticeCreate';
 import AdminNoticeDetailPage from './pages/AdminNoticeDetail';
 import AdminInquiryDetailPage from './pages/AdminInquiryDetail';
 import ProductCreatePage from './pages/ProductCreate';
+import CheckOrderPage from './pages/CheckOrder';
+
 export default function Admin() {
   return (
     <div>
@@ -25,6 +27,7 @@ export default function Admin() {
         <Route path="admininquiry" element={<AdminInquiryPage />} /> 
         <Route path="admininquirydetail" element={<AdminInquiryDetailPage />} />
         <Route path="productcreate" element={<ProductCreatePage />} /> 
+        <Route path="checkorder" element={<CheckOrderPage />} />
       </Routes>
     </div>
   );
