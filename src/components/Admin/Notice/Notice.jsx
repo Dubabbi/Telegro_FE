@@ -28,7 +28,7 @@ const Notice = () => {
     <CommonTableRow key={notice.id}>
       <CommonTableColumn>{notice.id}</CommonTableColumn>
       <CommonTableColumn>
-        <Link to={`/noticedetail`}>{notice.title}</Link>
+        <Link to={`/admin/adminnoticedetail`}>{notice.title}</Link>
       </CommonTableColumn>
       <CommonTableColumn>{notice.attachment}</CommonTableColumn>
       <CommonTableColumn>{notice.author}</CommonTableColumn>
