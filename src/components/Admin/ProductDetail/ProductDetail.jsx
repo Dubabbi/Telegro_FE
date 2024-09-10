@@ -6,15 +6,16 @@ import { Navigate, useNavigate } from 'react-router-dom';
 const ProductPageWrapper = styled.div`
   display: flex;
   justify-content: center;
-  margin-left: 23%;
   margin-top: 2%;
+  width: 70%;
+  margin-left: 23%;
+  margin-top: 3vh;
+  padding: 2%;
   margin-bottom: 4%;
-  padding: 20px;
   background-color: #fff;
   border: 1px solid #d3d3d3;
   border-radius: 15px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  width: 70%;
   flex-direction: column;
 `;
 
@@ -22,7 +23,7 @@ const ProductDetails = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
-  padding: 20px;
+  padding: 2%;
   border-radius: 10px;
   margin-bottom: 40px;
 `;
@@ -184,6 +185,7 @@ const Title = styled.div`
   width: 70%;
   margin-top: 5%;
   margin-left: 15%;
+  margin-bottom: 2%;
   justify-content: space-between;
   align-items: center;
   h1 {

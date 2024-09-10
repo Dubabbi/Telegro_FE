@@ -14,6 +14,7 @@ import LineCord from './components/Admin/ProductList/LineCord';
 import Recording from './components/Admin/ProductList/Recording';
 import Accessory from './components/Admin/ProductList/Accessory';
 import AdminProductDetailPage from './pages/AdminProductDetail';
+import AdminOrderListPage from './pages/AdminOrderList';
 
 export default function Admin() {
   return (
@@ -35,6 +36,7 @@ export default function Admin() {
         <Route path="recording" element={<Recording />} />
         <Route path="accessory" element={<Accessory />} />
         <Route path="adminproductdetail" element={<AdminProductDetailPage />} /> 
+        <Route path="adminorderlist" element={<AdminOrderListPage />} />
       </Routes>
     </div>
   );

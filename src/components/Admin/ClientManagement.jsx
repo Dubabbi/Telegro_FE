@@ -4,10 +4,10 @@ import { FaPencilAlt, FaTrash } from 'react-icons/fa';
 
 // 메인 컨테이너
 const MainWrapper = styled.div`
-  width: 78%;
-  margin-left: 22%;
-  margin-top: 3%;
-  padding: 20px;
+  width: 70%;
+  margin-left: 23%;
+  margin-top: 3vh;
+  padding: 2%;
 `;
 
 // 표 테이블 스타일

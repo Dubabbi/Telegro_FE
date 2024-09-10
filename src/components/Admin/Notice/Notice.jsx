@@ -38,7 +38,7 @@ const Notice = () => {
   ));
 
   return (
-    <N.MainWrapper style={{marginLeft: "22%"}}>
+    <N.MainWrapper style={{marginLeft: "23%"}}>
       <div style={{width: '100%', minHeight: '2.6vh', border: 'none'}}></div>
       <N.Section style={{width: '90%', minHeight: '2.6vh', border: 'none'}}>
         <N.PageTitle>

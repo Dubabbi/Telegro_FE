@@ -228,8 +228,8 @@ const AdminNav = () => {
           </SubMenu>
         </SubMenuWrapper>
 
-        <MenuItem>
-          <FaCog />
+        <MenuItem onClick={() => navigate('/admin/adminorderlist')}>
+          <FaCog/>
           주문 현황
         </MenuItem>
       </MenuWrapper>
