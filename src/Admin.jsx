@@ -11,6 +11,12 @@ import AdminNoticeDetailPage from './pages/AdminNoticeDetail';
 import AdminInquiryDetailPage from './pages/AdminInquiryDetail';
 import ProductCreatePage from './pages/ProductCreate';
 import CheckOrderPage from './pages/CheckOrder';
+import Headset from './components/Admin/ProductList/Headset';
+import PhoneAmplifier from './components/Admin/ProductList/PhoneAmplifier';
+import LineCord from './components/Admin/ProductList/LineCord';
+import Recording from './components/Admin/ProductList/Recording';
+import Accessory from './components/Admin/ProductList/Accessory';
+import ProductListPage from './components/Admin/ProductList/ProductList';
 
 export default function Admin() {
   return (
@@ -28,6 +34,12 @@ export default function Admin() {
         <Route path="admininquirydetail" element={<AdminInquiryDetailPage />} />
         <Route path="productcreate" element={<ProductCreatePage />} /> 
         <Route path="checkorder" element={<CheckOrderPage />} />
+        <Route path="headset" element={<Headset />} />
+        <Route path="phoneAmplifier" element={<PhoneAmplifier />} />
+        <Route path="lineCord" element={<LineCord />} />
+        <Route path="recording" element={<Recording />} />
+        <Route path="accessory" element={<Accessory />} />
+        <Route path="productlist" element={<ProductListPage />} /> 
       </Routes>
     </div>
   );
