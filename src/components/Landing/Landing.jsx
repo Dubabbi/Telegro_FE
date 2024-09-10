@@ -20,7 +20,7 @@ export default function Landing() {
     <L.Inline>
     <L.Content>
       <h1>프리미엄 헤드셋과<br />
-      공급 장비 브랜드</h1>
+      녹음 장비 브랜드</h1>
       <p>기술과 품질로 고객 여러분의 만족을 최우선 합니다.</p>
       <L.ButtonWrapper>
       <L.FirstButton onClick={() => navigate('/GeneralLogin')}><p>구매고객 </p><img src={Next} /></L.FirstButton>
@@ -39,7 +39,7 @@ export default function Landing() {
         </L.InlineIntro>
       </L.Intro>
       <L.List>
-        <p>헤드셋</p><p>전화/증폭기</p><p>라인코드</p><p>녹음기기</p><p>악세서리</p>
+        <p>헤드셋</p><p>라인코드</p><p>녹음기기</p><p>악세서리</p>
       </L.List>
       <L.FooterWrapper>
         <L.FooterInline>
