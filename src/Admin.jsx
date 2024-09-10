@@ -16,7 +16,7 @@ import PhoneAmplifier from './components/Admin/ProductList/PhoneAmplifier';
 import LineCord from './components/Admin/ProductList/LineCord';
 import Recording from './components/Admin/ProductList/Recording';
 import Accessory from './components/Admin/ProductList/Accessory';
-import ProductListPage from './components/Admin/ProductList/ProductList';
+import ProductListPage from './pages/ProductList';
 
 export default function Admin() {
   return (

@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import { FaSearch, FaCog, FaSignOutAlt } from 'react-icons/fa';
+import { FaSearch, FaCog, FaSignOutAlt, FaChevronDown, FaChevronRight } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 import Logo from '/src/assets/image/Landing/logo.svg';
 
 const Sidebar = styled.div`
@@ -84,6 +85,30 @@ const MenuItem = styled.div`
   }
 `;
 
+// absolute 포지션을 사용해 다른 요소에 영향을 주지 않음
+const SubMenu = styled.div`
+  display: ${(props) => (props.open ? 'block' : 'none')};
+  position: absolute;
+  left: 100%;  /* 오른쪽에 하위 메뉴가 뜨도록 설정 */
+  top: 0;
+  background-color: #4F4F4F;
+  padding: 10px 20px;
+  width: 200px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+
+  ${MenuItem} {
+    padding: 10px;
+    &:hover {
+      background-color: #6B6B6B;
+    }
+  }
+`;
+
+const SubMenuWrapper = styled.div`
+  position: relative;
+`;
+
 const FooterWrapper = styled.div`
   margin-top: auto;
   width: 100%;
@@ -135,6 +160,13 @@ const LogoutButton = styled.div`
 `;
 
 const AdminNav = () => {
+  const [isSubMenuOpen, setIsSubMenuOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const toggleSubMenu = () => {
+    setIsSubMenuOpen(!isSubMenuOpen);
+  };
+
   return (
     <Sidebar>
       <LogoWrapper>
@@ -152,26 +184,47 @@ const AdminNav = () => {
           <FaCog />
           Dashboard
         </MenuItem>
+
         <MenuItem>
           <FaCog />
           고객 관리
         </MenuItem>
+
         <MenuItem>
           <FaCog />
           상품 접속 현황
         </MenuItem>
+
         <MenuItem>
           <FaCog />
           자료실
         </MenuItem>
+
         <MenuItem>
           <FaCog />
           문의사항
         </MenuItem>
-        <MenuItem>
-          <FaCog />
-          상품 관리
-        </MenuItem>
+
+        {/* 상품 관리 메뉴 및 하위 카테고리 */}
+        <SubMenuWrapper>
+          <MenuItem onClick={toggleSubMenu}>
+            <FaCog />
+            상품 관리
+            {isSubMenuOpen ? <FaChevronDown /> : <FaChevronRight />}
+          </MenuItem>
+          <SubMenu open={isSubMenuOpen}>
+            <MenuItem onClick={() => navigate('/headset')}>
+              헤드셋
+            </MenuItem>
+            <MenuItem onClick={() => navigate('/lineCord')}>
+              라인 코드
+            </MenuItem>
+            <MenuItem onClick={() => navigate('/phoneAmplifier')}>
+              폰 앰프
+            </MenuItem>
+          </SubMenu>
+        </SubMenuWrapper>
+
         <MenuItem>
           <FaCog />
           주문 현황
