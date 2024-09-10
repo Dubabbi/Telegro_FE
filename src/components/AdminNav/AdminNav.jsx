@@ -8,10 +8,10 @@ const Sidebar = styled.div`
   position: fixed;
   left: 0;
   top: 0;
-  max-height: 100vh;
   padding-top: 4%;
   padding-bottom: 2%;
   width: 20%; 
+  height: 100vh;
   background-color: #4F4F4F;
   display: flex;
   flex-direction: column;
