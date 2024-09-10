@@ -15,7 +15,6 @@ const Notice = () => {
     { id: 4, title: "공지사항 4", created_at: "2023-01-02", view_count: 80, author: "Staff", attachment: "No File" },
     { id: 5, title: "공지사항 5", created_at: "2023-01-03", view_count: 90, author: "Coordinator", attachment: "Chart.xlsx" }
   ]);
-
   const [searchValue, setSearchValue] = useState('');
 
   const handleSubmit = (e) => {
@@ -23,6 +22,7 @@ const Notice = () => {
       console.log("검색어:", searchValue);
       setSearchValue('');
   };
+
 
   const items = notice.map((notice) => (
     <CommonTableRow key={notice.id}>

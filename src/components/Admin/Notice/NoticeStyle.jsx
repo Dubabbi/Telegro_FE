@@ -221,3 +221,99 @@ export const StyledForm = styled(Form)`
         padding-left: 10px;
     }
 `;
+//
+
+export const CommentSection = styled.div`
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+`;
+
+export const CommentForm = styled.form`
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+`;
+
+export const CommentInput = styled.input`
+  flex-grow: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  font-size: 1rem;
+  margin-right: 10px;
+`;
+
+export const SubmitButton = styled.button`
+  background-color: transparent;
+  border: none;
+  font-size: 1.5rem;
+  color: #333;
+  cursor: pointer;
+`;
+
+export const CommentList = styled.div`
+  margin-top: 20px;
+`;
+
+export const CommentItem = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+`;
+
+export const Avatar = styled.div`
+  width: 40px;
+  height: 40px;
+  background-color: #ddd;
+  border-radius: 50%;
+  margin-right: 10px;
+`;
+
+export const CommentContent = styled.div`
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 1rem;
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+  width: 100%;
+`;
+
+export const CommentHeader = styled.div`
+  font-weight: bold;
+  margin-bottom: 5px;
+`;
+
+export const CommentText = styled.p`
+  margin: 0;
+`;
+
+export const ButtonWrapper = styled.div`
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+`;
+
+export const ListButton = styled.button`
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px 20px;
+  margin-right: 10px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #f5f5f5;
+  }
+`;
+
+export const DeleteButton = styled(ListButton)`
+  color: red;
+  border-color: red;
+
+  &:hover {
+    background-color: #f8d7da;
+  }
+`;

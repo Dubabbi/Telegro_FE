@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import * as D from './NoticeDetailStyle'; 
 import * as N from '../Notice/NoticeStyle'; 
@@ -11,6 +11,17 @@ const NoticeDetail = () => {
     creator: "홍길동",
     view_count: 150,
     content: "공지사항의 내용입니다. 여기에 자세한 설명이 포함됩니다."
+  };
+  const [comments, setComments] = useState([
+    { id: 1, author: '관리자', text: '답변했습니다.' },
+  ]);
+  const [newComment, setNewComment] = useState('');
+  const handleCommentSubmit = (e) => {
+    e.preventDefault();
+    if (newComment.trim()) {
+      setComments([...comments, { id: comments.length + 1, author: '관리자', text: newComment }]);
+      setNewComment('');
+    }
   };
 
 
@@ -50,12 +61,39 @@ const NoticeDetail = () => {
               ))}
             </D.Cont>
           </D.BoardView>
-          <D.BtWrap>
+        </D.BoardViewWrap>
+                      {/* 댓글 입력 및 목록 */}
+      <N.CommentSection>
+        <N.CommentForm onSubmit={handleCommentSubmit}>
+          <N.CommentInput
+            type="text"
+            placeholder="댓글을 입력해 주세요."
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+          />
+          <N.SubmitButton type="submit">➤</N.SubmitButton>
+        </N.CommentForm>
+
+        <N.CommentList>
+          {comments.map((comment) => (
+            <N.CommentItem key={comment.id}>
+              <N.Avatar />
+              <N.CommentContent>
+                <N.CommentHeader>{comment.author}</N.CommentHeader>
+                <N.CommentText>{comment.text}</N.CommentText>
+              </N.CommentContent>
+            </N.CommentItem>
+          ))}
+        </N.CommentList>
+      </N.CommentSection>
+      <D.BtWrap>
             <D.BtLink as={Link} to="/notice">
               목록
             </D.BtLink>
+            <D.DeleteBtLink as={Link} to="">
+              삭제
+            </D.DeleteBtLink>
           </D.BtWrap>
-        </D.BoardViewWrap>
       </N.Section>
     </N.MainWrapper>
   );

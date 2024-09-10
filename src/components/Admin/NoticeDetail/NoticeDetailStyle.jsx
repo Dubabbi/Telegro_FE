@@ -125,6 +125,29 @@ export const BtLink = styled.a`
     color: #ccc;
   }
 `;
+export const DeleteBtLink = styled.a`
+  color: red;
+  display: inline-block;
+  min-width: 80px;
+  margin-left: 10px;
+  padding: 10px;
+  border: 1px solid red;
+  border-radius: 2px;
+  font-size: 1.4rem;
+
+  &:first-child {
+    margin-left: 0;
+  }
+
+  &.on {
+    background: #000;
+    color: #fff;
+  }
+  &:hover {
+    background: #f8d7da;
+  }
+`;
+
 
 
 export const SubmitButton = styled.button`
