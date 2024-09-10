@@ -7,20 +7,10 @@ export const Postcode = ({ onComplete }) => {
   const open = useDaumPostcodePopup(scriptUrl);
 
   const handleComplete = (data) => {
-    let fullAddress = data.address;
-    let extraAddress = '';
+    const fullAddress = data.roadAddress;
+    const zonecode = data.zonecode;
 
-    if (data.addressType === 'R') {
-      if (data.bname !== '') {
-        extraAddress += data.bname;
-      }
-      if (data.buildingName !== '') {
-        extraAddress += extraAddress !== '' ? `, ${data.buildingName}` : data.buildingName;
-      }
-      fullAddress += extraAddress !== '' ? ` (${extraAddress})` : '';
-    }
-
-    onComplete(fullAddress); // 주소를 부모 컴포넌트로 전달
+    onComplete({ fullAddress, zonecode }); // 우편번호와 주소를 부모 컴포넌트로 전달
   };
 
   const handleClick = () => {
@@ -28,7 +18,7 @@ export const Postcode = ({ onComplete }) => {
   };
 
   return (
-    <button type='button' onClick={handleClick}>
+    <button type="button" onClick={handleClick}>
       주소 검색
     </button>
   );
