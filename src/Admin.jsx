@@ -16,7 +16,7 @@ import PhoneAmplifier from './components/Admin/ProductList/PhoneAmplifier';
 import LineCord from './components/Admin/ProductList/LineCord';
 import Recording from './components/Admin/ProductList/Recording';
 import Accessory from './components/Admin/ProductList/Accessory';
-import ProductListPage from './pages/ProductList';
+import AdminProductDetailPage from './pages/AdminProductDetail';
 
 export default function Admin() {
   return (
@@ -39,7 +39,7 @@ export default function Admin() {
         <Route path="lineCord" element={<LineCord />} />
         <Route path="recording" element={<Recording />} />
         <Route path="accessory" element={<Accessory />} />
-        <Route path="productlist" element={<ProductListPage />} /> 
+        <Route path="adminproductdetail" element={<AdminProductDetailPage />} /> 
       </Routes>
     </div>
   );
