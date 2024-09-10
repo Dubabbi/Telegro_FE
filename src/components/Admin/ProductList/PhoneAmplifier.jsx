@@ -28,7 +28,7 @@ const PhoneAmplifier = () => {
     </P.Inline>
     <P.ProductGrid style={{width: '80%', marginLeft: '10%'}}>
       {products.map(product => (
-        <P.ProductBox onClick={() => navigate('/adminproductdetail')} key={product.id}>
+        <P.ProductBox onClick={() => navigate('/admin/adminproductdetail')} key={product.id}>
           <P.ProductImage src={product.img} alt={product.name} />
           <P.ProductInfo>
             <h3>{product.name}</h3>

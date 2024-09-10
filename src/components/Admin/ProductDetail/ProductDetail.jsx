@@ -48,6 +48,7 @@ const ProductInfo = styled.div`
 const ProductTitle = styled.h2`
   font-weight: bold;
   font-size: 2rem;
+  white-space: nowrap;
   color: #303972;
   margin-bottom: 10px;
   margin-left: 6%;
@@ -207,7 +208,6 @@ const AdminProductDetail = () => {
             <ProductInfo>
               <ProductTitle>상품명</ProductTitle>
               <ProductSubtitle>제품명</ProductSubtitle>
-              <BuyButton onClick={() => navigate('/orderproduct')}>구매하기</BuyButton>
             </ProductInfo>
           </ProductInfoWrapper>
           {/* 우측 추가 상품 이미지 */}
