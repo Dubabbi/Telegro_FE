@@ -122,7 +122,7 @@ const Stat = () => {
       <TableContainer>
         {/* HeaderContainer로 카테고리 선택과 제목을 한 줄로 정렬 */}
         <HeaderContainer>
-          <Title>상점 접속 현황</Title>
+          <Title style={{fontSize: '1.5vw'}}>상점 접속 현황</Title>
           <CategorySelect value={category} onChange={handleCategoryChange}>
             <option value="일별">일별</option>
             <option value="월별">월별</option>

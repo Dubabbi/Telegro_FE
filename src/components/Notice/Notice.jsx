@@ -44,7 +44,7 @@ const Notice = () => {
       <div style={{width: '100%', minHeight: '22.6vh', border: 'none'}}></div>
       <N.Section>
         <N.PageTitle>
-          <N.TitleText>공지사항</N.TitleText>
+          <N.TitleText style={{fontSize: '1.5vw'}}>공지사항</N.TitleText>
         </N.PageTitle>
         <div style={{textAlign: 'right'}}> 총 게시물 수 : 58  현재 페이지 : 1 / 6</div>
         <N.BoardSearchArea>

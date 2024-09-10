@@ -23,7 +23,7 @@ const LineCord = () => {
     <>
     <div style={{width: '100%', minHeight: '22.6vh', border: 'none'}}></div>
     <P.Inline style={{marginTop: '5%'}}>
-      <h1>헤드셋</h1>
+      <h1 style={{fontSize: '1.5vw'}}>헤드셋</h1>
       <p>Sort by: Most Popular</p>
     </P.Inline>
     <P.ProductGrid style={{width: '80%', marginLeft: '10%'}}>

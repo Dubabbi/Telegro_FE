@@ -154,7 +154,7 @@ const OrderManager = () => {
   return (
     <>
       <div style={{ width: '100%', minHeight: '22.6vh', border: 'none' }}></div>
-      <Title><h1>주문 관리</h1></Title>
+      <Title><h1 style={{fontSize: '1.5vw'}}>주문 관리</h1></Title>
       
     <OrderPageWrapper>
       {/* 좌측 상품 리스트 영역 */}

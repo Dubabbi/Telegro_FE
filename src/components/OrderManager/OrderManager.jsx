@@ -119,7 +119,7 @@ const CheckOrder = () => {
 
   return (
     <MainWrapper>
-      <Title>주문확인</Title>
+      <Title style={{fontSize: '1.5vw'}}>주문확인</Title>
 
       <SearchSection>
         <div>

@@ -18,7 +18,7 @@ const NoticeDetail = () => {
     <N.MainWrapper style={{marginLeft: "22%"}}>
       <N.Section style={{width: '90%', minHeight: '2.6vh', border: 'none'}}>
         <N.PageTitle>
-          <N.TitleText>공지사항</N.TitleText>
+          <N.TitleText style={{fontSize: '1.5vw'}}>공지사항</N.TitleText>
         </N.PageTitle>
         <D.BoardViewWrap>
           <D.BoardView>

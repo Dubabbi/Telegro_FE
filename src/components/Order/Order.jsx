@@ -47,7 +47,7 @@ const Order = () => {
       <div style={{width: '100%', minHeight: '22.6vh', border: 'none'}}></div>
       <N.Section>
         <N.PageTitle>
-          <N.TitleText>주문 목록</N.TitleText>
+          <N.TitleText style={{fontSize: '1.5vw'}}>주문 목록</N.TitleText>
         </N.PageTitle>
         <div style={{textAlign: 'right'}}>  총 주문 건수 : 0  현재 페이지 : 1 / 0 </div>
         <N.BoardSearchArea>

@@ -31,7 +31,7 @@ const InquiryDetail = () => {
       <div style={{width: '100%', minHeight: '22.6vh', border: 'none'}}></div>
       <N.Section>
         <N.PageTitle>
-          <N.TitleText>제안 문의</N.TitleText>
+          <N.TitleText style={{fontSize: '1.5vw'}}>제안 문의</N.TitleText>
         </N.PageTitle>
         <D.BoardViewWrap>
           <D.BoardView>

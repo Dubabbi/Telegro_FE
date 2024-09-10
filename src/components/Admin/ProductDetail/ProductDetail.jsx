@@ -187,7 +187,7 @@ const Title = styled.div`
   justify-content: space-between;
   align-items: center;
   h1 {
-    font-size: 1.7rem;
+    font-size: 1.5vw;
     font-weight: bold;
   }
   
@@ -198,7 +198,6 @@ const AdminProductDetail = () => {
   const navigate = useNavigate();
   return (
     <> 
-
       <Title style={{width: '78%', marginLeft:'25%', border: 'none'}}><h1>제품 상세</h1></Title>
       <ProductPageWrapper>
         <ProductDetails>

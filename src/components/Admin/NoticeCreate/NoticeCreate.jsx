@@ -83,7 +83,7 @@ const NoticeCreate = () => {
   return (
     <>
     <N.MainWrapper style={{ marginLeft: '22%' }}>
-      <SectionTitle style={{ marginLeft: '7.5%', marginTop: '4%', fontSize: '25px' }}>공지사항</SectionTitle>
+      <SectionTitle style={{ marginLeft: '7.5%', marginTop: '4%', fontSize: '1.5vw' }}>공지사항</SectionTitle>
       <FormWrapper>
       <SectionTitleWrapper>
         <SectionTitle>게시글 작성</SectionTitle>

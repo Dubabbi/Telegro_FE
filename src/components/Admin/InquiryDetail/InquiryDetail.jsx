@@ -29,7 +29,7 @@ const InquiryDetail = () => {
     <N.MainWrapper style={{marginLeft: "22%"}}>
     <N.Section style={{width: '90%', minHeight: '2.6vh', border: 'none'}}>
         <N.PageTitle>
-          <N.TitleText>제안 문의</N.TitleText>
+          <N.TitleText style={{fontSize: '1.5vw'}}>제안 문의</N.TitleText>
         </N.PageTitle>
         <D.BoardViewWrap>
           <D.BoardView>

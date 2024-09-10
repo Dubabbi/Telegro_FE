@@ -112,7 +112,7 @@ const ClientManagement = () => {
 
   return (
     <MainWrapper>
-      <h2>회원관리</h2>
+      <h2 style={{fontSize: '1.5vw'}}>회원관리</h2>
       <Table>
         <TableHead>
           <TableRow>

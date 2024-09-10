@@ -197,7 +197,7 @@ const ProductDetail = () => {
   return (
     <>
       <div style={{ width: '100%', minHeight: '22.6vh', border: 'none' }}></div>
-      <Title><h1>제품 상세</h1></Title>
+      <Title><h1 style={{fontSize: '1.5vw'}}>제품 상세</h1></Title>
       <ProductPageWrapper>
         <ProductDetails>
           {/* 상품 이미지와 정보가 가로로 정렬된 섹션 */}

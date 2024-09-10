@@ -42,7 +42,7 @@ const InquiryForm = () => {
       <div style={{width: '90%', minHeight: '2.6vh', border: 'none'}}></div>
       <N.Section style={{width: '90%', minHeight: '2.6vh', border: 'none'}}>
         <N.PageTitle>
-          <N.TitleText>제안문의</N.TitleText>
+          <N.TitleText style={{fontSize: '1.5vw'}}>제안문의</N.TitleText>
         </N.PageTitle>
         <div style={{textAlign: 'right'}}> 총 게시물 수 : 58  현재 페이지 : 1 / 6</div>
         <N.BoardSearchArea>
