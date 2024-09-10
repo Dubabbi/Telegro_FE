@@ -21,6 +21,7 @@ import Recording from './components/Check/Recording';
 import Accessory from './components/Check/Accessory';
 import ProductDetailPage from './pages/ProductDetail';
 import ChatButton from './components/ChatButton/ChatButton';
+import OrderManagerPage from './pages/OrderManager';
 
 export default function User() {
   return (
@@ -44,6 +45,7 @@ export default function User() {
         <Route path="/lineCord" element={<LineCord />} />
         <Route path="/recording" element={<Recording />} />
         <Route path="/accessory" element={<Accessory />} />
+        <Route path="/ordermanager" element={<OrderManagerPage />} />
       </Routes>
       <NotificationBar />
       <ChatButton />
