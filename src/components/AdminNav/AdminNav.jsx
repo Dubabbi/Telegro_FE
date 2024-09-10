@@ -180,27 +180,27 @@ const AdminNav = () => {
       </SearchBar>
 
       <MenuWrapper>
-        <MenuItem className="active">
+        <MenuItem  onClick={() => navigate('/admin/stat')} className="active">
           <FaCog />
           Dashboard
         </MenuItem>
 
-        <MenuItem>
+        <MenuItem onClick={() => navigate('/admin/clientmanagement')}>
           <FaCog />
           고객 관리
         </MenuItem>
-
-        <MenuItem>
-          <FaCog />
-          상품 접속 현황
+ 
+        <MenuItem onClick={() => navigate('/admin/stat')}>
+          <FaCog/>
+          상점 접속 현황
         </MenuItem>
 
-        <MenuItem>
-          <FaCog />
+        <MenuItem  onClick={() => navigate('/admin/adminnotice')}>
+          <FaCog/>
           자료실
         </MenuItem>
 
-        <MenuItem>
+        <MenuItem onClick={() => navigate('/admin/admininquiry')}>
           <FaCog />
           문의사항
         </MenuItem>
@@ -213,14 +213,20 @@ const AdminNav = () => {
             {isSubMenuOpen ? <FaChevronDown /> : <FaChevronRight />}
           </MenuItem>
           <SubMenu open={isSubMenuOpen}>
-            <MenuItem onClick={() => navigate('/headset')}>
+            <MenuItem onClick={() => navigate('/admin/headset')}>
               헤드셋
             </MenuItem>
-            <MenuItem onClick={() => navigate('/lineCord')}>
+            <MenuItem onClick={() => navigate('/admin/phoneAmplifier')}>
+              전화/증폭기
+            </MenuItem>
+            <MenuItem onClick={() => navigate('/admin/lineCord')}>
               라인 코드
             </MenuItem>
-            <MenuItem onClick={() => navigate('/phoneAmplifier')}>
-              폰 앰프
+            <MenuItem onClick={() => navigate('/admin/recording')}>
+              녹음기기
+            </MenuItem>
+            <MenuItem onClick={() => navigate('/admin/accessory')}>
+              악세서리
             </MenuItem>
           </SubMenu>
         </SubMenuWrapper>
