@@ -4,8 +4,8 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 export const NoticeWrapper = styled.div`
     color: black;
-    width: 1200px;
-    margin: 0px auto;
+    width: 80%;
+    margin-left: 10%;
 `
 export const MainWrapper = styled.div`
     color: black;
