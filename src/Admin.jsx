@@ -2,7 +2,7 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import AdminNav from './components/AdminNav/AdminNav'; 
 import Footer from './components/Footer/Footer';
-import ClientPage from './pages/Client';
+import ClientManagementPage from './pages/ClientManagement';
 import StatPage from './pages/Stat';
 import AdminNoticePage from './pages/AdminNotice';
 import AdminInquiryPage from './pages/AdminInquiry';
@@ -17,7 +17,7 @@ export default function Admin() {
       <AdminNav /> 
       <Routes>
         {/* 각 관리자 페이지로의 서브 라우트 설정 */}
-        <Route path="client" element={<ClientPage />} />
+        <Route path="clientManagement" element={<ClientManagementPage />} />
         <Route path="adminnotice" element={<AdminNoticePage />} />
         <Route path="noticecreate" element={<NoticeCreatePage />} />
         <Route path="adminnoticedetail" element={<AdminNoticeDetailPage />} />

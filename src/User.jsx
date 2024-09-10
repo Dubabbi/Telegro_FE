@@ -8,15 +8,11 @@ import NoticePage from './pages/Notice';
 import NoticeDetailPage from './pages/NoticeDetail';
 import InquiryFormPage from './pages/InquiryForm';
 import InquiryDetailPage from './pages/InquiryDetail';
-import OrderManagerPage from './pages/OrderManager';
+import OrderManagerPage from './pages/OrderProduct';
 import OrderReviewPage from './pages/OrderReview';
-import AdminPage from './pages/Admin';
 import ProductPage from './pages/Product';
-import ClientPage from './pages/Client';
-import AdminNoticePage from './pages/AdminNotice';
-import AdminInquiryPage from './pages/AdminInquiry';
-import StatPage from './pages/Stat';
 import OrderPage from './pages/Order';
+import OrderProductPage from './pages/OrderProduct';
 import CheckPage from './pages/Check';
 import Headset from './components/Check/Headset';
 import PhoneAmplifier from './components/Check/PhoneAmplifier';
@@ -37,7 +33,7 @@ export default function User() {
         <Route path="/noticedetail" element={<NoticeDetailPage />} />
         <Route path="/inquirydetail" element={<InquiryDetailPage />} />
         <Route path="/inquiryform" element={<InquiryFormPage />} />
-        <Route path="/orderManager" element={<OrderManagerPage />} />
+        <Route path="/orderProduct" element={<OrderProductPage />} />
         <Route path="/orderReview" element={<OrderReviewPage />} />
         <Route path="/admin/product" element={<ProductPage />} />
         <Route path="/productdetail" element={<ProductDetailPage />} />
