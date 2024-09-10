@@ -7,10 +7,7 @@ import MainPage from './pages/Main';
 import LoginPage from './pages/Login';
 import NoticePage from './pages/Notice';
 import NoticeDetailPage from './pages/NoticeDetail';
-import InquiryFormPage from './pages/InquiryForm';
-import InquiryDetailPage from './pages/InquiryDetail';
 import OrderReviewPage from './pages/OrderReview';
-import ProductPage from './pages/Product';
 import OrderPage from './pages/Order';
 import OrderProductPage from './pages/OrderProduct';
 import CheckPage from './pages/Check';
@@ -32,11 +29,8 @@ export default function User() {
         <Route path="/main" element={<MainPage />} />
         <Route path="/notice" element={<NoticePage />} />
         <Route path="/noticedetail" element={<NoticeDetailPage />} />
-        <Route path="/inquirydetail" element={<InquiryDetailPage />} />
-        <Route path="/inquiryform" element={<InquiryFormPage />} />
         <Route path="/orderProduct" element={<OrderProductPage />} />
         <Route path="/orderReview" element={<OrderReviewPage />} />
-        <Route path="/admin/product" element={<ProductPage />} />
         <Route path="/productdetail" element={<ProductDetailPage />} />
         <Route path="/order" element={<OrderPage />} />
         <Route path="/check" element={<CheckPage />} />

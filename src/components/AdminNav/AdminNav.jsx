@@ -205,12 +205,6 @@ const AdminNav = () => {
           <FaCog />
           자료실
         </MenuItem>
-
-        <MenuItem onClick={() => navigate('/admin/admininquiry')}>
-          <FaCog />
-          문의사항
-        </MenuItem>
-
         {/* 상품 관리 메뉴 및 하위 카테고리 */}
         <SubMenuWrapper>
           <MenuItem onClick={toggleSubMenu}>
@@ -221,9 +215,6 @@ const AdminNav = () => {
           <SubMenu open={isSubMenuOpen}>
             <MenuItem onClick={() => navigate('/admin/headset')}>
               헤드셋
-            </MenuItem>
-            <MenuItem onClick={() => navigate('/admin/phoneAmplifier')}>
-              전화/증폭기
             </MenuItem>
             <MenuItem onClick={() => navigate('/admin/lineCord')}>
               라인 코드
