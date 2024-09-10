@@ -7,27 +7,29 @@ const Sidebar = styled.div`
   position: fixed;
   left: 0;
   top: 0;
-  height: 100vh;
-  width: 20%; /* 전체 너비의 1/5 */
+  max-height: 100vh;
+  padding-top: 4%;
+  padding-bottom: 2%;
+  width: 20%; 
   background-color: #4F4F4F;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
+  padding: 1%;
 `;
 
 const LogoWrapper = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  margin-bottom: 30px;
+  justify-content: space-around;
+  gap: 3%;
+  flex-direction: row;
+  margin-bottom: 4%;
 `;
 
 const LogoImage = styled.img`
-  width: 80px;
-  height: 80px;
-  margin-bottom: 10px;
+  width: 35%;
+  height: auto;
 `;
 
 const LogoText = styled.h1`
@@ -93,7 +95,7 @@ const ProfileWrapper = styled.div`
   padding: 15px 20px;
   background-color: #303030;
   border-radius: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 3%;
 `;
 
 const ProfilePic = styled.div`
