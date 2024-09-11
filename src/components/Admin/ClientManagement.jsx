@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 import { FaPencilAlt, FaTrash } from 'react-icons/fa';
 import AddClient from '/src/assets/icon/Admin/addclient.svg';
 
@@ -117,6 +118,7 @@ const clientsData = [
 ];
 
 const ClientManagement = () => {
+  const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = 10;
 
@@ -127,7 +129,7 @@ const ClientManagement = () => {
   return (
     <MainWrapper>
       <h2 style={{fontSize: '1.5vw', fontWeight: 'bold'}}>회원관리</h2>
-      <Add src={AddClient} />
+      <Add onClick={() => navigate('/admin/addclient')} src={AddClient} />
       <Table>
         <TableHead>
           <TableRow>

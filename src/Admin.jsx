@@ -15,6 +15,7 @@ import Recording from './components/Admin/ProductList/Recording';
 import Accessory from './components/Admin/ProductList/Accessory';
 import AdminProductDetailPage from './pages/AdminProductDetail';
 import AdminOrderListPage from './pages/AdminOrderList';
+import AddClientPage from './pages/AddClient';
 
 export default function Admin() {
   return (
@@ -37,6 +38,7 @@ export default function Admin() {
         <Route path="accessory" element={<Accessory />} />
         <Route path="adminproductdetail" element={<AdminProductDetailPage />} /> 
         <Route path="adminorderlist" element={<AdminOrderListPage />} />
+        <Route path="addclient" element={<AddClientPage />} />
       </Routes>
     </div>
   );
