@@ -6,8 +6,8 @@ import * as D from '../NoticeDetail/NoticeDetailStyle';
 
 // 공지사항 작성 스타일
 const FormWrapper = styled.div`
-  width: 60%;
-  margin-left: 7%;
+  width: 70%;
+  margin-left: 4%;
   margin-top: 3%;
   background-color: #fff;
   border: 1px solid #e5e5e5;
@@ -83,7 +83,7 @@ const NoticeCreate = () => {
   return (
     <>
     <N.MainWrapper style={{ marginLeft: '22%' }}>
-      <SectionTitle style={{ marginLeft: '7.5%', marginTop: '4%', fontSize: '1.5vw' }}>공지사항</SectionTitle>
+      <SectionTitle style={{ marginLeft: '4.5%', marginTop: '4%', fontSize: '1.5vw' }}>공지사항</SectionTitle>
       <FormWrapper>
       <SectionTitleWrapper>
         <SectionTitle>게시글 작성</SectionTitle>
@@ -103,7 +103,7 @@ const NoticeCreate = () => {
         </div>
       </FormWrapper>
     </N.MainWrapper>
-    <D.BtWrap style={{ width: '60%', marginLeft: '21%', marginBottom: '2%'}}>
+    <D.BtWrap style={{ width: '70%', marginLeft: '21%', marginBottom: '2%'}}>
       <D.BtLink as={Link} to="/admin/adminnotice">
               취소
             </D.BtLink>

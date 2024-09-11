@@ -24,7 +24,7 @@ export default function Admin() {
       <AdminNav /> 
       <Routes>
         {/* 각 관리자 페이지로의 서브 라우트 설정 */}
-        <Route path="clientManagement" element={<ClientManagementPage />} />
+        <Route path="clientmanagement" element={<ClientManagementPage />} />
         <Route path="adminnotice" element={<AdminNoticePage />} />
         <Route path="noticecreate" element={<NoticeCreatePage />} />
         <Route path="adminnoticedetail" element={<AdminNoticeDetailPage />} />

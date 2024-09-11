@@ -128,7 +128,7 @@ const ClientManagement = () => {
 
   return (
     <MainWrapper>
-      <h2 style={{fontSize: '1.5vw', fontWeight: 'bold'}}>회원관리</h2>
+      <h2 style={{marginLeft: '1%', fontSize: '1.5vw', fontWeight: 'bold'}}>회원관리</h2>
       <Add onClick={() => navigate('/admin/addclient')} src={AddClient} />
       <Table>
         <TableHead>
