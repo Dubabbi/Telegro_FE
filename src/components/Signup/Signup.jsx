@@ -123,7 +123,7 @@ function Signup() {
                   />
                 </L.AddressInput>
               </div>
-              <L.Button style={{marginTop: '2%'}} primary="true" type="submit">회원가입</L.Button>
+              <L.Button style={{marginTop: '2%'}} primary="true" type="submit" onClick={() => navigate('/generallogin')}>회원가입</L.Button>
             </>
           )}
         </L.Form>

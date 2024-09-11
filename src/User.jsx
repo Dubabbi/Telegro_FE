@@ -19,6 +19,7 @@ import Accessory from './components/Product/Accessory';
 import ProductDetailPage from './pages/ProductDetail';
 import ChatButton from './components/ChatButton/ChatButton';
 import OrderManagerPage from './pages/OrderManager';
+import NoticePopup from './components/NoticePopup/NoticePopup';
 
 export default function User() {
   return (
@@ -42,6 +43,7 @@ export default function User() {
         <Route path="/ordermanager" element={<OrderManagerPage />} />
       </Routes>
       <NotificationBar />
+      <NoticePopup />
       <ChatButton />
       <Footer />
     </div>
