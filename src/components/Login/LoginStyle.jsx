@@ -36,7 +36,7 @@ export const LoginSection = styled.section`
 `;
 
 export const Title = styled.h3`
-  font-size: 30px;
+  font-size: 2.2vw;
   font-weight: bold;
   margin-top: 20px;
   margin-bottom: 20px;
@@ -82,7 +82,7 @@ export const InputBox = styled.div`
   white-space: nowrap;
   label {
     display: block;
-    font-size: 14px;
+    font-size: 1.1vw;
     margin-bottom: 6px;
   }
   input {
@@ -91,7 +91,7 @@ export const InputBox = styled.div`
     height: 48px;
     border: 1px solid #E0E0E0;
     padding: 12px 20px;
-    font-size: 18px;
+    font-size: 1.1vw;
     border-radius: 4px;
     &:focus {
       outline: 2.5px solid #94A3D8;
@@ -99,10 +99,11 @@ export const InputBox = styled.div`
     }
     &::placeholder {
       color: #B4B4B4;
-      font-size: 16px;
+     font-size: 1.1vw;
     }
   }
 `;
+
 
 export const Button = styled.button`
   width: 100%;
@@ -123,7 +124,7 @@ export const CheckboxContainer = styled.div`
 `;
 
 export const CheckboxLabel = styled.label`
-  font-size: 16px;
+  font-size: 1.1vw;
   cursor: pointer;
 `;
 
@@ -146,5 +147,84 @@ export const Link = styled.a`
   cursor: pointer;
   &:hover {
     text-decoration: none;
+  }
+`;
+
+
+export const SearchInput = styled.input`
+  padding: 10px;
+  width: 200px;
+  border: 1px solid #ccc;
+  margin-bottom: 14px;
+  border-radius: 4px;
+  height: 48px;
+  border: 1px solid #E0E0E0;
+  padding: 12px 20px;
+  border-radius: 4px;
+    &::placeholder {
+      color: #B4B4B4;
+      font-size: 1.1vw;
+    }
+`;
+export const SearchButton = styled.button`
+  border: none;
+  background-color: #94A3D8;
+  height: 48px;
+  border: 1px solid #E0E0E0;
+  padding: 12px 20px;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+`;
+
+
+export const AddressBox = styled.div`
+  margin-bottom: 14px;
+  white-space: nowrap;
+  label {
+    display: block;
+    font-size: 1.1vw;
+    margin-bottom: 6px;
+  }
+  input {
+    display: block;
+    width: 100%;
+    height: 48px;
+    border: 1px solid #E0E0E0;
+    padding: 12px 20px;
+    border-radius: 4px;
+    font-size: 1.1vw;
+    &::placeholder {
+      color: #B4B4B4;
+      font-size: 1.1vw;
+    }
+  }
+`;
+
+export const AddressInput = styled.div`
+  margin-bottom: 14px;
+  white-space: nowrap;
+  label {
+    display: block;
+    font-size: 1.1vw;
+    margin-bottom: 6px;
+  }
+  input {
+    font-size: 1.1vw;
+    display: block;
+    width: 100%;
+    height: 48px;
+    border: 1px solid #E0E0E0;
+    padding: 12px 20px;
+    border-radius: 4px;
+    &::placeholder {
+      color: #B4B4B4;
+      font-size: 1.1vw;
+    }
+  }
+    &:focus {
+      outline: 2px solid #94A3D8;
+      border: none;
+    }
   }
 `;

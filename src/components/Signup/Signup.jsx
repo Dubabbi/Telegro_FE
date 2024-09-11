@@ -83,7 +83,10 @@ function Signup() {
           {step === 2 && (
             <>
               <div>
-                <L.InputBox>
+              <L.InputBox style={{ textAlign: 'center'}}>
+                <label style={{  marginBottom: '2%', color: '#94A3D8', fontSize: '1.3vw', fontWeight: 'bold'}}>배송지 등록</label>
+                </L.InputBox>
+                <L.AddressBox>
                   <label htmlFor="zipCodeText">우편번호</label>
                   <input
                     id="zipCodeText"
@@ -92,20 +95,21 @@ function Signup() {
                     placeholder="우편번호"
                     readOnly
                   />
-                </L.InputBox>
+                </L.AddressBox>
                 <L.InputBox>
-                  <label htmlFor="addressText">주소</label>
-                  <input
-                    id="addressText"
-                    type="text"
-                    placeholder="주소를 검색해 주세요"
-                    value={roadAddress}
-                    readOnly
-                  />
-                  {/* 주소 검색 버튼을 클릭하면 Postcode 컴포넌트를 띄움 */}
-                  <Postcode onComplete={handleAddressComplete} />
+                <label htmlFor="addressText">주소</label>
                 </L.InputBox>
-                <L.InputBox>
+                <div style={{width: '100%', whiteSpace: 'nowrap', display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+                  <L.SearchInput 
+                       id="addressText"
+                       type="text"
+                       placeholder="주소를 검색해 주세요"
+                       value={roadAddress}
+                      readOnly/>
+                  <L.SearchButton><Postcode onComplete={handleAddressComplete} /></L.SearchButton>
+                </div>
+                
+                <L.AddressInput>
                   <label htmlFor="detailAddressText">상세주소</label>
                   <input 
                     id="detailAddressText"
@@ -113,9 +117,9 @@ function Signup() {
                     placeholder="상세 주소를 입력하세요" 
                     onChange={e => setDetailAddress(e.target.value)} 
                   />
-                </L.InputBox>
+                </L.AddressInput>
               </div>
-              <L.Button primary="true" type="submit">회원가입</L.Button>
+              <L.Button style={{marginTop: '2%'}} primary="true" type="submit">회원가입</L.Button>
             </>
           )}
         </L.Form>
