@@ -1,47 +1,26 @@
 import React from 'react';
 import styled from 'styled-components';
-import img from '../Check/image.svg'; 
-import { Navigate, useNavigate } from 'react-router-dom';
+import img from './example.svg'; 
+import { useNavigate } from 'react-router-dom';
+
 const ProductPageWrapper = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  margin-left: 15%;
-  margin-top: 2%;
-  margin-bottom: 4%;
+  margin: 2% auto 4%;
+  margin-top: 12%;
   padding: 20px;
   background-color: #fff;
   border: 1px solid #d3d3d3;
   border-radius: 15px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   width: 70%;
-  flex-direction: column;
-`;
-
-const ProductDetails = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  padding: 20px;
-  border-radius: 10px;
-  margin-bottom: 40px;
-`;
-
-const ProductInfoWrapper = styled.div`
-  display: flex; /* 가로로 배치 */
-  align-items: center;
-  flex: 2;
 `;
 
 const ProductImage = styled.img`
-  width: 250px;
-  height: auto;
-  margin-right: 30px;
-`;
-
-const ProductInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  width: auto;
+  height: 60vh;
+  margin: 4%;
 `;
 
 const ProductTitle = styled.h2`
@@ -49,198 +28,86 @@ const ProductTitle = styled.h2`
   font-size: 2rem;
   color: #303972;
   margin-bottom: 10px;
-  margin-left: 6%;
+  text-align: center;
 `;
 
-const ProductSubtitle = styled.h3`
-  font-weight: bold;
-  font-size: 1.6rem;
-  color: #6B6B6B;
-  margin-bottom: 35%;
-  margin-left: 8%;
+const ProductDescription = styled.p`
+  font-size: 1.2rem;
+  color: #444;
+  margin: 10px auto;
+  width: 70%;
+  text-align: left; /* Aligning text to the left */
+`;
+
+const PriceWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  margin-top: 30px;
+`;
+
+const PriceTag = styled.span`
+  padding: 10px 20px;
+  background-color: #f0f0f0;
+  border-radius: 1rem;
+  font-size: 1.3rem;
+  color: #303972;
+`;
+
+const ButtonWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 30px;
 `;
 
 const BuyButton = styled.button`
-  padding: 10px 25px;
+  padding: 10px 30px;
   background-color: #4D44B5;
   color: white;
   font-size: 1rem;
   border-radius: 1.5rem;
   border: none;
   cursor: pointer;
-  margin-bottom: 20px;
-`;
-
-const PriceWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 90%;
-  margin-left: 5%;
-  margin-bottom: 20px;
-  h1{
-    font-size: 1.4rem;
+  &:hover {
+    background-color: #37308f;
   }
 `;
 
-const PriceTag = styled.span`
-  padding: 5px 15px;
-  background: rgba(77, 68, 181, 0.2);
-  border-radius: 1rem;
-  align-items: center;
-  color: #444;
-  font-weight: semibold;
-  font-size: 1.3rem;
-`;
-
-const AdditionalImagesWrapper = styled.div`
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  row-gap: 5px;  /* 위아래 간격을 5px로 설정 */
-  column-gap: 10px;  /* 좌우 간격 */
-  padding-left: 20px;
-  align-items: center;
-  justify-items: center;
-  height: 29.5vh;
-  margin: 5% 0;
-`;
-
-const AdditionalImage = styled.img`
-  width: 80px;
-  height: auto;
-  border-radius: 5px;
-  border: 1px solid #d3d3d3;
-  `;
-
-const ContentWrapper = styled.div`
-  display: flex;
-  flex-direction: row; /* 좌우로 배치 */
-  justify-content: space-between; /* 좌우 정렬 */
-  width: 90%;
-  margin-left: 5%;
-  margin-top: 20px;
-  padding-bottom: 5%;
-  padding-top: 3%;
-`;
-
-const DescriptionWrapper = styled.div`
-  flex: 1;
-  margin-right: 20px;
-`;
-
-const DescriptionTitle = styled.h4`
-  font-size: 1.6rem;
-  color: #303972;
-  font-weight: bold;
-  margin-bottom: 10px;
-`;
-
-const DescriptionList = styled.ul`
-  list-style-type: none;
-  margin-top: 2%;
-  padding: 0;
-  font-size: 1.4rem;
-  line-height: 1.7;
-  color: #444;
-`;
-
-const DescriptionItem = styled.li`
-  margin-bottom: 5px;
-`;
-
-const RequestInputWrapper = styled.div`
-  flex: 1;
-`;
-
-const RequestInputLabel = styled.label`
-  font-size: 1.6rem;
-  color: #444;
-  font-weight: bold;
-  margin-bottom: 10px;
-  display: block;
-`;
-
-const RequestInput = styled.textarea`
-  width: 100%;
-  height: 100px;
-  padding: 10px;
-  border: 1px solid #777;
-  border-radius: 10px;
-  resize: none;
-    &::placeholder {
-      color: #444;
-    }
-    &:focus {
-      outline: 2px solid #94A3D8;
-      border: none;
-    }
-`;
-
-const Title = styled.div`
-  display: flex;
-  flex-direction: row;
-  width: 70%;
-  margin-top: 5%;
-  margin-left: 15%;
-  justify-content: space-between;
-  align-items: center;
-  h1 {
-    font-size: 1.7rem;
-    font-weight: bold;
+const CartButton = styled.button`
+  padding: 10px 30px;
+  background-color: #fff;
+  border: 1px solid #4D44B5;
+  color: #4D44B5;
+  font-size: 1rem;
+  border-radius: 1.5rem;
+  cursor: pointer;
+  &:hover {
+    background-color: #f0f0f0;
   }
-  
-
 `;
 
 const ProductDetail = () => {
   const navigate = useNavigate();
+  
   return (
     <>
-      <div style={{ width: '100%', minHeight: '22.6vh', border: 'none' }}></div>
-      <Title><h1 style={{fontSize: '1.5vw'}}>제품 상세</h1></Title>
       <ProductPageWrapper>
-        <ProductDetails>
-          {/* 상품 이미지와 정보가 가로로 정렬된 섹션 */}
-          <ProductInfoWrapper>
-            <ProductImage src={img} alt="Main Product" />
-            <ProductInfo>
-              <ProductTitle>상품명</ProductTitle>
-              <ProductSubtitle>제품명</ProductSubtitle>
-              <BuyButton onClick={() => navigate('/orderproduct')}>구매하기</BuyButton>
-            </ProductInfo>
-          </ProductInfoWrapper>
-          {/* 우측 추가 상품 이미지 */}
-          <AdditionalImagesWrapper>
-            <AdditionalImage src={img} alt="Additional Image 1" />
-            <AdditionalImage src={img} alt="Additional Image 2" />
-            <AdditionalImage src={img} alt="Additional Image 3" />
-            <AdditionalImage src={img} alt="Additional Image 4" />
-          </AdditionalImagesWrapper>
-        </ProductDetails>
-        <PriceWrapper>
-          <DescriptionTitle style={{marginBottom: '0px', alignItems: 'center'}}>가격</DescriptionTitle>
-          <PriceTag>Biz: ₩160,000</PriceTag>
-          <PriceTag>B: ₩110,000</PriceTag>
-          <PriceTag>D: ₩100,000</PriceTag>
-          <PriceTag>C: ₩90,000</PriceTag>
-          </PriceWrapper>
-        <ContentWrapper>
-          <DescriptionWrapper>
-            <DescriptionTitle>상품 설명</DescriptionTitle>
-            <DescriptionList>
-              <DescriptionItem>- 이 상품은 이런 특징이 있어요.</DescriptionItem>
-              <DescriptionItem>- ~~~~한 장점도 있어요.</DescriptionItem>
-              <DescriptionItem>- 다른 상품들과 이런 차이점이 있어요.</DescriptionItem>
-              <DescriptionItem>- 이 상품은 다양한 장점이 있어요.</DescriptionItem>
-              <DescriptionItem>- 만족도가 높은 제품이에요.</DescriptionItem>
-            </DescriptionList>
-          </DescriptionWrapper>
+        <ProductImage src={img} alt="Product Image" />
+        <ProductTitle>밀도 호밀잡곡식빵</ProductTitle>
+        <ProductDescription>
+          빵의 기본이 되는 식빵을 반죽 재료 하나만으로도 그 맛에 차이가 느껴지네요. 밀도의 호밀잡곡식빵은 블렌딩 밀가루에 호밀가루를 배합해 만들었습니다. 오독오독 씹히는 잡곡과 빠를 수 없는 매력 포인트들. 입에 넣는 순간 퍼지는 고소한 맛이 밖에 담긴 천연적 정성을 가능하게 합니다. 아무 것도 더하지 않았을 때 가장 맛있는 빵, 마지막 한입까지 맛있게 즐겨보세요.
+        </ProductDescription>
 
-          <RequestInputWrapper>
-            <RequestInputLabel>요청 사항</RequestInputLabel>
-            <RequestInput placeholder="요청 사항을 입력해 주세요." />
-          </RequestInputWrapper>
-        </ContentWrapper>
+        <PriceWrapper>
+          <PriceTag>₩15,000</PriceTag>
+        </PriceWrapper>
+
+        <ButtonWrapper>
+          <BuyButton onClick={() => navigate('/orderproduct')}>구매하기</BuyButton>
+          <CartButton>장바구니</CartButton>
+        </ButtonWrapper>
       </ProductPageWrapper>
     </>
   );
