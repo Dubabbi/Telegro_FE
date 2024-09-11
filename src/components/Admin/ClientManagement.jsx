@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { FaPencilAlt, FaTrash } from 'react-icons/fa';
 import AddClient from '/src/assets/icon/Admin/addclient.svg';
-import addcart from '/src/assets/icon/Admin/addcart.svg';
-import editpost from '/src/assets/icon/Admin/editpost.svg';
 
 // 메인 컨테이너
 const MainWrapper = styled.div`

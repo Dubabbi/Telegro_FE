@@ -102,16 +102,16 @@ const NoticeCreate = () => {
         <FileInput type="file" id="attachment" />
         </div>
       </FormWrapper>
-      <D.BtWrap style={{ width: '60%', marginLeft: '7%'}}>
-      <D.BtLink as={Link} to="/notice">
+    </N.MainWrapper>
+    <D.BtWrap style={{ width: '60%', marginLeft: '21%', marginBottom: '2%'}}>
+      <D.BtLink as={Link} to="/admin/adminnotice">
               취소
             </D.BtLink>
-            <D.BtLink as={Link} to="/notice">
-              목록
+            <D.BtLink as={Link} to="">
+              등록
             </D.BtLink>
           </D.BtWrap>
           
-    </N.MainWrapper>
     </>
   );
 };

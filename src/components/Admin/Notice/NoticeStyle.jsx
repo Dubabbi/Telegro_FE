@@ -317,3 +317,14 @@ export const DeleteButton = styled(ListButton)`
     background-color: #f8d7da;
   }
 `;
+
+
+export const Add = styled.img`
+  width: 3vw;
+  height: 3vw;
+  cursor: pointer;
+  position: fixed;
+  right: 35px;
+  bottom: 20px;
+
+`;     

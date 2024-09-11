@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FaSearch } from 'react-icons/fa';
 import Form from 'react-bootstrap/Form';
 import CommonTable from './CommonTable';
 import CommonTableColumn from './CommonTableColumn';
 import CommonTableRow from './CommonTableRow';
 import * as N from './NoticeStyle';
+import editpost from '/src/assets/icon/Admin/editpost.svg';
 
 const Notice = () => {
   const [notice, setNotice] = useState([
@@ -16,7 +17,7 @@ const Notice = () => {
     { id: 5, title: "공지사항 5", created_at: "2023-01-03", view_count: 90, author: "Coordinator", attachment: "Chart.xlsx" }
   ]);
   const [searchValue, setSearchValue] = useState('');
-
+  const navigate = useNavigate();
   const handleSubmit = (e) => {
       e.preventDefault();
       console.log("검색어:", searchValue);
@@ -64,6 +65,7 @@ const Notice = () => {
           <CommonTable headersName={['No', '제목', '첨부', '작성자', '등록일', '조회수']}>{items}</CommonTable><hr/>
         </div>
       </N.Section>
+      <N.Add  onClick={() => navigate('/admin/noticecreate')} src={editpost} />
     </N.MainWrapper>
   );
 };
