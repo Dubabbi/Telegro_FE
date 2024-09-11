@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import * as L from './LandingStyle';
 import { FaSearch } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import Img from '/src/assets/image/Landing/headset.svg';
+import Img2 from '/src/assets/image/Landing/headset2.svg';
 import Next from '/src/assets/image/Landing/next.svg';
 import NextBlue from '/src/assets/image/Landing/nextBlue.svg';
 import Logo from '/src/assets/image/Landing/logo.svg';
@@ -11,6 +12,22 @@ import Mail from '/src/assets/image/Landing/mail.svg';
 
 export default function Landing() {
   const navigate = useNavigate();
+    // 이미지 상태 관리
+    const [currentImage, setCurrentImage] = useState(Img);
+  
+    // 이미지 전환 효과
+    useEffect(() => {
+      const images = [Img, Img2];
+      let currentIndex = 0;
+  
+      const intervalId = setInterval(() => {
+        currentIndex = (currentIndex + 1) % images.length; // 0과 1을 반복
+        setCurrentImage(images[currentIndex]);
+      }, 3000); // 3초마다 이미지 교체
+  
+      return () => clearInterval(intervalId); // 컴포넌트 언마운트 시 인터벌 정리
+    }, []);
+  
   return (
     <>
     <L.LandingWrapper>
@@ -27,7 +44,9 @@ export default function Landing() {
       <L.SecondButton onClick={() => navigate('/login')}><p>공급업체 </p><img src={NextBlue} /></L.SecondButton>
       </L.ButtonWrapper>
       </L.Content>
-      <L.Img src={Img} />
+      <L.ImgWrapper>
+          <L.Img src={currentImage} />
+        </L.ImgWrapper>
       </L.Inline>
       <L.Intro>
         <L.InlineIntro>

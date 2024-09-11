@@ -43,11 +43,30 @@ export const Content = styled.div`
         margin-top: 3%;
     }
 `
+export const Img = styled.img`
+    max-height: 100vh;
+    margin-right: 1%;
+    width: auto;
+    object-fit: cover; /* 이미지를 컨테이너 안에 꽉 채움 */
+`
 
+
+/*
 export const Img = styled.img`
     max-width: 40%;
     height: auto;
 `
+*/
+export const ImgWrapper = styled.div`
+    width: 350px; /* 너비를 고정 */
+    height: 400; /* 높이를 고정 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
+
+
+  
 
 export const LandingWrapper = styled.div`
     background-color: #F2F4F8;
@@ -190,7 +209,7 @@ export const FooterTitle = styled.div`
     gap: 5%;
 
     img{
-        max-width: 30%;
+        max-height: 30%;
     }
     p{
         font-size: 1.7rem;
