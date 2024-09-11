@@ -40,6 +40,7 @@ export default function User() {
         <Route path="/recording" element={<Recording />} />
         <Route path="/accessory" element={<Accessory />} />
         <Route path="/ordermanager" element={<OrderManagerPage />} />
+        <Route path="/cart" element={<CartPage />} />
       </Routes>
       <NotificationBar />
       <NoticePopup />
