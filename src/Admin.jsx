@@ -9,7 +9,6 @@ import AdminNoticeDetailPage from './pages/AdminNoticeDetail';
 import ProductCreatePage from './pages/ProductCreate';
 import CheckOrderPage from './pages/CheckOrder';
 import Headset from './components/Admin/ProductList/Headset';
-import PhoneAmplifier from './components/Admin/ProductList/PhoneAmplifier';
 import LineCord from './components/Admin/ProductList/LineCord';
 import Recording from './components/Admin/ProductList/Recording';
 import Accessory from './components/Admin/ProductList/Accessory';
@@ -32,7 +31,6 @@ export default function Admin() {
         <Route path="productcreate" element={<ProductCreatePage />} /> 
         <Route path="checkorder" element={<CheckOrderPage />} />
         <Route path="headset" element={<Headset />} />
-        <Route path="phoneAmplifier" element={<PhoneAmplifier />} />
         <Route path="lineCord" element={<LineCord />} />
         <Route path="recording" element={<Recording />} />
         <Route path="accessory" element={<Accessory />} />

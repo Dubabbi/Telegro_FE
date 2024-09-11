@@ -12,7 +12,6 @@ import OrderPage from './pages/Order';
 import OrderProductPage from './pages/OrderProduct';
 import CheckPage from './pages/Check';
 import Headset from './components/Check/Headset';
-import PhoneAmplifier from './components/Product/PhoneAmplifier';
 import LineCord from './components/Product/LineCord';
 import Recording from './components/Product/Recording';
 import Accessory from './components/Product/Accessory';
@@ -20,6 +19,7 @@ import ProductDetailPage from './pages/ProductDetail';
 import ChatButton from './components/ChatButton/ChatButton';
 import OrderManagerPage from './pages/OrderManager';
 import NoticePopup from './components/NoticePopup/NoticePopup';
+import CartPage from './pages/Cart';
 
 export default function User() {
   return (
@@ -36,7 +36,6 @@ export default function User() {
         <Route path="/order" element={<OrderPage />} />
         <Route path="/check" element={<CheckPage />} />
         <Route path="/headset" element={<Headset />} />
-        <Route path="/phoneAmplifier" element={<PhoneAmplifier />} />
         <Route path="/lineCord" element={<LineCord />} />
         <Route path="/recording" element={<Recording />} />
         <Route path="/accessory" element={<Accessory />} />

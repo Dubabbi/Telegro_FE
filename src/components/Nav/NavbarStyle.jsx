@@ -2,170 +2,130 @@ import styled from 'styled-components';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
+/* Navbar Wrapper */
 export const NavWrapper = styled.div`
   position: fixed;
   top: 0;
   width: 100%;
-  background: rgba(20, 20, 20, 0.9);
+  background-color: black;
   display: flex;
+  flex-direction: column;
   align-items: center;
   z-index: 1000;
-  padding-bottom: 100px;
-  padding-top: 5px;
+  padding: 10px 0;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 `;
 
-export const Logo = styled.a`
-  width: 300px;
-  height: 70px;
-  line-height: 60px;
-  font-size: 4rem;
-  color: white;
-  text-align: center;
-  font-weight: bold;
-  flex-shrink: 0;
-`;
-
+/* Navigation Container (Logo + Main Nav + Avatar) */
 export const NavContainer = styled.div`
-  flex-grow: 1;
   display: flex;
-  height: 70px;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
+  width: 90%; /* Adjust as per your needs to control width */
 `;
 
+/* Logo Styling */
+export const Logo = styled.a`
+  font-size: 2.5rem;
+  color: white;
+  font-weight: bold;
+  text-decoration: none;
+`;
+
+/* Main Navigation Links */
 export const MainNav = styled.ul`
   list-style: none;
-  height: 100%;
   display: flex;
-  margin: 0;
   align-items: center;
+  margin-left: auto; /* Pushes navigation to the right */
+  padding: 0;
+
+  li {
+    padding: 0 20px;
+
+    a {
+      color: white;
+      font-size: 1.2rem;
+      font-weight: bold;
+      text-decoration: none;
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: #bbb; /* Lighter hover color */
+      }
+    }
+  }
+`;
+
+/* Secondary Navigation (for categories like 헤드셋, 라인코드) */
+export const SecondaryNav = styled.ul`
+  list-style: none;
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  margin-top: 10px;
   
   li {
-    position: relative;
-    padding: 0 25px;
-    padding-top: 22px;
-    height: 100%;
-    align-items: center;
-    transition: background 0.5s;
-    &:hover {
-      background-color: #6C6D6D;
-      > ul {
-        visibility: visible;       
-        opacity: 1;                
-        transform: translateY(0);  
-      }
-    }
-  }
+    padding: 0 15px;
 
-  a {
-    font-size: 17px;
-    color: white;
-    align-items: center;
-    text-decoration: none;
-    display: block;
-  }
-
-  ul {
-    position: absolute;
-    left: 0;
-    top: 100%;
-    background: #ffffff;
-    width: 250%;
-    margin: 0;
-    visibility: hidden;            
-    opacity: 0;                    
-    transform: translateY(20px);   
-    transition: visibility 0s, opacity 0.5s ease, transform 0.5s ease; 
-
-    li {
-      display: block;
-      width: 100%;
-      margin: 2%;
-      padding: 10px;
+    a {
+      color: white;
       font-size: 1rem;
+      text-decoration: none;
+
       &:hover {
-        background-color: transparent;
-        transition: color 0.5s, margin-left 0.5s;
-        color: #aaa;
-        align-items: center;
-        margin-left: 4%;
+        color: #bbb;
       }
-      a {
-      font-size: 1.3rem;
-        display: block;
-        color: inherit;
-      }    
     }
   }
 `;
 
-export const StyledButton = styled(Button)`
-    position: absolute;
-    top: 50%;
-    right: 5%; 
-    transform: translateY(-50%);
-    height: 30px; 
-    width: 30px; 
-    font-size: 1rem; 
-    background-color: #fefefe; 
-    border-radius: 50px; 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    
-    &:hover {
-        background: #F8F9FA;
-        transition: 0.5s;
-      }
-`;
-
-export const SearchWindow = styled.div`
-  position: absolute;
-  top: 70px;
-  transform: translateX(-10%);
-  right: 0;
-  justify-content: flex-end;
-  width: 100%;
-  max-width: 350px;
-  padding: 10px;
-  color: #fff;
-  z-index: 1001;
-`;
-
-export const SearchWrap = styled.div`
-  position: relative;
+/* Search Wrapper */
+export const SearchWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
-  color: #fff;
-  align-items: center;
-  max-width: 300px;
-  padding: 1%;
+  width: auto;
+  padding-left: 20px;
 `;
 
+/* Search Form Wrapper */
 export const StyledForm = styled.form`
   display: flex;
-  width: 100%;
-
-  input::placeholder {
-    color: #eee;
-    padding-left: 2%;
-  }
+  justify-content: center;
+  align-items: center;
+  width: 250px;
 `;
 
+/* Search Input Field */
 export const SearchInput = styled.input`
-  width: 100%;
-  padding: 8px;
-  color: #fff;
-  border-radius: 5px;
-  border: 1px solid #ccc;
+  width: 80%;
+  padding: 8px 10px;
+  border: 1px solid #444;
+  border-radius: 20px;
+  color: white;
+  background-color: black;
+  margin-right: 10px;
+
   &:focus {
     outline: none;
-    border-color: #fff;
+    border-color: #777;
+  }
+
+  &::placeholder {
+    color: #bbb;
   }
 `;
 
-export const BoardSearchArea = styled.div`
-  justify-content: flex-end;
-  margin: 15px 0;
-  max-height: 3%;
-`
+/* Search Button */
+export const StyledButton = styled.button`
+  background: #fff;
+  border: none;
+  color: black;
+  cursor: pointer;
+  padding: 5px 15px;
+  border-radius: 20px;
+
+  &:hover {
+    background-color: #f0f0f0;
+  }
+`;
