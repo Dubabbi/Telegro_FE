@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { FaPencilAlt, FaTrash } from 'react-icons/fa';
+import AddClient from '/src/assets/icon/Admin/addclient.svg';
+import addcart from '/src/assets/icon/Admin/addcart.svg';
+import editpost from '/src/assets/icon/Admin/editpost.svg';
 
 // 메인 컨테이너
 const MainWrapper = styled.div`
@@ -88,6 +91,17 @@ const PageButton = styled.button`
   }
 `;
 
+const Add = styled.img`
+  width: 3vw;
+  height: 3vw;
+  cursor: pointer;
+  position: fixed;
+  right: 35px;
+  bottom: 20px;
+
+`;               
+
+
 // 더미 데이터
 const clientsData = [
   { no: 20, name: '홍길동', phone: '010-1234-5678', email: 'example@email.com', id: 'example', date: '2024-09-08', total: 800000, points: 8000 },
@@ -115,6 +129,7 @@ const ClientManagement = () => {
   return (
     <MainWrapper>
       <h2 style={{fontSize: '1.5vw', fontWeight: 'bold'}}>회원관리</h2>
+      <Add src={AddClient} />
       <Table>
         <TableHead>
           <TableRow>
