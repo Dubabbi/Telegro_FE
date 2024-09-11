@@ -1,251 +1,338 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import img from '../../Check/image.svg'; 
-import * as P from '../ProductList/ProductStyle';
-import { Navigate, useNavigate } from 'react-router-dom';
-const ProductPageWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-top: 2%;
-  width: 70%;
-  margin-left: 23%;
-  margin-top: 3vh;
-  padding: 2%;
-  margin-bottom: 4%;
-  background-color: #fff;
-  border: 1px solid #d3d3d3;
-  border-radius: 15px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  flex-direction: column;
+import * as D from '../NoticeDetail/NoticeDetailStyle';
+import * as N from '../Notice/NoticeStyle';
+
+// Main container for the entire form
+const MainWrapper = styled.div`
+  width: 78%; 
+  margin-left: 22%;
+  padding: 20px;
 `;
 
-const ProductDetails = styled.div`
-  display: flex;
-  justify-content: space-between;
+// Form container with a gray background for the section title
+const FormWrapper = styled.div`
   width: 100%;
-  padding: 2%;
-  border-radius: 10px;
-  margin-bottom: 40px;
+  background-color: #f9f9f9;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
 `;
 
-const ProductInfoWrapper = styled.div`
-  display: flex; /* 가로로 배치 */
-  align-items: center;
-  flex: 2;
+const SectionTitleWrapper = styled.div`
+  background-color: #f2f2f2; /* 회색 배경 */
+  padding: 1%;
 `;
 
-const ProductImage = styled.img`
-  width: 250px;
-  height: auto;
-  margin-right: 30px;
-`;
-
-const ProductInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-`;
-
-const ProductTitle = styled.h2`
+const SectionTitle = styled.h3`
+  font-size: 1.5rem;
   font-weight: bold;
-  font-size: 2rem;
-  white-space: nowrap;
-  color: #303972;
-  margin-bottom: 10px;
-  margin-left: 6%;
 `;
 
-const ProductSubtitle = styled.h3`
+
+const Label = styled.label`
+  font-size: 1.2rem;
   font-weight: bold;
-  font-size: 1.6rem;
-  color: #6B6B6B;
-  margin-bottom: 35%;
-  margin-left: 8%;
 `;
 
-const BuyButton = styled.button`
-  padding: 10px 25px;
+const Input = styled.input`
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10%;
+  margin-top: 3%;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  box-sizing: border-box;
+`;
+
+const Select = styled.select`
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10%;
+  border: 1px solid #ddd;
+  margin-top: 3%;
+  border-radius: 5px;
+  font-size: 1rem;
+  box-sizing: border-box;
+`;
+
+const Textarea = styled.textarea`
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  min-height: 150px;
+  box-sizing: border-box;
+  resize: none;
+  margin-bottom: 10%;
+  margin-top: 3%;
+`;
+
+const FileInput = styled.input`
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10%;
+  margin-top: 3%;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  box-sizing: border-box;
+`;
+
+const Button = styled.button`
+  padding: 12px 20px;
   background-color: #4D44B5;
   color: white;
-  font-size: 1rem;
-  border-radius: 1.5rem;
   border: none;
-  cursor: pointer;
-  margin-bottom: 20px;
-`;
-
-const PriceWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 90%;
-  margin-left: 5%;
-  margin-bottom: 20px;
-  h1{
-    font-size: 1.4rem;
-  }
-`;
-
-const PriceTag = styled.span`
-  padding: 5px 15px;
-  background: rgba(77, 68, 181, 0.2);
-  border-radius: 1rem;
-  align-items: center;
-  color: #444;
-  font-weight: semibold;
-  font-size: 1.3rem;
-`;
-
-const AdditionalImagesWrapper = styled.div`
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  row-gap: 5px;  /* 위아래 간격을 5px로 설정 */
-  column-gap: 10px;  /* 좌우 간격 */
-  padding-left: 20px;
-  align-items: center;
-  justify-items: center;
-  height: 29.5vh;
-  margin: 5% 0;
-`;
-
-const AdditionalImage = styled.img`
-  width: 80px;
-  height: auto;
   border-radius: 5px;
-  border: 1px solid #d3d3d3;
-  `;
-
-const ContentWrapper = styled.div`
-  display: flex;
-  flex-direction: row; /* 좌우로 배치 */
-  justify-content: space-between; /* 좌우 정렬 */
-  width: 90%;
-  margin-left: 5%;
-  margin-top: 20px;
-  padding-bottom: 5%;
-  padding-top: 3%;
-`;
-
-const DescriptionWrapper = styled.div`
-  flex: 1;
-  margin-right: 20px;
-`;
-
-const DescriptionTitle = styled.h4`
-  font-size: 1.6rem;
-  color: #303972;
-  font-weight: bold;
-  margin-bottom: 10px;
-`;
-
-const DescriptionList = styled.ul`
-  list-style-type: none;
-  margin-top: 2%;
-  padding: 0;
-  font-size: 1.4rem;
-  line-height: 1.7;
-  color: #444;
-`;
-
-const DescriptionItem = styled.li`
-  margin-bottom: 5px;
-`;
-
-const RequestInputWrapper = styled.div`
-  flex: 1;
-`;
-
-const RequestInputLabel = styled.label`
-  font-size: 1.6rem;
-  color: #444;
-  font-weight: bold;
-  margin-bottom: 10px;
-  display: block;
-`;
-
-const RequestInput = styled.textarea`
+  font-size: 1rem;
+  cursor: pointer;
   width: 100%;
-  height: 100px;
-  padding: 10px;
-  border: 1px solid #777;
-  border-radius: 10px;
-  resize: none;
-    &::placeholder {
-      color: #444;
-    }
-    &:focus {
-      outline: 2px solid #94A3D8;
-      border: none;
-    }
+  margin-top: 20px;
+
+  &:hover {
+    background-color: #3b3a9d;
+  }
 `;
 
-const Title = styled.div`
-  display: flex;
-  flex-direction: row;
-  width: 70%;
-  margin-top: 5%;
-  margin-left: 15%;
-  margin-bottom: 2%;
-  justify-content: space-between;
-  align-items: center;
-  h1 {
-    font-size: 1.5vw;
-    font-weight: bold;
-  }
-  
+// Row container for fields that should be on the same line
+const RowContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4열로 나누어서 배치 */
+  grid-column-gap: 20px;
+  margin-bottom: 20px;
+`;
 
+// New container for 모델명 & 상품명을 한 줄로 배치
+const NameRowContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 모델명과 상품명을 한 줄로 배치 */
+  grid-column-gap: 20px;
+  margin-bottom: 20px;
+`;
+
+// Content & Photo Section Container (좌측)
+const LeftColumn = styled.div`
+  grid-column: 1 / 2; /* 첫 번째 열 차지 */
+`;
+
+// Price Section Container (우측)
+const RightColumn = styled.div`
+  grid-column: 2 / 3; /* 두 번째 열 차지 */
+`;
+
+// Container for splitting left and right areas
+const SplitContainer = styled.div`
+  display: grid;
+  grid-template-columns: 2fr 1fr; /* 좌측 2/3, 우측 1/3 비율로 나눔 */
+  grid-gap: 20px;
 `;
 
 const ProductEdit = () => {
-  const navigate = useNavigate();
+  const [product, setProduct] = useState({
+    modelName: '',
+    productName: '',
+    option: '',
+    stock: '',
+    category: '',
+    subCategory: '',
+    content: '',
+    businessPrice: '',
+    bestPrice: '',
+    dealerPrice: '',
+    customerPrice: '',
+    photo: ''
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setProduct({ ...product, [name]: value });
+  };
+
   return (
-    <> 
-      <Title style={{width: '78%', marginLeft:'25%', border: 'none'}}><h1>제품 상세</h1></Title>
-      <ProductPageWrapper>
-        <ProductDetails>
-          {/* 상품 이미지와 정보가 가로로 정렬된 섹션 */}
-          <ProductInfoWrapper>
-            <ProductImage src={img} alt="Main Product" />
-            <ProductInfo>
-              <ProductTitle>상품명</ProductTitle>
-              <ProductSubtitle>제품명</ProductSubtitle>
-            </ProductInfo>
-          </ProductInfoWrapper>
-          {/* 우측 추가 상품 이미지 */}
-          <AdditionalImagesWrapper>
-            <AdditionalImage src={img} alt="Additional Image 1" />
-            <AdditionalImage src={img} alt="Additional Image 2" />
-            <AdditionalImage src={img} alt="Additional Image 3" />
-            <AdditionalImage src={img} alt="Additional Image 4" />
-          </AdditionalImagesWrapper>
-        </ProductDetails>
-        <PriceWrapper>
-          <DescriptionTitle style={{marginBottom: '0px', alignItems: 'center'}}>가격</DescriptionTitle>
-          <PriceTag>Biz: ₩160,000</PriceTag>
-          <PriceTag>B: ₩110,000</PriceTag>
-          <PriceTag>D: ₩100,000</PriceTag>
-          <PriceTag>C: ₩90,000</PriceTag>
-          </PriceWrapper>
-        <ContentWrapper>
-          <DescriptionWrapper>
-            <DescriptionTitle>상품 설명</DescriptionTitle>
-            <DescriptionList>
-              <DescriptionItem>- 이 상품은 이런 특징이 있어요.</DescriptionItem>
-              <DescriptionItem>- ~~~~한 장점도 있어요.</DescriptionItem>
-              <DescriptionItem>- 다른 상품들과 이런 차이점이 있어요.</DescriptionItem>
-              <DescriptionItem>- 이 상품은 다양한 장점이 있어요.</DescriptionItem>
-              <DescriptionItem>- 만족도가 높은 제품이에요.</DescriptionItem>
-            </DescriptionList>
-          </DescriptionWrapper>
+    <MainWrapper>
+      <SectionTitle style={{margin: '1%', marginBottom: '4%', marginTop: '3%'}}>상품 등록</SectionTitle>
+      <FormWrapper>
+        <SectionTitleWrapper>
+        <SectionTitle style={{fontSize: '1.5vw'}}>상품 등록</SectionTitle>
+        </SectionTitleWrapper>
+        <div style={{padding: '2%'}}>
+        {/* 모델명 & 상품명 한 줄로 배치 */}
+        <NameRowContainer>
+          <div>
+            <Label htmlFor="modelName">모델명 *</Label>
+            <Input
+              type="text"
+              name="modelName"
+              id="modelName"
+              placeholder="모델명"
+              value={product.modelName}
+              onChange={handleChange}
+            />
+          </div>
 
-          <RequestInputWrapper>
-            <RequestInputLabel>요청 사항</RequestInputLabel>
-            <RequestInput placeholder="요청 사항을 입력해 주세요." />
-          </RequestInputWrapper>
-        </ContentWrapper>
-      </ProductPageWrapper>
+          <div>
+            <Label htmlFor="productName">상품명 *</Label>
+            <Input
+              type="text"
+              name="productName"
+              id="productName"
+              placeholder="상품명"
+              value={product.productName}
+              onChange={handleChange}
+            />
+          </div>
+        </NameRowContainer>
 
-    </>
+        {/* 옵션, 재고 보유, 상품 카테고리 한 줄로 배치 */}
+        <RowContainer>
+          <div>
+            <Label htmlFor="option">옵션 *</Label>
+            <Input
+              type="text"
+              name="option"
+              id="option"
+              placeholder="구분자"
+              value={product.option}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div>
+            <Label htmlFor="stock">재고 보유 *</Label>
+            <Select
+              name="stock"
+              id="stock"
+              value={product.stock}
+              onChange={handleChange}
+            >
+              <option value="">선택</option>
+              <option value="many">많음</option>
+              <option value="few">적음</option>
+            </Select>
+          </div>
+
+          <div>
+            <Label htmlFor="category">상품 카테고리 *</Label>
+            <Select
+              name="category"
+              id="category"
+              value={product.category}
+              onChange={handleChange}
+            >
+              <option value="">대분류명</option>
+              <option value="category1">카테고리1</option>
+              <option value="category2">카테고리2</option>
+            </Select>
+          </div>
+
+          <div>
+            <Label htmlFor="subCategory">상품 세부 카테고리 *</Label>
+            <Select
+              name="subCategory"
+              id="subCategory"
+              value={product.subCategory}
+              onChange={handleChange}
+            >
+              <option value="">상품 카테고리</option>
+              <option value="subCategory1">세부 카테고리1</option>
+              <option value="subCategory2">세부 카테고리2</option>
+            </Select>
+          </div>
+        </RowContainer>
+
+        {/* SplitContainer for 내용, 포토 & 가격 */}
+        <SplitContainer>
+          {/* Left Column: 내용 & 포토 */}
+          <LeftColumn>
+            <div>
+              <Label htmlFor="content">내용 *</Label>
+              <Textarea
+                name="content"
+                id="content"
+                placeholder="내용을 입력해 주세요."
+                value={product.content}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="photo">Photo *</Label>
+              <FileInput
+                type="file"
+                name="photo"
+                id="photo"
+                onChange={handleChange}
+              />
+            </div>
+          </LeftColumn>
+
+          {/* Right Column: 가격 */}
+          <RightColumn>
+            <div>
+              <Label htmlFor="businessPrice">Business *</Label>
+              <Input
+                type="number"
+                name="businessPrice"
+                id="businessPrice"
+                placeholder="숫자만 입력해 주세요."
+                value={product.businessPrice}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="bestPrice">Best *</Label>
+              <Input
+                type="number"
+                name="bestPrice"
+                id="bestPrice"
+                placeholder="숫자만 입력해 주세요."
+                value={product.bestPrice}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="dealerPrice">Dealer *</Label>
+              <Input
+                type="number"
+                name="dealerPrice"
+                id="dealerPrice"
+                placeholder="숫자만 입력해 주세요."
+                value={product.dealerPrice}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="customerPrice">Customer *</Label>
+              <Input
+                type="number"
+                name="customerPrice"
+                id="customerPrice"
+                placeholder="숫자만 입력해 주세요."
+                value={product.customerPrice}
+                onChange={handleChange}
+              />
+            </div>
+          </RightColumn>
+        </SplitContainer>
+        </div>
+      </FormWrapper>
+      <N.Section style={{margin: '0'}}>
+      <D.BtWrap>
+            <D.BtLink as={Link} to="">
+              취소
+            </D.BtLink>
+            <D.BtLink as={Link} to="">
+              등록
+            </D.BtLink>
+          </D.BtWrap>
+          </N.Section>
+    </MainWrapper>
   );
 };
 

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import * as D from './NoticeDetailStyle'; 
 import * as N from '../Notice/NoticeStyle'; 
+import edit from '/src/assets/icon/Admin/editpost.svg';
 
 const NoticeDetail = () => {
   const notice = {
@@ -17,9 +18,14 @@ const NoticeDetail = () => {
   return (
     <N.MainWrapper style={{marginLeft: "22%"}}>
       <N.Section style={{width: '90%', minHeight: '2.6vh', border: 'none'}}>
+        <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
         <N.PageTitle>
           <N.TitleText style={{fontSize: '1.5vw'}}>공지사항</N.TitleText>
         </N.PageTitle>
+        <D.BtLink style={{margin: '1%', textAlign: 'center', alignItems: 'center', maxHeight: '7vh'}} as={Link} to="/admin/adminnoticeedit">
+              수정
+          </D.BtLink>
+        </div>
         <D.BoardViewWrap>
           <D.BoardView>
             <D.Title>제목 <span style={{marginLeft:'1%', marginRight: '1%', color: '#aaa', fontSize: '1.6rem'}}>|</span> {notice.title}</D.Title>
