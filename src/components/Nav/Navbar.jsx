@@ -24,7 +24,6 @@ export default function Navbar() {
             <li><a href="/main">Home</a></li>
             <li><a href="/signup">회원가입</a></li>
             <li><a href="/cart">장바구니</a></li>
-            <li><a href="/inquiry">제안문의</a></li>
             <li><a href="/login">로그아웃</a></li>
             <li><a href="mailto:ykjroom@naver.com">Contact Us</a></li>
           </N.MainNav>
@@ -32,15 +31,17 @@ export default function Navbar() {
           <Avvvatars value="user" size={40} style={{ marginLeft: '20px' }} />
         </N.NavContainer>
 
-        {/* Secondary Navigation (Categories) */}
-        <N.SecondaryNav>
-          <li><a href="/headset">헤드셋</a></li>
-          <li><a href="/lineCord">라인코드</a></li>
-          <li><a href="/recording">녹음기기</a></li>
-          <li><a href="/accessory">악세서리</a></li>
-          <li><a href="/resources">자료실</a></li>
+        {/* Secondary Navigation (Categories + Search) */}
+        <N.SecondaryNavContainer>
+          <N.SecondaryNav>
+            <li><a href="/headset">헤드셋</a></li>
+            <li><a href="/lineCord">라인코드</a></li>
+            <li><a href="/recording">녹음기기</a></li>
+            <li><a href="/accessory">악세서리</a></li>
+            <li><a href="/notice">자료실</a></li>
+          </N.SecondaryNav>
           
-          {/* Search bar integrated within the category list */}
+          {/* Search bar on the right */}
           <N.SearchWrapper>
             <N.StyledForm onSubmit={handleSubmit}>
               <N.SearchInput
@@ -52,7 +53,7 @@ export default function Navbar() {
               <N.StyledButton type="submit"><FaSearch size={15} /></N.StyledButton>
             </N.StyledForm>
           </N.SearchWrapper>
-        </N.SecondaryNav>
+        </N.SecondaryNavContainer>
       </N.NavWrapper>
     </>
   );

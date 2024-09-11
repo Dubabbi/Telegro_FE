@@ -37,11 +37,11 @@ export const MainNav = styled.ul`
   list-style: none;
   display: flex;
   align-items: center;
-  margin-left: auto; /* Pushes navigation to the right */
+  margin-left: auto;
   padding: 0;
 
   li {
-    padding: 0 20px;
+    padding: 0 30px;
 
     a {
       color: white;
@@ -51,26 +51,33 @@ export const MainNav = styled.ul`
       transition: color 0.3s ease;
 
       &:hover {
-        color: #bbb; /* Lighter hover color */
+        color: #bbb;
       }
     }
   }
 `;
 
 /* Secondary Navigation (for categories like 헤드셋, 라인코드) */
+export const SecondaryNavContainer = styled.div`
+  display: flex;
+  justify-content: space-between; /* Spread items to left and right */
+  width: 100%;
+  padding: 10px 5%;
+  align-items: center;
+`;
+
+/* Secondary Navigation Links */
 export const SecondaryNav = styled.ul`
   list-style: none;
   display: flex;
-  justify-content: space-around;
-  width: 100%;
-  margin-top: 10px;
-  
+  align-items: center;
+
   li {
-    padding: 0 15px;
+    padding: 0 30px;
 
     a {
       color: white;
-      font-size: 1rem;
+      font-size: 1vw;
       text-decoration: none;
 
       &:hover {
@@ -83,9 +90,8 @@ export const SecondaryNav = styled.ul`
 /* Search Wrapper */
 export const SearchWrapper = styled.div`
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-end; /* Align search to the right */
   width: auto;
-  padding-left: 20px;
 `;
 
 /* Search Form Wrapper */
