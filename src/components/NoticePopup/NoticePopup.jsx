@@ -19,6 +19,8 @@ const PopupWrapper = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  max-width: 500px;
+  max-height: 600px;
   width: 500px;
   height: 600px;
   background-color: white;
@@ -27,6 +29,15 @@ const PopupWrapper = styled.div`
   z-index: 1000;
   display: flex;
   flex-direction: column;
+  @media (max-width: 1400px ) {
+    max-width: 400px;
+    max-height: 500px;
+  }
+
+  @media (max-width: 480px) {
+    width: 300px;
+    height: 400px;
+  }
 `;
 
 const Header = styled.div`
@@ -46,7 +57,7 @@ const Header = styled.div`
 const Logo = styled.img`
   width: 37px;
   height: auto;
-    align-items: center;
+  align-items: center;
   margin-right: 10px;
 `;
 

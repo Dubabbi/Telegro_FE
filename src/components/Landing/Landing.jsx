@@ -58,7 +58,10 @@ export default function Landing() {
         </L.InlineIntro>
       </L.Intro>
       <L.List>
-        <p>헤드셋</p><p>라인코드</p><p>녹음기기</p><p>악세서리</p>
+        <p onClick={() => navigate('/headset')}>헤드셋</p>
+        <p onClick={() => navigate('/lineCord')}>라인코드</p>
+        <p onClick={() => navigate('/recording')}>녹음기기</p>
+        <p onClick={() => navigate('/accessory')}>악세서리</p>
       </L.List>
       <L.FooterWrapper>
         <L.FooterInline>

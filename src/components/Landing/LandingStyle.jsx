@@ -50,16 +50,9 @@ export const Img = styled.img`
     object-fit: cover; /* 이미지를 컨테이너 안에 꽉 채움 */
 `
 
-
-/*
-export const Img = styled.img`
-    max-width: 40%;
-    height: auto;
-`
-*/
 export const ImgWrapper = styled.div`
     width: 350px; /* 너비를 고정 */
-    height: 400; /* 높이를 고정 */
+    height: 450px; /* 높이를 고정 */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -137,6 +130,7 @@ export const Intro = styled.div`
 export const InlineIntro = styled.div`
     text-align: center;
     align-items: center;
+    margin-top: 10%;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -168,17 +162,21 @@ export const About = styled.div`
 `
 
 export const List = styled.div`
-    font-size: 1.3rem;
+    font-size: 1.2vw;
     font-weight: bold;
     display: flex;
     flex-direction: row;
     justify-content: space-around;
     margin: 2%;
+    p{
+        cursor: pointer;
+        text-decoration: underline;
+    }
 `
 
 export const FooterWrapper = styled.div`
     background-color: #697077;
-    font-size: 1.5rem;
+    font-size: 1.2vw;
     padding: 2% 0;
     margin-top: 4%;
 `
@@ -212,7 +210,7 @@ export const FooterTitle = styled.div`
         max-height: 30%;
     }
     p{
-        font-size: 1.7rem;
+        font-size: 1.44vw;
         color: #C1C7CD;
         font-weight: bold;
     }
@@ -230,7 +228,7 @@ export const FooterEnd = styled.div`
         align-items: center;
     }
     p{
-        font-size: 1.2rem;
+        font-size: 1vw;
         color: #697077;
         align-items: center;
         margin-bottom: 3%;
