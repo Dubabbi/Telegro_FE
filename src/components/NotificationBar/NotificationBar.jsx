@@ -48,8 +48,8 @@ const NotificationBar = () => {
   return (
     <NotificationWrapper>
       <NotificationText>
-        본사이트는 기업전용 사이트로 일반고객은 제품구매를 하실 수 없습니다. 제품문의 및 구매는 KJ대리점으로 문의하시기 바랍니다. 
-        제품출고일: 매주 목요일(오후3시 접수마감) 입니다.
+       본사이트는 기업(고객) 구매 전용 사이트입니다. 제품 구매 및 문의 사항은 텔레그로 취급점으로 문의 바랍니다.
+      제품 출고 마감: 오전 12:00 접수 마감.
       </NotificationText>
       <CloseButton size={20} onClick={handleClose} />
     </NotificationWrapper>

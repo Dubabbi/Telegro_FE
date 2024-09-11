@@ -162,7 +162,7 @@ export const About = styled.div`
 `
 
 export const List = styled.div`
-    font-size: 1.2vw;
+    font-size: 1.1vw;
     font-weight: bold;
     display: flex;
     flex-direction: row;
