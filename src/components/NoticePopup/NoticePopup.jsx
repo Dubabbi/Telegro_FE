@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { FaTimes } from 'react-icons/fa';
-import Img from '/src/assets/image/Landing/headset.svg'; // 로고 이미지
+import Img from '/src/assets/image/Landing/logo.svg'; // 로고 이미지
 
 // 오버레이 배경 추가
 const Overlay = styled.div`
@@ -33,47 +33,57 @@ const Header = styled.div`
   background-color: #F6F8FA;
   color: #092139;
   padding: 15px;
-    align-items: center;
-  font-size: 1.5vw;
+  text-align: center;
   font-weight: bold;
   display: flex;
-  justify-content: space-between;
+  justify-content: center; /* 가운데 정렬 */
   align-items: center;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
+  position: relative; /* Close 버튼을 별도로 배치하기 위해 필요 */
 `;
 
 const Logo = styled.img`
-  width: 30px;
-  height: 30px;
-text-align: center;
+  width: 37px;
+  height: auto;
+    align-items: center;
   margin-right: 10px;
 `;
 
 const HeaderTitle = styled.div`
   display: flex;
   align-items: center;
-  font-size: 1.4vw;
+  font-size: 1.8vw;
 `;
 
 const Content = styled.div`
   flex: 1;
   padding: 20px;
-  font-size: 1rem;
   color: #30313D;
   text-align: left;
-  line-height: 1.5;
+  line-height: 1.8;
+  h2{
+    font-size: 1.3vw;
+    font-weight: bold;
+      margin-left: 1%;
+  }
+  p{
+    font-size: 1.1vw;
+      margin-left: 1%;
+  }
 `;
 
 const HorizontalRule = styled.hr`
   border: none;
-  border-top: 1px solid #D5DBE1;
+  border-top: 2px solid #D5DBE1;
   margin: 20px 0;
 `;
 
 const CloseButton = styled(FaTimes)`
   cursor: pointer;
-  font-size: 1.5rem;
+  font-size: 2vw;
+  position: absolute;
+  right: 4%; /* 헤더 오른쪽에 위치 */
 `;
 
 const Footer = styled.div`
@@ -87,9 +97,9 @@ const ConfirmButton = styled.button`
   padding: 10px 20px;
   background-color: #F6F8FA;
   color: #30313D;
-    width: 90%;
-    font-size: 1.1vw;
-    font-weight: bold;
+  width: 90%;
+  font-size: 1.1vw;
+  font-weight: bold;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -118,6 +128,7 @@ const NoticePopup = () => {
           <CloseButton onClick={handleClose} />
         </Header>
         <Content>
+        <HorizontalRule />
           <h2>공지 드립니다.</h2>
           <HorizontalRule />
           <p>공지사항의 내용입니다.</p>
