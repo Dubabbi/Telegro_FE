@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { FaTimes } from 'react-icons/fa';
+import Img from '/src/assets/image/Landing/headset.svg'; // 로고 이미지
 
 // 오버레이 배경 추가
 const Overlay = styled.div`
@@ -9,8 +10,8 @@ const Overlay = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.45); /* 10% 불투명도 */
-  z-index: 999; /* 팝업보다 낮은 레이어 */
+  background-color: rgba(0, 0, 0, 0.45); /* 45% 불투명도 */
+  z-index: 999;
 `;
 
 const PopupWrapper = styled.div`
@@ -23,16 +24,17 @@ const PopupWrapper = styled.div`
   background-color: white;
   border-radius: 10px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  z-index: 1000; /* 팝업 레이어 */
+  z-index: 1000;
   display: flex;
   flex-direction: column;
 `;
 
 const Header = styled.div`
-  background-color: #5A5A5A;
-  color: white;
+  background-color: #F6F8FA;
+  color: #092139;
   padding: 15px;
-  font-size: 1.5rem;
+    align-items: center;
+  font-size: 1.5vw;
   font-weight: bold;
   display: flex;
   justify-content: space-between;
@@ -41,13 +43,32 @@ const Header = styled.div`
   border-top-right-radius: 10px;
 `;
 
+const Logo = styled.img`
+  width: 30px;
+  height: 30px;
+text-align: center;
+  margin-right: 10px;
+`;
+
+const HeaderTitle = styled.div`
+  display: flex;
+  align-items: center;
+  font-size: 1.4vw;
+`;
+
 const Content = styled.div`
   flex: 1;
   padding: 20px;
   font-size: 1rem;
-  color: black;
+  color: #30313D;
   text-align: left;
   line-height: 1.5;
+`;
+
+const HorizontalRule = styled.hr`
+  border: none;
+  border-top: 1px solid #D5DBE1;
+  margin: 20px 0;
 `;
 
 const CloseButton = styled(FaTimes)`
@@ -59,13 +80,16 @@ const Footer = styled.div`
   padding: 15px;
   display: flex;
   justify-content: center;
-  border-top: 1px solid #ddd;
+  border-top: 1px solid #D5DBE1;
 `;
 
 const ConfirmButton = styled.button`
   padding: 10px 20px;
-  background-color: #5A5A5A;
-  color: white;
+  background-color: #F6F8FA;
+  color: #30313D;
+    width: 90%;
+    font-size: 1.1vw;
+    font-weight: bold;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -87,14 +111,18 @@ const NoticePopup = () => {
       <Overlay onClick={handleClose} />
       <PopupWrapper>
         <Header>
-          공지사항
+          <HeaderTitle>
+            <Logo src={Img} alt="Telegro Logo" />
+            Telegro
+          </HeaderTitle>
           <CloseButton onClick={handleClose} />
         </Header>
         <Content>
           <h2>공지 드립니다.</h2>
+          <HorizontalRule />
           <p>공지사항의 내용입니다.</p>
-          <p>여기에 자세한 내용이 포함됩니다.</p>
-          <p>참고 바랍니다.</p>
+          <p>공지사항 제목과 내용, 그리고 확인 및 삭제 버튼이 있습니다.</p>
+          <p>다른 공지 목록은 자료실에서 확인 가능합니다.</p>
         </Content>
         <Footer>
           <ConfirmButton onClick={handleClose}>확인</ConfirmButton>
