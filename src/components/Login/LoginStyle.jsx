@@ -153,7 +153,7 @@ export const Link = styled.a`
 
 export const SearchInput = styled.input`
   padding: 10px;
-  width: 200px;
+  width: 68%;
   border: 1px solid #ccc;
   margin-bottom: 14px;
   border-radius: 4px;

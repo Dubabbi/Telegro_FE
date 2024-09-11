@@ -83,28 +83,32 @@ function Signup() {
           {step === 2 && (
             <>
               <div>
-              <L.InputBox style={{ textAlign: 'center'}}>
-                <label style={{  marginBottom: '2%', color: '#94A3D8', fontSize: '1.3vw', fontWeight: 'bold'}}>배송지 등록</label>
-                </L.InputBox>
+              <L.AddressInput>
+                  <label>휴대폰 번호</label>
+                  <input                     
+                    placeholder="휴대폰 번호" 
+                    onChange={e => setDetailAddress(e.target.value)} 
+                  />
+                </L.AddressInput>
                 <L.AddressBox>
-                  <label htmlFor="zipCodeText">우편번호</label>
+                  <label htmlFor="zipCodeText">주소</label>
                   <input
-                    id="zipCodeText"
-                    value={zipCode}
+                    id="addressText"
+                    value={roadAddress}
                     type="text"
-                    placeholder="우편번호"
+                    placeholder="주소를 검색해 주세요."
                     readOnly
                   />
                 </L.AddressBox>
                 <L.InputBox>
-                <label htmlFor="addressText">주소</label>
+                <label htmlFor="addressText">우편번호</label>
                 </L.InputBox>
                 <div style={{width: '100%', whiteSpace: 'nowrap', display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
                   <L.SearchInput 
-                       id="addressText"
+                       id="zipCodeText"
                        type="text"
-                       placeholder="주소를 검색해 주세요"
-                       value={roadAddress}
+                       placeholder="우편번호"
+                       value={zipCode}
                       readOnly/>
                   <L.SearchButton><Postcode onComplete={handleAddressComplete} /></L.SearchButton>
                 </div>
