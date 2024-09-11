@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Pagination from '../Pagination/Pagination';
+import * as N from '../Notice/NoticeStyle';
+import { Link } from 'react-router-dom';
+import { FaSearch } from 'react-icons/fa';
+import Form from 'react-bootstrap/Form';
 
 // Wrapper for the whole page
 const MainWrapper = styled.div`
@@ -32,24 +36,6 @@ const DateInput = styled.input`
   border-radius: 4px;
 `;
 
-// Search input
-const SearchInput = styled.input`
-  padding: 10px;
-  width: 200px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-`;
-
-// Search button
-const SearchButton = styled.button`
-  padding: 10px;
-  border: none;
-  background-color: #333;
-  color: white;
-  border-radius: 4px;
-  margin-left: 10px;
-  cursor: pointer;
-`;
 
 // Table
 const OrderTable = styled.table`
@@ -116,20 +102,33 @@ const CheckOrder = () => {
         point: '₩0'
       }
   ]);
+  const [searchValue, setSearchValue] = useState('');
 
+  const handleSubmit = (e) => {
+      e.preventDefault();
+      console.log("검색어:", searchValue);
+      setSearchValue('');
+  };
   return (
     <MainWrapper>
       <Title style={{fontSize: '1.5vw'}}>주문확인</Title>
 
-      <SearchSection>
+      <SearchSection style={{whiteSpace: 'nowrap'}}>
         <div>
           <label>기간: </label>
           <DateInput type="date" /> - <DateInput type="date" />
         </div>
-        <div>
-          <SearchInput type="text" placeholder="상호명 검색" />
-          <SearchButton>검색</SearchButton>
-        </div>
+        <N.SearchWrap style={{marginLeft: '20%'}}>
+            <N.StyledForm onSubmit={handleSubmit}>
+                <Form.Control
+                  type="text"
+                  placeholder="게시글 검색"
+                  value={searchValue}
+                  onChange={(e) => setSearchValue(e.target.value)}
+                />
+              <N.StyledButton type="submit" variant="none"><FaSearch size={15} /></N.StyledButton>
+              </N.StyledForm>
+            </N.SearchWrap>
       </SearchSection>
 
       <OrderTable>
