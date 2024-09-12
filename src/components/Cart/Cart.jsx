@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import img from '../Check/image.svg'; // 실제 이미지 경로로 수정 필요
-
+import { useNavigate } from 'react-router-dom';
 const OrderPageWrapper = styled.div`
   display: flex;
   justify-content: space-between;
@@ -151,6 +151,7 @@ const Title = styled.div`
 
 `;
 const Cart = () => {
+  const navigate=useNavigate('');
   return (
     <>
       <div style={{ width: '100%', minHeight: '22.6vh', border: 'none' }}></div>
@@ -249,7 +250,7 @@ const Cart = () => {
         </PriceDetailsWrapper>
 
         {/* 구매하기 버튼 */}
-        <ConfirmButton>구매하기</ConfirmButton>
+        <ConfirmButton onClick={() => navigate('/orderprocess')}>구매하기</ConfirmButton>
       </RightSection>
     </OrderPageWrapper>
     </>

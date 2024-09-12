@@ -9,6 +9,7 @@ import NoticePage from './pages/Notice';
 import NoticeDetailPage from './pages/NoticeDetail';
 import OrderPage from './pages/Order';
 import OrderProductPage from './pages/OrderProduct';
+import OrderProcessPage from './components/OrderProcess/OrderProcess';
 import Headset from './components/Check/Headset';
 import LineCord from './components/Product/LineCord';
 import Recording from './components/Product/Recording';
@@ -36,6 +37,7 @@ export default function User() {
         <Route path="/recording" element={<Recording />} />
         <Route path="/accessory" element={<Accessory />} />
         <Route path="/ordermanager" element={<OrderManagerPage />} />
+        <Route path="/orderprocess" element={<OrderProcessPage />} />
         <Route path="/cart" element={<CartPage />} />
       </Routes>
       <NotificationBar />
