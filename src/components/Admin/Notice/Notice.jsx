@@ -7,6 +7,7 @@ import CommonTableColumn from './CommonTableColumn';
 import CommonTableRow from './CommonTableRow';
 import * as N from './NoticeStyle';
 import editpost from '/src/assets/icon/Admin/editpost.svg';
+import Pagination from '../../Pagination/Pagination';
 
 const Notice = () => {
   const [notice, setNotice] = useState([
@@ -63,6 +64,9 @@ const Notice = () => {
         </N.BoardSearchArea>
         <div><hr/>
           <CommonTable headersName={['No', '제목', '첨부', '작성자', '등록일', '조회수']}>{items}</CommonTable><hr/>
+        </div>      
+        <div style={{marginTop: '5%'}}>
+        <Pagination />
         </div>
       </N.Section>
       <N.Add  onClick={() => navigate('/admin/noticecreate')} src={editpost} />

@@ -6,7 +6,7 @@ import { FaPencilAlt, FaTrash } from 'react-icons/fa';
 import AddClient from '/src/assets/icon/Admin/addclient.svg';
 import * as D from './NoticeDetail/NoticeDetailStyle';
 import * as N from './Notice/NoticeStyle';
-
+import Pagination from '../Pagination/Pagination';
 // 메인 컨테이너
 const MainWrapper = styled.div`
   width: 70%;
@@ -177,23 +177,9 @@ const ClientManagement = () => {
         </tbody>
       </Table>
 
-      <PaginationWrapper>
-        <PageButton onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
-          이전
-        </PageButton>
-        {[...Array(totalPages)].map((_, index) => (
-          <PageButton
-            key={index}
-            onClick={() => handlePageChange(index + 1)}
-            className={currentPage === index + 1 ? 'active' : ''}
-          >
-            {index + 1}
-          </PageButton>
-        ))}
-        <PageButton onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
-          다음
-        </PageButton>
-      </PaginationWrapper>
+      <div style={{marginTop: '5%'}}>
+        <Pagination />
+        </div>
     </MainWrapper>
   );
 };
