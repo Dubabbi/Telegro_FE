@@ -7,10 +7,8 @@ import MainPage from './pages/Main';
 import LoginPage from './pages/Login';
 import NoticePage from './pages/Notice';
 import NoticeDetailPage from './pages/NoticeDetail';
-import OrderReviewPage from './pages/OrderReview';
 import OrderPage from './pages/Order';
 import OrderProductPage from './pages/OrderProduct';
-import CheckPage from './pages/Check';
 import Headset from './components/Check/Headset';
 import LineCord from './components/Product/LineCord';
 import Recording from './components/Product/Recording';
@@ -31,10 +29,8 @@ export default function User() {
         <Route path="/notice" element={<NoticePage />} />
         <Route path="/noticedetail" element={<NoticeDetailPage />} />
         <Route path="/orderProduct" element={<OrderProductPage />} />
-        <Route path="/orderReview" element={<OrderReviewPage />} />
         <Route path="/productdetail" element={<ProductDetailPage />} />
         <Route path="/order" element={<OrderPage />} />
-        <Route path="/check" element={<CheckPage />} />
         <Route path="/headset" element={<Headset />} />
         <Route path="/lineCord" element={<LineCord />} />
         <Route path="/recording" element={<Recording />} />
