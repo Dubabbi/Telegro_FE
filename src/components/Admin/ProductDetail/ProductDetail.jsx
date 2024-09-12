@@ -2,7 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import img from '../../Check/image.svg'; 
 import * as P from '../ProductList/ProductStyle';
-import { Navigate, useNavigate } from 'react-router-dom';
+import * as D from '../NoticeDetail/NoticeDetailStyle';
+import * as N from '../Notice/NoticeStyle';
+import { Link, useNavigate } from 'react-router-dom';
 const ProductPageWrapper = styled.div`
   display: flex;
   justify-content: center;
@@ -195,12 +197,27 @@ const Title = styled.div`
   
 
 `;
-
+// 메인 컨테이너
+const MainWrapper = styled.div`
+  width: 70%;
+  margin-left: 23%;
+  margin-top: 3vh;
+  padding: 2%;
+`;
 const AdminProductDetail = () => {
   const navigate = useNavigate();
   return (
     <> 
-      <Title style={{width: '78%', marginLeft:'25%', border: 'none'}}><h1>제품 상세</h1></Title>
+    <MainWrapper>
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+        <N.PageTitle>
+        <h2 style={{marginLeft: '1%', fontSize: '1.5vw', fontWeight: 'bold', whiteSpace: 'nowrap'}}>제품 상세</h2>
+        </N.PageTitle>
+        <D.BtLink style={{padding: '1%', textAlign: 'center', alignItems: 'center', maxHeight: '6vh'}} as={Link} to="/admin/adminproductedit">
+              수정
+          </D.BtLink>
+        </div>
+      </MainWrapper>
       <ProductPageWrapper>
         <ProductDetails>
           {/* 상품 이미지와 정보가 가로로 정렬된 섹션 */}

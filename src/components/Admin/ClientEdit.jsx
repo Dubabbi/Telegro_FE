@@ -3,7 +3,7 @@ import {Link, useNavigate} from 'react-router-dom';
 import styled from 'styled-components';
 import { Postcode } from '../Postcode/Postcode'; // 우편번호 검색 컴포넌트
 import * as D from './NoticeDetail/NoticeDetailStyle';
-import { VscWhitespace } from 'react-icons/vsc';
+
 const Container = styled.div`
   width: 65%; /* 좌측 내비게이션 바를 제외한 나머지 영역 */
   margin-left: 25%;

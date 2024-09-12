@@ -16,6 +16,8 @@ import Accessory from './components/Admin/ProductList/Accessory';
 import AdminProductDetailPage from './pages/AdminProductDetail';
 import AdminOrderListPage from './pages/AdminOrderList';
 import AddClientPage from './pages/AddClient';
+import AdminProductEditPage from './pages/AdminProductEdit';
+import ClientEditPage from'./pages/ClientEdit';
 
 export default function Admin() {
   return (
@@ -37,8 +39,10 @@ export default function Admin() {
         <Route path="recording" element={<Recording />} />
         <Route path="accessory" element={<Accessory />} />
         <Route path="adminproductdetail" element={<AdminProductDetailPage />} /> 
+        <Route path="adminproductedit" element={<AdminProductEditPage />} />
         <Route path="adminorderlist" element={<AdminOrderListPage />} />
         <Route path="addclient" element={<AddClientPage />} />
+        <Route path="clientedit" element={<ClientEditPage />} />
       </Routes>
     </div>
   );

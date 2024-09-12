@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { FaPencilAlt, FaTrash } from 'react-icons/fa';
 import AddClient from '/src/assets/icon/Admin/addclient.svg';
+import * as D from './NoticeDetail/NoticeDetailStyle';
+import * as N from './Notice/NoticeStyle';
 
 // 메인 컨테이너
 const MainWrapper = styled.div`
@@ -128,7 +131,14 @@ const ClientManagement = () => {
 
   return (
     <MainWrapper>
-      <h2 style={{marginLeft: '1%', fontSize: '1.5vw', fontWeight: 'bold'}}>회원관리</h2>
+        <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+        <N.PageTitle>
+        <h2 style={{marginLeft: '1%', fontSize: '1.5vw', fontWeight: 'bold', whiteSpace: 'nowrap'}}>고객 관리</h2>
+        </N.PageTitle>
+        <D.BtLink style={{padding: '1%', textAlign: 'center', alignItems: 'center', maxHeight: '6vh'}} as={Link} to="/admin/clientedit">
+              수정
+          </D.BtLink>
+        </div>
       <Add onClick={() => navigate('/admin/addclient')} src={AddClient} />
       <Table>
         <TableHead>
