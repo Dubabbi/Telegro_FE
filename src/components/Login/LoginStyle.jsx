@@ -1,6 +1,12 @@
 //LoginStyle.jsx
 import styled from 'styled-components';
-
+export const ErrorText = styled.p`
+  color: red;
+  font-size: 0.875rem;  // 적절한 크기로 설정
+  margin-top: 5px;
+  margin-bottom: 5px;
+  text-align: left;  // 오류 메시지가 왼쪽 정렬이 되도록 설정
+`;
 export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;

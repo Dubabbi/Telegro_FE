@@ -9,21 +9,90 @@ function Signup() {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
-  const [zipCode, setZipcode] = useState('');
-  const [roadAddress, setRoadAddress] = useState('');
-  const [detailAddress, setDetailAddress] = useState('');
+  const [zipCode, setZipcode] = useState(''); // 우편번호 저장
+  const [roadAddress, setRoadAddress] = useState(''); // 도로명 주소 저장
+  const [detailAddress, setDetailAddress] = useState(''); // 상세 주소 저장
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [step, setStep] = useState(1);
 
+  const [errors, setErrors] = useState({});
+
+  // Step 1 유효성 검사
+  const validateStep1 = () => {
+    let errors = {};
+
+    if (!id.trim()) {
+      errors.id = '아이디를 입력하세요.';
+    }
+    if (!email.trim()) {
+      errors.email = '이메일을 입력하세요.';
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      errors.email = '유효한 이메일 주소를 입력하세요.';
+    }
+    if (!name.trim()) {
+      errors.name = '이름을 입력하세요.';
+    }
+    if (!password.trim()) {
+      errors.password = '비밀번호를 입력하세요.';
+    } else if (password.length < 10 || !/^(?=.*\d)(?=.*[a-zA-Z])(?=.*\W).{10,}$/.test(password)) {
+      errors.password = '비밀번호는 숫자, 문자, 특수문자를 포함한 10자 이상이어야 합니다.';
+    }
+
+    return errors;
+  };
+
+  // Step 2 유효성 검사
+  const validateStep2 = () => {
+    let errors = {};
+
+    if (!phoneNumber.trim()) {
+      errors.phoneNumber = '휴대폰 번호를 입력하세요.';
+    } else if (!/^\d{3}-\d{3,4}-\d{4}$/.test(phoneNumber)) {
+      errors.phoneNumber = '유효한 휴대폰 번호를 입력하세요 (형식: 010-1234-5678).';
+    }
+    if (!roadAddress.trim()) {
+      errors.roadAddress = '주소를 입력하세요.';
+    }
+    if (!zipCode.trim()) {
+      errors.zipCode = '우편번호를 입력하세요.';
+    }
+    if (!detailAddress.trim()) {
+      errors.detailAddress = '상세 주소를 입력하세요.';
+    }
+
+    return errors;
+  };
+
+  // Submit 처리
   const handleSubmit = (event) => {
     event.preventDefault();
+
     if (step === 1) {
-      setStep(2); // Step 1을 완료하면 Step 2로 이동
+      const step1Errors = validateStep1();
+      if (Object.keys(step1Errors).length > 0) {
+        setErrors(step1Errors);
+      } else {
+        setErrors({});
+        setStep(2); // Step 1이 유효하면 Step 2로 이동
+      }
     } else {
-      console.log('Signup Attempt', { id, email, name, password, roadAddress, zipCode, detailAddress });
-      // 회원가입 로직 추가 후 리다이렉트
+      const step2Errors = validateStep2();
+      if (Object.keys(step2Errors).length > 0) {
+        setErrors(step2Errors);
+      } else {
+        console.log('Signup Attempt', { id, email, name, password, roadAddress, zipCode, detailAddress, phoneNumber });
+        // 회원가입 로직 추가 후 리다이렉트
+        navigate('/generallogin');
+      }
     }
   };
 
+  // 주소 검색 버튼 클릭 시 실행
+  const handleAddressSearch = () => {
+    setErrors({ ...errors, roadAddress: '', zipCode: '' }); // 주소 관련 유효성 검사 메시지 제거
+  };
+
+  // Postcode로부터 주소와 우편번호 가져오는 함수
   const handleAddressComplete = ({ fullAddress, zonecode }) => {
     setRoadAddress(fullAddress); // 도로명 주소 설정
     setZipcode(zonecode);        // 우편번호 설정
@@ -45,6 +114,7 @@ function Signup() {
                   value={id} 
                   onChange={e => setId(e.target.value)} 
                 />
+                {errors.id && <L.ErrorText>{errors.id}</L.ErrorText>}
               </L.InputBox>
               <L.InputBox>
                 <label htmlFor="emailText">이메일</label>
@@ -55,6 +125,7 @@ function Signup() {
                   value={email} 
                   onChange={e => setEmail(e.target.value)} 
                 />
+                {errors.email && <L.ErrorText>{errors.email}</L.ErrorText>}
               </L.InputBox>
               <L.InputBox>
                 <label htmlFor="nameText">이름</label>
@@ -65,6 +136,7 @@ function Signup() {
                   value={name} 
                   onChange={e => setName(e.target.value)} 
                 />
+                {errors.name && <L.ErrorText>{errors.name}</L.ErrorText>}
               </L.InputBox>
               <L.InputBox>
                 <label htmlFor="passwordText">비밀번호</label>
@@ -75,6 +147,7 @@ function Signup() {
                   value={password} 
                   onChange={e => setPassword(e.target.value)} 
                 />
+                {errors.password && <L.ErrorText>{errors.password}</L.ErrorText>}
               </L.InputBox>
               <L.Button primary="true" type="submit">다음</L.Button>
             </>
@@ -82,48 +155,53 @@ function Signup() {
 
           {step === 2 && (
             <>
-              <div>
               <L.AddressInput>
-                  <label>휴대폰 번호</label>
-                  <input                     
-                    placeholder="휴대폰 번호" 
-                    onChange={e => setDetailAddress(e.target.value)} 
-                  />
-                </L.AddressInput>
-                <L.AddressBox>
-                  <label htmlFor="zipCodeText">주소</label>
-                  <input
-                    id="addressText"
-                    value={roadAddress}
-                    type="text"
-                    placeholder="주소를 검색해 주세요."
-                    readOnly
-                  />
-                </L.AddressBox>
-                <L.InputBox>
-                <label htmlFor="addressText">우편번호</label>
-                </L.InputBox>
-                <div style={{width: '100%', whiteSpace: 'nowrap', display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
-                  <L.SearchInput 
-                       id="zipCodeText"
-                       type="text"
-                       placeholder="우편번호"
-                       value={zipCode}
-                      readOnly/>
-                  <L.SearchButton><Postcode onComplete={handleAddressComplete} /></L.SearchButton>
-                </div>
-                
-                <L.AddressInput>
-                  <label htmlFor="detailAddressText">상세주소</label>
-                  <input 
-                    id="detailAddressText"
-                    value={detailAddress}
-                    placeholder="상세 주소를 입력하세요" 
-                    onChange={e => setDetailAddress(e.target.value)} 
-                  />
-                </L.AddressInput>
+                <label>휴대폰 번호</label>
+                <input
+                  placeholder="휴대폰 번호"
+                  value={phoneNumber}
+                  onChange={e => setPhoneNumber(e.target.value)}
+                />
+                {errors.phoneNumber && <L.ErrorText>{errors.phoneNumber}</L.ErrorText>}
+              </L.AddressInput>
+              <L.AddressBox>
+                <label htmlFor="addressText">주소</label>
+                <input
+                  id="addressText"
+                  value={roadAddress}
+                  type="text"
+                  placeholder="주소를 검색해 주세요."
+                  readOnly
+                />
+                {errors.roadAddress && <L.ErrorText>{errors.roadAddress}</L.ErrorText>}
+              </L.AddressBox>
+              <L.InputBox>
+                <label htmlFor="zipCodeText">우편번호</label>
+              </L.InputBox>
+              <div style={{ width: '100%', whiteSpace: 'nowrap', display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                <L.SearchInput 
+                  id="zipCodeText"
+                  type="text"
+                  placeholder="우편번호"
+                  value={zipCode}
+                  readOnly
+                />
+                {/* 주소 검색 버튼 클릭 시 유효성 검사 오류 메시지가 뜨지 않도록 handleAddressSearch 추가 */}
+                <L.SearchButton onClick={handleAddressSearch}><Postcode onComplete={handleAddressComplete} /></L.SearchButton>
               </div>
-              <L.Button style={{marginTop: '2%'}} primary="true" type="submit" onClick={() => navigate('/generallogin')}>회원가입</L.Button>
+              {errors.zipCode && <L.ErrorText>{errors.zipCode}</L.ErrorText>}
+              
+              <L.AddressInput>
+                <label htmlFor="detailAddressText">상세주소</label>
+                <input
+                  id="detailAddressText"
+                  value={detailAddress}
+                  placeholder="상세 주소를 입력하세요" 
+                  onChange={e => setDetailAddress(e.target.value)} 
+                />
+                {errors.detailAddress && <L.ErrorText>{errors.detailAddress}</L.ErrorText>}
+              </L.AddressInput>
+              <L.Button style={{ marginTop: '2%' }} primary="true" type="submit">회원가입</L.Button>
             </>
           )}
         </L.Form>
