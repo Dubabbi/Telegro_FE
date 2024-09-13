@@ -135,9 +135,6 @@ const ClientManagement = () => {
         <N.PageTitle>
         <h2 style={{marginLeft: '1%', fontSize: '1.5vw', fontWeight: 'bold', whiteSpace: 'nowrap'}}>고객 관리</h2>
         </N.PageTitle>
-        <D.BtLink style={{padding: '1%', textAlign: 'center', alignItems: 'center', maxHeight: '6vh'}} as={Link} to="/admin/clientedit">
-              수정
-          </D.BtLink>
         </div>
       <Add onClick={() => navigate('/admin/addclient')} src={AddClient} />
       <Table>
@@ -167,7 +164,7 @@ const ClientManagement = () => {
               <TableData>{client.date}</TableData>
               <TableData>{`\₩${client.total.toLocaleString()} (\₩${client.points.toLocaleString()})`}</TableData>
               <TableData>
-                <IconButton><FaPencilAlt /></IconButton>
+                <IconButton onClick={() => navigate('/admin/clientedit')}><FaPencilAlt /></IconButton>
               </TableData>
               <TableData>
                 <IconButton><FaTrash /></IconButton>
