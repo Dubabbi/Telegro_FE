@@ -1,16 +1,34 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import * as L from '../Login/LoginStyle';
+import axios from 'axios';
 
 function GeneralLogin() {
   const navigate = useNavigate();
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // 로그인 처리 로직
-    console.log('Login Attempt', id, password);
+    try {
+      const response = await axios.post("http://ec2-52-78-189-146.ap-northeast-2.compute.amazonaws.com/auth/login", {
+        id: id,
+        password: password,
+      }, {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+      });
+
+      if (response.status === 200 && response.data.token) {
+        localStorage.setItem('token', response.data.token);
+        navigate('/main');
+      } else {
+        alert("로그인에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error("로그인 요청 중 오류 발생:", error);
+      alert("로그인 실패: " + (error.response?.data?.message || "네트워크 오류"));
+    }
   };
 
   return (
@@ -24,23 +42,23 @@ function GeneralLogin() {
           </L.InputBox>
           <L.InputBox>
             <label htmlFor="passwordText">비밀번호</label>
-            <input id="passwordText" type="password" placeholder="숫자, 문자, 특수문자를 포함한 10자 이상" value={password} onChange={e => setPassword(e.target.value)} />
+            <input id="passwordText" type="password" placeholder="비밀번호를 입력하세요" value={password} onChange={e => setPassword(e.target.value)} />
           </L.InputBox>
-          <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
-          <L.CheckboxContainer style={{alignItems: 'center'}}>
-            <L.Checkbox type="checkbox" id="checkId" />
-            <L.CheckboxLabel htmlFor="checkId">아이디 저장</L.CheckboxLabel>
-          </L.CheckboxContainer>
-          <div>
-          <L.Text>일반고객</L.Text>
-          <L.Account>            
-            <L.Span color="#94A3D8">ID: guest</L.Span>
-            <L.Span color="#94A3D8">PW: 0000</L.Span>
-          </L.Account>
-        </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <L.CheckboxContainer>
+              <L.Checkbox type="checkbox" id="checkId" />
+              <L.CheckboxLabel htmlFor="checkId">아이디 저장</L.CheckboxLabel>
+            </L.CheckboxContainer>
+            <div>
+              <L.Text>일반고객</L.Text>
+              <L.Account>            
+                <L.Span color="#94A3D8">ID: guest</L.Span>
+                <L.Span color="#94A3D8">PW: 0000</L.Span>
+              </L.Account>
+            </div>
           </div>
-          <L.Button primary type="submit" onClick={() => navigate('/main')}>로그인</L.Button>
-          <L.Button onClick={() => navigate('/signup')}>회원가입</L.Button>
+          <L.Button type="submit">로그인</L.Button>
+          <L.Button type="button" onClick={() => navigate('/signup')}>회원가입</L.Button>
         </L.Form>
       </L.LoginSection>
     </L.Wrapper>

@@ -172,7 +172,7 @@ export const SearchInput = styled.input`
       font-size: 1.1vw;
     }
 `;
-export const SearchButton = styled.button`
+export const SearchButton = styled.div`
   border: none;
   background-color: #94A3D8;
   height: 48px;

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as L from '../Login/LoginStyle';
 import { Postcode } from '../Postcode/Postcode';
+import axios from 'axios';
 
 function Signup() {
   const navigate = useNavigate();
@@ -16,7 +17,6 @@ function Signup() {
   const [step, setStep] = useState(1);
 
   const [errors, setErrors] = useState({});
-
   // Step 1 유효성 검사
   const validateStep1 = () => {
     let errors = {};
@@ -63,6 +63,32 @@ function Signup() {
     return errors;
   };
 
+  //https://thingproxy.freeboard.io/fetch/
+
+  const handleSignupClick = async () => {
+    try {
+      const response = await axios.post("http://ec2-52-78-189-146.ap-northeast-2.compute.amazonaws.com", {
+        userid: id,
+        username: name,
+        password: password,
+        phone: phoneNumber,
+        email: email,
+        address: roadAddress,
+        zipCode: zipCode,
+        addressDetail: detailAddress,
+      },{
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+      });
+      if (response.status === 200) {
+        navigate("/generallogin");
+        alert("회원가입에 성공했습니다.");
+      }
+    } catch (error) {
+      console.error("Error while signing up:", error);
+    }
+  };
+
   // Submit 처리
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -75,16 +101,7 @@ function Signup() {
         setErrors({});
         setStep(2); // Step 1이 유효하면 Step 2로 이동
       }
-    } else {
-      const step2Errors = validateStep2();
-      if (Object.keys(step2Errors).length > 0) {
-        setErrors(step2Errors);
-      } else {
-        console.log('Signup Attempt', { id, email, name, password, roadAddress, zipCode, detailAddress, phoneNumber });
-        // 회원가입 로직 추가 후 리다이렉트
-        navigate('/generallogin');
-      }
-    }
+    } 
   };
 
   // 주소 검색 버튼 클릭 시 실행
@@ -149,7 +166,7 @@ function Signup() {
                 />
                 {errors.password && <L.ErrorText>{errors.password}</L.ErrorText>}
               </L.InputBox>
-              <L.Button primary="true" type="submit">다음</L.Button>
+              <L.Button  type="button" onClick={handleSubmit}>다음</L.Button>
             </>
           )}
 
@@ -186,10 +203,8 @@ function Signup() {
                   value={zipCode}
                   readOnly
                 />
-                {/* 주소 검색 버튼 클릭 시 유효성 검사 오류 메시지가 뜨지 않도록 handleAddressSearch 추가 */}
                 <L.SearchButton onClick={handleAddressSearch}><Postcode onComplete={handleAddressComplete} /></L.SearchButton>
               </div>
-              {errors.zipCode && <L.ErrorText>{errors.zipCode}</L.ErrorText>}
               
               <L.AddressInput>
                 <label htmlFor="detailAddressText">상세주소</label>
@@ -201,7 +216,7 @@ function Signup() {
                 />
                 {errors.detailAddress && <L.ErrorText>{errors.detailAddress}</L.ErrorText>}
               </L.AddressInput>
-              <L.Button style={{ marginTop: '2%' }} primary="true" type="submit">회원가입</L.Button>
+              <L.Button onClick={handleSignupClick} style={{ marginTop: '2%' }} primary={true} type="submit">회원가입</L.Button>
             </>
           )}
         </L.Form>

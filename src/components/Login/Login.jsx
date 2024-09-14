@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as L from './LoginStyle';
 import axios from 'axios';
@@ -8,12 +8,10 @@ function Login() {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleEmail = (e) => setEmail(e.target.value);
-  const handlePw = (e) => setPw(e.target.value);
-
-  const handleSubmit = async () => {
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     try {
-      const response = await axios.post("http://ec2-52-78-189-146.ap-northeast-2.compute.amazonaws.com", {
+      const response = await axios.post("http://ec2-52-78-189-146.ap-northeast-2.compute.amazonaws.com/auth/login", {
         id: id,
         password: password,
       }, {
@@ -21,10 +19,9 @@ function Login() {
         withCredentials: true,
       });
 
-      const { token, id } = response.data.data;
-      if (response.status === 200 && token) {
-        login(token, id); // AuthContext를 통한 로그인 상태 관리
-        fetchUserInfo(token); // 사용자 정보 가져오기
+      if (response.status === 200 && response.data.token) {
+        localStorage.setItem('token', response.data.token);
+        navigate('/main');
       } else {
         alert("로그인에 실패했습니다.");
       }
@@ -33,6 +30,7 @@ function Login() {
       alert("로그인 실패: " + (error.response?.data?.message || "네트워크 오류"));
     }
   };
+
   return (
     <L.Wrapper>
       <L.LoginSection>
@@ -47,15 +45,15 @@ function Login() {
             <input id="passwordText" type="password" placeholder="숫자, 문자, 특수문자를 포함한 10자 이상" value={password} onChange={e => setPassword(e.target.value)} />
           </L.InputBox>
           <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
-          <L.CheckboxContainer style={{alignItems: 'center'}}>
-            <L.Checkbox type="checkbox" id="checkId" />
-            <L.CheckboxLabel htmlFor="checkId">아이디 저장</L.CheckboxLabel>
-          </L.CheckboxContainer>
-          <div>
-          <L.Text><a style={{color: '#0F62FE',  textDecoration: 'underline', textDecorationColor: '#0F62FE' }} href="/generallogin">일반고객으로 로그인</a></L.Text>
-        </div>
+            <L.CheckboxContainer style={{alignItems: 'center'}}>
+              <L.Checkbox type="checkbox" id="checkId" />
+              <L.CheckboxLabel htmlFor="checkId">아이디 저장</L.CheckboxLabel>
+            </L.CheckboxContainer>
+            <div>
+              <L.Text><a style={{color: '#0F62FE', textDecoration: 'underline', textDecorationColor: '#0F62FE'}} href="/generallogin">일반고객으로 로그인</a></L.Text>
+            </div>
           </div>
-          <L.Button primary type="submit" onClick={() => navigate('/main')}>로그인</L.Button>
+          <L.Button type="submit">로그인</L.Button>
         </L.Form>
       </L.LoginSection>
     </L.Wrapper>
