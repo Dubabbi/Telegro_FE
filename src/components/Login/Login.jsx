@@ -1,19 +1,38 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as L from './LoginStyle';
+import axios from 'axios';
 
 function Login() {
   const navigate = useNavigate();
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    // 로그인 처리 로직
-    console.log('Login Attempt', id, password);
-    // navigate('/dashboard'); // 로그인 성공 후 리다이렉트
-  };
+  const handleEmail = (e) => setEmail(e.target.value);
+  const handlePw = (e) => setPw(e.target.value);
 
+  const handleSubmit = async () => {
+    try {
+      const response = await axios.post("http://ec2-52-78-189-146.ap-northeast-2.compute.amazonaws.com", {
+        id: id,
+        password: password,
+      }, {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+      });
+
+      const { token, id } = response.data.data;
+      if (response.status === 200 && token) {
+        login(token, id); // AuthContext를 통한 로그인 상태 관리
+        fetchUserInfo(token); // 사용자 정보 가져오기
+      } else {
+        alert("로그인에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error("로그인 요청 중 오류 발생:", error);
+      alert("로그인 실패: " + (error.response?.data?.message || "네트워크 오류"));
+    }
+  };
   return (
     <L.Wrapper>
       <L.LoginSection>
