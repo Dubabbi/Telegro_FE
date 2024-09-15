@@ -7,9 +7,8 @@ function GeneralLogin() {
   const navigate = useNavigate();
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  
+  const handleSubmit = async () => {
     try {
       const response = await axios.post("http://ec2-52-78-189-146.ap-northeast-2.compute.amazonaws.com/auth/login", {
         id: id,
@@ -19,8 +18,8 @@ function GeneralLogin() {
         withCredentials: true,
       });
 
-      if (response.status === 200 && response.data.token) {
-        localStorage.setItem('token', response.data.token);
+      if (response.status === 200 && response.data.accessToken) {
+        localStorage.setItem('token', response.data.accessToken);
         navigate('/main');
       } else {
         alert("로그인에 실패했습니다.");
@@ -35,7 +34,6 @@ function GeneralLogin() {
     <L.Wrapper>
       <L.LoginSection>
         <L.Title>Telegro</L.Title>
-        <L.Form onSubmit={handleSubmit}>
           <L.InputBox>
             <label htmlFor="idText">아이디</label>
             <input id="idText" type="text" placeholder="아이디를 입력하세요" value={id} onChange={e => setId(e.target.value)} />
@@ -57,9 +55,8 @@ function GeneralLogin() {
               </L.Account>
             </div>
           </div>
-          <L.Button type="submit">로그인</L.Button>
-          <L.Button type="button" onClick={() => navigate('/signup')}>회원가입</L.Button>
-        </L.Form>
+          <L.Button style={{backgroundColor: '#94A3D8', color: '#fff'}} type="submit" onClick={handleSubmit}>로그인</L.Button>
+          <L.Button onClick={e=>navigate('/signup')}>회원가입</L.Button>
       </L.LoginSection>
     </L.Wrapper>
   );
