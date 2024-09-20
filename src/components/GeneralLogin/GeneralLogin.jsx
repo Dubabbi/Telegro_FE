@@ -18,10 +18,8 @@ function GeneralLogin() {
         withCredentials: true,
       });
 
-      const { token } = response.data.data;
-      if (response.status === 200 && token) {
-        localStorage.setItem('token', token);
-        navigate('/main'); // 메인 페이지로 이동
+      if (response.status === 200) {
+        navigate('/main');
       } else {
         alert("로그인에 실패했습니다: ");
       }

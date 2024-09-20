@@ -53,55 +53,6 @@ export default function Main() {
                 ))}
             </div>
         </div>
-        <M.Layer className="company-synopses">
-      <M.List>
-      <M.SynopsisItem className="synopsis-item wow fadeInUpA animated" data-wow-delay="0s">
-          <M.ItemWrap>
-            <M.ItemImg href="">
-              <img src="https://cdn.globalso.com/inbertec/th-2.png" alt="Free Sample"/>
-            </M.ItemImg>
-            <M.ItemInfo>
-              <M.ItemTitle>
-                <a href="">Free Sample</a>
-              </M.ItemTitle>
-              <M.ItemDesc>Want to have a try?<br/>Apply for free sample!</M.ItemDesc>
-            </M.ItemInfo>
-          </M.ItemWrap>
-        </M.SynopsisItem>
-        <M.SynopsisItem className="synopsis-item wow fadeInUpA animated" data-wow-delay="0s">
-          <M.ItemWrap>
-            <M.ItemImg href="">
-              <img src="https://cdn.globalso.com/inbertec/th-2.png" alt="Free Sample"/>
-            </M.ItemImg>
-            <M.ItemInfo>
-              <M.ItemTitle>
-                <a href="">Free Sample</a>
-              </M.ItemTitle>
-              <M.ItemDesc>Want to have a try?<br/>Apply for free sample!</M.ItemDesc>
-            </M.ItemInfo>
-          </M.ItemWrap>
-        </M.SynopsisItem>
-        <M.SynopsisItem className="synopsis-item wow fadeInUpA animated" data-wow-delay="0s">
-          <M.ItemWrap>
-            <M.ItemImg href="">
-              <img src="https://cdn.globalso.com/inbertec/th-2.png" alt="Free Sample"/>
-            </M.ItemImg>
-            <M.ItemInfo>
-              <M.ItemTitle>
-                <a href="">Free Sample</a>
-              </M.ItemTitle>
-              <M.ItemDesc>Want to have a try?<br/>Apply for free sample!</M.ItemDesc>
-            </M.ItemInfo>
-          </M.ItemWrap>
-        </M.SynopsisItem>
-      </M.List>
-    </M.Layer>
-    {/*
-      <M.ContactWrapper>
-        <div><h1>LET'S TALK</h1><p>Welcome to inquire or leave us a message, we will serve you wholeheartedly!</p></div>
-        <M.Contact>Contact Us!</M.Contact>
-      </M.ContactWrapper>
-    */}
         </>
 
     );
