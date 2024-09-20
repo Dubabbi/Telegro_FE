@@ -16,16 +16,14 @@ function Login() {
         password: password,
       });
 
-      // 응답 코드에 따라 처리 분기
-      if (response.status === 200 && response.data.code === 20000) {
-        localStorage.setItem('token', response.data.accessToken); // 토큰 저장
-        navigate('/main'); // 메인 페이지로 이동
+      const { token } = response.data.data;
+      if (response.status === 200 && token) {
+        localStorage.setItem('token', token);
+        navigate('/main'); 
         alert("로그인에 성공했습니다.");
-      } else if (response.status === 401 && response.data.code === 40102) {
-        alert("아이디/비밀번호가 적절하지 않습니다."); // 인증 실패 메시지
-      } else {
-        alert("로그인에 실패했습니다: " + response.data.message); // 기타 실패 메시지
-      }
+      } else if (response.status === 401) {
+        alert("잘못된 인증입니다."); 
+      } 
     } catch (error) {
       console.error("로그인 요청 중 오류 발생:", error);
       alert("로그인 실패: " + (error.response?.data?.message || "네트워크 오류")); // 네트워크 오류 처리

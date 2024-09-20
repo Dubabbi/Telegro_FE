@@ -18,9 +18,9 @@ function GeneralLogin() {
         withCredentials: true,
       });
 
-      const { accessToken } = response.data.data;
-      if (response.status === 200 && accessToken) {
-        localStorage.setItem('accessToken', accessToken);
+      const { token } = response.data.data;
+      if (response.status === 200 && token) {
+        localStorage.setItem('token', token);
         navigate('/main'); // 메인 페이지로 이동
       } else {
         alert("로그인에 실패했습니다: ");
