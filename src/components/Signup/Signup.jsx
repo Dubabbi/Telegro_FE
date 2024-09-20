@@ -67,7 +67,7 @@ function Signup() {
 
   const handleSignupClick = async () => {
     try {
-      const response = await axios.post("/proxy/auth/signup", {
+      const response = await axios.post("/api/auth/signup", {
         userid: id,
         username: name,
         password: password,
@@ -76,9 +76,6 @@ function Signup() {
         address: roadAddress,
         zipCode: zipCode,
         addressDetail: detailAddress,
-      },{
-        headers: { "Content-Type": "application/json" },
-        withCredentials: true,
       });
       if (response.status === 200) {
         navigate("/generallogin");

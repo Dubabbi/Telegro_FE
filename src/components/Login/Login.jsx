@@ -11,17 +11,14 @@ function Login() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post("/api/auth/login", {
+      const response = await axios.post("http://ec2-52-78-189-146.ap-northeast-2.compute.amazonaws.com/auth/login", {
         id: id,
         password: password,
-      }, {
-        headers: { "Content-Type": "application/json" },
-        withCredentials: true,
       });
 
       // 응답 코드에 따라 처리 분기
       if (response.status === 200 && response.data.code === 20000) {
-        localStorage.setItem('token', response.data.data.accessToken); // 토큰 저장
+        localStorage.setItem('token', response.data.accessToken); // 토큰 저장
         navigate('/main'); // 메인 페이지로 이동
         alert("로그인에 성공했습니다.");
       } else if (response.status === 401 && response.data.code === 40102) {

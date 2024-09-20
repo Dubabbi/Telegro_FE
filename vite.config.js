@@ -4,6 +4,9 @@ import svgr from 'vite-plugin-svgr'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  build: {
+    outDir: './dist' // 빌드 결과물이 저장될 디렉터리 경로
+  },
   plugins: [
     react(),
     svgr({

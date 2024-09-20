@@ -10,7 +10,7 @@ function GeneralLogin() {
   
   const handleSubmit = async () => {
     try {
-      const response = await axios.post("http://ec2-52-78-189-146.ap-northeast-2.compute.amazonaws.com/auth/login", {
+      const response = await axios.post("/api/auth/login", {
         id: id,
         password: password,
       }, {
@@ -18,11 +18,12 @@ function GeneralLogin() {
         withCredentials: true,
       });
 
-      if (response.status === 200 && response.data.accessToken) {
-        localStorage.setItem('token', response.data.accessToken);
-        navigate('/main');
+      const { accessToken } = response.data.data;
+      if (response.status === 200 && accessToken) {
+        localStorage.setItem('accessToken', accessToken);
+        navigate('/main'); // 메인 페이지로 이동
       } else {
-        alert("로그인에 실패했습니다.");
+        alert("로그인에 실패했습니다: ");
       }
     } catch (error) {
       console.error("로그인 요청 중 오류 발생:", error);
