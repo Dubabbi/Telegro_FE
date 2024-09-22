@@ -80,7 +80,9 @@ function Signup() {
       if (response.status === 200) {
         navigate("/generallogin");
         alert("회원가입에 성공했습니다.");
-      }
+      } else if (response.status === 409) {
+        alert("등록된 회원입니다."); 
+      } 
     } catch (error) {
       console.error("Error while signing up:", error);
     }

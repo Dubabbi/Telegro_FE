@@ -26,7 +26,7 @@ function Login() {
       } 
     } catch (error) {
       console.error("로그인 요청 중 오류 발생:", error);
-      alert("로그인 실패: " + (error.response?.data?.message || "네트워크 오류")); // 네트워크 오류 처리
+      alert((error.response?.data?.message)); // 네트워크 오류 처리
     }
   };
 
