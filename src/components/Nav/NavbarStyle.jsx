@@ -29,6 +29,9 @@ export const NavContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 90%; 
+  @media (max-width: 500px) {
+    width: 95%;
+  }
 `;
 
 export const Logo = styled.a`
@@ -47,6 +50,10 @@ export const MainNav = styled.ul`
 
   li {
     padding: 0 30px;
+    white-space: nowrap;
+    @media (max-width: 780px) {
+      padding: 0 8px;
+    }
 
     a {
       color: white;
@@ -54,6 +61,9 @@ export const MainNav = styled.ul`
       font-weight: bold;
       text-decoration: none;
       transition: color 0.3s ease;
+      @media (max-width: 780px) {
+        font-size: 1rem;
+      }
 
       &:hover {
         color: #bbb;
@@ -64,10 +74,13 @@ export const MainNav = styled.ul`
 
 export const SecondaryNavContainer = styled.div`
   display: flex;
-  justify-content: space-between; /* Spread items to left and right */
+  justify-content: space-between; 
   width: 100%;
   padding: 10px 5%;
   align-items: center;
+  @media (max-width: 500px) {
+    padding: 0 2%;
+  }
 `;
 
 export const SecondaryNav = styled.ul`
@@ -77,12 +90,14 @@ export const SecondaryNav = styled.ul`
 
   li {
     padding: 0 30px;
-
+    @media (max-width: 500px) {
+      padding: 0 5%;
+    }
     a {
       color: white;
-      font-size: 1vw;
+      font-size: 0.9rem;
       text-decoration: none;
-
+      white-space: nowrap;
       &:hover {
         color: #bbb;
       }
@@ -90,10 +105,9 @@ export const SecondaryNav = styled.ul`
   }
 `;
 
-/* Search Wrapper */
 export const SearchWrapper = styled.div`
   display: flex;
-  justify-content: flex-end; /* Align search to the right */
+  justify-content: flex-end;
   width: auto;
 `;
 

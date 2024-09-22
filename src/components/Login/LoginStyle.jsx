@@ -42,11 +42,14 @@ export const LoginSection = styled.section`
 `;
 
 export const Title = styled.h3`
-  font-size: 2.2vw;
+  font-size: 2.6rem;
   font-weight: bold;
   margin-top: 20px;
   margin-bottom: 20px;
   text-align: center;
+  @media (max-width: 800px) {
+    font-size: 2rem;
+  }
 `;
 
 export const Text = styled.p`
@@ -57,6 +60,9 @@ export const Text = styled.p`
   white-space: nowrap;
   color: #777;
   text-decoration : underline;
+  @media(max-width: 800px){
+    font-size: 1.1rem;
+  }
 `;
 
 export const Account = styled.div`
@@ -88,8 +94,13 @@ export const InputBox = styled.div`
   white-space: nowrap;
   label {
     display: block;
-    font-size: 1.1vw;
+    font-size: 1.5rem;
+    font-weight: semi-bold;
     margin-bottom: 6px;
+    margin-bottom: 2%;
+    @media(max-width: 800px){
+      font-size: 1.1rem;
+    }
   }
   input {
     display: block;
@@ -97,7 +108,7 @@ export const InputBox = styled.div`
     height: 48px;
     border: 1px solid #E0E0E0;
     padding: 12px 20px;
-    font-size: 1.1vw;
+    font-size: 1.5rem;
     border-radius: 4px;
     &:focus {
       outline: 2.5px solid #94A3D8;
@@ -105,7 +116,10 @@ export const InputBox = styled.div`
     }
     &::placeholder {
       color: #B4B4B4;
-     font-size: 1.1vw;
+      font-size: 1.5rem;
+       @media(max-width: 800px){
+        font-size: 0.95rem;
+      }
     }
   }
 `;
@@ -130,8 +144,11 @@ export const CheckboxContainer = styled.div`
 `;
 
 export const CheckboxLabel = styled.label`
-  font-size: 1.1vw;
+  font-size: 1.5rem;
   cursor: pointer;
+    @media(max-width: 800px){
+      font-size: 1.1rem;
+    }
 `;
 
 export const Checkbox = styled.input`
@@ -143,6 +160,11 @@ export const Checkbox = styled.input`
   border-radius: 8px;
   &:checked {
     background-color: #94A3D8;
+  }
+ @media(max-width: 800px){
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
   }
 `;
 
