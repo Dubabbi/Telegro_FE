@@ -179,6 +179,7 @@ export const FooterWrapper = styled.div`
     font-size: 1.2vw;
     padding: 2% 0;
     margin-top: 4%;
+
 `
 
 export const FooterInline = styled.div`
@@ -213,6 +214,9 @@ export const FooterTitle = styled.div`
         font-size: 1.44vw;
         color: #C1C7CD;
         font-weight: bold;
+        @media(max-width: 800px){
+            font-size: 1.64rem;
+        }
     }
 
 `
@@ -232,6 +236,10 @@ export const FooterEnd = styled.div`
         color: #697077;
         align-items: center;
         margin-bottom: 3%;
+        @media(max-width: 800px){
+            font-size: 1rem;
+            padding-right: 5%;
+        }
     }
 
 `
