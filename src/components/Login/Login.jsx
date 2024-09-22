@@ -11,14 +11,13 @@ function Login() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post("http://ec2-52-78-189-146.ap-northeast-2.compute.amazonaws.com:8080/auth/login", {
+      const response = await axios.post("/api/auth/login", {
         id: id,
         password: password,
       });
-
-      const { token } = response.data.data;
-      if (response.status === 200 && token) {
-        localStorage.setItem('token', token);
+      
+      if (response.status === 200 && response.data.data.token) {
+        localStorage.setItem('token', response.data.data.token);
         navigate('/main'); 
         alert("로그인에 성공했습니다.");
       } else if (response.status === 401) {
@@ -26,10 +25,9 @@ function Login() {
       } 
     } catch (error) {
       console.error("로그인 요청 중 오류 발생:", error);
-      alert((error.response?.data?.message)); 
+      alert("로그인 실패: " + (error.response?.data?.message || "네트워크 오류")); 
     }
   };
-
   return (
     <L.Wrapper>
       <L.LoginSection>
