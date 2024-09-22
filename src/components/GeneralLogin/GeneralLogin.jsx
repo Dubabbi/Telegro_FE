@@ -8,24 +8,25 @@ function GeneralLogin() {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   
-  const handleSubmit = async () => {
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     try {
       const response = await axios.post("/api/auth/login", {
         id: id,
         password: password,
-      }, {
-        headers: { "Content-Type": "application/json" },
-        withCredentials: true,
       });
 
-      if (response.status === 200) {
-        navigate('/main');
-      } else {
-        alert("로그인에 실패했습니다: ");
-      }
+      const { token } = response.data.data;
+      if (response.status === 200 && token) {
+        localStorage.setItem('token', token);
+        navigate('/main'); 
+        alert("로그인에 성공했습니다.");
+      } else if (response.status === 401) {
+        alert("잘못된 인증입니다."); 
+      } 
     } catch (error) {
       console.error("로그인 요청 중 오류 발생:", error);
-      alert("로그인 실패: " + (error.response?.data?.message || "네트워크 오류"));
+      alert("로그인 실패: " + (error.response?.data?.message || "네트워크 오류")); 
     }
   };
 

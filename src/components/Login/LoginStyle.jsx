@@ -15,8 +15,8 @@ export const Wrapper = styled.div`
   padding: 6% 0;
   margin: 0;
   background-color: #ccc;
-  width: 100%; /* 화면 너비에 맞춰 배경이 줄어들도록 설정 */
-  min-height: 100vh; /* 화면 높이에 맞춰 Wrapper가 줄어들도록 설정 */
+  width: 100%; 
+  min-height: 100vh;
 `;
 
 export const LoginSection = styled.section`
@@ -30,14 +30,14 @@ export const LoginSection = styled.section`
   position: relative;
   border-radius: 1rem;
   z-index: 2;
-    @media (max-width: 768px) {
-    width: 80%; /* 화면 크기가 768px 이하일 때 너비를 80%로 조정 */
-    padding: 40px 30px; /* 작은 화면에서는 패딩을 줄여 공간 확보 */
+  @media (max-width: 768px) {
+    width: 60%; /* 화면 크기가 768px 이하일 때 너비를 80%로 조정 */
+    padding: 40px 30px; 
   }
 
   @media (max-width: 480px) {
-    width: 90%; /* 모바일 화면에서는 너비를 90%로 조정 */
-    padding: 30px 20px; /* 패딩을 더 줄여 모바일에서 더 깔끔하게 표시 */
+    width: 90%; 
+    padding: 30px 20px; 
   }
 `;
 

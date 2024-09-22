@@ -10,9 +10,9 @@ function Signup() {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
-  const [zipCode, setZipcode] = useState(''); // 우편번호 저장
-  const [roadAddress, setRoadAddress] = useState(''); // 도로명 주소 저장
-  const [detailAddress, setDetailAddress] = useState(''); // 상세 주소 저장
+  const [zipCode, setZipcode] = useState('');
+  const [roadAddress, setRoadAddress] = useState('');
+  const [detailAddress, setDetailAddress] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [step, setStep] = useState(1);
 
@@ -67,7 +67,7 @@ function Signup() {
 
   const handleSignupClick = async () => {
     try {
-      const response = await axios.post("/api/auth/signup", {
+      const response = await axios.post("http://ec2-52-78-189-146.ap-northeast-2.compute.amazonaws.com/auth/signup", {
         userid: id,
         username: name,
         password: password,
@@ -116,7 +116,6 @@ function Signup() {
     <L.Wrapper>
       <L.LoginSection>
         <L.Title>Telegro</L.Title>
-        <L.Form onSubmit={handleSubmit}>
           {step === 1 && (
             <>
               <L.InputBox>
@@ -216,7 +215,6 @@ function Signup() {
               <L.Button onClick={handleSignupClick} style={{ marginTop: '2%' }} primary={true} type="submit">회원가입</L.Button>
             </>
           )}
-        </L.Form>
       </L.LoginSection>
     </L.Wrapper>
   );
