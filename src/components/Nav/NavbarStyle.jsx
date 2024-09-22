@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
-/* Navbar Wrapper */
 export const NavWrapper = styled.div`
   position: fixed;
   top: 0;
@@ -14,17 +13,24 @@ export const NavWrapper = styled.div`
   z-index: 1000;
   padding: 10px 0;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  @media (max-width: 1000px) {
+    
+  }
+  @media (max-width: 780px) {
+    
+  }
+  @media (max-width: 500px) {
+    
+  }
 `;
 
-/* Navigation Container (Logo + Main Nav + Avatar) */
 export const NavContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 90%; /* Adjust as per your needs to control width */
+  width: 90%; 
 `;
 
-/* Logo Styling */
 export const Logo = styled.a`
   font-size: 2.5rem;
   color: white;
@@ -32,7 +38,6 @@ export const Logo = styled.a`
   text-decoration: none;
 `;
 
-/* Main Navigation Links */
 export const MainNav = styled.ul`
   list-style: none;
   display: flex;
@@ -57,7 +62,6 @@ export const MainNav = styled.ul`
   }
 `;
 
-/* Secondary Navigation (for categories like 헤드셋, 라인코드) */
 export const SecondaryNavContainer = styled.div`
   display: flex;
   justify-content: space-between; /* Spread items to left and right */
@@ -66,7 +70,6 @@ export const SecondaryNavContainer = styled.div`
   align-items: center;
 `;
 
-/* Secondary Navigation Links */
 export const SecondaryNav = styled.ul`
   list-style: none;
   display: flex;

@@ -2131,6 +2131,11 @@ node-releases@^2.0.14:
   resolved "https://registry.yarnpkg.com/node-releases/-/node-releases-2.0.14.tgz#2ffb053bceb8b2be8495ece1ab6ce600c4461b0b"
   integrity sha512-y10wOWt8yZpqXmOgRo77WaHEmhYQYGNA6y421PKsKYWEK8aW+cqAphborZDhqfyKrbZEN92CN1X2KbafY2s7Yw==
 
+node.js@^0.0.1-security:
+  version "0.0.1-security"
+  resolved "https://registry.yarnpkg.com/node.js/-/node.js-0.0.1-security.tgz#ad5a038f1c70dc7a5f95c8df524cee98534d62a6"
+  integrity sha512-8tWQiyg/3ggdLTrtfgj/NxmZpC20eB1U5VNkqt2dbelpcr3NrfjpEE3DgifpBOCJ4Xu9Obvu8iju63ViQW3Hvg==
+
 object-assign@^4.1.1:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/object-assign/-/object-assign-4.1.1.tgz#2109adc7965887cfc05cbbd442cac8bfbb360863"

@@ -17,6 +17,19 @@ const Sidebar = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 1%;
+  @media (max-width: 780px) {
+    width: 60%; 
+  }
+`;
+
+const MenuButton = styled.button`
+  display: none;
+  @media (max-width: 780px) {
+    display: block;
+    position: fixed;
+    left: 10px;
+    top: 10px;
+  }
 `;
 
 const LogoWrapper = styled.div`
@@ -80,16 +93,15 @@ const MenuItem = styled.div`
   }
 
   &.active {
-    color: #FFD700; /* 선택된 메뉴 색상 */
+    color: #FFD700; 
     background-color: #6B6B6B;
   }
 `;
 
-// absolute 포지션을 사용해 다른 요소에 영향을 주지 않음
 const SubMenu = styled.div`
   display: ${(props) => (props.open ? 'block' : 'none')};
   position: absolute;
-  left: 100%;  /* 오른쪽에 하위 메뉴가 뜨도록 설정 */
+  left: 100%;
   top: 0;
   background-color: #4F4F4F;
   padding: 10px 20px;
@@ -101,6 +113,8 @@ const SubMenu = styled.div`
     padding: 10px;
     &:hover {
       background-color: #6B6B6B;
+      padding-left: 1.7rem;
+      transition: all 0.5s ease;
     }
   }
 `;
@@ -162,19 +176,26 @@ const LogoutButton = styled.div`
 const AdminNav = () => {
   const [isSubMenuOpen, setIsSubMenuOpen] = useState(false);
   const navigate = useNavigate();
-  const location = useLocation(); // 현재 위치 정보를 가져옴
+  const location = useLocation();
+  const [sidebarVisible, setSidebarVisible] = useState(true);
+
+  const toggleSidebar = () => {
+    setSidebarVisible(!sidebarVisible);
+  };
 
   const toggleSubMenu = () => {
     setIsSubMenuOpen(!isSubMenuOpen);
   };
 
-  // 페이지 이동 시 하위 메뉴를 자동으로 닫음
+
   useEffect(() => {
-    setIsSubMenuOpen(false);  // 라우트가 변경될 때 하위 메뉴를 닫음
-  }, [location.pathname]); // 경로 변경을 감지
+    setIsSubMenuOpen(false); 
+  }, [location.pathname]); 
 
   return (
-    <Sidebar>
+  <>
+      <MenuButton onClick={toggleSidebar}>Menu</MenuButton>
+    <Sidebar show={sidebarVisible}>
       <LogoWrapper>
         <LogoImage src={Logo} alt="Telegro Logo" />
         <LogoText>Telegro</LogoText>
@@ -254,6 +275,7 @@ const AdminNav = () => {
         </LogoutButton>
       </FooterWrapper>
     </Sidebar>
+    </>
   );
 };
 

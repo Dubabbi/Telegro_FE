@@ -11,7 +11,6 @@ export default function Navbar() {
     e.preventDefault();
     console.log('검색어:', searchValue);
     setSearchValue('');
-    // 검색 실행 로직 추가 가능
   };
 
   return (
@@ -31,7 +30,6 @@ export default function Navbar() {
           <Avvvatars value="user" size={40} style={{ marginLeft: '20px' }} />
         </N.NavContainer>
 
-        {/* Secondary Navigation (Categories + Search) */}
         <N.SecondaryNavContainer>
           <N.SecondaryNav>
             <li><a href="/headset">헤드셋</a></li>
@@ -40,8 +38,7 @@ export default function Navbar() {
             <li><a href="/accessory">악세서리</a></li>
             <li><a href="/notice">자료실</a></li>
           </N.SecondaryNav>
-          
-          {/* Search bar on the right */}
+
           <N.SearchWrapper>
             <N.StyledForm onSubmit={handleSubmit}>
               <N.SearchInput

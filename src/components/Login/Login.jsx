@@ -11,7 +11,7 @@ function Login() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post("http://ec2-52-78-189-146.ap-northeast-2.compute.amazonaws.com/auth/login", {
+      const response = await axios.post("/api/auth/login", {
         id: id,
         password: password,
       });
@@ -26,7 +26,7 @@ function Login() {
       } 
     } catch (error) {
       console.error("로그인 요청 중 오류 발생:", error);
-      alert((error.response?.data?.message)); // 네트워크 오류 처리
+      alert((error.response?.data?.message)); 
     }
   };
 
