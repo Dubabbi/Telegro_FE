@@ -24,7 +24,6 @@ function Login() {
         alert("잘못된 인증입니다."); 
       } 
     } catch (error) {
-      console.error("로그인 요청 중 오류 발생:", error);
       alert("로그인 실패: " + (error.response?.data?.message || "네트워크 오류")); 
     }
   };
