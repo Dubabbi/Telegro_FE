@@ -67,7 +67,7 @@ function Signup() {
 
   const handleSignupClick = async () => {
     try {
-      const response = await axios.post("http://ec2-52-78-189-146.ap-northeast-2.compute.amazonaws.com/auth/signup", {
+      const response = await axios.post("/api/auth/signup", {
         userid: id,
         username: name,
         password: password,

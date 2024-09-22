@@ -5,6 +5,12 @@ export const ProductGrid = styled.div`
   grid-template-columns: repeat(4, 1fr); /* 4개의 열 */
   gap: 20px; /* 각 제품 박스 간격 */
   margin-top: 50px;
+  @media(max-width:800px){
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @media(max-width:600px){
+    grid-template-columns: repeat(2, 1fr);
+  }
 `;
 
 export const ProductBox = styled.div`

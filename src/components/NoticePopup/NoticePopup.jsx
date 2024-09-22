@@ -33,9 +33,12 @@ const PopupWrapper = styled.div`
     max-width: 400px;
     max-height: 500px;
   }
-
+  @media (max-width: 700px) {
+    max-width: 350px;
+    max-height: 450px;
+  }
   @media (max-width: 480px) {
-    width: 300px;
+    width: 100%;
     height: 400px;
   }
 `;
@@ -65,6 +68,9 @@ const HeaderTitle = styled.div`
   display: flex;
   align-items: center;
   font-size: 1.8vw;
+  @media(max-width: 800px){
+    font-size: 1.5rem;
+  }
 `;
 
 const Content = styled.div`
@@ -77,10 +83,18 @@ const Content = styled.div`
     font-size: 1.3vw;
     font-weight: bold;
       margin-left: 1%;
+    @media(max-width: 800px){
+      font-size: 1.3rem;
+      margin-left: 2%;
+    }
   }
   p{
     font-size: 1.1vw;
       margin-left: 1%;
+    @media(max-width: 800px){
+      font-size: 1.2rem;
+      margin-left: 2%;
+    }
   }
 `;
 

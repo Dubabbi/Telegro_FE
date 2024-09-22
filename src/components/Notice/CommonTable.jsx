@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 const Table = styled.table`
-  width: 100%;
+  width: 95%;
   margin: 0 auto;
   text-align: center;
   border-spacing: 0;
@@ -14,6 +14,10 @@ const TableHeaderColumn = styled.th`
   font-size: 1.5rem;
   padding: 1% 1%;
   font-weight: bold;
+  @media(max-width: 800px){
+    font-size: 1.3rem;
+    padding: 1.5% 1%;
+  }
 `;
 
 const CommonTable = ({ headersName, children }) => {

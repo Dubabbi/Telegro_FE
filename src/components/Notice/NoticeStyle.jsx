@@ -20,6 +20,7 @@ export const Section = styled.section`
 export const PageTitle = styled.div`
   margin-bottom: 30px;
   font-size: 100px;
+  
 `
 
 export const TitleText = styled.h3`
@@ -117,7 +118,7 @@ export const BoardListArea = styled.div`
 
 export const BoardTable = styled.table`
   font-size: 13px;
-  width: 100%;
+  max-width: 100%;
   border-top: 1px solid #ccc;
   border-bottom: 1px solid #ccc;
   border: 2px solid #111;

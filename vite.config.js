@@ -4,9 +4,7 @@ import svgr from 'vite-plugin-svgr';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  build: {
-    outDir: './dist' 
-  },
+
   plugins: [
     react(),
     svgr({
@@ -17,7 +15,7 @@ export default defineConfig({
     port: 5173,
     proxy: {
       '/api': {
-        target: 'http://ec2-52-78-189-146.ap-northeast-2.compute.amazonaws.com',
+        target: 'http://ec2-52-78-189-146.ap-northeast-2.compute.amazonaws.com:8080',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ''),
         secure: false,
