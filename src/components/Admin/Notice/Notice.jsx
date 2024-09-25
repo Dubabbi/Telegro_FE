@@ -8,6 +8,7 @@ import CommonTableRow from './CommonTableRow';
 import * as N from './NoticeStyle';
 import editpost from '/src/assets/icon/Admin/editpost.svg';
 import Pagination from '../../Pagination/Pagination';
+import * as P from '../ProductList/ProductStyle';
 
 const Notice = () => {
   const [notice, setNotice] = useState([
@@ -40,11 +41,12 @@ const Notice = () => {
   ));
 
   return (
-    <N.MainWrapper style={{marginLeft: "23%"}}>
+    <>
+    <N.MainWrapper>
       <div style={{width: '100%', minHeight: '2.6vh', border: 'none'}}></div>
-      <N.Section style={{width: '90%', minHeight: '2.6vh', border: 'none'}}>
+      <N.Section>
         <N.PageTitle>
-          <N.TitleText style={{fontSize: '1.5vw'}}>공지사항</N.TitleText>
+          <N.TitleText>공지사항</N.TitleText>
         </N.PageTitle>
         <div style={{textAlign: 'right'}}> 총 게시물 수 : 58  현재 페이지 : 1 / 6</div>
         <N.BoardSearchArea>
@@ -65,12 +67,13 @@ const Notice = () => {
         <div><hr/>
           <CommonTable headersName={['No', '제목', '첨부', '작성자', '등록일', '조회수']}>{items}</CommonTable><hr/>
         </div>      
-        <div style={{marginTop: '5%'}}>
-        <Pagination />
-        </div>
       </N.Section>
       <N.Add  onClick={() => navigate('/admin/noticecreate')} src={editpost} />
     </N.MainWrapper>
+        <P.Pagediv>
+        <Pagination />
+      </P.Pagediv>
+      </>
   );
 };
 

@@ -162,7 +162,7 @@ export const About = styled.div`
 `
 
 export const List = styled.div`
-    font-size: 1.1vw;
+    font-size: 2rem;
     font-weight: bold;
     display: flex;
     flex-direction: row;
@@ -171,6 +171,9 @@ export const List = styled.div`
     p{
         cursor: pointer;
         text-decoration: underline;
+    }
+    @media(max-width: 700px){
+        font-size: 1.6rem;
     }
 `
 

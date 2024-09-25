@@ -7,12 +7,17 @@ import AddClient from '/src/assets/icon/Admin/addclient.svg';
 import * as D from './NoticeDetail/NoticeDetailStyle';
 import * as N from './Notice/NoticeStyle';
 import Pagination from '../Pagination/Pagination';
+import * as P from './ProductList/ProductStyle';
 // 메인 컨테이너
 const MainWrapper = styled.div`
   width: 70%;
   margin-left: 23%;
   margin-top: 3vh;
   padding: 2%;
+  @media(max-width: 780px){
+    margin-left: 0px;
+    margin-top: 7vh;
+  }
 `;
 
 // 표 테이블 스타일
@@ -94,8 +99,8 @@ const PageButton = styled.button`
 `;
 
 const Add = styled.img`
-  width: 3vw;
-  height: 3vw;
+  width: 5rem;
+  height: 5rem;
   cursor: pointer;
   position: fixed;
   right: 35px;
@@ -130,10 +135,11 @@ const ClientManagement = () => {
   };
 
   return (
+    <>
     <MainWrapper>
         <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
         <N.PageTitle>
-        <h2 style={{marginLeft: '1%', fontSize: '1.5vw', fontWeight: 'bold', whiteSpace: 'nowrap'}}>고객 관리</h2>
+        <h2>고객 관리</h2>
         </N.PageTitle>
         </div>
       <Add onClick={() => navigate('/admin/addclient')} src={AddClient} />
@@ -173,11 +179,11 @@ const ClientManagement = () => {
           ))}
         </tbody>
       </Table>
-
-      <div style={{marginTop: '5%'}}>
-        <Pagination />
-        </div>
     </MainWrapper>
+      <P.Pagediv>
+       <Pagination />
+    </P.Pagediv>
+    </>
   );
 };
 

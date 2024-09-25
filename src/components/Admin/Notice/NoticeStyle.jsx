@@ -11,35 +11,66 @@ export const MainWrapper = styled.div`
     color: black;
     max-width: 1200px;
     margin: 0px auto;
+    margin-left: 23%;
+    @media(max-width: 780px){
+      max-width: 100%;
+      min-width: 100%;
+      margin: 10% 5%;
+    }
 `;
 
 export const Section = styled.section`
   padding: 50px 0;
+  min-width: 90%;
+  margin-left: 15%;
+  min-height: 2.6vh;
+  border: none;
+  @media(max-width: 780px){
+    width: 100%;
+    margin-left: 0px;
+    padding: 50px 0;
+  }
 `
 
 export const PageTitle = styled.div`
   margin-bottom: 30px;
   font-size: 100px;
+  h2 { 
+    font-size: 2.6rem;
+    margin-left: 1%;
+    white-space: nowrap;
+    font-weight: bold;
+    @media(max-width: 780px){
+      font-size: 1.9rem;
+      margin-top: 3%;
+    }
+  }
+  
 `
 
 export const TitleText = styled.h3`
   margin-top: 15px;  
   margin-left: 10px;
-  font-size: 25px;
+  font-size: 2.6rem;
   color: #333333;
-  font-weight: bold; 
+  font-weight: bold;
+  @media(max-width: 780px){
+    font-size: 1.9rem;
+  }
 `
 
 export const BoardSearchArea = styled.div`
   justify-content: flex-end;
   margin: 15px 0;
   max-height: 3%;
+
 `
 
 export const SearchWindow = styled.div`
   justify-content: flex-end;
   padding: 15px 0;
   background-color: #eee;
+
 
 `
 
@@ -52,6 +83,12 @@ export const SearchWrap = styled.div`
   width: 100%;
   max-width: 350px;
   align-items: center;
+  @media(max-width: 780px){
+    max-width: 90px;
+    max-width: 100%;
+    margin-left: 0px;
+    justify-content: center;
+  }
 `
 
 export const SearchButton = styled.button`
@@ -108,7 +145,9 @@ export const SearchInput = styled.input`
     border-width: 1px;
     border-radius: 15px;
   }
-  }`
+}
+
+ `
 
   
 export const BoardListArea = styled.div`
@@ -320,11 +359,11 @@ export const DeleteButton = styled(ListButton)`
 
 
 export const Add = styled.img`
-  width: 3vw;
-  height: 3vw;
+  width: 5rem;
+  height: 5rem;
   cursor: pointer;
   position: fixed;
   right: 35px;
   bottom: 20px;
 
-`;     
+`;        

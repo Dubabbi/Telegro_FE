@@ -22,7 +22,7 @@ const Accessory = () => {
     <> 
     <P.PageContainer>
     <P.Inline style={{width: '78%', border: 'none'}}>
-      <h1 style={{fontSize: '1.5vw'}}>헤드셋</h1>
+      <h1>헤드셋</h1>
       <p>Sort by: Most Popular</p>
     </P.Inline>
     <P.ProductGrid style={{width: '80%', marginLeft: '10%'}}>

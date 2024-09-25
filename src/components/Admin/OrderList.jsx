@@ -7,17 +7,24 @@ import { FaSearch } from 'react-icons/fa';
 import Form from 'react-bootstrap/Form';
 // Wrapper for the whole page
 const MainWrapper = styled.div`
-  width: 70%;
-  margin-left: 23%;
-  margin-top: 3vh;
-  padding: 2%;
+  width: 65%; 
+  margin-left: 25%;
+  margin-top: 4%;
+  @media(max-width: 780px){
+    width: 100%; 
+    margin-left: 0px;
+    margin-top: 10%;
+  }
 `;
 
 // Title
 const Title = styled.h2`
-  font-size: 1.5vw;
+  font-size: 2.6rem;
   font-weight: bold;
   margin-bottom: 20px;
+  @media(max-width: 780px){
+    font-size: 1.9rem;
+  }
 `;
 
 // Search section
@@ -129,7 +136,7 @@ const OrderList = () => {
 
   return (
     <MainWrapper>
-      <Title style={{fontSize: '1.5vw'}}>주문확인</Title>
+      <Title>주문확인</Title>
 
       <SearchSection style={{whiteSpace: 'nowrap'}}>
         <div>

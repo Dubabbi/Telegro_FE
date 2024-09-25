@@ -12,16 +12,33 @@ const FormWrapper = styled.div`
   background-color: #fff;
   border: 1px solid #e5e5e5;
   border-radius: 8px;
+  @media(max-width: 780px){
+    width: 100%;
+    margin-left: 0px;
+    
+  }
 `;
 
 const SectionTitleWrapper = styled.div`
   background-color: #f2f2f2; /* 회색 배경 */
   padding: 1%;
+  @media(max-width: 780px){
+    padding: 2%;
+  }
 `;
 
 const SectionTitle = styled.h3`
-  font-size: 1.5rem;
+  font-size: 2.6rem;
   font-weight: bold;
+  h2{
+    font-size: 2.3rem;
+  }
+  @media(max-width: 780px){
+    font-size: 1.9rem;
+    h2{
+      font-size: 1.5rem;
+    }
+  }
 `;
 
 const Label = styled.label`
@@ -82,11 +99,11 @@ const Button = styled.button`
 const NoticeCreate = () => {
   return (
     <>
-    <N.MainWrapper style={{ marginLeft: '22%' }}>
-      <SectionTitle style={{ marginLeft: '4.5%', marginTop: '4%', fontSize: '1.5vw' }}>공지사항</SectionTitle>
+    <N.MainWrapper>
+      <SectionTitle style={{ marginLeft: '4.5%', marginTop: '4%', }}>공지사항</SectionTitle>
       <FormWrapper>
       <SectionTitleWrapper>
-        <SectionTitle>게시글 작성</SectionTitle>
+        <SectionTitle><h2>게시글 작성</h2></SectionTitle>
         </SectionTitleWrapper>
         <div style={{  padding: '2%'}}>
         <Label htmlFor="title">제목 *</Label>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import * as D from './NoticeDetailStyle'; 
 import * as N from '../Notice/NoticeStyle'; 
 import edit from '/src/assets/icon/Admin/editpost.svg';
@@ -14,17 +14,16 @@ const NoticeDetail = () => {
     content: "공지사항의 내용입니다. 여기에 자세한 설명이 포함됩니다."
   };
 
+  const navigate = useNavigate('');
 
   return (
-    <N.MainWrapper style={{marginLeft: "22%"}}>
+    <N.MainWrapper>
       <N.Section style={{width: '90%', minHeight: '2.6vh', border: 'none'}}>
         <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
         <N.PageTitle>
-          <N.TitleText style={{fontSize: '1.5vw'}}>공지사항</N.TitleText>
+          <N.TitleText>공지사항</N.TitleText>
         </N.PageTitle>
-        <D.BtLink style={{padding: '1%', textAlign: 'center', alignItems: 'center', maxHeight: '6vh'}} as={Link} to="/admin/adminnoticeedit">
-              수정
-          </D.BtLink>
+        <img src={edit} style={{padding: '1%', textAlign: 'center', alignItems: 'center', Height: '50px', cursor: 'pointer'}} onClick={e=>navigate("/admin/adminnoticeedit")}/>
         </div>
         <D.BoardViewWrap>
           <D.BoardView>

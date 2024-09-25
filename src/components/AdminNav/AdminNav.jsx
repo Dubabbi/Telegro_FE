@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { FaSearch, FaCog, FaSignOutAlt, FaChevronDown, FaChevronRight } from 'react-icons/fa';
+import { FaSearch, FaCog, FaSignOutAlt, FaChevronDown, FaChevronRight, FaBars, FaTimes } from 'react-icons/fa';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Logo from '/src/assets/image/Landing/logo.svg';
 
@@ -10,25 +10,35 @@ const Sidebar = styled.div`
   top: 0;
   padding-top: 4%;
   padding-bottom: 2%;
-  width: 20%; 
+  width: 20%;
   height: 100vh;
   background-color: #4F4F4F;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 1%;
+  z-index: 1000;
+  transition: transform 0.3s ease-in-out;
+
   @media (max-width: 780px) {
     width: 60%; 
+    transform: ${({ show }) => (show ? 'translateX(0)' : 'translateX(-100%)')}; /* 모바일일 때 사이드바의 이동을 제어 */
   }
 `;
 
 const MenuButton = styled.button`
   display: none;
+  position: fixed;
+  left: 15px;
+  top: 13px;
+  border: none;
+  color: white;
+  font-size: 3rem;
+  cursor: pointer;
+  z-index: 2000;
+  color: #bbb;
   @media (max-width: 780px) {
-    display: block;
-    position: fixed;
-    left: 10px;
-    top: 10px;
+    display: block; 
   }
 `;
 
@@ -82,7 +92,7 @@ const MenuItem = styled.div`
   color: #D3D3D3;
   font-size: 1.1rem;
   cursor: pointer;
-  
+
   &:hover {
     background-color: #6B6B6B;
     color: #fff;
@@ -93,7 +103,7 @@ const MenuItem = styled.div`
   }
 
   &.active {
-    color: #FFD700; 
+    color: #FFD700;
     background-color: #6B6B6B;
   }
 `;
@@ -167,7 +177,7 @@ const LogoutButton = styled.div`
   color: red;
   padding: 10px 20px;
   cursor: pointer;
-  
+
   &:hover {
     color: #ff5a5a;
   }
@@ -177,104 +187,111 @@ const AdminNav = () => {
   const [isSubMenuOpen, setIsSubMenuOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const [sidebarVisible, setSidebarVisible] = useState(true);
+  const [isMobileSidebarVisible, setIsMobileSidebarVisible] = useState(false);
 
+  // 토글 버튼 클릭 시 모달 열기/닫기
   const toggleSidebar = () => {
-    setSidebarVisible(!sidebarVisible);
+    setIsMobileSidebarVisible(!isMobileSidebarVisible);
   };
 
   const toggleSubMenu = () => {
     setIsSubMenuOpen(!isSubMenuOpen);
   };
 
-
+  // 페이지가 변경되면 사이드바를 자동으로 닫고 서브메뉴도 초기화
   useEffect(() => {
-    setIsSubMenuOpen(false); 
-  }, [location.pathname]); 
+    setIsMobileSidebarVisible(false);
+    setIsSubMenuOpen(false); // 서브메뉴 초기화
+  }, [location.pathname]);
 
   return (
-  <>
-      <MenuButton onClick={toggleSidebar}>Menu</MenuButton>
-    <Sidebar show={sidebarVisible}>
-      <LogoWrapper>
-        <LogoImage src={Logo} alt="Telegro Logo" />
-        <LogoText>Telegro</LogoText>
-      </LogoWrapper>
+    <>
+      {/* 모바일에서 사이드바 상태에 따라 아이콘 변경 */}
+      <MenuButton onClick={toggleSidebar}>
+        {isMobileSidebarVisible ? <FaTimes /> : <FaBars />} {/* X 아이콘과 햄버거 메뉴 아이콘 전환 */}
+      </MenuButton>
 
-      <SearchBar>
-        <FaSearch />
-        <SearchInput type="text" placeholder="Search" />
-      </SearchBar>
+      <Sidebar show={isMobileSidebarVisible || window.innerWidth > 780}>
+        <LogoWrapper>
+          <LogoImage src={Logo} alt="Telegro Logo" />
+          <LogoText>Telegro</LogoText>
+        </LogoWrapper>
 
-      <MenuWrapper>
-        <MenuItem onClick={() => navigate('/admin/stat')} className="active">
-          <FaCog />
-          Dashboard
-        </MenuItem>
+        <SearchBar>
+          <FaSearch />
+          <SearchInput type="text" placeholder="Search" />
+        </SearchBar>
 
-        <MenuItem onClick={() => navigate('/admin/clientmanagement')}>
-          <FaCog />
-          고객 관리
-        </MenuItem>
-
-        <MenuItem onClick={() => navigate('/admin/stat')}>
-          <FaCog />
-          상점 접속 현황
-        </MenuItem>
-
-        <MenuItem onClick={() => navigate('/admin/adminnotice')}>
-          <FaCog />
-          자료실
-        </MenuItem>
-        {/* 상품 관리 메뉴 및 하위 카테고리 */}
-        <SubMenuWrapper>
-          <MenuItem onClick={toggleSubMenu}>
+        <MenuWrapper>
+          <MenuItem onClick={() => navigate('/admin/stat')} className="active">
             <FaCog />
-            상품 관리
-            {isSubMenuOpen ? <FaChevronDown /> : <FaChevronRight />}
+            Dashboard
           </MenuItem>
-          <SubMenu open={isSubMenuOpen}>
-            <MenuItem onClick={() => navigate('/admin/headset')}>
-              헤드셋
-            </MenuItem>
-            <MenuItem onClick={() => navigate('/admin/lineCord')}>
-              라인 코드
-            </MenuItem>
-            <MenuItem onClick={() => navigate('/admin/recording')}>
-              녹음기기
-            </MenuItem>
-            <MenuItem onClick={() => navigate('/admin/accessory')}>
-              악세서리
-            </MenuItem>
-          </SubMenu>
-        </SubMenuWrapper>
 
-        <MenuItem onClick={() => navigate('/admin/adminorderlist')}>
-          <FaCog/>
-          주문 현황
-        </MenuItem>
-      </MenuWrapper>
+          <MenuItem onClick={() => navigate('/admin/clientmanagement')}>
+            <FaCog />
+            고객 관리
+          </MenuItem>
 
-      <FooterWrapper>
-        <ProfileWrapper>
-          <ProfilePic />
-          <ProfileInfo>
-            <div>관리자</div>
-            <div style={{ fontSize: '0.8rem', color: '#FFD700' }}>Admin</div>
-          </ProfileInfo>
-        </ProfileWrapper>
+          <MenuItem onClick={() => navigate('/admin/stat')}>
+            <FaCog />
+            상점 접속 현황
+          </MenuItem>
 
-        <SettingsWrapper>
-          <FaCog />
-          Settings
-        </SettingsWrapper>
+          <MenuItem onClick={() => navigate('/admin/adminnotice')}>
+            <FaCog />
+            자료실
+          </MenuItem>
 
-        <LogoutButton>
-          <FaSignOutAlt />
-          Log out
-        </LogoutButton>
-      </FooterWrapper>
-    </Sidebar>
+          {/* 상품 관리 메뉴 및 하위 카테고리 */}
+          <SubMenuWrapper>
+            <MenuItem onClick={toggleSubMenu}>
+              <FaCog />
+              상품 관리
+              {isSubMenuOpen ? <FaChevronDown /> : <FaChevronRight />}
+            </MenuItem>
+            <SubMenu open={isSubMenuOpen}>
+              <MenuItem onClick={() => navigate('/admin/headset')}>
+                헤드셋
+              </MenuItem>
+              <MenuItem onClick={() => navigate('/admin/lineCord')}>
+                라인 코드
+              </MenuItem>
+              <MenuItem onClick={() => navigate('/admin/recording')}>
+                녹음기기
+              </MenuItem>
+              <MenuItem onClick={() => navigate('/admin/accessory')}>
+                악세서리
+              </MenuItem>
+            </SubMenu>
+          </SubMenuWrapper>
+
+          <MenuItem onClick={() => navigate('/admin/adminorderlist')}>
+            <FaCog />
+            주문 현황
+          </MenuItem>
+        </MenuWrapper>
+
+        <FooterWrapper>
+          <ProfileWrapper>
+            <ProfilePic />
+            <ProfileInfo>
+              <div>관리자</div>
+              <div style={{ fontSize: '0.8rem', color: '#FFD700' }}>Admin</div>
+            </ProfileInfo>
+          </ProfileWrapper>
+
+          <SettingsWrapper>
+            <FaCog />
+            Settings
+          </SettingsWrapper>
+
+          <LogoutButton>
+            <FaSignOutAlt />
+            Log out
+          </LogoutButton>
+        </FooterWrapper>
+      </Sidebar>
     </>
   );
 };

@@ -5,9 +5,14 @@ import { Postcode } from '../Postcode/Postcode'; // 우편번호 검색 컴포�
 import * as D from './NoticeDetail/NoticeDetailStyle';
 import { VscWhitespace } from 'react-icons/vsc';
 const Container = styled.div`
-  width: 65%; /* 좌측 내비게이션 바를 제외한 나머지 영역 */
+  width: 65%; 
   margin-left: 25%;
   margin-top: 4%;
+  @media(max-width: 780px){
+    width: 100%; 
+    margin-left: 0px;
+    margin-top: 10%;
+  }
 `;
 
 const SearchButton = styled.button`
@@ -24,8 +29,11 @@ const SearchButton = styled.button`
 `;
 
 const SectionTitleWrapper = styled.div`
-  background-color: #f2f2f2; /* 회색 배경 */
+  background-color: #f2f2f2; 
   padding: 1%;
+  @media(max-width: 780px){
+    padding: 3%;
+  }
 `;
 
 const SectionTitle = styled.h3`
@@ -34,10 +42,13 @@ const SectionTitle = styled.h3`
 `;
 
 const Title = styled.h1`
-  font-size: 1.5vw;
+  font-size: 2.6rem;
   font-weight: bold;
   margin-bottom: 3rem;
   margin-left: 1%;
+  @media(max-width: 780px){
+    font-size: 1.9rem;
+  }
 `;
 
 const FormWrapper = styled.div`
@@ -53,8 +64,12 @@ const Form = styled.form`
 `;
 
 const Label = styled.label`
-  font-size: 1vw;
+  font-size: 1.7rem;
   font-weight: bold;
+  @media(max-width: 780px){
+    font-size: 1.45rem;
+    white-space: nowrap;
+  }
 `;
 
 const Input = styled.input`
@@ -322,7 +337,7 @@ function AddClient() {
                 등록
               </D.BtLink>
             </D.BtWrap>
-            </>
+        </>
   );
 }
 
