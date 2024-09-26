@@ -164,7 +164,7 @@ function Signup() {
                 />
                 {errors.password && <L.ErrorText>{errors.password}</L.ErrorText>}
               </L.InputBox>
-              <L.Button  type="button" onClick={handleSubmit}>다음</L.Button>
+              <L.Button2  type="button" onClick={handleSubmit}>다음</L.Button2>
             </>
           )}
 
@@ -214,7 +214,7 @@ function Signup() {
                 />
                 {errors.detailAddress && <L.ErrorText>{errors.detailAddress}</L.ErrorText>}
               </L.AddressInput>
-              <L.Button onClick={handleSignupClick} style={{ marginTop: '2%' }} primary={true} type="submit">회원가입</L.Button>
+              <L.Button2 onClick={handleSignupClick} style={{ marginTop: '2%' }} primary={true} type="submit">회원가입</L.Button2>
             </>
           )}
       </L.LoginSection>

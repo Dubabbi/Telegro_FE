@@ -60,7 +60,7 @@ function GeneralLogin() {
               </L.Account>
             </div>
           </div>
-          <L.Button style={{backgroundColor: '#94A3D8', color: '#fff'}} type="submit" onClick={handleSubmit}>로그인</L.Button>
+          <L.Button2 type="submit" onClick={handleSubmit}>로그인</L.Button2>
           <L.Button onClick={e=>navigate('/signup')}>회원가입</L.Button>
       </L.LoginSection>
     </L.Wrapper>

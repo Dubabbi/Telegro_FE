@@ -30,15 +30,11 @@ export const LoginSection = styled.section`
   position: relative;
   border-radius: 1rem;
   z-index: 2;
-  @media (max-width: 768px) {
-    width: 60%; /* 화면 크기가 768px 이하일 때 너비를 80%로 조정 */
-    padding: 40px 30px; 
+  @media (max-width: 780px) {
+    width: 80%; 
+    padding: 5% 6%;
   }
 
-  @media (max-width: 480px) {
-    width: 90%; 
-    padding: 30px 20px; 
-  }
 `;
 
 export const Title = styled.h3`
@@ -131,10 +127,32 @@ export const Button = styled.button`
   border-radius: 4px;
   font-size: 16px;
   margin-bottom: 14px;
-  background-color: ${props => props.primary ? '#94A3D8' : '#FFFFFF'};
-  color: ${props => props.primary ? '#FFFFFF' : '#000000'};
-  border: ${props => props.primary ? 'none' : '1px solid #E0E0E0'};
+  background-color: #FFFFFF;
+  color: #000000;
+  border: 1px solid #E0E0E0;
+
+  &:hover {
+    background-color: #F0F0F0; 
+    color: #333333; 
+  }
 `;
+
+export const Button2 = styled.button`
+  width: 100%;
+  height: 48px;
+  border-radius: 4px;
+  font-size: 16px;
+  margin-bottom: 14px;
+  background-color: #94A3D8;
+  color: #FFFFFF;
+  border: none;
+
+  &:hover {
+    background-color: #7F89C0; 
+    color: #E0E0E0; 
+  }
+`;
+
 
 export const CheckboxContainer = styled.div`
   display: flex;
