@@ -35,7 +35,7 @@ function Admin() {
             <L.CheckboxLabel htmlFor="checkId">아이디 저장</L.CheckboxLabel>
           </L.CheckboxContainer>
           <div>
-          <L.Text><a href="/">일반고객으로 로그인</a></L.Text>
+          <L.Text style={{color: '#0F62FE', textDecoration: 'underline', textDecorationColor: '#0F62FE'}}><a href="/">일반고객으로 로그인</a></L.Text>
 
         </div>
           </div>

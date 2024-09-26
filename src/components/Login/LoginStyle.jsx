@@ -25,11 +25,15 @@ export const LoginSection = styled.section`
   height: auto;
   box-shadow: 0 0.4rem 0.8rem rgba(0, 0, 0, 0.1);
   background: #fff;
-  padding: 5% 6%;
+  padding: 3% 4%;
   border-radius: 10px;
   position: relative;
   border-radius: 1rem;
   z-index: 2;
+  @media (max-width: 1000px) {
+    width: 90%; 
+    padding: 5% 6%;
+  }
   @media (max-width: 780px) {
     width: 80%; 
     padding: 5% 6%;
