@@ -8,6 +8,9 @@ export const NavWrapper = styled.div`
   z-index: 1000;
   padding: 1%;
   margin: 0;
+  @media(max-width: 780px){
+      padding-bottom: 2%;
+  }
 `;
 
 export const Logo = styled.a`
@@ -42,12 +45,22 @@ export const Content = styled.div`
         font-size: 1.6rem;
         margin-top: 3%;
     }
+    @media(max-width: 780px){
+        margin-top: 3%;
+        h1{
+            font-size: 2.5rem;
+            margin-bottom: 4%;
+        }
+    }
 `
 export const Img = styled.img`
     max-height: 100vh;
     margin-right: 1%;
     width: auto;
-    object-fit: cover; /* 이미지를 컨테이너 안에 꽉 채움 */
+    object-fit: cover; 
+    @media(max-width: 780px){
+        max-height: 50vh;
+    }
 `
 
 export const ImgWrapper = styled.div`
@@ -135,6 +148,7 @@ export const InlineIntro = styled.div`
     flex-direction: row;
     justify-content: center;
     gap: 3%;
+
 `
 
 export const Title = styled.div`
@@ -144,6 +158,12 @@ export const Title = styled.div`
     padding: 0.8% 2%;
     border-radius: 3rem;
     font-weight: bold;
+    align-items: center;
+    @media(max-width: 780px){
+        font-size: 2rem;
+        padding: 1% 1.5%;
+
+    }
 `
 
 export const About = styled.div`
@@ -159,27 +179,48 @@ export const About = styled.div`
         font-weight: bold;
         font-size: 2rem;
     }
+    @media(max-width: 780px){
+        p{
+            font-size: 1.3rem;
+        }
+        h1{
+            font-size: 1.7rem;
+        }
+    
+    }
 `
 
 export const List = styled.div`
-    font-size: 2rem;
     font-weight: bold;
     display: flex;
     flex-direction: row;
     justify-content: space-around;
     margin: 2%;
+    color: #444;
     p{
+        font-size: 1.9rem;
         cursor: pointer;
         text-decoration: underline;
+        &:hover{
+            color: #4871BF;
+        }
     }
-    @media(max-width: 700px){
-        font-size: 1.6rem;
+    @media(max-width: 780px){
+        color: #888;
+        margin: 5%;
+        font-weight: normal;
+        p{
+        font-size: 1.4rem;
+            &:hover{
+                color: #4871BF;
+            }
+        }
     }
 `
 
 export const FooterWrapper = styled.div`
     background-color: #697077;
-    font-size: 1.2vw;
+    font-size: 1.2rem;
     padding: 2% 0;
     margin-top: 4%;
 
@@ -191,7 +232,40 @@ export const FooterInline = styled.div`
     justify-content: space-between;
     width: 90%;
     margin-left: 5%;
+    @media(max-width: 780px){
+        align-items: center;
+    }
+`
 
+export const FooterEnd = styled.div`
+    display: flex;
+    max-width: 200px;
+    min-width: 140px;
+    background-color: #F2F4F8;
+    border-radius: 2px;
+    padding-left: 1%;
+    padding-right: 3%;
+    align-items: center;
+    white-space: nowrap; 
+    img{
+        max-width: 20%;
+        align-items: center;
+    }
+    p{
+        font-size: 1.3rem;
+        white-space: nowrap; 
+        color: #697077;
+        align-items: center;
+        margin-bottom: 3%;
+        @media(max-width: 800px){
+            font-size: 1rem;
+            padding-right: 5%;
+        }
+    }
+    @media(max-width: 780px){
+        white-space: normal; 
+        height: 35px;
+    }
 `
 
 export const Footerline = styled.div`
@@ -211,7 +285,7 @@ export const FooterTitle = styled.div`
     gap: 5%;
 
     img{
-        max-height: 30%;
+        width: 50px;
     }
     p{
         font-size: 1.44vw;
@@ -221,31 +295,13 @@ export const FooterTitle = styled.div`
             font-size: 1.64rem;
         }
     }
-
-`
-export const FooterEnd = styled.div`
-    display: flex;
-    background-color: #F2F4F8;
-    border-radius: 2px;
-    padding-left: 1%;
-    padding-right: 3%;
-    align-items: center;
-    img{
-        max-width: 20%;
-        align-items: center;
-    }
-    p{
-        font-size: 1vw;
-        color: #697077;
-        align-items: center;
-        margin-bottom: 3%;
-        @media(max-width: 800px){
-            font-size: 1rem;
-            padding-right: 5%;
+    @media(max-width: 780px){
+        img{
+            width: 40px;
         }
     }
-
 `
+
 
 export const FooterBox = styled.div`
     display: flex;
@@ -254,6 +310,9 @@ export const FooterBox = styled.div`
     white-space: nowrap;
     width: 40%;
     gap: 2%;
+    @media(max-width: 780px){
+
+    }
 `
 
 export const Contact = styled.button`
@@ -266,12 +325,16 @@ export const Contact = styled.button`
     border-radius: 2px;
     align-items: center;
     display: flex;
-    font-weight: Semibold;
+    font-weight: semi-bold;
     flex-direction: row;
     justify-content: space-around;
     p{
         align-items: center;
         margin: 1%;
+    }
+    @media(max-width: 780px){
+        padding: 0px 3%;
+        font-size: 1.1rem;
     }
 `
 export const TextWrapper = styled.div`
@@ -283,13 +346,23 @@ export const TextWrapper = styled.div`
     margin-left: 5%;
     h1{
         font-size: 1.4rem;
-        font-weight: semibold;
+        font-weight: bold;
         margin-bottom: 1.3%;
     }
-
     p{
         font-size: 1.2rem;
         margin-bottom: 0.7%;
+    }
+    @media(max-width: 780px){
+        h1{
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 3%;
+        }
+        p{
+            font-size: 0.9rem;
+            margin-bottom: 1.8%;
+        }
     }
 `
 
@@ -301,4 +374,7 @@ export const Copyright = styled.div`
     color: #fff;
     margin-left: 5%;
     font-size: 1.3rem;
+    @media(max-width: 780px){
+        font-size: 1.1rem;
+    }
 `

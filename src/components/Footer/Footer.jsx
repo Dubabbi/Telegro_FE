@@ -18,7 +18,7 @@ export default function Footer() {
             <img src={Mail} />
             <p>Telegro@telegro.com</p>
           </L.FooterEnd>
-          <L.Contact>Contact Us</L.Contact>
+          <L.Contact><a href="mailto:Telegro@telegro.com">Contact Us</a></L.Contact>
           </L.FooterBox>
         </L.Footerline>
         <hr style={{margin: '2%', width: '90%', marginLeft: '5%', color: '#C1C7CD'}}/>

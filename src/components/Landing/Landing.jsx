@@ -50,7 +50,7 @@ export default function Landing() {
       </L.Inline>
       <L.Intro>
         <L.InlineIntro>
-          <L.Title>Telegro</L.Title>
+          <L.Title><p>Telegro</p></L.Title>
           <L.About>
             <p>기술개발 전문제조 공급 유통</p>
             <h1>헤드셋 녹취 장비 전문</h1>
@@ -75,7 +75,7 @@ export default function Landing() {
             <img src={Mail} />
             <p>Telegro@telegro.com</p>
           </L.FooterEnd>
-          <L.Contact><a href="mailto:ykjroom@naver.com">Contact Us</a></L.Contact>
+          <L.Contact><a href="mailto:Telegro@telegro.com">Contact Us</a></L.Contact>
           </L.FooterBox>
         </L.FooterInline>
         <hr style={{margin: '2%', width: '90%', marginLeft: '5%', color: '#C1C7CD'}}/>
