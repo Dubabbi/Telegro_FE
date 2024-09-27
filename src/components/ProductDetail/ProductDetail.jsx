@@ -32,11 +32,13 @@ const ProductTitle = styled.h2`
 `;
 
 const ProductDescription = styled.p`
-  font-size: 1.2rem;
+  font-size: 1.3rem;
+  line-height: 1.8;
   color: #444;
   margin: 10px auto;
   width: 70%;
-  text-align: left; /* Aligning text to the left */
+  text-align: left;
+
 `;
 
 const PriceWrapper = styled.div`
@@ -97,7 +99,7 @@ const ProductDetail = () => {
         <ProductImage src={img} alt="Product Image" />
         <ProductTitle>밀도 호밀잡곡식빵</ProductTitle>
         <ProductDescription>
-          빵의 기본이 되는 식빵을 반죽 재료 하나만으로도 그 맛에 차이가 느껴지네요. 밀도의 호밀잡곡식빵은 블렌딩 밀가루에 호밀가루를 배합해 만들었습니다. 오독오독 씹히는 잡곡과 빠를 수 없는 매력 포인트들. 입에 넣는 순간 퍼지는 고소한 맛이 밖에 담긴 천연적 정성을 가능하게 합니다. 아무 것도 더하지 않았을 때 가장 맛있는 빵, 마지막 한입까지 맛있게 즐겨보세요.
+         상품 상세 설명이 들어갈 곳입니다.
         </ProductDescription>
 
         <PriceWrapper>

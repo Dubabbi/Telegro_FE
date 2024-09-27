@@ -217,6 +217,11 @@ function Signup() {
               <L.Button2 onClick={handleSignupClick} style={{ marginTop: '2%' }} primary={true} type="submit">회원가입</L.Button2>
             </>
           )}
+             <div>
+              <L.Text><a style={{color: '#0F62FE', textDecoration: 'underline', textDecorationColor: '#0F62FE'}} href="/generallogin">
+                <span>이미 계정이 있으신가요?</span> <span style={{fontWeight: 'bold'}}>로그인</span>
+                </a></L.Text>
+            </div>
       </L.LoginSection>
     </L.Wrapper>
   );
