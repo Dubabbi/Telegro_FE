@@ -223,7 +223,7 @@ const AdminNav = () => {
         </SearchBar>
 
         <MenuWrapper>
-          <MenuItem onClick={() => navigate('/admin/stat')} className="active">
+          <MenuItem style={{cursor: 'default'}} className="active">
             <FaCog />
             Dashboard
           </MenuItem>

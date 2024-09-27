@@ -15,7 +15,7 @@ export const MainWrapper = styled.div`
     @media(max-width: 780px){
       max-width: 100%;
       min-width: 100%;
-      margin: 10% 5%;
+      margin: 3% 5%;
     }
 `;
 

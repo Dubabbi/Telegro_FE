@@ -6,11 +6,20 @@ const DashboardWrapper = styled.div`
   display: flex;
   justify-content: center;
   padding: 20px;
+  align-items: center;
+  margin-left: 20%;
+  @media(max-width: 780px){
+    margin-left: 0px;
+    margin-top: 4%;
+  }
 `;
 
 const TableContainer = styled.div`
   width: 80%;
   margin-top: 2%;
+  @media(max-width: 780px){
+    width: 90%;
+  }
 `;
 
 const HeaderContainer = styled.div`
@@ -21,8 +30,11 @@ const HeaderContainer = styled.div`
 `;
 
 const Title = styled.h2`
-  font-size: 1.7rem;
+  font-size: 2.5rem;
   font-weight: bold;
+  @media(max-width: 780px){
+    font-size: 1.9rem;
+  }
 `;
 
 const CategorySelect = styled.select`
@@ -49,6 +61,7 @@ const TableHeader = styled.th`
 
 const TableRow = styled.tr`
   border-bottom: 1px solid #e0e0e0;
+  align-items: center;
 `;
 
 const TableCell = styled.td`
@@ -84,11 +97,13 @@ const PercentageCell = styled.td`
   padding: 15px;
   text-align: right;
   font-size: 1rem;
+  align-items: center;
 `;
 
 const SummaryRow = styled.tr`
   font-weight: bold;
   border-bottom: 1px solid #e0e0e0;
+  white-space: nowrap;
 `;
 
 const StatsData = [
@@ -118,11 +133,11 @@ const Stat = () => {
   };
 
   return (
-    <DashboardWrapper style={{ marginLeft: "20%" }}>
+    <DashboardWrapper>
       <TableContainer>
         {/* HeaderContainer로 카테고리 선택과 제목을 한 줄로 정렬 */}
         <HeaderContainer>
-          <Title style={{fontSize: '1.5vw'}}>상점 접속 현황</Title>
+          <Title>상점 접속 현황</Title>
           <CategorySelect value={category} onChange={handleCategoryChange}>
             <option value="일별">일별</option>
             <option value="월별">월별</option>
