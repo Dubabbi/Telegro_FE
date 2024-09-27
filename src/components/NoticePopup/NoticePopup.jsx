@@ -67,7 +67,7 @@ const Logo = styled.img`
 const HeaderTitle = styled.div`
   display: flex;
   align-items: center;
-  font-size: 1.8vw;
+  font-size: 2rem;
   @media(max-width: 800px){
     font-size: 1.5rem;
   }
@@ -80,7 +80,7 @@ const Content = styled.div`
   text-align: left;
   line-height: 1.8;
   h2{
-    font-size: 1.3vw;
+    font-size: 1.6rem;
     font-weight: bold;
       margin-left: 1%;
     @media(max-width: 800px){
@@ -89,7 +89,7 @@ const Content = styled.div`
     }
   }
   p{
-    font-size: 1.1vw;
+    font-size: 1.2rem;
       margin-left: 1%;
     @media(max-width: 800px){
       font-size: 1.2rem;
@@ -106,9 +106,12 @@ const HorizontalRule = styled.hr`
 
 const CloseButton = styled(FaTimes)`
   cursor: pointer;
-  font-size: 2vw;
+  font-size: 2.5rem;
   position: absolute;
-  right: 4%; /* 헤더 오른쪽에 위치 */
+  right: 6%;
+  &:hover{
+    color: #5351af;
+  }
 `;
 
 const Footer = styled.div`
@@ -123,11 +126,18 @@ const ConfirmButton = styled.button`
   background-color: #F6F8FA;
   color: #30313D;
   width: 90%;
-  font-size: 1.1vw;
+  font-size: 1.5rem;
   font-weight: bold;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  &:hover{
+    background-color: #E9EEF3;
+    color: #5351af;
+  }
+  @media(max-width: 780px){
+    font-size: 1.3rem;
+  }
 `;
 
 const NoticePopup = () => {
