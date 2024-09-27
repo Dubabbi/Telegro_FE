@@ -170,7 +170,7 @@ function Signup() {
 
           {step === 2 && (
             <>
-              <L.AddressInput>
+              <L.InputBox>
                 <label>휴대폰 번호</label>
                 <input
                   placeholder="휴대폰 번호"
@@ -178,8 +178,8 @@ function Signup() {
                   onChange={e => setPhoneNumber(e.target.value)}
                 />
                 {errors.phoneNumber && <L.ErrorText>{errors.phoneNumber}</L.ErrorText>}
-              </L.AddressInput>
-              <L.AddressBox>
+              </L.InputBox>
+              <L.InputBox>
                 <label htmlFor="addressText">주소</label>
                 <input
                   id="addressText"
@@ -189,10 +189,10 @@ function Signup() {
                   readOnly
                 />
                 {errors.roadAddress && <L.ErrorText>{errors.roadAddress}</L.ErrorText>}
-              </L.AddressBox>
-              <L.InputBox>
-                <label htmlFor="zipCodeText">우편번호</label>
               </L.InputBox>
+              <L.AddressBox>
+                <label htmlFor="zipCodeText">우편번호</label>
+              </L.AddressBox>
               <div style={{ width: '100%', whiteSpace: 'nowrap', display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                 <L.SearchInput 
                   id="zipCodeText"
@@ -204,7 +204,7 @@ function Signup() {
                 <L.SearchButton onClick={handleAddressSearch}><Postcode onComplete={handleAddressComplete} /></L.SearchButton>
               </div>
               
-              <L.AddressInput>
+              <L.InputBox>
                 <label htmlFor="detailAddressText">상세주소</label>
                 <input
                   id="detailAddressText"
@@ -213,7 +213,7 @@ function Signup() {
                   onChange={e => setDetailAddress(e.target.value)} 
                 />
                 {errors.detailAddress && <L.ErrorText>{errors.detailAddress}</L.ErrorText>}
-              </L.AddressInput>
+              </L.InputBox>
               <L.Button2 onClick={handleSignupClick} style={{ marginTop: '2%' }} primary={true} type="submit">회원가입</L.Button2>
             </>
           )}

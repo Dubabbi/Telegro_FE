@@ -213,7 +213,7 @@ export const SearchInput = styled.input`
   border-radius: 4px;
     &::placeholder {
       color: #B4B4B4;
-      font-size: 1.1vw;
+      font-size: 1.1rem;
     }
 `;
 export const SearchButton = styled.div`
@@ -233,7 +233,7 @@ export const AddressBox = styled.div`
   white-space: nowrap;
   label {
     display: block;
-    font-size: 1.1vw;
+    font-size: 1.5rem;
     margin-bottom: 6px;
   }
   input {
@@ -243,10 +243,18 @@ export const AddressBox = styled.div`
     border: 1px solid #E0E0E0;
     padding: 12px 20px;
     border-radius: 4px;
-    font-size: 1.1vw;
+    font-size: 1.4rem;
     &::placeholder {
       color: #B4B4B4;
-      font-size: 1.1vw;
+      font-size: 1.5rem;
+    }
+  }
+  @media(max-width: 780px){
+    label{
+      font-size: 1.1rem;
+    }
+    input {
+      font-size: 1.0rem;
     }
   }
 `;
@@ -256,11 +264,11 @@ export const AddressInput = styled.div`
   white-space: nowrap;
   label {
     display: block;
-    font-size: 1.1vw;
+    font-size: 1.5rem;
     margin-bottom: 6px;
   }
   input {
-    font-size: 1.1vw;
+    font-size: 1.5rem;
     display: block;
     width: 100%;
     height: 48px;
@@ -269,12 +277,38 @@ export const AddressInput = styled.div`
     border-radius: 4px;
     &::placeholder {
       color: #B4B4B4;
-      font-size: 1.1vw;
+      font-size: 1.5rem;
     }
+      
   }
     &:focus {
       outline: 2px solid #94A3D8;
       border: none;
+    }
+  }
+  @media(max-width: 780px){
+    label {
+      font-size: 1.2rem;
+      margin-bottom: 6px;
+    }
+    input {
+      font-size: 1.2rem;
+      display: block;
+      width: 100%;
+      height: 48px;
+      border: 1px solid #E0E0E0;
+      padding: 12px 20px;
+      border-radius: 4px;
+      &::placeholder {
+        color: #B4B4B4;
+        font-size: 1.2rem;
+      }
+        
+    }
+      &:focus {
+        outline: 2px solid #94A3D8;
+        border: none;
+      }
     }
   }
 `;
