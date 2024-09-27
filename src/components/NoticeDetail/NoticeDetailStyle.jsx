@@ -48,7 +48,7 @@ export const Title = styled.div`
   position: relative; // 선을 위한 상대 위치 지정
   padding-right: 30px; // 제목과 선 사이의 간격
   margin-right: 30px; // 선과 내용 사이의 추가 간격
-  font-size: 2rem; // 제목의 글자 크기
+  font-size: 1.8rem; // 제목의 글자 크기
   padding: 20px 15px; // 상하, 좌우 패딩
   display: flex; // Flexbox 레이아웃 적용
   align-items: center; // 중앙 정렬
@@ -61,6 +61,9 @@ export const Title = styled.div`
     bottom: 0; // 하단 위치 조정
     width: 1px; // 선의 두께
     background: #ddd; // 선의 색상
+  }
+  @media(max-width: 780px){
+    font-size: 1.6rem;
   }
 `;
 

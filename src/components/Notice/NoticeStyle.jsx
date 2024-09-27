@@ -26,7 +26,7 @@ export const PageTitle = styled.div`
 export const TitleText = styled.h3`
   margin-top: 15px;  
   margin-left: 10px;
-  font-size: 25px;
+  font-size: 2rem;
   color: #333333;
   font-weight: bold; 
 `
