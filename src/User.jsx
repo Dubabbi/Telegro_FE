@@ -19,11 +19,13 @@ import ChatButton from './components/ChatButton/ChatButton';
 import OrderManagerPage from './pages/OrderManager';
 import NoticePopup from './components/NoticePopup/NoticePopup';
 import CartPage from './pages/Cart';
+import ScrollToTop from './ScrollToTop';
 
 export default function User() {
   return (
     <div>
       <Navbar />
+      <ScrollToTop />
       <Routes>
       <Route path="/" element={<LoginPage />} />
         <Route path="/main" element={<MainPage />} />

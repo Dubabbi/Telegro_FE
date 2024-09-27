@@ -17,12 +17,14 @@ import AdminOrderListPage from './pages/AdminOrderList';
 import AddClientPage from './pages/AddClient';
 import AdminProductEditPage from './pages/AdminProductEdit';
 import ClientEditPage from'./pages/ClientEdit';
+import ScrollToTop from './ScrollToTop';
 
 export default function Admin() {
   return (
     <div>
       {/* 관리자 전용 네비게이션 바 */}
       <AdminNav /> 
+      <ScrollToTop />
       <Routes>
         {/* 각 관리자 페이지로의 서브 라우트 설정 */}
         <Route path="clientmanagement" element={<ClientManagementPage />} />
