@@ -18,7 +18,6 @@ export const MainWrapper = styled.div`
       margin: 10% 5%;
     }
 `;
-
 export const Section = styled.section`
   padding: 50px 0;
   min-width: 90%;
@@ -26,16 +25,18 @@ export const Section = styled.section`
   min-height: 2.6vh;
   border: none;
   @media(max-width: 780px){
-    width: 100%;
+    max-width: 99%;
     margin-left: 0px;
-    padding: 50px 0;
+    padding: 50px 10px;
   }
 `
+
+
 
 export const PageTitle = styled.div`
   margin-bottom: 30px;
   font-size: 100px;
-  h2 { 
+    h2 { 
     font-size: 2.6rem;
     margin-left: 1%;
     white-space: nowrap;
@@ -51,9 +52,9 @@ export const PageTitle = styled.div`
 export const TitleText = styled.h3`
   margin-top: 15px;  
   margin-left: 10px;
-  font-size: 2.6rem;
+  font-size: 2rem;
   color: #333333;
-  font-weight: bold;
+  font-weight: bold; 
   @media(max-width: 780px){
     font-size: 1.9rem;
   }
@@ -79,17 +80,17 @@ export const SearchWrap = styled.div`
   position: relative;
   display: flex;
   justify-content: flex-end;
-  margin-left: 55%;
+  margin-left: auto;
   width: 100%;
   max-width: 350px;
   align-items: center;
-  @media(max-width: 780px){
-    max-width: 90px;
-    max-width: 100%;
-    margin-left: 0px;
-    justify-content: center;
+
+  @media (max-width: 780px) {
+    justify-content: center; /* 작은 화면에서 가운데 정렬 */
+    margin-left: 0;
+    width: 90%; /* 더 작은 화면에서 검색창을 적절히 줄임 */
   }
-`
+`;
 
 export const SearchButton = styled.button`
   position: absolute; 
@@ -156,7 +157,7 @@ export const BoardListArea = styled.div`
 
 export const BoardTable = styled.table`
   font-size: 13px;
-  width: 100%;
+  max-width: 100%;
   border-top: 1px solid #ccc;
   border-bottom: 1px solid #ccc;
   border: 2px solid #111;
@@ -220,47 +221,7 @@ export const Search_Container=styled.div`
     display: flex;
     justify-content: center;
 `
-export const StyledButton = styled(Button)`
-    position: absolute;
-    top: 50%;
-    right: 8px; 
-    transform: translateY(-50%);
-    height: 30px; 
-    width: 30px; 
-    font-size: 1rem; 
-    background-color: #fefefe; 
-    border-radius: 50px; 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    
-    &:hover {
-        background: #F8F9FA;
-        transition: 0.5s;
-      }
-`;
 
-
-export const StyledForm = styled(Form)`
-    width: 300px;
-    height: 37px; 
-    font-size: 16px; 
-    border-radius: 7px;
-    border: 1.5px solid #777;
-    display: flex;
-    align-items: center;
-    position: relative;
-    
-    .form-control {
-        margin-left: 10px;
-        height: 35px; 
-        font-size: 1.5rem; 
-        border-radius: 5px;
-        padding-right: 80px; 
-        padding-left: 10px;
-    }
-`;
-//
 
 export const CommentSection = styled.div`
   margin-top: 20px;
@@ -367,3 +328,60 @@ export const Add = styled.img`
   bottom: 20px;
 
 `;        
+
+
+
+export const StyledForm = styled(Form)`
+  width: 300px;
+  height: 37px; 
+  font-size: 16px; 
+  border-radius: 7px;
+  border: 1.5px solid #777;
+  display: flex;
+  align-items: center;
+  position: relative;
+
+  .form-control {
+    margin-left: 10px;
+    height: 35px; 
+    font-size: 1.5rem; 
+    border-radius: 5px;
+    padding-right: 80px; 
+    padding-left: 10px;
+  }
+
+  @media (max-width: 780px) {
+    width: 100%; /* 검색창의 너비를 100%로 */
+    .form-control {
+      font-size: 1rem; /* 폰트 크기를 줄여 화면에 맞춤 */
+      padding-right: 50px; /* 여백 조정 */
+      padding-left: 10px;
+    }
+  }
+`;
+
+export const StyledButton = styled(Button)`
+  position: absolute;
+  top: 50%;
+  right: 8px; 
+  transform: translateY(-50%);
+  height: 30px; 
+  width: 30px; 
+  font-size: 1rem; 
+  background-color: #fefefe; 
+  border-radius: 50px; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+    background: #F8F9FA;
+    transition: 0.5s;
+  }
+
+  @media (max-width: 780px) {
+    height: 25px; 
+    width: 25px; 
+    font-size: 0.8rem;
+  }
+`;
