@@ -368,7 +368,7 @@ export const StyledForm = styled(Form)`
   @media (max-width: 780px) {
     width: 100%; /* 검색창의 너비를 100%로 */
     .form-control {
-      font-size: 1rem; /* 폰트 크기를 줄여 화면에 맞춤 */
+      font-size: 1.1rem; /* 폰트 크기를 줄여 화면에 맞춤 */
       padding-right: 50px; /* 여백 조정 */
       padding-left: 10px;
     }
