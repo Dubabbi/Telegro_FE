@@ -14,13 +14,16 @@ const NotificationWrapper = styled.div`
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  @media (max-width: 768px) {
+    padding: 1%;
+  }
 `;
 
 const NotificationText = styled.div`
   font-size: 1vw; /* 기본적으로 화면 너비의 4% */
 
   @media (max-width: 768px) {
-    font-size: 2vw; /* 화면 너비가 768px 이하일 때는 6%로 설정 */
+    font-size: 2.2vw; /* 화면 너비가 768px 이하일 때는 6%로 설정 */
   }
 
   @media (max-width: 480px) {
@@ -32,6 +35,12 @@ const CloseButton = styled(FaTimes)`
   cursor: pointer;
   margin-right: -3%;
   margin-left: 2%;
+  &:hover{
+    color: #7675df;
+  }
+  @media (max-width: 768px) {
+    margin-right: 2px;
+  }
 `;
 
 const NotificationBar = () => {
