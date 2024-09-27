@@ -41,7 +41,7 @@ const Notice = () => {
   return (
     <>
     <N.MainWrapper>
-      <div style={{width: '100%', minHeight: '22.6vh', border: 'none'}}></div>
+    <N.Div></N.Div>
       <N.Section>
         <N.PageTitle>
           <N.TitleText>공지사항</N.TitleText>

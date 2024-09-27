@@ -3,6 +3,16 @@ import styled from 'styled-components';
 import img from '../Check/image.svg'; // 실제 이미지 경로로 수정 필요
 import { useNavigate } from 'react-router-dom';
 
+export const Div = styled.div`
+  width: 100%;
+  min-height: 22.6vh;
+  border: none;
+  @media (max-width: 780px) {
+    max-height: 4vh;
+    min-height: 6vh;
+  }
+`;
+
 export const OrderPageWrapper = styled.div`
   display: flex;
   justify-content: space-between;
@@ -12,6 +22,7 @@ export const OrderPageWrapper = styled.div`
   @media (max-width: 780px) {
     flex-direction: column;
     width: 90%;
+
   }
 `;
 
@@ -237,9 +248,8 @@ const Cart = () => {
 
   return (
     <>
-      <div style={{ width: '100%', minHeight: '22.6vh', border: 'none' }}></div>
+      <Div></Div>
       <Title><h1>장바구니</h1></Title>
-
       <OrderPageWrapper>
         {/* 좌측 상품 리스트 영역 */}
         <LeftSection>

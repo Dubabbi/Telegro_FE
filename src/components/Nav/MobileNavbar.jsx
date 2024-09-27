@@ -81,7 +81,7 @@ const LogoImag = styled.img`
 
 const LogoText = styled.h1`
   color: #ccc;
-  font-size: 1.6rem;
+  font-size: 1.8rem;
   font-weight: bold;
 `;
 
@@ -251,7 +251,7 @@ export default function MobileNavbar() {
           <LogoText>Telegro</LogoText>
         </LogoWrapper>
 
-        <SearchBar>
+        <SearchBar style={{marginTop: '2%'}}>
           <FaSearch />
           <SearchInput type="text" placeholder="Search" />
         </SearchBar>
@@ -309,8 +309,8 @@ export default function MobileNavbar() {
           <ProfileWrapper>
             <ProfilePic />
             <ProfileInfo>
-              <div>관리자</div>
-              <div style={{ fontSize: '0.8rem', color: '#FFD700' }}>Admin</div>
+              <div>회원명</div> {/* 비회원인 경우 '비회원' */}
+              <div style={{ fontSize: '0.8rem', color: '#FFD700' }}>일반회원</div> {/* 등급 */}
             </ProfileInfo>
           </ProfileWrapper>
           <LogoutButton onClick={() => navigate('/logout')}>
