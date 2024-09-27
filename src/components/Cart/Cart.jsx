@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import img from '../Check/image.svg'; // 실제 이미지 경로로 수정 필요
 import { useNavigate } from 'react-router-dom';
 
-const OrderPageWrapper = styled.div`
+export const OrderPageWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   width: 80%;
@@ -15,7 +15,7 @@ const OrderPageWrapper = styled.div`
   }
 `;
 
-const LeftSection = styled.div`
+export const LeftSection = styled.div`
   width: 60%;
   background-color: #f8f9fa;
   padding: 20px;
@@ -27,7 +27,7 @@ const LeftSection = styled.div`
   }
 `;
 
-const RightSection = styled.div`
+export const RightSection = styled.div`
   width: 35%;
   background-color: #fff;
   padding: 2%;
@@ -41,13 +41,13 @@ const RightSection = styled.div`
   }
 `;
 
-const OrderTitle = styled.h2`
+export const OrderTitle = styled.h2`
   font-size: 1.8rem;
   font-weight: bold;
   margin-bottom: 20px;
 `;
 
-const ProductItem = styled.div`
+export const ProductItem = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -55,54 +55,54 @@ const ProductItem = styled.div`
   border-bottom: 1px solid #e0e0e0;
 `;
 
-const ProductInfo = styled.div`
+export const ProductInfo = styled.div`
   display: flex;
   align-items: center;
   width: 70%;
 `;
 
-const ProductImage = styled.img`
+export const ProductImage = styled.img`
   width: 100px;
   height: auto;
   border-radius: 10px;
   margin-right: 20px;
 `;
 
-const ProductDetails = styled.div`
+export const ProductDetails = styled.div`
   display: flex;
   flex-direction: column;
 `;
 
-const ProductName = styled.span`
+export const ProductName = styled.span`
   font-weight: bold;
   font-size: 1.3rem;
   margin-bottom: 6px;
 `;
 
-const ProductModel = styled.span`
+export const ProductModel = styled.span`
   color: #666;
   font-size: 1rem;
 `;
 
-const ProductColor = styled.span`
+export const ProductColor = styled.span`
   font-size: 1rem;
   color: #666;
   margin-top: 4px;
 `;
 
-const ProductPrice = styled.div`
+export const ProductPrice = styled.div`
   font-size: 1.2rem;
   font-weight: bold;
   color: #000;
 `;
 
-const QuantityWrapper = styled.div`
+export const QuantityWrapper = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
 `;
 
-const QuantityButton = styled.button`
+export const QuantityButton = styled.button`
   background-color: #eee;
   padding: 5px 10px;
   border-radius: 5px;
@@ -110,12 +110,12 @@ const QuantityButton = styled.button`
   cursor: pointer;
 `;
 
-const QuantityInput = styled.input`
+export const QuantityInput = styled.input`
   width: 40px;
   text-align: center;
 `;
 
-const DeleteButton = styled.button`
+export const DeleteButton = styled.button`
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -123,7 +123,7 @@ const DeleteButton = styled.button`
   font-size: 1.5rem;
 `;
 
-const PriceDetailsWrapper = styled.div`
+export const PriceDetailsWrapper = styled.div`
   padding: 15px 0;
   display: flex;
   width: 100%;
@@ -141,12 +141,18 @@ const PriceDetailsWrapper = styled.div`
     padding: 9px 20px;
     background-color: #000;
     color: #fff;
-    width: 20%;
+    width: 19%;
     border-radius: 5px;
+    text-align: center;
+  }
+  p{
+    white-space: nowrap;
+    margin: 1%;
+    text-align: center;
   }
 `;
 
-const PriceDetail = styled.div`
+export const PriceDetail = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -159,12 +165,12 @@ const PriceDetail = styled.div`
   }
 `;
 
-const TotalPrice = styled.div`
+export const TotalPrice = styled.div`
   font-size: 1.3rem;
   font-weight: bold;
 `;
 
-const ConfirmButton = styled.button`
+export const ConfirmButton = styled.button`
   width: 100%;
   padding: 15px;
   background-color: #4d44b5;
@@ -176,7 +182,7 @@ const ConfirmButton = styled.button`
   margin-top: 2%;
 `;
 
-const Title = styled.div`
+export const Title = styled.div`
   display: flex;
   flex-direction: row;
   width: 70%;
@@ -287,7 +293,7 @@ const Cart = () => {
           {/* 할인 코드 입력 */}
           <PriceDetailsWrapper>
             <input type="text" placeholder="할인 코드 입력" />
-            <button>확인</button>
+            <button><p>확인</p></button>
           </PriceDetailsWrapper>
 
           {/* 구매하기 버튼 */}

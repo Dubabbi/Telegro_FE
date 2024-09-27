@@ -2,20 +2,29 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import img from '../Check/image.svg'; // Adjust the actual image path
 import { Postcode } from '../Postcode/Postcode';
-
-const OrderPageWrapper = styled.div`
+import * as C from '../Cart/Cart';
+export const OrderPageWrapper = styled.div`
   display: flex;
   justify-content: space-between;
-  width: 80%;
+  width: 77%;
   margin: 2% auto;
+
+  @media (max-width: 780px) {
+    flex-direction: column;
+    width: 90%;
+  }
 `;
 
 const LeftSection = styled.div`
-  width: 60%;
-  background-color: #fff;
+  width: 50%;
+  background-color: #f8f9fa;
   padding: 20px;
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+  @media (max-width: 780px) {
+    width: 100%;
+    margin-bottom: 20px;
+  }
 `;
 
 const DeliveryInfoForm = styled.div`
@@ -43,9 +52,20 @@ const FormInput = styled.input`
   border-radius: 5px;
 `;
 
+const AddressInput = styled.input`
+  width: 68%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+`;
+
+
 const AddressSearchRow = styled(FormRow)`
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  max-width: 100%;
+  flex-direction: row;
 `;
 
 const AddressButton = styled.button`
@@ -55,6 +75,7 @@ const AddressButton = styled.button`
   border-radius: 5px;
   margin-left: 10px;
   cursor: pointer;
+  width: 30%;
 `;
 
 const TextArea = styled.textarea`
@@ -66,13 +87,7 @@ const TextArea = styled.textarea`
   height: 100px;
 `;
 
-const RightSection = styled.div`
-  width: 35%;
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-`;
+
 
 const OrderTitle = styled.h2`
   font-size: 1.5rem;
@@ -80,11 +95,7 @@ const OrderTitle = styled.h2`
   font-weight: bold;
 `;
 
-const PriceDetailsWrapper = styled.div`
-  padding: 10px 0;
-  border-top: 1px solid #dcdcdc;
-  margin-top: 20px;
-`;
+
 
 const PriceDetail = styled.div`
   display: flex;
@@ -99,16 +110,6 @@ const TotalPrice = styled.div`
   font-weight: bold;
 `;
 
-const ConfirmButton = styled.button`
-  width: 100%;
-  padding: 15px;
-  background-color: #4d44b5;
-  color: white;
-  font-size: 1rem;
-  border-radius: 5px;
-  border: none;
-  cursor: pointer;
-`;
 
 const PaymentMethodWrapper = styled.div`
   margin-top: 20px;
@@ -141,19 +142,6 @@ const CheckboxLabel = styled.label`
   font-size: 1rem;
 `;
 
-const Title = styled.div`
-  display: flex;
-  flex-direction: row;
-  width: 70%;
-  margin-top: 5%;
-  margin-left: 12%;
-  justify-content: space-between;
-  align-items: center;
-  h1 {
-    font-size: 1.7rem;
-    font-weight: bold;
-  }
-`;
 
 const OrderProcess = () => {
   const [isDefaultChecked, setIsDefaultChecked] = useState(false);
@@ -191,7 +179,7 @@ const OrderProcess = () => {
   return (
     <>
       <div style={{ width: '100%', minHeight: '22.6vh', border: 'none' }}></div>
-      <Title><h1 style={{ fontSize: '1.5vw' }}>주문 관리</h1></Title>
+      <C.Title><h1>주문 관리</h1></C.Title>
       
       <OrderPageWrapper>
         {/* 좌측 배송 정보 입력란 */}
@@ -223,24 +211,22 @@ const OrderProcess = () => {
                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
               />
             </FormRow>
-            <FormRow>
-              <FormInput
+            <AddressSearchRow>
+            <AddressInput
                 type="text"
                 placeholder="주소 *"
                 value={formData.address}
                 onChange={(e) => setFormData({ ...formData, address: e.target.value })}
               />
-            </FormRow>
-            <AddressSearchRow>
+              <AddressButton>주소 검색</AddressButton>
+            </AddressSearchRow>
+            <FormRow>
               <FormInput
                 type="text"
                 placeholder="우편번호 *"
                 value={formData.postalCode}
                 onChange={(e) => setFormData({ ...formData, postalCode: e.target.value })}
               />
-              <AddressButton>주소 검색</AddressButton>
-            </AddressSearchRow>
-            <FormRow>
               <FormInput
                 type="text"
                 placeholder="상세 주소 *"
@@ -257,8 +243,8 @@ const OrderProcess = () => {
         </LeftSection>
 
         {/* 우측 주문 금액 및 결제 수단 영역 */}
-        <RightSection>
-          <OrderTitle>주문 금액</OrderTitle>
+        <C.RightSection>
+          <OrderTitle>결제 수단</OrderTitle>
           <PriceDetail>
             <span>총 상품 금액</span>
             <span>₩880,000원</span>
@@ -296,8 +282,8 @@ const OrderProcess = () => {
           </PaymentMethodWrapper>
 
           {/* 구매하기 버튼 */}
-          <ConfirmButton>구매하기</ConfirmButton>
-        </RightSection>
+          <C.ConfirmButton>구매하기</C.ConfirmButton>
+        </C.RightSection>
       </OrderPageWrapper>
     </>
   );
