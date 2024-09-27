@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
-import Navbar from './components/Nav/Navbar';
+import ResponseNav from './components/Nav/ResponseNav';
 import Footer from './components/Footer/Footer';
 import NotificationBar from './components/NotificationBar/NotificationBar';
 import MainPage from './pages/Main';
@@ -24,7 +24,7 @@ import ScrollToTop from './ScrollToTop';
 export default function User() {
   return (
     <div>
-      <Navbar />
+      <ResponseNav />
       <ScrollToTop />
       <Routes>
       <Route path="/" element={<LoginPage />} />

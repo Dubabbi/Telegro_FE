@@ -1,6 +1,4 @@
 import styled from 'styled-components';
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
 
 export const NavWrapper = styled.div`
   position: fixed;
@@ -13,25 +11,13 @@ export const NavWrapper = styled.div`
   z-index: 1000;
   padding: 10px 0;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  @media (max-width: 1000px) {
-    
-  }
-  @media (max-width: 780px) {
-    
-  }
-  @media (max-width: 500px) {
-    
-  }
 `;
 
 export const NavContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 90%; 
-  @media (max-width: 500px) {
-    width: 95%;
-  }
+  width: 90%;
 `;
 
 export const Logo = styled.a`
@@ -39,9 +25,6 @@ export const Logo = styled.a`
   color: white;
   font-weight: bold;
   text-decoration: none;
-  @media(max-width: 780px){
-    font-size: 2rem;
-  }
 `;
 
 export const MainNav = styled.ul`
@@ -50,27 +33,24 @@ export const MainNav = styled.ul`
   align-items: center;
   margin-left: auto;
   padding: 0;
+
   li {
     padding: 0 30px;
     white-space: nowrap;
-    @media (max-width: 780px) {
-      padding: 0 8px;
-    }
 
     a {
       color: white;
       font-size: 1.4rem;
       font-weight: bold;
       text-decoration: none;
-      transition: color 0.3s ease;
-      @media (max-width: 780px) {
-        font-size: 1rem;
-      }
-
       &:hover {
         color: #94A3D8;
       }
     }
+  }
+
+  @media (max-width: 780px) {
+    display: none; /* 780px 이하에서 메인 네비게이션을 숨김 */
   }
 `;
 
@@ -90,7 +70,7 @@ export const SecondaryNav = styled.ul`
   list-style: none;
   display: flex;
   align-items: center;
-  li {
+    li {
     padding: 0 30px;
     @media (max-width: 500px) {
       padding: 0 5%;
@@ -110,41 +90,28 @@ export const SecondaryNav = styled.ul`
   }
 `;
 
+
+
 export const SearchWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
-  width: auto;
 `;
 
-/* Search Form Wrapper */
 export const StyledForm = styled.form`
   display: flex;
-  justify-content: center;
   align-items: center;
   width: 250px;
 `;
 
-/* Search Input Field */
 export const SearchInput = styled.input`
   width: 80%;
   padding: 8px 10px;
   border: 1px solid #444;
   border-radius: 20px;
-  color: white;
   background-color: black;
-  margin-right: 10px;
-
-  &:focus {
-    outline: none;
-    border-color: #777;
-  }
-
-  &::placeholder {
-    color: #bbb;
-  }
+  color: white;
 `;
 
-/* Search Button */
 export const StyledButton = styled.button`
   background: #fff;
   border: none;
@@ -152,8 +119,43 @@ export const StyledButton = styled.button`
   cursor: pointer;
   padding: 5px 15px;
   border-radius: 20px;
+`;
 
-  &:hover {
-    background-color: #f0f0f0;
+export const Sidebar = styled.div`
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 60%;
+  height: 100vh;
+  background-color: #4F4F4F;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 10px;
+  z-index: 2000;
+
+  li {
+    margin: 20px 0;
+    a {
+      color: white;
+      text-decoration: none;
+      font-size: 1.5rem;
+    }
+  }
+`;
+
+export const MenuButton = styled.button`
+  display: none;
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  font-size: 2rem;
+  background: none;
+  border: none;
+  color: white;
+  z-index: 2000;
+
+  @media (max-width: 780px) {
+    display: block;
   }
 `;
