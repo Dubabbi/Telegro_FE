@@ -49,11 +49,17 @@ export const SearchWrap = styled.div`
   position: relative;
   display: flex;
   justify-content: flex-end;
-  margin-left: 67%;
+  margin-left: auto;
   width: 100%;
   max-width: 350px;
   align-items: center;
-`
+
+  @media (max-width: 780px) {
+    justify-content: center; /* 작은 화면에서 가운데 정렬 */
+    margin-left: 0;
+    width: 90%; /* 더 작은 화면에서 검색창을 적절히 줄임 */
+  }
+`;
 
 export const SearchButton = styled.button`
   position: absolute; /* 수정된 부분 */
@@ -183,45 +189,60 @@ export const Search_Container=styled.div`
     justify-content: center;
 `
 export const StyledButton = styled(Button)`
-    position: absolute;
-    top: 50%;
-    right: 8px; 
-    transform: translateY(-50%);
-    height: 30px; 
-    width: 30px; 
-    font-size: 1rem; 
-    background-color: #fefefe; 
-    border-radius: 50px; 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    
-    &:hover {
-        background: #F8F9FA;
-        transition: 0.5s;
-      }
-`;
+  position: absolute;
+  top: 50%;
+  right: 8px; 
+  transform: translateY(-50%);
+  height: 30px; 
+  width: 30px; 
+  font-size: 1rem; 
+  background-color: #fefefe; 
+  border-radius: 50px; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
+  &:hover {
+    background: #F8F9FA;
+    transition: 0.5s;
+  }
+
+  @media (max-width: 780px) {
+    height: 25px; 
+    width: 25px; 
+    font-size: 0.8rem;
+  }
+`;
 
 export const StyledForm = styled(Form)`
-    width: 300px;
-    height: 37px; 
-    font-size: 16px; 
-    border-radius: 7px;
-    border: 1.5px solid #777;
-    display: flex;
-    align-items: center;
-    position: relative;
-    
+  width: 300px;
+  height: 37px; 
+  font-size: 16px; 
+  border-radius: 7px;
+  border: 1.5px solid #777;
+  display: flex;
+  align-items: center;
+  position: relative;
+
+  .form-control {
+    margin-left: 10px;
+    height: 35px; 
+    font-size: 1.5rem; 
+    border-radius: 5px;
+    padding-right: 80px; 
+    padding-left: 10px;
+  }
+
+  @media (max-width: 780px) {
+    width: 100%; /* 검색창의 너비를 100%로 */
     .form-control {
-        margin-left: 10px;
-        height: 35px; 
-        font-size: 1.5rem; 
-        border-radius: 5px;
-        padding-right: 80px; 
-        padding-left: 10px;
+      font-size: 1rem; /* 폰트 크기를 줄여 화면에 맞춤 */
+      padding-right: 50px; /* 여백 조정 */
+      padding-left: 10px;
     }
+  }
 `;
+
 
 //
 
