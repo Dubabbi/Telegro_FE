@@ -53,6 +53,9 @@ export const Title = styled.div`
   display: flex; // Flexbox 레이아웃 적용
   align-items: center; // 중앙 정렬
   border-bottom: 1px dashed #ddd;
+  @media(max-width: 780px){
+    font-size: 1.6rem;
+  }
 `;
 
 export const Info = styled.div`
@@ -88,6 +91,10 @@ export const InfoItem = styled.dl`
 export const InfoItemText = styled.div`
   display: inline-block;
   font-size: 1.4rem;
+  white-space: nowrap;
+  @media(max-width: 780px){
+    font-size: 1.1rem;
+  }
 `;
 
 export const Cont = styled.div`
@@ -166,5 +173,17 @@ export const SubmitButton = styled.button`
     background: #141414ae;
     border-radius: 5px;
     color: #ccc;
+  }
+`;
+
+export const EditImg = styled.img`
+  padding: 1%;
+  text-align: center;
+  align-items: center;
+  height: 60px;
+  cursor: pointer;
+
+  @media(max-width: 780px){
+    height: 40px;
   }
 `;

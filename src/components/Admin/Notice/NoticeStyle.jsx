@@ -18,6 +18,20 @@ export const MainWrapper = styled.div`
       margin: 10% 5%;
     }
 `;
+
+export const MainWrapper2 = styled.div`
+    color: black;
+    max-width: 1200px;
+    margin: 0px auto;
+    margin-left: 23%;
+    margin-top: 6%;
+    @media(max-width: 780px){
+      max-width: 100%;
+      min-width: 100%;
+      margin: 10% 5%;
+    }
+`;
+
 export const Section = styled.section`
   padding: 50px 0;
   min-width: 90%;
@@ -30,6 +44,7 @@ export const Section = styled.section`
     padding: 50px 10px;
   }
 `
+
 
 
 

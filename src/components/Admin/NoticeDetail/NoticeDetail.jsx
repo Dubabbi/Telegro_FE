@@ -17,13 +17,13 @@ const NoticeDetail = () => {
   const navigate = useNavigate('');
 
   return (
-    <N.MainWrapper>
+    <N.MainWrapper2>
       <N.Section style={{width: '90%', minHeight: '2.6vh', border: 'none'}}>
         <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
         <N.PageTitle>
           <N.TitleText>공지사항</N.TitleText>
         </N.PageTitle>
-        <img src={edit} style={{padding: '1%', textAlign: 'center', alignItems: 'center', Height: '50px', cursor: 'pointer'}} onClick={e=>navigate("/admin/adminnoticeedit")}/>
+        <D.EditImg src={edit} onClick={e=>navigate("/admin/adminnoticeedit")}/>
         </div>
         <D.BoardViewWrap>
           <D.BoardView>
@@ -65,7 +65,7 @@ const NoticeDetail = () => {
             </D.DeleteBtLink>
           </D.BtWrap>
       </N.Section>
-    </N.MainWrapper>
+    </N.MainWrapper2>
   );
 }
 
