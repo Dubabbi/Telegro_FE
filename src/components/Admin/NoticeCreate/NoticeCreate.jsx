@@ -7,7 +7,7 @@ import * as D from '../NoticeDetail/NoticeDetailStyle';
 // 공지사항 작성 스타일
 const FormWrapper = styled.div`
   width: 70%;
-  margin-left: 4%;
+  margin-left: 6%;
   margin-top: 3%;
   background-color: #fff;
   border: 1px solid #e5e5e5;
@@ -30,13 +30,20 @@ const SectionTitleWrapper = styled.div`
 const SectionTitle = styled.h3`
   font-size: 2.6rem;
   font-weight: bold;
+  h1{
+    margin-left: 6%;
+    margin-top: 4%;
+  }
   h2{
-    font-size: 2.3rem;
+    font-size: 2rem;
   }
   @media(max-width: 780px){
     font-size: 1.9rem;
     h2{
       font-size: 1.5rem;
+    }
+    h1{
+      margin-left: 2%;
     }
   }
 `;
@@ -100,7 +107,7 @@ const NoticeCreate = () => {
   return (
     <>
     <N.MainWrapper>
-      <SectionTitle style={{ marginLeft: '4.5%', marginTop: '4%', }}>공지사항</SectionTitle>
+      <SectionTitle><h1>공지사항</h1></SectionTitle>
       <FormWrapper>
       <SectionTitleWrapper>
         <SectionTitle><h2>게시글 작성</h2></SectionTitle>

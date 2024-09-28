@@ -15,7 +15,7 @@ export const MainWrapper = styled.div`
     @media(max-width: 780px){
       max-width: 100%;
       min-width: 100%;
-      margin: 3% 5%;
+      margin: 10% 5%;
     }
 `;
 
@@ -28,7 +28,7 @@ export const MainWrapper2 = styled.div`
     @media(max-width: 780px){
       max-width: 100%;
       min-width: 100%;
-      margin: 10% 5%;
+      margin: 3% 5%;
     }
 `;
 
@@ -72,6 +72,7 @@ export const TitleText = styled.h3`
   font-weight: bold; 
   @media(max-width: 780px){
     font-size: 1.9rem;
+    margin-top: 25px;  
   }
 `
 
