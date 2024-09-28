@@ -9,8 +9,28 @@ import * as N from './NoticeStyle';
 import editpost from '/src/assets/icon/Admin/editpost.svg';
 import Pagination from '../../Pagination/Pagination';
 import * as P from '../ProductList/ProductStyle';
+import { FaFilePdf, FaFileImage, FaFileWord, FaFileExcel, FaFile } from 'react-icons/fa';
 
 const Notice = () => {
+  const getFileIcon = (filename) => {
+    const extension = filename.split('.').pop().toLowerCase();
+    switch (extension) {
+      case 'pdf':
+        return <FaFilePdf />;
+      case 'jpg':
+      case 'jpeg':
+      case 'png':
+        return <FaFileImage />;
+      case 'doc':
+      case 'docx':
+        return <FaFileWord />;
+      case 'xlsx':
+        return <FaFileExcel />;
+      default:
+        return <FaFile />; // 기본 파일 아이콘
+    }
+  };
+  
   const [notice, setNotice] = useState([
     { id: 1, title: "공지사항 1", created_at: "2023-01-01", view_count: 150, author: "Admin", attachment: "File.pdf" },
     { id: 2, title: "공지사항 2", created_at: "2023-01-02", view_count: 80, author: "Manager", attachment: "Image.jpg" },
@@ -33,13 +53,14 @@ const Notice = () => {
       <CommonTableColumn>
         <Link to={`/admin/adminnoticedetail`}>{notice.title}</Link>
       </CommonTableColumn>
-      <CommonTableColumn>{notice.attachment}</CommonTableColumn>
+      <CommonTableColumn>
+        {getFileIcon(notice.attachment)}
+      </CommonTableColumn>
       <CommonTableColumn>{notice.author}</CommonTableColumn>
       <CommonTableColumn>{new Date(notice.created_at).toLocaleDateString()}</CommonTableColumn>
       <CommonTableColumn>{notice.view_count}</CommonTableColumn>
     </CommonTableRow>
   ));
-
   return (
     <>
     <N.MainWrapper>
