@@ -10,7 +10,7 @@ import NoticeDetailPage from './pages/NoticeDetail';
 import OrderPage from './pages/Order';
 import OrderProductPage from './pages/OrderProduct';
 import OrderProcessPage from './components/OrderProcess/OrderProcess';
-import Headset from './components/Check/Headset';
+import Headset from './components/Product/Headset';
 import LineCord from './components/Product/LineCord';
 import Recording from './components/Product/Recording';
 import Accessory from './components/Product/Accessory';

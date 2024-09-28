@@ -56,12 +56,17 @@ export const Inline = styled.div`
   justify-content: space-between;
   align-items: center;
   h1 {
-    font-size: 1.5rem;
+    font-size: 2.6rem;
     font-weight: bold;
   }
   
   p {
     font-size: 1rem;
     color: #777;
+  }
+  @media(max-width: 780px){
+    h1{
+      font-size: 1.9rem;
+    }
   }
 `;

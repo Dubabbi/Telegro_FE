@@ -366,10 +366,10 @@ export const DeleteBtLink = styled.a`
 
 export const Div = styled.div`
   width: 100%;
-  min-height: 22.6vh;
+  min-height: 20.6vh;
   border: none;
   @media (max-width: 780px) {
-    max-height: 4vh;
-    min-height: 6vh;
+    max-height: 2vh;
+    min-height: 2vh;
   }
 `;

@@ -5,23 +5,35 @@ import * as N from '../Notice/NoticeStyle';
 import { Link } from 'react-router-dom';
 import { FaSearch } from 'react-icons/fa';
 import Form from 'react-bootstrap/Form';
+export const Div = styled.div`
+  width: 100%;
+  min-height: 22.6vh;
+  border: none;
+  @media (max-width: 780px) {
+    max-height: 4vh;
+    min-height: 6vh;
+  }
+`;
 
-// Wrapper for the whole page
 const MainWrapper = styled.div`
   width: 80%;
   margin-left: 10%;
-  margin-top: 30vh;
   padding: 20px;
+  @media (max-width: 780px) {
+    width: 90%;
+    margin-left: 5%;
+  }
 `;
 
-// Title
 const Title = styled.h2`
-  font-size: 1.5vw;
+  font-size: 2.6rem;
   font-weight: bold;
   margin-bottom: 20px;
+  @media(max-width: 780px){
+    font-size: 1.9rem;
+  }
 `;
 
-// Search section
 const SearchSection = styled.div`
   display: flex;
   justify-content: space-between;
@@ -111,9 +123,9 @@ const CheckOrder = () => {
   };
   return (
     <MainWrapper>
-      <Title style={{fontSize: '1.5vw'}}>주문확인</Title>
-
-      <SearchSection style={{whiteSpace: 'nowrap'}}>
+      <Div></Div>
+      <Title>주문확인</Title>
+      <SearchSection >
         <div>
           <label>기간: </label>
           <DateInput type="date" /> - <DateInput type="date" />

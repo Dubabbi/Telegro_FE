@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import * as M from './MainStyle';
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
@@ -27,13 +27,22 @@ export default function Main() {
         const newIndex = isLastSlide ? 0 : currentIndex + 1;
         setCurrentIndex(newIndex);
     };
-
+    useEffect(() => {
+        if (window.innerWidth <= 500) { 
+          const interval = setInterval(() => {
+            goToNext();
+          }, 3000);
+      
+          return () => {
+            clearInterval(interval); 
+          };
+        }
+      }, [currentIndex]);
     return (
         <>
         <div style={{width: '100%', minHeight: '22.6vh', backgroundColor: '#000', border: 'none'}}>
         </div>
-        <div 
-          style={{ position: 'relative', alignItems: 'center', width: '100%', maxHeight: '100vh', overflow: 'hidden' }}
+        <M.NewContainer
           onMouseEnter={() => setShowArrows(true)}
           onMouseLeave={() => setShowArrows(false)}
         >
@@ -49,10 +58,10 @@ export default function Main() {
                 transform: `translateX(-${currentIndex * 100}%)`
             }}>
                 {images.map((image, index) => (
-                    <img key={index} src={image} alt={`Slide ${index}`} style={{ minWidth: '100%', height: '100%' }} />
+                    <M.ItemImage key={index} src={image} alt={`Slide ${index}`}/>
                 ))}
             </div>
-        </div>
+        </M.NewContainer>
         </>
 
     );

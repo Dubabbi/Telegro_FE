@@ -210,3 +210,28 @@ export const ItemDesc = styled.div`
   color: #909090;
 `;
 
+
+export const NewContainer = styled.div`
+  position: relative;
+  align-items: center;
+  width: 100%;
+  max-height: 100vh;
+  overflow: hidden;
+  @media(max-width: 780px){
+    max-height: 200vh;
+  }
+`;
+
+
+
+export const ItemImage = styled.img`
+  flex-shrink: 0;  
+  width: 100%;  
+  height: 80vh;
+  object-fit: cover;
+  @media(max-width: 780px){
+    width: 100%;  
+    height: 50vh;
+    object-fit: cover;
+  }
+`;
