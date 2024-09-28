@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import * as N from './NavbarStyle';
 import { FaSearch } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import Avvvatars from 'avvvatars-react';
 
 export default function Navbar() {
@@ -37,12 +37,12 @@ export default function Navbar() {
           {!isLoggedIn ? (
             <li><a href="/login">로그인</a></li>
           ) : (
-            <li><a onClick={handleLogout}>로그아웃</a></li>
+            <li><a onClick={(e) => { e.preventDefault(); handleLogout(); }}>로그아웃</a></li>
           )}
           <li><a href="/cart">장바구니</a></li>
           <li><a href="mailto:Telegro@telegro.com">Contact Us</a></li>
         </N.MainNav>
-        {isLoggedIn && <Avvvatars value="user" onClick={e=>navigate('/mypage')} size={40} />}
+        {isLoggedIn && <Link to="/mypage"><Avvvatars value="user" size={40} /></Link>}
       </N.NavContainer>
 
       <N.SecondaryNavContainer>

@@ -20,6 +20,7 @@ import OrderManagerPage from './pages/OrderManager';
 import NoticePopup from './components/NoticePopup/NoticePopup';
 import CartPage from './pages/Cart';
 import ScrollToTop from './ScrollToTop';
+import MypagePage from './pages/Mypage';
 
 export default function User() {
   return (
@@ -41,6 +42,7 @@ export default function User() {
         <Route path="/ordermanager" element={<OrderManagerPage />} />
         <Route path="/orderprocess" element={<OrderProcessPage />} />
         <Route path="/cart" element={<CartPage />} />
+        <Route path="/mypage" element={<MypagePage />} />
       </Routes>
       <NotificationBar />
       <NoticePopup />
