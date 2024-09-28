@@ -2,15 +2,11 @@ import styled from 'styled-components';
 
 export const ProductGrid = styled.div`
   display: grid;
-  width: 80%;
-  margin-left: 10%;
   grid-template-columns: repeat(4, 1fr); /* 4개의 열 */
   gap: 20px; /* 각 제품 박스 간격 */
   margin-top: 50px;
   @media(max-width: 780px){
     grid-template-columns: repeat(2, 1fr);
-    width: 90%;
-    margin-left: 10%;
   }
 `;
 
@@ -55,22 +51,23 @@ export const ProductInfo = styled.div`
 export const Inline = styled.div`
   display: flex;
   flex-direction: row;
-  width: 80%;
-  margin-left: 10%;
   justify-content: space-between;
   align-items: center;
   margin-top: 3%;
   h1 {
     font-size: 2.6rem;
     font-weight: bold;
-    @media(max-width: 780px){
-      font-size: 1.9rem;
-    }
   }
-  
   p {
     font-size: 1.35rem;
     color: #777;
+  }
+  @media(max-width: 780px){
+    h1{font-size: 1.9rem;}
+      margin-top: 9%;
+    }
+    max-width: 100%;
+    width: 100%;
   }
 `;
 

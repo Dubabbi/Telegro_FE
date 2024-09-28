@@ -1,5 +1,4 @@
 import React from 'react';
-import styled from 'styled-components';
 import image from './image.svg';
 import { useNavigate } from 'react-router-dom';
 import * as P from './ProductStyle'
@@ -20,13 +19,13 @@ const products = [
 const LineCord = () => {
   const navigate = useNavigate();
   return (
-    <> 
+    <>
     <P.PageContainer>
     <P.Inline style={{width: '78%', border: 'none'}}>
       <h1>헤드셋</h1>
       <p>Sort by: Most Popular</p>
     </P.Inline>
-    <P.ProductGrid style={{width: '80%', marginLeft: '10%'}}>
+    <P.ProductGrid>
       {products.map(product => (
         <P.ProductBox onClick={() => navigate('/admin/adminproductdetail')} key={product.id}>
           <P.ProductImage src={product.img} alt={product.name} />
