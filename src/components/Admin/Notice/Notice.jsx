@@ -44,7 +44,7 @@ const Notice = () => {
     <>
     <N.MainWrapper>
       <div style={{width: '100%', minHeight: '2.6vh', border: 'none'}}></div>
-      <N.Section>
+      <N.Section2 style={{marginTop: '3%'}}>
         <N.PageTitle>
           <N.TitleText>공지사항</N.TitleText>
         </N.PageTitle>
@@ -67,7 +67,7 @@ const Notice = () => {
         <div><hr/>
           <CommonTable headersName={['No', '제목', '첨부', '작성자', '등록일', '조회수']}>{items}</CommonTable><hr/>
         </div>      
-      </N.Section>
+      </N.Section2>
       <N.Add  onClick={() => navigate('/admin/noticecreate')} src={editpost} />
     </N.MainWrapper>
         <P.Pagediv>

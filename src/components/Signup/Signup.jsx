@@ -67,7 +67,7 @@ function Signup() {
 
   const handleSignupClick = async () => {
     try {
-      const response = await axios.post("/api/auth/signup", {
+      const response = await axios.post("/proxy/auth/signup", {
         userid: id,
         username: name,
         password: password,

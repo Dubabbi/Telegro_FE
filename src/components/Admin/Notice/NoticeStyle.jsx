@@ -44,7 +44,17 @@ export const Section = styled.section`
     padding: 50px 10px;
   }
 `
-
+export const Section2 = styled.section`
+  padding: 50px 0;
+  min-width: 90%;
+  min-height: 2.6vh;
+  border: none;
+  @media(max-width: 780px){
+    max-width: 99%;
+    margin-left: 0px;
+    padding: 50px 10px;
+  }
+`
 
 
 

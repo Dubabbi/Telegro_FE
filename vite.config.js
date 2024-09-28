@@ -14,10 +14,10 @@ export default defineConfig({
   server: {
     port: 5173,
     proxy: {
-      '/api': {
+      '/proxy': {
         target: 'http://ec2-52-78-189-146.ap-northeast-2.compute.amazonaws.com:8080',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ''),
+        rewrite: (path) => path.replace(/^\/proxy/, ''),
         secure: false,
         ws: true,
       }

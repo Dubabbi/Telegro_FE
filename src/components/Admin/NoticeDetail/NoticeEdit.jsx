@@ -7,7 +7,7 @@ import * as D from './NoticeDetailStyle';
 // 공지사항 작성 스타일
 const FormWrapper = styled.div`
   width: 70%;
-  margin-left: 23%;
+  margin-left: 10%;
   margin-top: 3%;
   background-color: #fff;
   border: 1px solid #e5e5e5;
@@ -32,7 +32,7 @@ const SectionTitle = styled.h3`
   font-size: 2.5rem;
   font-weight: bold;
   h1{
-    margin-left: 23.5%;
+    margin-left: 10%;
     margin-top: 8%;
   }
   h2{
