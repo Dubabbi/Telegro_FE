@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import img from '../Check/image.svg'; // 실제 이미지 경로로 수정 필요
 import { useNavigate } from 'react-router-dom';
+import Delete from '/src/assets/icon/delete.svg';
 
 export const Div = styled.div`
   width: 100%;
@@ -35,6 +36,14 @@ export const LeftSection = styled.div`
   @media (max-width: 780px) {
     width: 100%;
     margin-bottom: 20px;
+  }
+`;
+
+export const DeleteIcon = styled.img`
+  max-width: 20px;
+
+  @media (max-width: 780px) {
+    max-width: 15px;
   }
 `;
 
@@ -270,7 +279,7 @@ const Cart = () => {
                 <QuantityInput type="text" value={product.quantity} readOnly />
                 <QuantityButton onClick={() => handleIncreaseQuantity(product.id)}>+</QuantityButton>
               </QuantityWrapper>
-              <DeleteButton onClick={() => handleDelete(product.id)}>🗑️</DeleteButton>
+              <DeleteButton onClick={() => handleDelete(product.id)}><DeleteIcon src={Delete} /></DeleteButton>
             </ProductItem>
           ))}
         </LeftSection>

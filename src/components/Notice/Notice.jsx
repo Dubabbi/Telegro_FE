@@ -10,6 +10,35 @@ import Pagination from '../Pagination/Pagination';
 import { FaFilePdf, FaFileImage, FaFileWord, FaFileExcel, FaFile } from 'react-icons/fa';
 
 const Notice = () => {
+  const [notice, setNotice] = useState([
+    { id: 1, title: "공지사항 1", created_at: "2023-01-01", view_count: 150, author: "Admin", attachment: "File.pdf" },
+    { id: 2, title: "공지사항 2", created_at: "2023-01-02", view_count: 80, author: "Manager", attachment: "Image.jpg" },
+    { id: 3, title: "공지사항 3", created_at: "2023-01-01", view_count: 150, author: "Admin", attachment: "Document.docx" },
+    { id: 4, title: "공지사항 4", created_at: "2023-01-02", view_count: 80, author: "Staff", attachment: "No File" },
+    { id: 5, title: "공지사항 5", created_at: "2023-01-03", view_count: 90, author: "Coordinator", attachment: "Chart.xlsx" }
+  ]);
+
+  {/*
+    useEffect(() => {
+    axios.get('')
+      .then(response => {
+        if (response.data.isSuccess) {
+          const sortedData = response.data.data.sort((a, b) => {
+            // 날짜를 Date 객체로 변환하여 비교
+            return new Date(b.createdAt) - new Date(a.createdAt);
+          });
+          setNotices(sortedData);
+        } else {
+          throw new Error('Failed to fetch data');
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+        setError(`Failed to load word sets: ${error.message}`);
+      });
+  }, []);
+  */}
+
   const getFileIcon = (filename) => {
     const extension = filename.split('.').pop().toLowerCase();
     switch (extension) {
@@ -28,14 +57,7 @@ const Notice = () => {
         return <FaFile />; // 기본 파일 아이콘
     }
   };
-  
-  const [notice, setNotice] = useState([
-    { id: 1, title: "공지사항 1", created_at: "2023-01-01", view_count: 150, author: "Admin", attachment: "File.pdf" },
-    { id: 2, title: "공지사항 2", created_at: "2023-01-02", view_count: 80, author: "Manager", attachment: "Image.jpg" },
-    { id: 3, title: "공지사항 3", created_at: "2023-01-01", view_count: 150, author: "Admin", attachment: "Document.docx" },
-    { id: 4, title: "공지사항 4", created_at: "2023-01-02", view_count: 80, author: "Staff", attachment: "No File" },
-    { id: 5, title: "공지사항 5", created_at: "2023-01-03", view_count: 90, author: "Coordinator", attachment: "Chart.xlsx" }
-  ]);
+
 
   const [searchValue, setSearchValue] = useState('');
 
@@ -49,7 +71,7 @@ const Notice = () => {
     <CommonTableRow key={notice.id}>
       <CommonTableColumn>{notice.id}</CommonTableColumn>
       <CommonTableColumn>
-        <Link to={`/noticedetail/${notice.id}`}>{notice.title}</Link>
+        <Link to={`/noticedetail`}>{notice.title}</Link>
       </CommonTableColumn>
       <CommonTableColumn>
         {getFileIcon(notice.attachment)}
