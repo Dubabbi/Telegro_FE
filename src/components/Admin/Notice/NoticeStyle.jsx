@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 export const NoticeWrapper = styled.div`
     color: black;
     width: 80%;
-    margin-left: 10%;
+    margin-left: 0px;
 `
 export const MainWrapper = styled.div`
     color: black;
@@ -23,7 +23,7 @@ export const MainWrapper2 = styled.div`
     color: black;
     max-width: 1200px;
     margin: 0px auto;
-    margin-left: 23%;
+    margin-left: 14%;
     margin-top: 6%;
     @media(max-width: 780px){
       max-width: 100%;

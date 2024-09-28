@@ -1,125 +1,9 @@
 import React, { useState } from 'react';
 import {Link, useNavigate} from 'react-router-dom';
-import styled from 'styled-components';
 import { Postcode } from '../Postcode/Postcode'; // 우편번호 검색 컴포넌트
 import * as D from './NoticeDetail/NoticeDetailStyle';
-import { VscWhitespace } from 'react-icons/vsc';
-const Container = styled.div`
-  width: 65%; 
-  margin-left: 25%;
-  margin-top: 4%;
-  @media(max-width: 780px){
-    width: 100%; 
-    margin-left: 0px;
-    margin-top: 10%;
-  }
-`;
-
-const SearchButton = styled.button`
-  border: none;
-  background-color: #f2f2f2;
-  height: auto;
-  border: 1px solid #E0E0E0;
-  padding: 1.7% 2%;
-  margin-top: 1.1%;
-  color: white;
-  border-radius: 2px;
-  cursor: pointer;
-  margin-left: 1%;
-`;
-
-const SectionTitleWrapper = styled.div`
-  background-color: #f2f2f2; 
-  padding: 1%;
-  @media(max-width: 780px){
-    padding: 3%;
-  }
-`;
-
-const SectionTitle = styled.h3`
-  font-size: 1.5rem;
-  font-weight: bold;
-`;
-
-const Title = styled.h1`
-  font-size: 2.6rem;
-  font-weight: bold;
-  margin-bottom: 3rem;
-  margin-left: 1%;
-  @media(max-width: 780px){
-    font-size: 1.9rem;
-  }
-`;
-
-const FormWrapper = styled.div`
-  background-color: #fff;
-  border: 1px solid #e5e5e5;
-  border-radius: 8px;
-`;
-
-const Form = styled.form`
-  display: grid;
-  grid-template-columns: 1fr 1fr; /* 2열 레이아웃 */
-  gap: 20px;
-`;
-
-const Label = styled.label`
-  font-size: 1.7rem;
-  font-weight: bold;
-  @media(max-width: 780px){
-    font-size: 1.45rem;
-    white-space: nowrap;
-  }
-`;
-
-const Input = styled.input`
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 1rem;
-  margin-top: 1%;
-`;
-
-const Select = styled.select`
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  margin-top: 1%;
-  border-radius: 5px;
-  font-size: 1rem;
-`;
-
-const Button = styled.button`
-  grid-column: span 2; /* 버튼을 2열 차지하도록 설정 */
-  padding: 10px;
-  background-color: #4D44B5;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  font-size: 1rem;
-  cursor: pointer;
-  margin-top: 1rem;
-
-  &:hover {
-    background-color: #3b3a9d;
-  }
-`;
-
-const InlineFormWrapper = styled.div`
-  display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 4열 그리드 레이아웃 */
-  gap: 20px;
-  grid-column: span 2; /* 2열을 차지하도록 설정 */
-`;
-
-const ContactFormWrapper = styled.div`
-  display: grid;
-  grid-template-columns: 0.97fr 0.97fr 2fr; /* 1:1:2 비율로 배치 */
-  gap: 2%;
-  max-width: 100%;
-  grid-column: span 2; /* 전체 열을 차지 */
-`;
+import * as A from './AddClientStyle';
+import axios from 'axios';
 
 function AddClient() {
   const [form, setForm] = useState({
@@ -147,7 +31,11 @@ function AddClient() {
       zipCode: zonecode,     // 우편번호 설정
     }));
   };
-
+  const priceApplicationOptions = {
+    A: '옵션 A',
+    B: '옵션 B',
+    C: '옵션 C'
+  };
   const handleChange = (e) => {
     setForm({
       ...form,
@@ -160,180 +48,206 @@ function AddClient() {
     console.log('Form Data:', form);
   };
 
+  const handleSignupClick = async () => {
+    const authData = {
+      id: form.id,
+      password: form.password,
+      email: form.email
+    };
+  
+    try {
+      const authResponse = await axios.post('/api/auth/register', authData);
+      if (authResponse.status === 200) {
+        console.log('사용자 정보');
+        const profileData = {
+          companyName: form.companyName, //회원명
+          phone: form.phone, //전화번호
+          address: form.address, //주소
+          zipCode: form.zipCode, //우편번호
+          detailAddress: form.detailAddress, //상세주소
+          businessName: form.businessName, //상호명
+          businessNumber: form.businessNumber, //사업자 번호
+          industry: form.industry, //업태
+          category: form.category, //종목
+          priceApplication: form.priceApplication, //단가적용
+          contactName: form.contactName, //담당자 이름
+          contactPhone: form.contactPhone, //담당자 번호
+        };
+  
+        const profileResponse = await axios.post('/api/profile/update', profileData);
+        if (profileResponse.status === 200) {
+          console.log('프로필 정보');
+        }
+      } else if (authResponse.status === 409) {
+        alert("등록된 회원입니다."); 
+      } 
+    } catch (error) {
+      console.error("Error while signing up:", error);
+    }
+  };
+  
+  
   return (
     <>
-    <Container>
-      <Title>회원가입</Title>
-      <FormWrapper>
-        <SectionTitleWrapper>
-          <SectionTitle>공급업체 회원가입</SectionTitle>
-        </SectionTitleWrapper>
+    <A.Container>
+      <A.Title>회원가입</A.Title>
+      <A.FormWrapper>
+        <A.SectionTitleWrapper>
+          <A.SectionTitle>공급업체 회원가입</A.SectionTitle>
+        </A.SectionTitleWrapper>
         <div style={{ padding: '2%' }}>
-          <Form onSubmit={handleSubmit}>
+          <A.Form onSubmit={handleSubmit}>
             <div>
-              <Label>회원명 *</Label>
-              <Input
+              <A.Label>회원명 *</A.Label>
+              <A.Input
                 name="companyName"
                 value={form.companyName}
                 onChange={handleChange}
-                required
               />
             </div>
             <div>
-              <Label>전화번호 *</Label>
-              <Input
+              <A.Label>전화번호 *</A.Label>
+              <A.Input
                 name="phone"
                 value={form.phone}
                 onChange={handleChange}
-                required
               />
             </div>
 
-            {/* 아이디, 비밀번호, 이메일, 단가적용을 한 줄로 정렬 */}
-            <InlineFormWrapper>
+            <A.InlineFormWrapper>
               <div>
-                <Label>아이디 *</Label>
-                <Input
-                  name="username"
-                  value={form.username}
+                <A.Label>아이디 *</A.Label>
+                <A.Input
+                  name="id"
+                  value={form.id}
                   onChange={handleChange}
-                  required
                 />
               </div>
               <div>
-                <Label>비밀번호 *</Label>
-                <Input
+                <A.Label>비밀번호 *</A.Label>
+                <A.Input
                   name="password"
                   type="password"
                   value={form.password}
                   onChange={handleChange}
-                  required
                 />
               </div>
               <div>
-                <Label>이메일 *</Label>
-                <Input
+                <A.Label>이메일 *</A.Label>
+                <A.Input
                   name="email"
                   type="email"
                   value={form.email}
                   onChange={handleChange}
-                  required
                 />
               </div>
               <div>
-                <Label>단가적용 *</Label>
-                <Select
+                <A.Label>단가적용 *</A.Label>
+                <A.Select
                   name="priceApplication"
                   value={form.priceApplication}
                   onChange={handleChange}
-                  required
-                >
-                  <option value="">단가 선택</option>
-                  <option value="A">A</option>
-                  <option value="B">B</option>
-                </Select>
+                > 
+                <option value="">단가 선택</option>
+                {Object.entries(priceApplicationOptions).map(([key, value]) => (
+                  <option key={key} value={key}>{value || '단가 선택'}</option>
+                ))}
+                
+                </A.Select>
               </div>
-            </InlineFormWrapper>
+            </A.InlineFormWrapper>
 
-            {/* 담당자 이름, 담당자 전화번호, 상호명 1:1:2 비율로 배치 */}
-            <ContactFormWrapper>
+            <A.ContactFormWrapper>
               <div>
-                <Label>담당자 이름 *</Label>
-                <Input
+                <A.Label>담당자 이름 *</A.Label>
+                <A.Input
                   style={{width: '97%'}}
                   name="contactName"
                   value={form.contactName}
                   onChange={handleChange}
-                  required
                 />
               </div>
               <div>
-                <Label>담당자 전화번호 *</Label>
-                <Input
+                <A.Label>담당자 전화번호 *</A.Label>
+                <A.Input
                   style={{width: '97%'}}
                   name="contactPhone"
                   value={form.contactPhone}
                   onChange={handleChange}
-                  required
                 />
               </div>
               <div>
-                <Label>상호명 *</Label>
-                <Input
+                <A.Label>상호명 *</A.Label>
+                <A.Input
                   name="businessName"
                   value={form.businessName}
                   onChange={handleChange}
-                  required
                 />
               </div>
-            </ContactFormWrapper>
+            </A.ContactFormWrapper>
             <div>
-              <Label>주소 *</Label>
-              <div style={{ display: 'flex', whiteSpace: 'nowrap', alignItems: 'center' }}>
-                <Input
+              <A.Label>주소 *</A.Label>
+              <div style={{ display: 'flex', whiteSpace: 'nowrap', alignItems: 'center'}}>
+                <A.Input
                   name="address"
                   value={form.address}
                   placeholder="주소를 검색해 주세요."
                   readOnly
                 />
-                <SearchButton>
+                <A.SearchButton>
                 <Postcode onComplete={handleAddressComplete} />
-                </SearchButton>
+                </A.SearchButton>
               </div>
             </div>
             <div>
-              <Label>사업자 번호 *</Label>
-              <Input
+              <A.Label>사업자 번호 *</A.Label>
+              <A.Input
                 name="businessNumber"
                 value={form.businessNumber}
                 onChange={handleChange}
-                required
               />
             </div>
             <div>
-              <Label>우편번호 *</Label>
-              <Input
+              <A.Label>우편번호 *</A.Label>
+              <A.Input
                 name="zipCode"
                 value={form.zipCode}
                 readOnly
               />
             </div>
             <div>
-              <Label>업태 *</Label>
-              <Input
+              <A.Label>업태 *</A.Label>
+              <A.Input
                 name="industry"
                 value={form.industry}
                 onChange={handleChange}
-                required
               />
             </div>
             <div>
-              <Label>상세주소 *</Label>
-              <Input
+              <A.Label>상세주소 *</A.Label>
+              <A.Input
                 name="detailAddress"
                 value={form.detailAddress}
                 onChange={handleChange}
-                required
               />
             </div>
             <div>
-              <Label>종목 *</Label>
-              <Input
+              <A.Label>종목 *</A.Label>
+              <A.Input
                 name="category"
                 value={form.category}
                 onChange={handleChange}
-                required
               />
             </div>
-          </Form>
+          </A.Form>
         </div>
-      </FormWrapper>
-    </Container>
+      </A.FormWrapper>
+    </A.Container>
         <D.BtWrap style={{ width: '70%', marginLeft: '22.5%', marginBottom: '3%'}}>
         <D.BtLink as={Link} to="/admin/clientmanagement">
                 취소
               </D.BtLink>
-              <D.BtLink as={Link} to="">
+              <D.BtLink onClick={handleSignupClick} as={Link} to="">
                 등록
               </D.BtLink>
             </D.BtWrap>
