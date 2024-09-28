@@ -120,6 +120,9 @@ export const QuantityWrapper = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
+  @media(max-width: 780px){
+    gap: 2px;
+  }
 `;
 
 export const QuantityButton = styled.button`
@@ -133,6 +136,9 @@ export const QuantityButton = styled.button`
 export const QuantityInput = styled.input`
   width: 40px;
   text-align: center;
+  @media(max-width: 780px){
+    width: 20px;
+  }
 `;
 
 export const DeleteButton = styled.button`

@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { FaTimes } from 'react-icons/fa';
 import Img from '/src/assets/image/Landing/logo.svg'; // 로고 이미지
 
-// 오버레이 배경 추가
 const Overlay = styled.div`
   position: fixed;
   top: 0;
@@ -117,6 +116,8 @@ const CloseButton = styled(FaTimes)`
 const Footer = styled.div`
   padding: 15px;
   display: flex;
+  flex-direction: row;
+  gap: 2%;
   justify-content: center;
   border-top: 1px solid #D5DBE1;
 `;
@@ -143,7 +144,20 @@ const ConfirmButton = styled.button`
 const NoticePopup = () => {
   const [visible, setVisible] = useState(true);
 
-  const handleClose = () => {
+  useEffect(() => {
+    const hidePopupDate = localStorage.getItem('hidePopupDate');
+    const todayDate = new Date().toISOString().split('T')[0];
+
+    if (hidePopupDate === todayDate) {
+      setVisible(false);
+    }
+  }, []);
+
+  const handleClose = (forToday) => {
+    if (forToday) {
+      const todayDate = new Date().toISOString().split('T')[0];
+      localStorage.setItem('hidePopupDate', todayDate);
+    }
     setVisible(false);
   };
 
@@ -153,17 +167,17 @@ const NoticePopup = () => {
 
   return (
     <>
-      <Overlay onClick={handleClose} />
+      <Overlay onClick={() => handleClose(false)} />
       <PopupWrapper>
         <Header>
           <HeaderTitle>
             <Logo src={Img} alt="Telegro Logo" />
             Telegro
           </HeaderTitle>
-          <CloseButton onClick={handleClose} />
+          <CloseButton onClick={() => handleClose(false)} />
         </Header>
         <Content>
-        <HorizontalRule />
+          <HorizontalRule />
           <h2>공지 드립니다.</h2>
           <HorizontalRule />
           <p>공지사항의 내용입니다.</p>
@@ -171,7 +185,8 @@ const NoticePopup = () => {
           <p>다른 공지 목록은 자료실에서 확인 가능합니다.</p>
         </Content>
         <Footer>
-          <ConfirmButton onClick={handleClose}>확인</ConfirmButton>
+          <ConfirmButton onClick={() => handleClose(true)}>오늘 하루 보지 않기</ConfirmButton>
+          <ConfirmButton onClick={() => handleClose(false)}>닫기</ConfirmButton>
         </Footer>
       </PopupWrapper>
     </>

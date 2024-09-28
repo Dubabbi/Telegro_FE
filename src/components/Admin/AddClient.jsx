@@ -32,9 +32,9 @@ function AddClient() {
     }));
   };
   const priceApplicationOptions = {
-    A: '옵션 A',
-    B: '옵션 B',
-    C: '옵션 C'
+    A: 'Dealer',
+    B: 'Business',
+    C: 'Best'
   };
   const handleChange = (e) => {
     setForm({
@@ -48,45 +48,50 @@ function AddClient() {
     console.log('Form Data:', form);
   };
 
+
+  
   const handleSignupClick = async () => {
+    const accessToken = localStorage.getItem('token');
+
+    const headers = { Authorization: `Bearer ${accessToken}` };
+    console.log('Using headers:', headers);
     const authData = {
-      id: form.id,
+      userId: form.id,
       password: form.password,
-      email: form.email
+      email: form.email,
+      username: form.companyName,
+      phone: form.phone,
+      address: form.address,
+      zipCode: form.zipCode,
+      addressDetail: form.detailAddress,
     };
   
     try {
-      const authResponse = await axios.post('/api/auth/register', authData);
+      const authResponse = await axios.post('/proxy/auth/signup', authData, { headers });
       if (authResponse.status === 200) {
         console.log('사용자 정보');
         const profileData = {
-          companyName: form.companyName, //회원명
-          phone: form.phone, //전화번호
-          address: form.address, //주소
-          zipCode: form.zipCode, //우편번호
-          detailAddress: form.detailAddress, //상세주소
-          businessName: form.businessName, //상호명
-          businessNumber: form.businessNumber, //사업자 번호
-          industry: form.industry, //업태
-          category: form.category, //종목
-          priceApplication: form.priceApplication, //단가적용
-          contactName: form.contactName, //담당자 이름
-          contactPhone: form.contactPhone, //담당자 번호
+          userId: form.id,
+          companyName: form.businessName,
+          companyNumber: form.businessNumber,
+          companyType: form.industry,
+          companyItem: form.category,
+          managerName: form.contactName,
+          managerPhone: form.contactPhone,
         };
   
-        const profileResponse = await axios.post('/api/profile/update', profileData);
+        const profileResponse = await axios.post('/proxy/api/companies', profileData, { headers });
         if (profileResponse.status === 200) {
           console.log('프로필 정보');
         }
       } else if (authResponse.status === 409) {
-        alert("등록된 회원입니다."); 
-      } 
+        alert("등록된 회원입니다.");
+      }
     } catch (error) {
       console.error("Error while signing up:", error);
+      // Handle more specific errors here if needed
     }
   };
-  
-  
   return (
     <>
     <A.Container>
