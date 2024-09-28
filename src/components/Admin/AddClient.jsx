@@ -52,44 +52,42 @@ function AddClient() {
   
   const handleSignupClick = async () => {
     const accessToken = localStorage.getItem('token');
-
     const headers = { Authorization: `Bearer ${accessToken}` };
-    console.log('Using headers:', headers);
-    const authData = {
-      userId: form.id,
-      password: form.password,
-      email: form.email,
-      username: form.companyName,
-      phone: form.phone,
-      address: form.address,
-      zipCode: form.zipCode,
-      addressDetail: form.detailAddress,
-    };
-  
+
+
     try {
-      const authResponse = await axios.post('/proxy/auth/signup', authData, { headers });
-      if (authResponse.status === 200) {
+      const signUpUserInfoDto = {
+        userid: form.id,
+        password: form.password,
+        email: form.email,
+        username: form.companyName,
+        phone: form.phone,
+        address: form.address,
+        zipCode: form.zipCode,
+        addressDetail: form.detailAddress,
+      };
+      const companyRequestDTO = {
+        userId: form.id,
+        companyName: form.businessName,
+        companyNumber: form.businessNumber,
+        companyType: form.industry,
+        companyItem: form.category,
+        managerName: form.contactName,
+        managerPhone: form.contactPhone,
+      };
+
+      const DTO = {signUpUserInfoDto, companyRequestDTO}
+      
+    
+      const response = await axios.post('/proxy/api/companies', DTO, { headers });
+      if (response.status === 200) {
         console.log('사용자 정보');
-        const profileData = {
-          userId: form.id,
-          companyName: form.businessName,
-          companyNumber: form.businessNumber,
-          companyType: form.industry,
-          companyItem: form.category,
-          managerName: form.contactName,
-          managerPhone: form.contactPhone,
-        };
-  
-        const profileResponse = await axios.post('/proxy/api/companies', profileData, { headers });
-        if (profileResponse.status === 200) {
-          console.log('프로필 정보');
-        }
-      } else if (authResponse.status === 409) {
+
+      } else if (response.status === 409) {
         alert("등록된 회원입니다.");
       }
     } catch (error) {
       console.error("Error while signing up:", error);
-      // Handle more specific errors here if needed
     }
   };
   return (
