@@ -3,6 +3,15 @@ import styled from 'styled-components';
 import img from '../Check/image.svg'; // Adjust the actual image path
 import { Postcode } from '../Postcode/Postcode';
 import * as C from '../Cart/Cart';
+export const Div = styled.div`
+  width: 100%;
+  min-height: 15.6vh;
+  border: none;
+  @media (max-width: 780px) {
+    max-height: 4vh;
+    min-height: 6vh;
+  }
+`;
 export const OrderPageWrapper = styled.div`
   display: flex;
   justify-content: space-between;
@@ -178,9 +187,8 @@ const OrderProcess = () => {
 
   return (
     <>
-      <div style={{ width: '100%', minHeight: '22.6vh', border: 'none' }}></div>
+      <Div></Div>
       <C.Title><h1>주문 관리</h1></C.Title>
-      
       <OrderPageWrapper>
         {/* 좌측 배송 정보 입력란 */}
         <LeftSection>

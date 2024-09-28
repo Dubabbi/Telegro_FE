@@ -2,17 +2,17 @@
 import styled from 'styled-components';
 export const ErrorText = styled.p`
   color: red;
-  font-size: 0.875rem;  // 적절한 크기로 설정
+  font-size: 0.875rem; 
   margin-top: 5px;
   margin-bottom: 5px;
-  text-align: left;  // 오류 메시지가 왼쪽 정렬이 되도록 설정
+  text-align: left; 
 `;
 export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 6% 0;
+  padding: 5% 0px;
   margin: 0;
   background-color: #ccc;
   width: 100%; 
@@ -20,22 +20,22 @@ export const Wrapper = styled.div`
 `;
 
 export const LoginSection = styled.section`
-  width: 38%;
+  width: 36%;
   max-width: 558px;
   height: auto;
   box-shadow: 0 0.4rem 0.8rem rgba(0, 0, 0, 0.1);
   background: #fff;
-  padding: 3% 4%;
+  padding: 4% 4%;
   border-radius: 10px;
   position: relative;
   border-radius: 1rem;
   z-index: 2;
   @media (max-width: 1000px) {
-    width: 90%; 
-    padding: 5% 6%;
+    width: 60%; 
+    padding: 5% 4%;
   }
   @media (max-width: 780px) {
-    width: 80%; 
+    width: 70%; 
     padding: 5% 6%;
   }
 
