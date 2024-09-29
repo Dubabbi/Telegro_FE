@@ -200,19 +200,6 @@ const ProductCreate = () => {
             />
           </div>
 
-          <div>
-            <Label htmlFor="stock">재고 보유 *</Label>
-            <Select
-              name="stock"
-              id="stock"
-              value={product.stock}
-              onChange={handleChange}
-            >
-              <option value="">선택</option>
-              <option value="many">많음</option>
-              <option value="few">적음</option>
-            </Select>
-          </div>
 
           <div>
             <Label htmlFor="category">상품 카테고리 *</Label>
@@ -228,19 +215,7 @@ const ProductCreate = () => {
             </Select>
           </div>
 
-          <div>
-            <Label htmlFor="subCategory">상품 세부 카테고리 *</Label>
-            <Select
-              name="subCategory"
-              id="subCategory"
-              value={product.subCategory}
-              onChange={handleChange}
-            >
-              <option value="">상품 카테고리</option>
-              <option value="subCategory1">세부 카테고리1</option>
-              <option value="subCategory2">세부 카테고리2</option>
-            </Select>
-          </div>
+
         </RowContainer>
 
         {/* SplitContainer for 내용, 포토 & 가격 */}
@@ -259,7 +234,7 @@ const ProductCreate = () => {
             </div>
 
             <div>
-              <Label htmlFor="photo">Photo *</Label>
+              <Label htmlFor="photo">Photo *</Label> {/* 이미지 순서 변경 로직 필요 */}
               <FileInput
                 type="file"
                 name="photo"

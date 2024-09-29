@@ -1,20 +1,40 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as L from '../Login/LoginStyle';
+import axios from 'axios';
 
-// 로그인 컴포넌트
 function Admin() {
   const navigate = useNavigate();
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    // 로그인 처리 로직
-    console.log('Login Attempt', id, password);
-    // navigate('/dashboard'); // 로그인 성공 후 리다이렉트
-  };
 
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await axios.post("/proxy/auth/login", {
+        id: id,
+        password: password,
+      });
+  
+      console.log('Response:', response); // 응답 전체 확인
+      console.log('Response Data:', response.data); // 응답 데이터 확인
+  
+      // 응답 데이터에서 accessToken 확인
+      if (response.status === 200 && response.data.data.accessToken) {
+        console.log('Login successful, accessToken:', response.data.data.accessToken);
+        localStorage.setItem('token', response.data.data.accessToken); // accessToken으로 변경
+        navigate('/admin/stat'); 
+        alert("로그인에 성공했습니다.");
+      } else if (response.status === 401) {
+        console.log('Invalid credentials');
+        alert("잘못된 인증입니다."); 
+      } 
+    } catch (error) {
+      console.error('Login error:', error); // 에러 로그 추가
+      alert("로그인 실패: " + (error.response?.data?.message || "네트워크 오류")); 
+    }
+  };
   return (
     <L.Wrapper>
       <L.LoginSection>
@@ -39,7 +59,7 @@ function Admin() {
 
         </div>
           </div>
-          <L.Button primary type="submit" onClick={() => navigate('/admin/stat')}>로그인</L.Button>
+          <L.Button2 type="submit" >로그인</L.Button2>
           
         </L.Form>
       </L.LoginSection>
