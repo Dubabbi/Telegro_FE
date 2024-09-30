@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import img from '../Check/image.svg'; // Adjust the actual image path
-import { Postcode } from '../Postcode/Postcode';
+import { Postcode } from '../Postcode/Postcode'; // 주소 검색 컴포넌트
 import * as C from '../Cart/Cart';
+
 export const Div = styled.div`
   width: 100%;
   min-height: 15.6vh;
@@ -27,9 +28,11 @@ export const OrderPageWrapper = styled.div`
 const LeftSection = styled.div`
   width: 50%;
   background-color: #f8f9fa;
-  padding: 20px;
+  background-color: #fff;
+  padding: 2%;
+  border: 1px solid #d3d3d3;
   border-radius: 10px;
-
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   @media (max-width: 780px) {
     width: 100%;
     margin-bottom: 20px;
@@ -68,7 +71,6 @@ const AddressInput = styled.input`
   border-radius: 5px;
 `;
 
-
 const AddressSearchRow = styled(FormRow)`
   display: flex;
   align-items: center;
@@ -95,7 +97,6 @@ const TextArea = styled.textarea`
   resize: none;
   height: 100px;
 `;
-
 
 
 const OrderTitle = styled.h2`
@@ -151,7 +152,6 @@ const CheckboxLabel = styled.label`
   font-size: 1rem;
 `;
 
-
 const OrderProcess = () => {
   const [isDefaultChecked, setIsDefaultChecked] = useState(false);
   const [formData, setFormData] = useState({
@@ -163,26 +163,13 @@ const OrderProcess = () => {
     request: ''
   });
 
-  const handleDefaultAddress = () => {
-    if (isDefaultChecked) {
-      setFormData({
-        name: '홍길동',
-        phone: '010-1234-5678',
-        address: '서울특별시 강남구 테헤란로 123',
-        postalCode: '06234',
-        detailedAddress: 'A동 101호',
-        request: ''
-      });
-    } else {
-      setFormData({
-        name: '',
-        phone: '',
-        address: '',
-        postalCode: '',
-        detailedAddress: '',
-        request: ''
-      });
-    }
+  // Postcode로부터 주소와 우편번호 가져오는 함수
+  const handleAddressComplete = ({ fullAddress, zonecode }) => {
+    setFormData({
+      ...formData,
+      address: fullAddress, // 도로명 주소 설정
+      postalCode: zonecode  // 우편번호 설정
+    });
   };
 
   return (
@@ -220,20 +207,22 @@ const OrderProcess = () => {
               />
             </FormRow>
             <AddressSearchRow>
-            <AddressInput
+              <AddressInput
                 type="text"
                 placeholder="주소 *"
                 value={formData.address}
-                onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                readOnly
               />
-              <AddressButton>주소 검색</AddressButton>
+              <AddressButton onClick={handleAddressComplete}>
+                <Postcode onComplete={handleAddressComplete} />
+              </AddressButton>
             </AddressSearchRow>
             <FormRow>
               <FormInput
                 type="text"
                 placeholder="우편번호 *"
                 value={formData.postalCode}
-                onChange={(e) => setFormData({ ...formData, postalCode: e.target.value })}
+                readOnly
               />
               <FormInput
                 type="text"
