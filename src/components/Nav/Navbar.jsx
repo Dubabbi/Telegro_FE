@@ -8,6 +8,13 @@ export default function Navbar() {
   const [searchValue, setSearchValue] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
+  const [userInfo, setUserInfo] = useState({
+    id: 'Justin Hope',
+    phone: '010-1234-5678',
+    email: 'example@email.com',
+    name: '홍길동' ,
+    avatarUrl: 'https://example.com/avatar.jpg' 
+  });
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
@@ -42,7 +49,7 @@ export default function Navbar() {
           <li><a href="/cart">장바구니</a></li>
           <li><a href="mailto:Telegro@telegro.com">Contact Us</a></li>
         </N.MainNav>
-        {isLoggedIn && <Link to="/mypage"><Avvvatars value="user" size={40} /></Link>}
+        {isLoggedIn && <Link to="/mypage"><Avvvatars value={userInfo.username} style="Shapes" size={40} /></Link>}
       </N.NavContainer>
 
       <N.SecondaryNavContainer>
