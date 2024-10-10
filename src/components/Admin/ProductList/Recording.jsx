@@ -2,6 +2,8 @@ import React from 'react';
 import image from './image.svg';
 import { useNavigate } from 'react-router-dom';
 import * as P from './ProductStyle'
+import * as N from '../Notice/NoticeStyle';
+import editpost from '/src/assets/icon/Admin/editpost.svg';
 import Pagination from '../../Pagination/Pagination';
 
 const products = [
@@ -37,6 +39,7 @@ const Recording = () => {
         </P.ProductBox>
       ))}
     </P.ProductGrid>
+    <N.Add  onClick={() => navigate('/admin/productcreate')} src={editpost} />
     <P.Pagediv>
       <Pagination />
     </P.Pagediv>

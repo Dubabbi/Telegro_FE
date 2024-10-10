@@ -346,8 +346,8 @@ export const DeleteButton = styled(ListButton)`
 
 
 export const Add = styled.img`
-  width: 5rem;
-  height: 5rem;
+  width: 4.5rem;
+  height: 4.5rem;
   cursor: pointer;
   position: fixed;
   right: 35px;
