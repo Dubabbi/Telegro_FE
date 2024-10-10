@@ -5,7 +5,7 @@ import Avvvatars from 'avvvatars-react';
 import { useNavigate } from 'react-router-dom';
 import add from '/src/assets/icon/mypage/addaddress.svg';
 import AddressModal from './AddressModal'; 
-
+import EditAddressModal from './EditAddressModal';
 const Mypage = () => {
   const navigate = useNavigate();
 
@@ -29,11 +29,18 @@ const Mypage = () => {
 
   const [currentVisible, setCurrentVisible] = useState(4); // 초기에는 4개만 보임
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false); // 편집 모달 열림 상태 관리
+
+
   const handleViewMore = () => {
     setCurrentVisible((prevVisible) => prevVisible + 4); // 버튼 클릭 시 4개 더 보임
   };
   const toggleModal = () => {
-    setIsModalOpen(!isModalOpen); // 모달 열기/닫기 토글
+    setIsModalOpen(!isModalOpen); 
+  };
+
+  const toggleEditModal = () => {
+    setIsEditModalOpen(!isEditModalOpen); 
   };
   return (
     <div style={{ backgroundColor: '#eee' }}>
@@ -94,7 +101,7 @@ const Mypage = () => {
                 </M.AddressDetail>
               </M.AddressContent>
               <M.AddressActions>
-                <FaEdit style={{ cursor: 'pointer', marginRight: '10px' }} />
+                <FaEdit style={{ cursor: 'pointer', marginRight: '10px' }} onClick={toggleEditModal} />
                 <FaTrash style={{ cursor: 'pointer' }} />
               </M.AddressActions>
             </M.AddressCard>
@@ -105,6 +112,7 @@ const Mypage = () => {
         </M.AddressListWrapper>
       </M.Container>
       <AddressModal isOpen={isModalOpen} toggleModal={toggleModal} />
+      <EditAddressModal isOpen={isEditModalOpen} toggleEditModal={toggleEditModal} /> 
     </div>
   );
 };

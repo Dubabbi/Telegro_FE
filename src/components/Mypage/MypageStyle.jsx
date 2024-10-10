@@ -18,6 +18,7 @@ export const ProfileWrapper = styled.div`
   border-radius: 10px;
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
   overflow: hidden;
+  max-height: 100vh;
   @media(max-width: 780px){
     width: 100%;
     margin: 0 auto;

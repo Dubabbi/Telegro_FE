@@ -2,24 +2,28 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import CloseIcon from '/src/assets/icon/mypage/close.svg';
 import { Postcode } from '../Postcode/Postcode';
-
+import * as L from '../Login/LoginStyle';
 const ModalOverlay = styled.div`
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
+  padding-top: 6.5%;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 10;
+  z-index: 1000;
+  @media(max-width: 780px){
+    padding-top: 3%;
+  }
 `;
 
 const ModalContent = styled.div`
   position: relative;
   min-width: 400px;
-  min-height: 70vh;
+  min-height: 400px;
   background: white;
   border-radius: 10px;
   padding: 20px;
@@ -91,23 +95,49 @@ const SearchButton = styled.button`
   }
 `;
 
-const SearchTitle = styled.div`
+
+export const CheckboxContainer = styled.div`
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+`;
+
+export const CheckboxLabel = styled.label`
   font-size: 1.5rem;
-  text-align: left;
-  p{
-    text-align: left;
+  cursor: pointer;
+    @media(max-width: 800px){
+      font-size: 1.1rem;
+    }
+`;
+
+export const Checkbox = styled.input`
+  margin-right: 6px;
+  margin-top: 6px;
+  width: 23px;
+  border: 1px solid #ddd;
+  height: 23px;
+  border-radius: 8px;
+  &:checked {
+    background-color: #ACAACC;
   }
-`
+ @media(max-width: 800px){
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
+  }
+`;
 
 export default function AddressModal({ isOpen, toggleModal }) {
   const [roadAddress, setRoadAddress] = useState(''); 
   const [zipCode, setZipCode] = useState(''); 
   const [detailAddress, setDetailAddress] = useState('');
-
+  const [isDefault, setIsDefault] = useState(false); 
   const handleAddressSearch = () => {
     setErrors({ ...errors, roadAddress: '', zipCode: '' }); 
   };
-
+  const handleCheckboxChange = () => {
+    setIsDefault(!isDefault); // 체크박스 상태 토글
+  };
   const handleAddressComplete = ({ fullAddress, zonecode }) => {
     setRoadAddress(fullAddress);
     setZipCode(zonecode);        
@@ -146,6 +176,17 @@ export default function AddressModal({ isOpen, toggleModal }) {
           value={detailAddress}
           onChange={e => setDetailAddress(e.target.value)} 
         />
+           <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+            <CheckboxContainer style={{alignItems: 'center'}}>
+              <Checkbox
+                type="checkbox" 
+                id="defaultAddressCheckbox" 
+                checked={isDefault} 
+                onChange={handleCheckboxChange} 
+              />
+              <CheckboxLabel htmlFor="defaultAddressCheckbox">기본 배송지로 설정</CheckboxLabel>
+            </CheckboxContainer>
+            </div>
         <div>
           <Button onClick={toggleModal}>취소</Button>
           <Button onClick={toggleModal}>확인</Button>
