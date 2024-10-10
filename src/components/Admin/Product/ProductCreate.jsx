@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import * as D from '../NoticeDetail/NoticeDetailStyle';
 import * as N from '../Notice/NoticeStyle';
-
+import { Editor } from '@toast-ui/react-editor'; 
+import '@toast-ui/editor/dist/toastui-editor.css'; 
 
 const MainWrapper = styled.div`
   width: 78%; 
@@ -113,11 +114,17 @@ const ProductCreate = () => {
     photo: ''
   });
 
+  const editorRef = useRef();
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setProduct({ ...product, [name]: value });
   };
 
+  const handleEditorChange = () => {
+    const data = editorRef.current.getInstance().getHTML(); // 에디터 내용을 HTML 형태로 저장
+    setProduct({ ...product, content: data }); // content 필드에 저장
+  };
   return (
     <MainWrapper>
       <SectionTitle style={{margin: '1%', marginBottom: '4%', marginTop: '3%'}}>상품 등록</SectionTitle>
@@ -233,23 +240,27 @@ const ProductCreate = () => {
               />
             </div>
           </RightColumn>
-        {/* SplitContainer for 내용, 포토 & 가격 */}
-        <SplitContainer>
-          {/* Left Column: 내용 & 포토 */}
 
+          {/* Toast UI Editor */}
+          <div>
+            <div style={{marginBottom: '10px'}}><Label  htmlFor="content">상품 설명 *</Label></div>
+            <Editor
+              ref={editorRef}
+              initialValue="상품 설명을 입력하세요."
+              previewStyle="vertical"
+              height="500px"
+              initialEditType="wysiwyg"
+              useCommandShortcut={false}
+              toolbarItems={[
+                ['heading', 'bold', 'italic', 'strike'],
+                ['hr', 'quote'],
+                ['ul', 'ol', 'task', 'indent', 'outdent'],
+                ['table', 'link', 'image']
+              ]}
+              onChange={handleEditorChange}
+            />
+          </div>
 
-
-            <div>
-              <Label htmlFor="photo">Photo *</Label> {/* 이미지 순서 변경 로직 필요 */}
-              <FileInput
-                type="file"
-                name="photo"
-                id="photo"
-                onChange={handleChange}
-              />
-            </div>
-
-            </SplitContainer>
         </div>
       </FormWrapper>
       <N.Section style={{margin: '0'}}>
