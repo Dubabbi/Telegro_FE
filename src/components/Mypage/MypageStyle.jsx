@@ -127,7 +127,7 @@ export const AddressWrapper = styled.div`
 `;
 
 export const AddressBar = styled.div`
-  background-color: #4D44B5;
+  background-color: ${({ isDefault }) => (isDefault ? '#4D44B5' : '#697077')}; /* 기본 배송지 여부에 따라 색상 변경 */
   width: 10px;
   height: 100%;
   border-radius: 8px 0 0 8px;

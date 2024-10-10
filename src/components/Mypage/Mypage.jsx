@@ -17,14 +17,14 @@ const Mypage = () => {
   });
 
   const [addressList, setAddressList] = useState([
-    { name: '우리 집', address: '서울시 도봉구 창일로 14길 33(쌍문동)', detail: '상세 주소', code: '우편번호' },
-    { name: '우리 학교', address: '서울시 도봉구 창일로 14길 33(쌍문동)', detail: '상세 주소', code: '우편번호' },
-    { name: '배송지1', address: '서울시 도봉구 창일로 14길 33(쌍문동)', detail: '상세 주소', code: '우편번호' },
-    { name: '배송지 2', address: '서울시 도봉구 창일로 14길 33(쌍문동)', detail: '상세 주소', code: '우편번호' },
-    { name: '배송지 3', address: '서울시 도봉구 창일로 14길 33(쌍문동)', detail: '상세 주소', code: '우편번호' },
-    { name: '배송지 4', address: '서울시 도봉구 창일로 14길 33(쌍문동)', detail: '상세 주소', code: '우편번호' },
-    { name: '배송지 5', address: '서울시 도봉구 창일로 14길 33(쌍문동)', detail: '상세 주소', code: '우편번호' },
-    { name: '배송지 6', address: '서울시 도봉구 창일로 14길 33(쌍문동)', detail: '상세 주소', code: '우편번호' },
+    { name: '우리 집', address: '서울시 도봉구 창일로 14길 33(쌍문동)', detail: '상세 주소', code: '우편번호', isDefault: true },
+    { name: '우리 학교', address: '서울시 도봉구 창일로 14길 33(쌍문동)', detail: '상세 주소', code: '우편번호', isDefault: false },
+    { name: '배송지1', address: '서울시 도봉구 창일로 14길 33(쌍문동)', detail: '상세 주소', code: '우편번호', isDefault: false },
+    { name: '배송지 2', address: '서울시 도봉구 창일로 14길 33(쌍문동)', detail: '상세 주소', code: '우편번호', isDefault: false },
+    { name: '배송지 3', address: '서울시 도봉구 창일로 14길 33(쌍문동)', detail: '상세 주소', code: '우편번호', isDefault: false },
+    { name: '배송지 4', address: '서울시 도봉구 창일로 14길 33(쌍문동)', detail: '상세 주소', code: '우편번호', isDefault: false },
+    { name: '배송지 5', address: '서울시 도봉구 창일로 14길 33(쌍문동)', detail: '상세 주소', code: '우편번호', isDefault: false },
+    { name: '배송지 6', address: '서울시 도봉구 창일로 14길 33(쌍문동)', detail: '상세 주소', code: '우편번호', isDefault: false },
   ]);
 
   const [currentVisible, setCurrentVisible] = useState(4); // 초기에는 4개만 보임
@@ -87,25 +87,25 @@ const Mypage = () => {
             <img src={add} alt="Add Address" onClick={toggleModal} />
           </M.AddressWrapper>
           {addressList.slice(0, currentVisible).map((address, index) => (
-            <M.AddressCard key={index}>
-              <M.AddressBar />
-              <M.AddressContent>
-                <M.AddressName>{address.name}</M.AddressName>
-                <M.AddressDetail>
-                  <FaMapMarkerAlt style={{ marginRight: '5px' }} />
-                  {address.address} ({address.code})
-                </M.AddressDetail>
-                <M.AddressDetail>
-                  <FaMapMarkerAlt style={{ marginRight: '5px' }} />
-                  {address.detail}
-                </M.AddressDetail>
-              </M.AddressContent>
-              <M.AddressActions>
-                <FaEdit style={{ cursor: 'pointer', marginRight: '10px' }} onClick={toggleEditModal} />
-                <FaTrash style={{ cursor: 'pointer' }} />
-              </M.AddressActions>
-            </M.AddressCard>
-          ))}
+          <M.AddressCard key={index}>
+            <M.AddressBar isDefault={address.isDefault} /> {/* 기본 배송지 여부를 props로 전달 */}
+            <M.AddressContent>
+              <M.AddressName>{address.name}</M.AddressName>
+              <M.AddressDetail>
+                <FaMapMarkerAlt style={{ marginRight: '5px' }} />
+                {address.address} ({address.code})
+              </M.AddressDetail>
+              <M.AddressDetail>
+                <FaMapMarkerAlt style={{ marginRight: '5px' }} />
+                {address.detail}
+              </M.AddressDetail>
+            </M.AddressContent>
+            <M.AddressActions>
+              <FaEdit style={{ cursor: 'pointer', marginRight: '10px' }} onClick={toggleEditModal} />
+              <FaTrash style={{ cursor: 'pointer' }} />
+            </M.AddressActions>
+          </M.AddressCard>
+        ))}
           {currentVisible < addressList.length && (
             <M.ViewMoreButton onClick={handleViewMore}>View More</M.ViewMoreButton>
           )}
