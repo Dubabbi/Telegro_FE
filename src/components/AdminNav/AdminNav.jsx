@@ -188,6 +188,11 @@ const AdminNav = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isMobileSidebarVisible, setIsMobileSidebarVisible] = useState(false);
+  const handleLogout = () => {
+    localStorage.removeItem('token'); 
+    navigate('/admin');
+    alert('로그아웃되었습니다.')
+  };
 
   // 토글 버튼 클릭 시 모달 열기/닫기
   const toggleSidebar = () => {
@@ -286,7 +291,7 @@ const AdminNav = () => {
             Settings
           </SettingsWrapper>
 
-          <LogoutButton>
+          <LogoutButton onClick={handleLogout}>
             <FaSignOutAlt />
             Log out
           </LogoutButton>
