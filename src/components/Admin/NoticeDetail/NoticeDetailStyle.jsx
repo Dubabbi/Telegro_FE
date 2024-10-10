@@ -187,3 +187,21 @@ export const EditImg = styled.img`
     height: 40px;
   }
 `;
+
+
+export const Checkbox = styled.input`
+  margin-right: 6px;
+  margin-top: 6px;
+  width: 23px;
+  border: 1px solid #ddd;
+  height: 23px;
+  border-radius: 8px;
+  &:checked {
+    background-color: #bbb;
+  }
+ @media(max-width: 800px){
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
+  }
+`;

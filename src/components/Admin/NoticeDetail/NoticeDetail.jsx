@@ -13,7 +13,13 @@ const NoticeDetail = () => {
     view_count: 150,
     content: "공지사항의 내용입니다. 여기에 자세한 설명이 포함됩니다."
   };
+  const [isPopup, setIsPopup] = useState(false); // 팝업 설정 여부 상태 관리
 
+
+
+  const handleCheckboxChange = () => {
+    setIsPopup(!isPopup); 
+  };
   const navigate = useNavigate('');
 
   return (
@@ -54,6 +60,19 @@ const NoticeDetail = () => {
                 </React.Fragment>
               ))}
             </D.Cont>
+            <div style={{ display: 'flex', alignItems: 'center', marginTop: '10px' }}>
+              <D.Checkbox
+                type="checkbox"
+                id="popupCheckbox"
+                checked={isPopup}
+                onChange={handleCheckboxChange}
+              />
+              <label htmlFor="popupCheckbox" style={{ marginLeft: '8px', fontSize: '1.2rem' }}>
+                팝업으로 설정
+              </label>
+            </div>
+            <hr style={{ margin: '20px 0', border: '1.3px solid #000' }} />
+
           </D.BoardView>
         </D.BoardViewWrap>
       <D.BtWrap>

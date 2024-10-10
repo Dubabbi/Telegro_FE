@@ -23,7 +23,7 @@ export const MainWrapper2 = styled.div`
     color: black;
     max-width: 1200px;
     margin: 0px auto;
-    margin-left: 14%;
+    margin-left: 7%;
     margin-top: 6%;
     @media(max-width: 780px){
       max-width: 100%;
