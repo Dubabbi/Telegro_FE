@@ -41,7 +41,7 @@ export const SectionTitle = styled.h3`
 `;
 
 export const Title = styled.h1`
-  font-size: 2.6rem;
+  font-size: 2.3rem;
   font-weight: bold;
   margin-bottom: 3rem;
   margin-left: 1%;

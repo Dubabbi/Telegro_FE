@@ -30,7 +30,7 @@ const HeaderContainer = styled.div`
 `;
 
 const Title = styled.h2`
-  font-size: 2.5rem;
+  font-size: 2.3rem;
   font-weight: bold;
   @media(max-width: 780px){
     font-size: 1.9rem;

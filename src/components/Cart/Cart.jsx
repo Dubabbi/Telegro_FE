@@ -223,7 +223,7 @@ export const Title = styled.div`
   }
 
   h1 {
-    font-size: 2.6rem;
+    font-size: 2.3rem;
     font-weight: bold;
 
     @media (max-width: 780px) {

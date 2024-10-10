@@ -26,7 +26,7 @@ const MainWrapper = styled.div`
 `;
 
 const Title = styled.h2`
-  font-size: 2.6rem;
+  font-size: 2.3rem;
   font-weight: bold;
   margin-bottom: 20px;
   @media(max-width: 780px){

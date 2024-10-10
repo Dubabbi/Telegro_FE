@@ -29,7 +29,7 @@ const SectionTitleWrapper = styled.div`
 `;
 
 const SectionTitle = styled.h3`
-  font-size: 2.5rem;
+  font-size: 2.3rem;
   font-weight: bold;
   h1{
     margin-left: 10%;

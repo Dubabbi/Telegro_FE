@@ -19,16 +19,18 @@ export const Section = styled.section`
 
 export const PageTitle = styled.div`
   margin-bottom: 30px;
-  font-size: 100px;
-  
+
 `
 
 export const TitleText = styled.h3`
   margin-top: 15px;  
   margin-left: 10px;
-  font-size: 2rem;
   color: #333333;
   font-weight: bold; 
+  font-size: 2.3rem;
+  @media(max-width: 780px){
+    font-size: 1.9rem;
+  }
 `
 
 export const BoardSearchArea = styled.div`

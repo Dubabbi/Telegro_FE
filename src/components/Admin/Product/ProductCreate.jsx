@@ -4,28 +4,27 @@ import styled from 'styled-components';
 import * as D from '../NoticeDetail/NoticeDetailStyle';
 import * as N from '../Notice/NoticeStyle';
 
-// Main container for the entire form
+
 const MainWrapper = styled.div`
   width: 78%; 
   margin-left: 22%;
   padding: 20px;
 `;
 
-// Form container with a gray background for the section title
+
 const FormWrapper = styled.div`
   width: 100%;
-  background-color: #f9f9f9;
   border: 1px solid #e5e5e5;
   border-radius: 8px;
 `;
 
 const SectionTitleWrapper = styled.div`
-  background-color: #f2f2f2; /* 회색 배경 */
+  background-color: #f2f2f2; 
   padding: 1%;
 `;
 
 const SectionTitle = styled.h3`
-  font-size: 1.5rem;
+  font-size: 2.3rem;
   font-weight: bold;
 `;
 
@@ -57,19 +56,6 @@ const Select = styled.select`
   box-sizing: border-box;
 `;
 
-const Textarea = styled.textarea`
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  font-size: 1rem;
-  min-height: 150px;
-  box-sizing: border-box;
-  resize: none;
-  margin-bottom: 10%;
-  margin-top: 3%;
-`;
-
 const FileInput = styled.input`
   width: 100%;
   padding: 10px;
@@ -81,52 +67,33 @@ const FileInput = styled.input`
   box-sizing: border-box;
 `;
 
-const Button = styled.button`
-  padding: 12px 20px;
-  background-color: #4D44B5;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  font-size: 1rem;
-  cursor: pointer;
-  width: 100%;
-  margin-top: 20px;
 
-  &:hover {
-    background-color: #3b3a9d;
-  }
-`;
-
-// Row container for fields that should be on the same line
 const RowContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 4열로 나누어서 배치 */
+  grid-template-columns: repeat(2, 1fr); 
   grid-column-gap: 20px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 `;
 
-// New container for 모델명 & 상품명을 한 줄로 배치
+
 const NameRowContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* 모델명과 상품명을 한 줄로 배치 */
+  grid-template-columns: repeat(2, 1fr); 
   grid-column-gap: 20px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 `;
 
-// Content & Photo Section Container (좌측)
-const LeftColumn = styled.div`
-  grid-column: 1 / 2; /* 첫 번째 열 차지 */
-`;
 
-// Price Section Container (우측)
 const RightColumn = styled.div`
-  grid-column: 2 / 3; /* 두 번째 열 차지 */
+  flex-direction: row;
+  display: flex;
+  justify-content: space-between;
 `;
 
-// Container for splitting left and right areas
+
 const SplitContainer = styled.div`
   display: grid;
-  grid-template-columns: 2fr 1fr; /* 좌측 2/3, 우측 1/3 비율로 나눔 */
+  grid-template-columns: 2fr 1fr; 
   grid-gap: 20px;
 `;
 
@@ -214,35 +181,7 @@ const ProductCreate = () => {
               <option value="category2">카테고리2</option>
             </Select>
           </div>
-
-
         </RowContainer>
-
-        {/* SplitContainer for 내용, 포토 & 가격 */}
-        <SplitContainer>
-          {/* Left Column: 내용 & 포토 */}
-          <LeftColumn>
-            <div>
-              <Label htmlFor="content">내용 *</Label>
-              <Textarea
-                name="content"
-                id="content"
-                placeholder="내용을 입력해 주세요."
-                value={product.content}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div>
-              <Label htmlFor="photo">Photo *</Label> {/* 이미지 순서 변경 로직 필요 */}
-              <FileInput
-                type="file"
-                name="photo"
-                id="photo"
-                onChange={handleChange}
-              />
-            </div>
-          </LeftColumn>
 
           {/* Right Column: 가격 */}
           <RightColumn>
@@ -294,7 +233,23 @@ const ProductCreate = () => {
               />
             </div>
           </RightColumn>
-        </SplitContainer>
+        {/* SplitContainer for 내용, 포토 & 가격 */}
+        <SplitContainer>
+          {/* Left Column: 내용 & 포토 */}
+
+
+
+            <div>
+              <Label htmlFor="photo">Photo *</Label> {/* 이미지 순서 변경 로직 필요 */}
+              <FileInput
+                type="file"
+                name="photo"
+                id="photo"
+                onChange={handleChange}
+              />
+            </div>
+
+            </SplitContainer>
         </div>
       </FormWrapper>
       <N.Section style={{margin: '0'}}>

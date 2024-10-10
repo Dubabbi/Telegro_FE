@@ -62,7 +62,7 @@ export const PageTitle = styled.div`
   margin-bottom: 30px;
   font-size: 100px;
     h2 { 
-    font-size: 2.6rem;
+    font-size: 2.3rem;
     margin-left: 1%;
     white-space: nowrap;
     font-weight: bold;
@@ -77,7 +77,7 @@ export const PageTitle = styled.div`
 export const TitleText = styled.h3`
   margin-top: 15px;  
   margin-left: 10px;
-  font-size: 2rem;
+  font-size: 2.3rem;
   color: #333333;
   font-weight: bold; 
   @media(max-width: 780px){
