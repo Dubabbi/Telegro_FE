@@ -1,10 +1,15 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  display: flex; 
+  display: flex;
   justify-content: space-between;
   width: 90%;
   margin: 0 auto;
+  flex-grow: 1;
+  flex-direction: row;
+  @media(max-width: 780px){
+    flex-direction: column;
+  }
 `;
 
 export const ProfileWrapper = styled.div`
@@ -13,10 +18,14 @@ export const ProfileWrapper = styled.div`
   border-radius: 10px;
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
   overflow: hidden;
+  @media(max-width: 780px){
+    width: 100%;
+    margin: 0 auto;
+  }
 `;
 
 export const TopBackground = styled.div`
-  height: 150px;
+  height: 250px;
   background-color: #d8d8d8;
 `;
 
@@ -26,28 +35,40 @@ export const BottomBackground = styled.div`
 `;
 
 export const ProfileImage = styled.div`
-  margin-top: -75px;
+  margin-top: -105px;
 `;
 
 export const Name = styled.h2`
-  margin: 10px 0;
-  font-size: 24px;
+  margin: 30px 0;
+  padding-left: 20px;
+  font-size: 2.5rem;
   color: #333;
+  text-align: left;
 `;
 
 export const UserInfoWrapper = styled.div`
   display: flex;
   justify-content: space-between;
+  padding: 0 20px ;
   margin: 20px 0;
+  flex-direction: row;
+  @media(max-width: 780px){
+    flex-direction: column;
+  }
 `;
 
 export const UserDetail = styled.div`
-  text-align: center;
+  text-align: left;
 `;
 
 export const UserLabel = styled.h4`
   font-size: 16px;
+  margin-bottom: 10px;
   color: #777;
+  @media(max-width: 780px){
+    margin-bottom: 0px;
+    display: flex;
+  }
 `;
 
 export const UserInfo = styled.p`
@@ -56,47 +77,67 @@ export const UserInfo = styled.p`
   display: flex;
   align-items: center;
   justify-content: center;
-`;
-
-export const Button = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 10px 20px;
-  background-color: #333;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  &:hover {
-    background-color: #555;
+  @media(max-width: 780px){
+    justify-content: flex-start;
+    margin-top: 8px;
+    margin-bottom: 12px;
   }
 `;
 
-// 우측 배송지 목록 스타일
 export const AddressListWrapper = styled.div`
   width: 35%;
-  background-color: #f9f9f9;
-  border-radius: 10px;
   padding: 20px;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  img{
+    cursor: pointer;
+  }
+  @media(max-width: 780px){
+    width: 100%;
+    margin: 0 auto;
+  }
 `;
 
 export const AddressTitle = styled.h3`
   font-size: 18px;
   color: #333;
-  margin-bottom: 20px;
 `;
 
 export const AddressCard = styled.div`
+  display: flex;
+  align-items: center;
   background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 8px;
-  padding: 15px;
   margin-bottom: 10px;
+  padding: 15px;
+  position: relative;
+`;
+
+export const AddressWrapper = styled.div`
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  padding: 4%;
+  justify-content: space-between;
+  position: relative;
+  align-items: center;
+`;
+
+export const AddressBar = styled.div`
+  background-color: #4D44B5;
+  width: 10px;
+  height: 100%;
+  border-radius: 8px 0 0 8px;
+  position: absolute;
+  left: 0;
+  top: 0;
+`;
+
+export const AddressContent = styled.div`
+  padding-left: 20px;
+  flex-grow: 1;
 `;
 
 export const AddressName = styled.h4`
@@ -120,12 +161,30 @@ export const ViewMoreButton = styled.button`
   margin-top: 15px;
   width: 100%;
   padding: 10px;
-  background-color: #6200ea;
-  color: #fff;
+  background-color: rgba(77, 68, 181, 0.3);
+  color: #4D44B5;
   border: none;
-  border-radius: 5px;
+  border-radius: 10px;
   cursor: pointer;
   &:hover {
-    background-color: #3700b3;
+    background-color: rgba(77, 68, 181, 0.6);  /* 호버 시 배경을 진한 보라색으로 */
+    color: #fff;    
+  }
+`;
+
+
+export const OrderButton = styled.button`
+  margin-top: 25px;
+  margin-left: 7px;
+  width: 30%;
+  padding: 10px;
+  background-color: rgba(77, 68, 181, 0.3);
+  color: #4D44B5;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  &:hover {
+    background-color: rgba(77, 68, 181, 0.6);  /* 호버 시 배경을 진한 보라색으로 */
+    color: #fff;    
   }
 `;

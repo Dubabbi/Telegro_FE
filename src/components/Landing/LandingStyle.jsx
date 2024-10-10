@@ -222,7 +222,6 @@ export const FooterWrapper = styled.div`
     background-color: #697077;
     font-size: 1.2rem;
     padding: 2% 0;
-    margin-top: 4%;
 
 `
 
