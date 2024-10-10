@@ -140,7 +140,30 @@ const PaymentOption = styled.div`
 const RadioButton = styled.input`
   margin-right: 10px;
 `;
-
+export const Checkbox = styled.input`
+  margin-right: 6px;
+  margin-top: 6px;
+  width: 23px;
+  border: 1px solid #ddd;
+  height: 23px;
+  border-radius: 8px;
+  &:checked {
+    background-color: #bbb;
+  }
+ @media(max-width: 800px){
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
+  }
+`;
+export const Select = styled.select`
+  width: 50%;
+  border: 1px solid #ddd;
+  max-height: 30px;
+  min-height: 30px;
+  border-radius: 5px;
+  font-size: 1rem;
+`;
 const CheckboxWrapper = styled.div`
   display: flex;
   align-items: center;
@@ -154,6 +177,13 @@ const CheckboxLabel = styled.label`
 
 const OrderProcess = () => {
   const [isDefaultChecked, setIsDefaultChecked] = useState(false);
+  const [selectedAddress, setSelectedAddress] = useState(''); // 선택된 배송지 관리
+  const handleChange = (e) => {
+    const selectedKey = e.target.value;
+    const selectedAddressValue = AddressList[selectedKey];
+
+    setSelectedAddress(selectedKey);
+  };
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -162,7 +192,11 @@ const OrderProcess = () => {
     detailedAddress: '',
     request: ''
   });
-
+  const AddressList = {
+    A: '배송지1',
+    B: '배송지2',
+    C: '배송지3'
+  };
   // Postcode로부터 주소와 우편번호 가져오는 함수
   const handleAddressComplete = ({ fullAddress, zonecode }) => {
     setFormData({
@@ -180,17 +214,31 @@ const OrderProcess = () => {
         {/* 좌측 배송 정보 입력란 */}
         <LeftSection>
           <SectionTitle>배송 정보</SectionTitle>
+          <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
           <CheckboxWrapper>
-            <input
+            <Checkbox
               type="checkbox"
               checked={isDefaultChecked}
               onChange={() => {
                 setIsDefaultChecked(!isDefaultChecked);
                 handleDefaultAddress();
               }}
-            />
+          />
             <CheckboxLabel>기본 배송지 불러오기</CheckboxLabel>
           </CheckboxWrapper>
+          <Select
+              name="AddressList"
+              value={selectedAddress} // 선택된 값 상태 반영
+              onChange={handleChange}
+            >
+              <option value="">배송지 선택</option>
+              {Object.entries(AddressList).map(([key, value]) => (
+                <option key={key} value={key}>
+                  {value}
+                </option>
+              ))}
+            </Select>
+          </div>
           <DeliveryInfoForm>
             <FormRow>
               <FormInput
