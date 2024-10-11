@@ -1,5 +1,69 @@
 import styled from 'styled-components';
 
+export const GalleryGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);  
+  gap: 20px;  
+  margin: 0 auto;
+  padding: 2%;
+  max-width: 86%;
+
+  @media (max-width: 900px) {
+    grid-template-columns: repeat(3, 1fr);
+    max-width: 90%;
+  }
+
+  @media (max-width: 780px) {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 95%;
+  }
+`;
+
+export const GalleryItem = styled.div`
+  background-color: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+  text-align: center;
+  cursor: pointer;
+  padding-bottom: 7%;
+
+  &:hover {
+    transform: translateY(-10px);  
+  }
+
+  img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;  
+    border-bottom: 2px solid #94A3D8;
+  }
+
+  h3 {
+    padding: 15px;
+    font-size: 1.6rem;
+    color: #333;
+    text-align: center;
+  }
+
+  p {
+    font-size: 1rem;
+    color: #777;
+    margin-bottom: 10px;
+  }
+
+  strong {
+    font-size: 1.1rem;
+    color: #000;
+  }
+
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+`;
+
 export const ProductGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -8,7 +72,7 @@ export const ProductGrid = styled.div`
   @media(max-width:800px){
     grid-template-columns: repeat(3, 1fr);
   }
-  @media(max-width:600px){
+  @media(max-width:780px){
     grid-template-columns: repeat(2, 1fr);
   }
 `;
@@ -53,10 +117,11 @@ export const Inline = styled.div`
   flex-direction: row;
   width: 80%;
   margin-left: 10%;
+  margin-top: 2%;
   justify-content: space-between;
   align-items: center;
   h1 {
-    font-size: 2.6rem;
+    font-size: 2.5rem;
     font-weight: bold;
   }
   

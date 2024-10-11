@@ -23,22 +23,22 @@ const Headset = () => {
   return (
     <>
     <P.PageContainer>
-    <P.Inline style={{width: '78%', border: 'none'}}>
+    <P.Inline style={{marginLeft: '4%', width: '88%', marginBottom: '2%', border: 'none'}}>
       <h1>헤드셋</h1>
       <p>Sort by: Most Popular</p>
     </P.Inline>
-    <P.ProductGrid>
+    <P.GalleryGrid>
       {products.map(product => (
-        <P.ProductBox onClick={() => navigate('/admin/adminproductdetail')} key={product.id}>
+        <P.GalleryItem onClick={() => navigate('/admin/adminproductdetail')} key={product.id}>
           <P.ProductImage src={product.img} alt={product.name} />
           <P.ProductInfo>
             <h3>{product.name}</h3>
             <p>{product.model}</p>
             <strong>{product.price}</strong>
           </P.ProductInfo>
-        </P.ProductBox>
+        </P.GalleryItem>
       ))}
-    </P.ProductGrid>
+    </P.GalleryGrid>
     <N.Add  onClick={() => navigate('/admin/productcreate')} src={editpost} />
     <P.Pagediv>
       <Pagination />
