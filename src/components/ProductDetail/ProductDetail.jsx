@@ -1,117 +1,166 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import img from './example.svg'; 
+import * as P from '../Product/ProductStyle';
+import * as D from '../NoticeDetail/NoticeDetailStyle';
+import * as N from '../Notice/NoticeStyle';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
-
+import Modal from 'react-modal';
+const CloseButton = styled.button`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.9);
+  }
+`;
 const ProductPageWrapper = styled.div`
   display: flex;
-  flex-direction: column;
   justify-content: center;
-  margin: 2% auto 4%;
-  margin-top: 12%;
-  padding: 20px;
+  margin-top: 2%;
+  width: 70%;
+  margin-left: 23%;
+  margin-top: 3vh;
+  padding: 2%;
+  margin-bottom: 4%;
   background-color: #fff;
   border: 1px solid #d3d3d3;
   border-radius: 15px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  width: 70%;
+  flex-direction: column;
+`;
+
+const ProductDetails = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 2%;
+  border-radius: 10px;
+  margin-bottom: 40px;
+`;
+
+const ProductInfoWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  flex: 2;
+`;
+const ModalImage = styled.img`
+  width: 80%;
+  height: auto;
+  max-height: 80vh;
+  object-fit: contain;
+  margin: auto;
+`;
+
+const ArrowButton = styled.button`
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  font-size: 2rem;
+  &:hover {
+    background: rgba(0, 0, 0, 0.7);
+  }
+`;
+
+const LeftArrow = styled(ArrowButton)`
+  left: 5%;
+`;
+
+const RightArrow = styled(ArrowButton)`
+  right: 5%;
 `;
 
 const ProductImage = styled.img`
-  width: 40%;
+  width: 250px;
   height: auto;
-  margin: 0 auto;
+  margin-right: 30px;
+`;
+
+const ProductInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 `;
 
 const ProductTitle = styled.h2`
   font-weight: bold;
-  margin-top: 2%;
   font-size: 2rem;
+  white-space: nowrap;
   color: #303972;
   margin-bottom: 10px;
-  text-align: center;
+  margin-left: 6%;
 `;
 
-const SubTitle = styled.h2`
+const ProductSubtitle = styled.h3`
   font-weight: bold;
-  font-size: 1.7rem;
-  color: #111;
-  margin-bottom: 10px;
-  text-align: center;
-`;
-
-const ProductDescription = styled.p`
-  font-size: 1.3rem;
-  line-height: 1.8;
-  color: #444;
-  margin: 10px auto;
-  width: 70%;
-  text-align: left;
-
-`;
-
-const PriceWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
-  margin-top: 30px;
-`;
-
-const PriceTag = styled.span`
-  padding: 10px 20px;
-  background-color: #f0f0f0;
-  border-radius: 1rem;
-  font-size: 1.3rem;
-  color: #303972;
-`;
-
-const ButtonWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  margin-top: 30px;
+  font-size: 1.6rem;
+  color: #6B6B6B;
+  margin-bottom: 35%;
+  margin-left: 8%;
 `;
 
 const BuyButton = styled.button`
-  padding: 10px 30px;
+  padding: 10px 25px;
   background-color: #4D44B5;
   color: white;
   font-size: 1rem;
   border-radius: 1.5rem;
   border: none;
   cursor: pointer;
-  &:hover {
-    background-color: #37308f;
+  margin-bottom: 20px;
+`;
+
+const PriceWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 90%;
+  margin-left: 5%;
+  margin-bottom: 20px;
+  h1{
+    font-size: 1.4rem;
   }
 `;
-const DescriptionItem = styled.li`
-  margin-bottom: 5px;
+
+const PriceTag = styled.span`
+  padding: 5px 15px;
+  background: rgba(77, 68, 181, 0.2);
+  border-radius: 1rem;
+  align-items: center;
+  color: #444;
+  font-weight: semibold;
+  font-size: 1.3rem;
 `;
-const CartButton = styled.button`
-  padding: 10px 30px;
-  background-color: #fff;
-  border: 1px solid #4D44B5;
-  color: #4D44B5;
-  font-size: 1rem;
-  border-radius: 1.5rem;
-  cursor: pointer;
-  &:hover {
-    background-color: #f0f0f0;
-  }
-`;
+
 const AdditionalImagesWrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  row-gap: 5px; 
-  column-gap: 10px;  
+  row-gap: 5px;  /* 위아래 간격을 5px로 설정 */
+  column-gap: 10px;  /* 좌우 간격 */
   padding-left: 20px;
   align-items: center;
   justify-items: center;
-  height: auto;
+  height: 29.5vh;
   margin: 5% 0;
 `;
+
 const AdditionalImage = styled.img`
   width: 80px;
   height: auto;
@@ -119,13 +168,102 @@ const AdditionalImage = styled.img`
   border: 1px solid #d3d3d3;
   `;
 
+const ContentWrapper = styled.div`
+  display: flex;
+  flex-direction: row; /* 좌우로 배치 */
+  justify-content: space-between; /* 좌우 정렬 */
+  width: 90%;
+  margin-left: 5%;
+  margin-top: 20px;
+  padding-bottom: 5%;
+  padding-top: 3%;
+`;
+
+const DescriptionWrapper = styled.div`
+  flex: 1;
+  margin-right: 20px;
+`;
+
+const DescriptionTitle = styled.h4`
+  font-size: 1.6rem;
+  color: #303972;
+  font-weight: bold;
+  margin-bottom: 10px;
+`;
+
+const DescriptionList = styled.ul`
+  list-style-type: none;
+  margin-top: 2%;
+  padding: 0;
+  font-size: 1.4rem;
+  line-height: 1.7;
+  color: #444;
+`;
+
+const DescriptionItem = styled.li`
+  margin-bottom: 5px;
+`;
+
+const RequestInputWrapper = styled.div`
+  flex: 1;
+`;
+
+const RequestInputLabel = styled.label`
+  font-size: 1.6rem;
+  color: #444;
+  font-weight: bold;
+  margin-bottom: 10px;
+  display: block;
+`;
+
+const RequestInput = styled.textarea`
+  width: 100%;
+  height: 100px;
+  padding: 10px;
+  border: 1px solid #777;
+  border-radius: 10px;
+  resize: none;
+    &::placeholder {
+      color: #444;
+    }
+    &:focus {
+      outline: 2px solid #94A3D8;
+      border: none;
+    }
+`;
+
+const Title = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 70%;
+  margin-top: 5%;
+  margin-left: 15%;
+  margin-bottom: 2%;
+  justify-content: space-between;
+  align-items: center;
+  h1 {
+    font-size: 1.5vw;
+    font-weight: bold;
+  }
+  
+
+`;
+// 메인 컨테이너
+const MainWrapper = styled.div`
+  width: 70%;
+  margin-left: 23%;
+  margin-top: 3vh;
+  padding: 2%;
+`;
 const ProductDetail = () => {
   const navigate = useNavigate();
-    //const { productId } = useParams(); 
   const [product, setProduct] = useState(null);
-  const productId = 3;
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  //const { productId } = useParams(); 
+  const productId = 5;
   useEffect(() => {
-    const productId = 3;
+    const productId = 5;
     const fetchProduct = async () => {
       try {
         const response = await axios.get(`/proxy/products/${productId}`);
@@ -140,6 +278,26 @@ const ProductDetail = () => {
 
     fetchProduct();
   }, [productId]); 
+  const openModal = (index) => {
+    setCurrentImageIndex(index);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const nextImage = () => {
+    setCurrentImageIndex((prevIndex) =>
+      prevIndex === product.pictures.length - 1 ? 0 : prevIndex + 1
+    );
+  };
+
+  const prevImage = () => {
+    setCurrentImageIndex((prevIndex) =>
+      prevIndex === 0 ? product.pictures.length - 1 : prevIndex - 1
+    );
+  };
 
   if (!product) {
     return <div>로딩 중...</div>; 
@@ -147,32 +305,68 @@ const ProductDetail = () => {
 
   return (
     <>
+      <MainWrapper>
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+          <N.PageTitle>
+            <h2 style={{ marginLeft: '1%', fontSize: '1.5vw', fontWeight: 'bold', whiteSpace: 'nowrap' }}>제품 상세</h2>
+          </N.PageTitle>
+          <D.BtLink style={{ padding: '1%', textAlign: 'center', alignItems: 'center', maxHeight: '6vh' }} as={Link} to={`/admin/adminproductedit/${productId}`}>
+            수정
+          </D.BtLink>
+        </div>
+      </MainWrapper>
       <ProductPageWrapper>
-        <ProductImage src={product.pictures[0] || img}  alt="Product Image" />
-        <ProductTitle>모델명: {product.productModel}</ProductTitle>
-        <SubTitle>상품명: {product.productName}</SubTitle>
-        <AdditionalImagesWrapper>
+        <ProductDetails>
+          <ProductInfoWrapper>
+            <ProductImage src={product.pictures[0] || img} alt="Main Product" /> {/* 메인 이미지 표시 */}
+            <ProductInfo>
+              <ProductTitle>{product.productName}</ProductTitle> {/* 상품명 */}
+              <ProductSubtitle>{product.productModel}</ProductSubtitle> {/* 모델명 */}
+            </ProductInfo>
+          </ProductInfoWrapper>
+          <AdditionalImagesWrapper>
             {product.pictures.slice(1).map((picture, index) => (
-              <AdditionalImage key={index} src={picture} alt={`Additional Image ${index + 1}`} />
+              <AdditionalImage
+                key={index}
+                src={picture}
+                alt={`Additional Image ${index + 1}`}
+                onClick={() => openModal(index)} />
             ))}
+                  {/* 모달 */}
+            <Modal
+              isOpen={isModalOpen}
+              onRequestClose={closeModal}
+              style={{
+                content: {
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                  border: 'none',
+                  inset: 0,
+                },
+                overlay: { backgroundColor: 'rgba(0, 0, 0, 0.8)' },
+              }}
+            >
+        <LeftArrow onClick={prevImage}>&lt;</LeftArrow>
+        <ModalImage src={product.pictures[currentImageIndex]} onClick={closeModal} alt="Modal" />
+        <RightArrow onClick={nextImage}>&gt;</RightArrow>
+      </Modal>
           </AdditionalImagesWrapper>
+        </ProductDetails>
         <PriceWrapper>
+          <DescriptionTitle style={{ marginBottom: '0px', alignItems: 'center' }}>가격</DescriptionTitle>
           <PriceTag>Biz: ₩{product.priceBusiness}</PriceTag>
-          {/*
           <PriceTag>B: ₩{product.priceBest}</PriceTag>
           <PriceTag>D: ₩{product.priceDealer}</PriceTag>
           <PriceTag>C: ₩{product.priceCustomer}</PriceTag>
-          */}
         </PriceWrapper>
-        <ProductDescription>
-        <DescriptionItem dangerouslySetInnerHTML={{ __html: product.content }} />
-        </ProductDescription>
+        <ContentWrapper>
+            <DescriptionTitle>상품 설명</DescriptionTitle>
+            <DescriptionList> <DescriptionItem dangerouslySetInnerHTML={{ __html: product.content }} /> {/* 상품 설명 */}
+            </DescriptionList>
 
-
-        <ButtonWrapper>
-          <BuyButton onClick={() => navigate('/orderproduct')}>구매하기</BuyButton>
-          <CartButton>장바구니</CartButton>
-        </ButtonWrapper>
+        </ContentWrapper>
       </ProductPageWrapper>
     </>
   );

@@ -6,6 +6,7 @@ import * as D from '../NoticeDetail/NoticeDetailStyle';
 import * as N from '../Notice/NoticeStyle';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
+import Modal from 'react-modal';
 
 const ProductPageWrapper = styled.div`
   display: flex;
@@ -33,9 +34,39 @@ const ProductDetails = styled.div`
 `;
 
 const ProductInfoWrapper = styled.div`
-  display: flex; /* 가로로 배치 */
+  display: flex;
   align-items: center;
   flex: 2;
+`;
+const ModalImage = styled.img`
+  width: 80%;
+  height: auto;
+  max-height: 80vh;
+  object-fit: contain;
+  margin: auto;
+`;
+
+const ArrowButton = styled.button`
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  font-size: 2rem;
+  &:hover {
+    background: rgba(0, 0, 0, 0.7);
+  }
+`;
+
+const LeftArrow = styled(ArrowButton)`
+  left: 5%;
+`;
+
+const RightArrow = styled(ArrowButton)`
+  right: 5%;
 `;
 
 const ProductImage = styled.img`
@@ -208,9 +239,10 @@ const MainWrapper = styled.div`
 `;
 const AdminProductDetail = () => {
   const navigate = useNavigate();
-  //const { productId } = useParams(); 
-  
   const [product, setProduct] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  //const { productId } = useParams(); 
   const productId = 5;
   useEffect(() => {
     const productId = 5;
@@ -228,6 +260,26 @@ const AdminProductDetail = () => {
 
     fetchProduct();
   }, [productId]); 
+  const openModal = (index) => {
+    setCurrentImageIndex(index);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const nextImage = () => {
+    setCurrentImageIndex((prevIndex) =>
+      prevIndex === product.pictures.length - 1 ? 0 : prevIndex + 1
+    );
+  };
+
+  const prevImage = () => {
+    setCurrentImageIndex((prevIndex) =>
+      prevIndex === 0 ? product.pictures.length - 1 : prevIndex - 1
+    );
+  };
 
   if (!product) {
     return <div>로딩 중...</div>; 
@@ -256,8 +308,32 @@ const AdminProductDetail = () => {
           </ProductInfoWrapper>
           <AdditionalImagesWrapper>
             {product.pictures.slice(1).map((picture, index) => (
-              <AdditionalImage key={index} src={picture} alt={`Additional Image ${index + 1}`} />
+              <AdditionalImage
+                key={index}
+                src={picture}
+                alt={`Additional Image ${index + 1}`}
+                onClick={() => openModal(index)} />
             ))}
+                  {/* 모달 */}
+      <Modal
+        isOpen={isModalOpen}
+        onRequestClose={closeModal}
+        style={{
+          content: {
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+            border: 'none',
+            inset: 0,
+          },
+          overlay: { backgroundColor: 'rgba(0, 0, 0, 0.8)' },
+        }}
+      >
+        <LeftArrow onClick={prevImage}>&lt;</LeftArrow>
+        <ModalImage src={product.pictures[currentImageIndex]} onClick={closeModal} alt="Modal" />
+        <RightArrow onClick={nextImage}>&gt;</RightArrow>
+      </Modal>
           </AdditionalImagesWrapper>
         </ProductDetails>
         <PriceWrapper>
