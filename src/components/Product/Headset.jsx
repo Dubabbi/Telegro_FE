@@ -1,9 +1,9 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import image from './image.svg';
 import Pagination from '../Pagination/Pagination';
-import * as P from './ProductStyle'
+import * as P from './ProductStyle';
 import axios from 'axios';
 
 export const Div = styled.div`
@@ -16,62 +16,57 @@ export const Div = styled.div`
   }
 `;
 
-const Headset = () => {
+const Headset = ({ category = 'HEADSET', page = 0, size = 10 }) => {
   const navigate = useNavigate();
-  const [searchValue, setSearchValue] = useState('');
-  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [products, setProducts] = useState([]);
   const [error, setError] = useState('');
-  const products = [
-    { id: 1, name: '상품명', model: '모델명', price: '880,000원', img: image },
-    { id: 2, name: '헤드셋2', model: '모델명', price: '880,000원', img: image },
-    { id: 3, name: '상품명', model: '모델명', price: '880,000원', img: image },
-    { id: 4, name: '헤드셋2', model: '모델명', price: '880,000원', img: image },
-    { id: 5, name: '상품명', model: '모델명', price: '880,000원', img: image },
-    { id: 6, name: '헤드셋2', model: '모델명', price: '880,000원', img: image },
-    { id: 7, name: '상품명', model: '모델명', price: '880,000원', img: image },
-    { id: 8, name: '헤드셋2', model: '모델명', price: '880,000원', img: image },
-  ];
-  
+
   useEffect(() => {
-    axios
-      .get("/proxy/api/products")
-      .then((response) => {
-        if (response.data.isSuccess) {
-          const sortedData = response.data.data.sort((a, b) => {
-            return new Date(b.createdAt) - new Date(a.createdAt);
-          });
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get('/proxy/products', {
+          params: { category, page, size },
+        });
   
-          setProducts(sortedData); 
-          setFilteredProducts(sortedData); 
+        console.log('API Response:', response); // 응답 데이터 확인
+  
+        if (response.status===200) {
+          setProducts(response.data.data);
         } else {
-          throw new Error("Failed to fetch data");
+          throw new Error(response.data.message || 'Failed to fetch data');
         }
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-        setError(`Failed to load word sets: ${error.message}`);
-      });
-  }, []);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setError(`Failed to load products: ${error.message}`);
+      }
+    };
+  
+    fetchProducts();
+  }, [category, page, size]);
+  
+
+  if (error) {
+    return <div>{error}</div>;
+  }
+
   return (
     <>
-    <Div></Div>
-    <P.Inline>
-      <h1>헤드셋</h1>
-      <p>Sort by: Most Popular</p>
-    </P.Inline>
+      <Div />
+      <P.Inline>
+        <h1>헤드셋</h1>
+        <p>r</p>
+      </P.Inline>
       <P.GalleryGrid>
-        {products.map(product => (
-          <P.GalleryItem key={product.id} onClick={() => navigate('/productdetail')} >
-            <img src={product.img} alt={product.name} />
-            <h3>
-              {product.name}
-            </h3>
-            <p>{product.model}</p>
+        {products.map((product) => (
+          <P.GalleryItem key={product.id} onClick={() => navigate(`/productdetail/${product.id}`)}>
+            <img src={product.coverImage || image} alt={product.name} />
+            <h3>{product.productName}</h3>
+            <p>{product.productModel}</p>
             <strong>{product.price}</strong>
           </P.GalleryItem>
         ))}
       </P.GalleryGrid>
-      <Pagination />
+      <Pagination currentPage={page} />
     </>
   );
 };
