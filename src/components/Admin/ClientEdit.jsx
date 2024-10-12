@@ -159,7 +159,42 @@ function ClientEdit() {
     e.preventDefault();
     console.log('Form Data:', form);
   };
+  // DELETE 요청을 처리하는 함수
+  const handleDelete = async (companyId) => {
+    const token = localStorage.getItem('token'); // JWT 토큰을 로컬 스토리지에서 가져옴
 
+    if (!token) {
+      alert('로그인이 필요합니다.');
+      return;
+    }
+
+    try {
+      const response = await axios.delete(`/proxy/api/companies`, {
+        headers: {
+          Authorization: `Bearer ${token}`, // 인증 토큰을 헤더에 포함
+        },
+        params: { id: companyId }, // 삭제할 공급업체 ID를 쿼리로 전달
+      });
+      alert('정말 회원을 삭제하시겠습니까?');
+      if (response.status === 200) {
+        alert('공급업체가 성공적으로 삭제되었습니다.');
+        navigate('/admin/clientmanagement'); // 삭제 후 관리 페이지로 이동
+      }
+    } catch (error) {
+      if (error.response) {
+        if (error.response.status === 401) {
+          alert('유저 인증 실패: 다시 로그인해 주세요.');
+          navigate('/admin'); // 로그인 페이지로 리다이렉트
+        } else if (error.response.status === 404) {
+          alert('해당 리소스를 찾을 수 없습니다.');
+        } else {
+          alert('서버 오류가 발생했습니다.');
+        }
+      } else {
+        alert('네트워크 오류가 발생했습니다.');
+      }
+    }
+  };
   return (
     <>
     <Container>
@@ -327,6 +362,12 @@ function ClientEdit() {
             </div>
           </Form>
         </div>
+        <D.BtLink
+          as="button"
+          onClick={() => handleDelete('공급업체-ID')}
+        >
+          삭제
+          </D.BtLink>
       </FormWrapper>
     </Container>
         <D.BtWrap style={{ width: '70%', marginLeft: '22.5%', marginBottom: '3%'}}>

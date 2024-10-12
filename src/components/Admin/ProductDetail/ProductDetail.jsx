@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import img from '../../Check/image.svg'; 
 import * as P from '../ProductList/ProductStyle';
 import * as D from '../NoticeDetail/NoticeDetailStyle';
 import * as N from '../Notice/NoticeStyle';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import axios from 'axios';
+
 const ProductPageWrapper = styled.div`
   display: flex;
   justify-content: center;
@@ -206,62 +208,72 @@ const MainWrapper = styled.div`
 `;
 const AdminProductDetail = () => {
   const navigate = useNavigate();
+  //const { productId } = useParams(); 
+  
+  const [product, setProduct] = useState(null);
+  const productId = 3;
+  useEffect(() => {
+    const productId = 3;
+    const fetchProduct = async () => {
+      try {
+        const response = await axios.get(`/proxy/products/${productId}`);
+        if (response.status === 200) {
+          setProduct(response.data.data);
+        }
+      } catch (error) {
+        console.error('Error fetching product:', error);
+        alert('상품 정보를 가져오는 데 실패했습니다.');
+      }
+    };
+
+    fetchProduct();
+  }, [3]); 
+
+  if (!product) {
+    return <div>로딩 중...</div>; 
+  }
+
   return (
-    <> 
-    <MainWrapper>
-        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
-        <N.PageTitle>
-        <h2 style={{marginLeft: '1%', fontSize: '1.5vw', fontWeight: 'bold', whiteSpace: 'nowrap'}}>제품 상세</h2>
-        </N.PageTitle>
-        <D.BtLink style={{padding: '1%', textAlign: 'center', alignItems: 'center', maxHeight: '6vh'}} as={Link} to="/admin/adminproductedit">
-              수정
+    <>
+      <MainWrapper>
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+          <N.PageTitle>
+            <h2 style={{ marginLeft: '1%', fontSize: '1.5vw', fontWeight: 'bold', whiteSpace: 'nowrap' }}>제품 상세</h2>
+          </N.PageTitle>
+          <D.BtLink style={{ padding: '1%', textAlign: 'center', alignItems: 'center', maxHeight: '6vh' }} as={Link} to={`/admin/adminproductedit/${productId}`}>
+            수정
           </D.BtLink>
         </div>
       </MainWrapper>
       <ProductPageWrapper>
         <ProductDetails>
-          {/* 상품 이미지와 정보가 가로로 정렬된 섹션 */}
           <ProductInfoWrapper>
-            <ProductImage src={img} alt="Main Product" />
+            <ProductImage src={product.pictures[0] || img} alt="Main Product" /> {/* 메인 이미지 표시 */}
             <ProductInfo>
-              <ProductTitle>상품명</ProductTitle>
-              <ProductSubtitle>제품명</ProductSubtitle>
+              <ProductTitle>{product.productName}</ProductTitle> {/* 상품명 */}
+              <ProductSubtitle>{product.productModel}</ProductSubtitle> {/* 모델명 */}
             </ProductInfo>
           </ProductInfoWrapper>
-          {/* 우측 추가 상품 이미지 */}
           <AdditionalImagesWrapper>
-            <AdditionalImage src={img} alt="Additional Image 1" />
-            <AdditionalImage src={img} alt="Additional Image 2" />
-            <AdditionalImage src={img} alt="Additional Image 3" />
-            <AdditionalImage src={img} alt="Additional Image 4" />
+            {product.pictures.slice(1).map((picture, index) => (
+              <AdditionalImage key={index} src={picture} alt={`Additional Image ${index + 1}`} />
+            ))}
           </AdditionalImagesWrapper>
         </ProductDetails>
         <PriceWrapper>
-          <DescriptionTitle style={{marginBottom: '0px', alignItems: 'center'}}>가격</DescriptionTitle>
-          <PriceTag>Biz: ₩160,000</PriceTag>
-          <PriceTag>B: ₩110,000</PriceTag>
-          <PriceTag>D: ₩100,000</PriceTag>
-          <PriceTag>C: ₩90,000</PriceTag>
-          </PriceWrapper>
+          <DescriptionTitle style={{ marginBottom: '0px', alignItems: 'center' }}>가격</DescriptionTitle>
+          <PriceTag>Biz: ₩{product.priceBusiness}</PriceTag>
+          <PriceTag>B: ₩{product.priceBest}</PriceTag>
+          <PriceTag>D: ₩{product.priceDealer}</PriceTag>
+          <PriceTag>C: ₩{product.priceCustomer}</PriceTag>
+        </PriceWrapper>
         <ContentWrapper>
-          <DescriptionWrapper>
             <DescriptionTitle>상품 설명</DescriptionTitle>
-            <DescriptionList>
-              <DescriptionItem>- 이 상품은 이런 특징이 있어요.</DescriptionItem>
-              <DescriptionItem>- ~~~~한 장점도 있어요.</DescriptionItem>
-              <DescriptionItem>- 다른 상품들과 이런 차이점이 있어요.</DescriptionItem>
-              <DescriptionItem>- 이 상품은 다양한 장점이 있어요.</DescriptionItem>
-              <DescriptionItem>- 만족도가 높은 제품이에요.</DescriptionItem>
+            <DescriptionList> <DescriptionItem dangerouslySetInnerHTML={{ __html: product.content }} /> {/* 상품 설명 */}
             </DescriptionList>
-          </DescriptionWrapper>
 
-          <RequestInputWrapper>
-            <RequestInputLabel>요청 사항</RequestInputLabel>
-            <RequestInput placeholder="요청 사항을 입력해 주세요." />
-          </RequestInputWrapper>
         </ContentWrapper>
       </ProductPageWrapper>
-
     </>
   );
 };
