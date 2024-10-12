@@ -20,31 +20,41 @@ const ProductCreate = () => {
     priceBest: '',
     priceDealer: '',
     priceCustomer: '',
-    pictures: []
+    pictures: [],
+    previewImage: '' 
   });
   useEffect(() => {
     if (editorRef.current) {
       const editorInstance = editorRef.current.getInstance();
-      // Now you can safely use editorInstance
-      console.log(editorInstance.getHTML()); // Example usage
+
+      console.log(editorInstance.getHTML()); 
     }
   }, []);
-
   const handleChange = e => {
-    const { name, value } = e.target;
-    if (name === 'category') {
+    const { name, value, files } = e.target;
+  
+    if (name === 'options') {
+      // optionsArray는 이제 options 조건문 안에서만 존재하지 않고, 전체 함수 범위에서 사용됩니다.
+      const optionsArray = value.split(',').map(item => item.trim());
+      setProduct(prev => ({
+        ...prev,
+        options: optionsArray
+      }));
+    } else if (name === 'photo' && files.length > 0) {
+      const file = files[0];
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProduct(prev => ({
+          ...prev,
+          previewImage: reader.result // 프리뷰 이미지 상태 업데이트
+        }));
+      };
+      reader.readAsDataURL(file);
+    } else if (name === 'category') {
       setProduct(prev => ({
         ...prev,
         category: value 
       }));
-    } else if (name === 'options') {
-      // Assuming options should be stored as an array of strings
-      const optionsArray = value.split(',').map(item => item.trim());
-      setProduct(prev => ({
-          ...prev,
-          options: optionsArray
-      }));
-
     } else {
       setProduct(prev => ({
         ...prev,
@@ -52,7 +62,7 @@ const ProductCreate = () => {
       }));
     }
   };
-
+  
   const handleEditorChange = () => {
     if (editorRef.current) {
       const htmlContent = editorRef.current.getInstance().getHTML();
@@ -61,54 +71,100 @@ const ProductCreate = () => {
       console.error('Editor not initialized');
     }
   };
+  const handleAddImage = async (event) => {
+    const file = event.target.files[0];
+    
+    if (file) {
+      // 이미지 미리보기 생성
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProduct(prev => ({
+          ...prev,
+          previewImage: reader.result 
+        }));
+      };
+      reader.readAsDataURL(file); 
+      
+      try {
+        // 백엔드에서 presigned URL 가져오기
+        const presignedUrlResponse = await axios.post('/proxy/api/file?prefix=product', {
+          metadata: {
+            description: '이미지 설명',
+            tags: ['태그1', '태그2']
+          }
+        }, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        const presignedUrl = presignedUrlResponse.data.data.url;
+        
+        // presigned URL로 이미지 업로드 (PUT)
+        await axios.put(presignedUrl, file, {
+          headers: {
+            'Content-Type': file.type
+          }
+        });
+
+        // 업로드된 이미지의 URL을 product에 추가
+        const imageUrl = presignedUrl.split('?')[0]; // URL에서 쿼리스트링 제거
+        setProduct(prev => ({
+          ...prev,
+          pictures: [...prev.pictures, imageUrl]
+        }));
+        
+        alert('이미지 업로드에 성공했습니다.');
+      } catch (error) {
+        console.error('이미지 업로드 중 오류가 발생했습니다:', error);
+        alert(`이미지 업로드 중 오류가 발생했습니다: ${error.message}`);
+      }
+    }
+  };
+
+  
 
   const addImageBlobHook = async (blob, callback) => {
-    const formData = new FormData();
-    formData.append('image', blob);
-    
-    const token = localStorage.getItem('token'); // 토큰 가져오기
+    const token = localStorage.getItem('token');
     if (!token) {
       alert('로그인이 필요합니다.');
-      return; 
+      return;
     }
-    
+  
     try {
-      const response = await axios.post(`/proxy/api/file?prefix=product`, formData, {
+      // 백엔드에서 프리사인 URL 가져오기
+      const response = await axios.post(`/proxy/api/file?prefix=product`, {
+        metadata: {
+          description: "새로운 이미지 설명",
+          tags: ["태그1", "태그2"]
+        }
+      }, {
         headers: {
-          'Authorization': `Bearer ${token}`, 
-          'Content-Type': 'multipart/form-data' 
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
         }
       });
-    
-      const imageUrl = response.data.data.url;
-      setProduct(prev => ({
-        ...prev,
-        pictures: [...prev.pictures, imageUrl]
-      }));
-    
-      callback(imageUrl, 'Image');
-      
-
-      updateImageMetadata(imageUrl, {
-        description: "새로운 이미지 설명",
-        tags: ["태그1", "태그2"]
+  
+      const presignedUrl = response.data.data.url;
+  
+      // 이미지 업로드
+      await axios.put(presignedUrl, blob, {
+        headers: {
+          'Content-Type': blob.type,
+        }
       });
-      
+  
+      // 업로드 완료 후 콜백 호출
+      callback(presignedUrl.split('?')[0], 'Image');
     } catch (error) {
-      console.error('Image upload failed:', error.response.data.message); 
-      alert('이미지 업로드 실패: ' + error.response.data.message);
+      console.error('Image upload failed:', error.response ? error.response.data : error.message);
+      alert('이미지 업로드 실패: ' + (error.response ? error.response.data.message : error.message));
     }
   };
   
-  const updateImageMetadata = async (imageUrl, metadata) => {
-    try {
-      const response = await axios.put(`https://thingproxy.freeboard.io/fetch/${imageUrl}`, metadata);
-      console.log('Metadata updated successfully:', response);
-    } catch (error) {
-      console.error('Failed to update metadata:', error.response ? error.response.data : error.message);
-    }
-  };
   
+ 
 
   const handleCreateProduct = async () => {
     const formData = {
@@ -245,8 +301,15 @@ const ProductCreate = () => {
                 type="file"
                 name="photo"
                 id="photo"
-                onChange={handleChange}
+                onChange={handleAddImage}
               />
+                {product.previewImage && (
+                <img 
+                  src={product.previewImage} 
+                  alt="Preview" 
+                  style={{ width: '100%', height: 'auto' }} 
+                />
+              )}
             </div>
             </C.RightColumn>
             {/* Toast UI Editor */}
