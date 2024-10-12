@@ -227,7 +227,7 @@ const AdminProductDetail = () => {
     };
 
     fetchProduct();
-  }, [3]); 
+  }, [productId]); 
 
   if (!product) {
     return <div>로딩 중...</div>; 

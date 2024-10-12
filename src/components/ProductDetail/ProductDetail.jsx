@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import img from './example.svg'; 
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import axios from 'axios';
 
 const ProductPageWrapper = styled.div`
   display: flex;
@@ -18,15 +19,24 @@ const ProductPageWrapper = styled.div`
 `;
 
 const ProductImage = styled.img`
-  width: auto;
-  height: 60vh;
-  margin: 4%;
+  width: 40%;
+  height: auto;
+  margin: 0 auto;
 `;
 
 const ProductTitle = styled.h2`
   font-weight: bold;
+  margin-top: 2%;
   font-size: 2rem;
   color: #303972;
+  margin-bottom: 10px;
+  text-align: center;
+`;
+
+const SubTitle = styled.h2`
+  font-weight: bold;
+  font-size: 1.7rem;
+  color: #111;
   margin-bottom: 10px;
   text-align: center;
 `;
@@ -76,7 +86,9 @@ const BuyButton = styled.button`
     background-color: #37308f;
   }
 `;
-
+const DescriptionItem = styled.li`
+  margin-bottom: 5px;
+`;
 const CartButton = styled.button`
   padding: 10px 30px;
   background-color: #fff;
@@ -89,22 +101,73 @@ const CartButton = styled.button`
     background-color: #f0f0f0;
   }
 `;
+const AdditionalImagesWrapper = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  row-gap: 5px; 
+  column-gap: 10px;  
+  padding-left: 20px;
+  align-items: center;
+  justify-items: center;
+  height: auto;
+  margin: 5% 0;
+`;
+const AdditionalImage = styled.img`
+  width: 80px;
+  height: auto;
+  border-radius: 5px;
+  border: 1px solid #d3d3d3;
+  `;
 
 const ProductDetail = () => {
   const navigate = useNavigate();
-  
+    //const { productId } = useParams(); 
+  const [product, setProduct] = useState(null);
+  const productId = 3;
+  useEffect(() => {
+    const productId = 3;
+    const fetchProduct = async () => {
+      try {
+        const response = await axios.get(`/proxy/products/${productId}`);
+        if (response.status === 200) {
+          setProduct(response.data.data);
+        }
+      } catch (error) {
+        console.error('Error fetching product:', error);
+        alert('상품 정보를 가져오는 데 실패했습니다.');
+      }
+    };
+
+    fetchProduct();
+  }, [productId]); 
+
+  if (!product) {
+    return <div>로딩 중...</div>; 
+  }
+
   return (
     <>
       <ProductPageWrapper>
-        <ProductImage src={img} alt="Product Image" />
-        <ProductTitle>밀도 호밀잡곡식빵</ProductTitle>
+        <ProductImage src={product.pictures[0] || img}  alt="Product Image" />
+        <ProductTitle>모델명: {product.productModel}</ProductTitle>
+        <SubTitle>상품명: {product.productName}</SubTitle>
+        <AdditionalImagesWrapper>
+            {product.pictures.slice(1).map((picture, index) => (
+              <AdditionalImage key={index} src={picture} alt={`Additional Image ${index + 1}`} />
+            ))}
+          </AdditionalImagesWrapper>
+        <PriceWrapper>
+          <PriceTag>Biz: ₩{product.priceBusiness}</PriceTag>
+          {/*
+          <PriceTag>B: ₩{product.priceBest}</PriceTag>
+          <PriceTag>D: ₩{product.priceDealer}</PriceTag>
+          <PriceTag>C: ₩{product.priceCustomer}</PriceTag>
+          */}
+        </PriceWrapper>
         <ProductDescription>
-         상품 상세 설명이 들어갈 곳입니다.
+        <DescriptionItem dangerouslySetInnerHTML={{ __html: product.content }} />
         </ProductDescription>
 
-        <PriceWrapper>
-          <PriceTag>₩15,000</PriceTag>
-        </PriceWrapper>
 
         <ButtonWrapper>
           <BuyButton onClick={() => navigate('/orderproduct')}>구매하기</BuyButton>
