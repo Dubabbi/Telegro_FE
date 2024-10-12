@@ -211,9 +211,9 @@ const AdminProductDetail = () => {
   //const { productId } = useParams(); 
   
   const [product, setProduct] = useState(null);
-  const productId = 3;
+  const productId = 5;
   useEffect(() => {
-    const productId = 3;
+    const productId = 5;
     const fetchProduct = async () => {
       try {
         const response = await axios.get(`/proxy/products/${productId}`);

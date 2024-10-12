@@ -74,58 +74,78 @@ const ProductCreate = () => {
       console.error('Editor not initialized');
     }
   };
+  const MAX_IMAGES = 4;
+
+
   const handleAddImage = async (event) => {
-    const file = event.target.files[0];
-    
-    if (file) {
-      // 이미지 미리보기 생성
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setProduct(prev => ({
-          ...prev,
-          previewImage: reader.result 
-        }));
-      };
-      reader.readAsDataURL(file); 
-      
-      try {
-        // 백엔드에서 presigned URL 가져오기
-        const presignedUrlResponse = await axios.post('/proxy/api/file?prefix=product', {
-          metadata: {
-            description: '이미지 설명',
-            tags: ['태그1', '태그2']
-          }
-        }, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-            'Content-Type': 'application/json'
-          }
-        });
-
-        const presignedUrl = presignedUrlResponse.data.data.url;
-        
-        // presigned URL로 이미지 업로드 (PUT)
-        await axios.put(presignedUrl, file, {
-          headers: {
-            'Content-Type': file.type
-          }
-        });
-
-        // 업로드된 이미지의 URL을 product에 추가
-        const imageUrl = presignedUrl.split('?')[0]; // URL에서 쿼리스트링 제거
-        setProduct(prev => ({
-          ...prev,
-          pictures: [...prev.pictures, imageUrl]
-        }));
-        
-        alert('이미지 업로드에 성공했습니다.');
-      } catch (error) {
-        console.error('이미지 업로드 중 오류가 발생했습니다:', error);
-        alert(`이미지 업로드 중 오류가 발생했습니다: ${error.message}`);
-      }
+    const files = Array.from(event.target.files);
+  
+    if (files.length + product.pictures.length > MAX_IMAGES) {
+      alert(`최대 ${MAX_IMAGES}개의 이미지만 업로드할 수 있습니다.`);
+      return;
+    }
+  
+    try {
+      const newImages = await Promise.all(
+        files.map(async (file) => {
+          const reader = new FileReader();
+          const imageDataUrl = await new Promise((resolve) => {
+            reader.onloadend = () => resolve(reader.result);
+            reader.readAsDataURL(file);
+          });
+  
+          // presigned URL 가져오기
+          const presignedUrlResponse = await axios.post(
+            '/proxy/api/file?prefix=product',
+            {
+              metadata: {
+                description: '이미지 설명',
+                tags: ['태그1', '태그2'],
+              },
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+                'Content-Type': 'application/json',
+              },
+            }
+          );
+  
+          const presignedUrl = presignedUrlResponse.data.data.url;
+  
+          // presigned URL로 이미지 업로드 (PUT)
+          await axios.put(presignedUrl, file, {
+            headers: {
+              'Content-Type': file.type,
+            },
+          });
+  
+          const imageUrl = presignedUrl.split('?')[0]; // URL에서 쿼리스트링 제거
+          return imageUrl;
+        })
+      );
+  
+      // 새로 업로드된 이미지를 상태에 추가
+      setProduct((prev) => ({
+        ...prev,
+        pictures: [...prev.pictures, ...newImages],
+      }));
+  
+      console.log('이미지 업로드에 성공했습니다.');
+    } catch (error) {
+      console.error('이미지 업로드 중 오류가 발생했습니다:', error);
+      alert(`이미지 업로드 중 오류가 발생했습니다: ${error.message}`);
     }
   };
+  
+  
 
+  const handleCoverImageSelect = (image) => {
+    setProduct((prev) => ({
+      ...prev,
+      coverImage: image,
+    }));
+  };
   
 
   const addImageBlobHook = async (blob, callback) => {
@@ -180,7 +200,8 @@ const ProductCreate = () => {
       priceBest: product.priceBest,    
       priceDealer: product.priceDealer,   
       priceCustomer: product.priceCustomer,
-      pictures: product.pictures        
+      pictures: product.pictures ,
+      coverImage: product.coverImage,    
     };
   
     try {
@@ -191,7 +212,7 @@ const ProductCreate = () => {
   
       if (response.status === 200) {
         alert('Product registered successfully.');
-        navigate('/admin/adminproductlist');  // 상품 등록 후 이동할 페이지
+        navigate('/admin/headset');  
       }
     } catch (error) {
       console.error('Error while registering product:', error);
@@ -308,23 +329,56 @@ const ProductCreate = () => {
               </div>
             </C.RightColumn>
             <C.RightColumn>
-            <div>
-              <C.Label htmlFor="photo">Photo *</C.Label> {/* 이미지 순서 변경 로직 필요 */}
-              <C.FileInput
-                type="file"
-                name="photo"
-                id="photo"
-                onChange={handleAddImage}
-              />
-                {product.previewImage && (
-                <img 
-                  src={product.previewImage} 
-                  alt="Preview" 
-                  style={{ width: '100%', height: 'auto' }} 
-                />
-              )}
-            </div>
-            </C.RightColumn>
+  <div>
+    <C.Label htmlFor="photo">사진 업로드 (최대 4개) *</C.Label>
+    <C.FileInput
+      type="file"
+      name="photo"
+      id="photo"
+      multiple
+      onChange={handleAddImage}
+    />
+    <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+      {product.pictures.map((image, index) => (
+        <div key={index} style={{ position: 'relative' }}>
+          <img
+            src={image}
+            alt={`preview-${index}`}
+            style={{
+              width: '100px',
+              height: '100px',
+              objectFit: 'cover',
+              border: product.coverImage === image ? '2px solid green' : 'none',
+            }}
+          />
+          <button
+            style={{
+              position: 'absolute',
+              top: '5px',
+              right: '5px',
+              background: product.coverImage === image ? 'green' : 'white',
+              color: product.coverImage === image ? 'white' : 'black',
+              border: '1px solid black',
+              borderRadius: '50%',
+            }}
+            onClick={(e) => {
+              e.stopPropagation(); // 이벤트 버블링 방지
+              setProduct((prev) => ({
+                ...prev,
+                coverImage: image,
+              }));
+            }}
+          >
+            {product.coverImage === image ? '✔' : '☆'}
+          </button>
+        </div>
+      ))}
+    </div>
+  </div>
+</C.RightColumn>
+
+
+
             {/* Toast UI Editor */}
             <div>
               <div style={{marginBottom: '10px'}}><C.Label  htmlFor="content">상품 설명 *</C.Label></div>
