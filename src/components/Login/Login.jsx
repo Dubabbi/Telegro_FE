@@ -11,11 +11,11 @@ function Login() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post("/proxy/auth/login", {
+      const response = await axios.post("http://ec2-52-78-189-146.ap-northeast-2.compute.amazonaws.com:8080/auth/login", {
         id: id,
         password: password,
       });
-  
+      
       console.log('Response:', response); // 응답 전체 확인
       console.log('Response Data:', response.data); // 응답 데이터 확인
   
