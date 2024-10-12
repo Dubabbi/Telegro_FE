@@ -16,7 +16,7 @@ const ProductCreate = () => {
     options: [],
     category: '',
     content: '',
-    priceBusiness: '',
+    priceBussiness: '',
     priceBest: '',
     priceDealer: '',
     priceCustomer: '',
@@ -168,24 +168,34 @@ const ProductCreate = () => {
 
   const handleCreateProduct = async () => {
     const formData = {
-      ...product,
-      pictures: product.pictures
+      productModel: product.productModel,  
+      productName: product.productName,  
+      options: product.options,           
+      category: product.category,         
+      content: product.content,          
+      priceBussiness: product.priceBussiness,
+      priceBest: product.priceBest,    
+      priceDealer: product.priceDealer,   
+      priceCustomer: product.priceCustomer,
+      pictures: product.pictures        
     };
-
+  
     try {
       const accessToken = localStorage.getItem('token');
       const response = await axios.post('/proxy/api/products', formData, {
         headers: { Authorization: `Bearer ${accessToken}` }
       });
+  
       if (response.status === 200) {
         alert('Product registered successfully.');
-        navigate('/adminproductlist');
+        navigate('/admin/adminproductlist');  // 상품 등록 후 이동할 페이지
       }
     } catch (error) {
       console.error('Error while registering product:', error);
       alert('Failed to register product');
     }
   };
+  
 
   return (
     <C.MainWrapper>
@@ -221,21 +231,21 @@ const ProductCreate = () => {
           </C.NameRowContainer>
           <C.RowContainer>
             <div>
-              <C.Label htmlFor="options">상품 카테고리 *</C.Label>
+              <C.Label htmlFor="category">상품 카테고리 *</C.Label>
               <C.Input
                 type="text"
-                name="options"
-                id="options"
-                value={product.options.join(', ')}
+                name="category"
+                id="category"
+                value={product.category}
                 onChange={handleChange}
               />
             </div>
             <div>
-              <C.Label htmlFor="category">옵션 *</C.Label>
+              <C.Label htmlFor="options">옵션 *</C.Label>
               <C.Select
-                name="category"
-                id="category"
-                value={product.category}
+                name="options"
+                id="options"
+                value={product.options.join(', ')}
                 onChange={handleChange}
               >
                 <option value="">옵션 선택</option>
@@ -247,49 +257,49 @@ const ProductCreate = () => {
             </C.RowContainer>
             <C.RightColumn>
               <div>
-                <C.Label htmlFor="businessPrice">Business *</C.Label>
+                <C.Label htmlFor="priceBussiness">Business *</C.Label>
                 <C.Input
                   type="number"
-                  name="businessPrice"
-                  id="businessPrice"
+                  name="priceBussiness"
+                  id="priceBussiness"
                   placeholder="숫자만 입력해 주세요."
-                  value={product.businessPrice}
+                  value={product.priceBussiness}
                   onChange={handleChange}
                 />
               </div>
 
               <div>
-                <C.Label htmlFor="bestPrice">Best *</C.Label>
+                <C.Label htmlFor="priceBest">Best *</C.Label>
                 <C.Input
                   type="number"
-                  name="bestPrice"
-                  id="bestPrice"
+                  name="priceBest"
+                  id="priceBest"
                   placeholder="숫자만 입력해 주세요."
-                  value={product.bestPrice}
+                  value={product.priceBest}
                   onChange={handleChange}
                 />
               </div>
 
               <div>
-                <C.Label htmlFor="dealerPrice">Dealer *</C.Label>
+                <C.Label htmlFor="priceDealer">Dealer *</C.Label>
                 <C.Input
                   type="number"
-                  name="dealerPrice"
-                  id="dealerPrice"
+                  name="priceDealer"
+                  id="priceDealer"
                   placeholder="숫자만 입력해 주세요."
-                  value={product.dealerPrice}
+                  value={product.priceDealer}
                   onChange={handleChange}
                 />
               </div>
 
               <div>
-                <C.Label htmlFor="customerPrice">Customer *</C.Label>
+                <C.Label htmlFor="priceCustomer">Customer *</C.Label>
                 <C.Input
                   type="number"
-                  name="customerPrice"
-                  id="customerPrice"
+                  name="priceCustomer"
+                  id="priceCustomer"
                   placeholder="숫자만 입력해 주세요."
-                  value={product.customerPrice}
+                  value={product.priceCustomer}
                   onChange={handleChange}
                 />
               </div>
