@@ -19,7 +19,14 @@ export const Section = styled.section`
 
 export const PageTitle = styled.div`
   margin-bottom: 30px;
-
+  white-space: nowrap;
+  font-weight: bold;
+  h2{
+    font-size: 2.3rem;
+    @media(max-width: 780px){
+      font-size: 1.9rem;
+    }
+  }
 `
 
 export const TitleText = styled.h3`
@@ -368,7 +375,7 @@ export const DeleteBtLink = styled.a`
 
 export const Div = styled.div`
   width: 100%;
-  min-height: 20.6vh;
+  min-height: 160px;
   border: none;
   @media (max-width: 780px) {
     max-height: 2vh;

@@ -8,12 +8,11 @@ import Form from 'react-bootstrap/Form';
 // Wrapper for the whole page
 const MainWrapper = styled.div`
   width: 65%; 
-  margin-left: 25%;
+  margin-left: 280px;
   margin-top: 4%;
   @media(max-width: 780px){
     width: 100%; 
-    margin-left: 0px;
-    margin-top: 10%;
+    margin: 0 auto;
   }
 `;
 export const SearchWrap = styled.div`
@@ -40,6 +39,7 @@ const Title = styled.h2`
   margin-bottom: 20px;
   @media(max-width: 780px){
     font-size: 1.9rem;
+    margin-top: 10%;
   }
 `;
 

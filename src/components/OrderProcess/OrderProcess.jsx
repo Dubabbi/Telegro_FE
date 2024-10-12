@@ -6,7 +6,7 @@ import * as C from '../Cart/Cart';
 
 export const Div = styled.div`
   width: 100%;
-  min-height: 15.6vh;
+  min-height: 160px;
   border: none;
   @media (max-width: 780px) {
     max-height: 4vh;

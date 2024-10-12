@@ -7,7 +7,7 @@ const DashboardWrapper = styled.div`
   justify-content: center;
   padding: 20px;
   align-items: center;
-  margin-left: 20%;
+  margin-left: 280px;
   @media(max-width: 780px){
     margin-left: 0px;
     margin-top: 4%;
@@ -15,7 +15,7 @@ const DashboardWrapper = styled.div`
 `;
 
 const TableContainer = styled.div`
-  width: 80%;
+  width: 90%;
   margin-top: 2%;
   @media(max-width: 780px){
     width: 90%;

@@ -152,9 +152,7 @@ const AdditionalImage = styled.img`
 
 const ContentWrapper = styled.div`
   display: flex;
-  flex-direction: row; /* 좌우로 배치 */
-  justify-content: space-between; /* 좌우 정렬 */
-  width: 90%;
+  max-width: 90%;
   margin-left: 5%;
   margin-top: 20px;
   padding-bottom: 5%;
@@ -230,12 +228,14 @@ const Title = styled.div`
   
 
 `;
-// 메인 컨테이너
 const MainWrapper = styled.div`
-  width: 70%;
-  margin-left: 23%;
-  margin-top: 3vh;
+  width: 70%; 
+  margin: 0 auto 0 280px; 
   padding: 2%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 70%; 
 `;
 const AdminProductDetail = () => {
   const navigate = useNavigate();
@@ -287,16 +287,41 @@ const AdminProductDetail = () => {
 
   return (
     <>
-      <MainWrapper>
-        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-          <N.PageTitle>
-            <h2 style={{ marginLeft: '1%', fontSize: '1.5vw', fontWeight: 'bold', whiteSpace: 'nowrap' }}>제품 상세</h2>
-          </N.PageTitle>
-          <D.BtLink style={{ padding: '1%', textAlign: 'center', alignItems: 'center', maxHeight: '6vh' }} as={Link} to={`/admin/adminproductedit/${productId}`}>
-            수정
-          </D.BtLink>
-        </div>
-      </MainWrapper>
+    <MainWrapper>
+      <div 
+        style={{ 
+          display: 'flex', 
+          justifyContent: 'space-between', 
+          alignItems: 'center', 
+          width: '100%', 
+          maxWidth: '70%', 
+          height: '40px', 
+          margin: '0 auto' 
+        }}
+      >
+        <N.PageTitle style={{ margin: '0', padding: '0' }}>
+          <h2>제품 상세</h2>
+        </N.PageTitle>
+
+        <D.BtLink 
+          as={Link} 
+          to={`/admin/adminproductedit/${productId}`} 
+          style={{
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center',
+            height: '40px', 
+            padding: '0 10px', 
+            textDecoration: 'none', 
+            backgroundColor: '#4D44B5', 
+            color: 'white', 
+            borderRadius: '5px'
+          }}
+        >
+          수정
+        </D.BtLink>
+      </div>
+    </MainWrapper>
       <ProductPageWrapper>
         <ProductDetails>
           <ProductInfoWrapper>
@@ -345,7 +370,8 @@ const AdminProductDetail = () => {
         </PriceWrapper>
         <ContentWrapper>
             <DescriptionTitle>상품 설명</DescriptionTitle>
-            <DescriptionList> <DescriptionItem dangerouslySetInnerHTML={{ __html: product.content }} /> {/* 상품 설명 */}
+            <DescriptionList> 
+              <DescriptionItem dangerouslySetInnerHTML={{ __html: product.content }} /> {/* 상품 설명 */}
             </DescriptionList>
 
         </ContentWrapper>

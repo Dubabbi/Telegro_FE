@@ -11,6 +11,7 @@ export const NavWrapper = styled.div`
   z-index: 1000;
   padding: 10px 0;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  height: 150px;
 `;
 
 export const NavContainer = styled.div`

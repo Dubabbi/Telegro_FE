@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 export const MainWrapper = styled.div`
   width: 78%; 
-  margin-left: 22%;
+  margin-left: 280px;
   padding: 20px;
 `;
 

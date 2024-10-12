@@ -237,7 +237,7 @@ const OrderProduct = () => {
 
   return (
     <>
-      <div style={{ width: '100%', minHeight: '22.6vh', border: 'none' }}></div>
+      <div style={{ width: '100%', minHeight: '160px', border: 'none' }}></div>
       <Title><h1>주문하기</h1></Title>
 
       <OrderPageWrapper>

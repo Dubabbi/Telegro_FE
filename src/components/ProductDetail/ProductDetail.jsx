@@ -7,32 +7,13 @@ import * as N from '../Notice/NoticeStyle';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import Modal from 'react-modal';
-const CloseButton = styled.button`
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background-color: rgba(0, 0, 0, 0.7);
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 30px;
-  height: 30px;
-  cursor: pointer;
-  font-size: 1.2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.9);
-  }
-`;
+
 const ProductPageWrapper = styled.div`
   display: flex;
   justify-content: center;
   margin-top: 2%;
   width: 70%;
-  margin-left: 23%;
-  margin-top: 3vh;
+  margin: 0 auto;
   padding: 2%;
   margin-bottom: 4%;
   background-color: #fff;
@@ -248,12 +229,14 @@ const Title = styled.div`
   
 
 `;
-// 메인 컨테이너
 const MainWrapper = styled.div`
-  width: 70%;
-  margin-left: 23%;
-  margin-top: 3vh;
+  width: 70%; /* 가운데 정렬을 위해 고정된 너비 설정 */
+  margin: 160px auto 0 auto; 
   padding: 2%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 70%; /* 최대 너비 설정 */
 `;
 const ProductDetail = () => {
   const navigate = useNavigate();
@@ -305,16 +288,12 @@ const ProductDetail = () => {
 
   return (
     <>
-      <MainWrapper>
-        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-          <N.PageTitle>
-            <h2 style={{ marginLeft: '1%', fontSize: '1.5vw', fontWeight: 'bold', whiteSpace: 'nowrap' }}>제품 상세</h2>
-          </N.PageTitle>
-          <D.BtLink style={{ padding: '1%', textAlign: 'center', alignItems: 'center', maxHeight: '6vh' }} as={Link} to={`/admin/adminproductedit/${productId}`}>
-            수정
-          </D.BtLink>
-        </div>
-      </MainWrapper>
+    <MainWrapper>
+        <N.PageTitle style={{ margin: '0', padding: '0' }}>
+          <h2>제품 상세</h2>
+        </N.PageTitle>
+    </MainWrapper>
+
       <ProductPageWrapper>
         <ProductDetails>
           <ProductInfoWrapper>
@@ -363,7 +342,7 @@ const ProductDetail = () => {
         </PriceWrapper>
         <ContentWrapper>
             <DescriptionTitle>상품 설명</DescriptionTitle>
-            <DescriptionList> <DescriptionItem dangerouslySetInnerHTML={{ __html: product.content }} /> {/* 상품 설명 */}
+            <DescriptionList> <DescriptionItem dangerouslySetInnerHTML={{ __html: product.content }} /> 
             </DescriptionList>
 
         </ContentWrapper>

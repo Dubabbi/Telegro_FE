@@ -52,7 +52,7 @@ export default function Main() {
 
     return (
         <>
-        <div style={{width: '100%', minHeight: '22.6vh', backgroundColor: '#000', border: 'none'}}></div>
+        <div style={{width: '100%', minHeight: '160px', backgroundColor: '#000', border: 'none'}}></div>
         <M.NewContainer
           onMouseEnter={() => setShowArrows(!isMobile && true)}
           onMouseLeave={() => setShowArrows(false)}

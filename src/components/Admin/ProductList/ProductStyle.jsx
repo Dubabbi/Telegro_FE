@@ -14,6 +14,7 @@ export const GalleryGrid = styled.div`
   @media (max-width: 780px) {
     grid-template-columns: repeat(2, 1fr);
     max-width: 100%;
+    width: 100%;
   }
 `;
 
@@ -133,13 +134,13 @@ export const Inline = styled.div`
 `;
 
 export const PageContainer = styled.div`
-  margin-left: 20%; /* 좌측 네비게이션 바와의 간격 */
+  margin-left: 280px; /* 좌측 네비게이션 바와의 간격 */
   padding: 2%;
   margin-top: 1%;
   width: 78%; /* 전체 화면의 78% 차지 */
   @media(max-width: 780px){
     padding: 1%;
-    margin-left: 8%;
+    margin: 0 auto;
   }
 `;
 

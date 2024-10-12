@@ -10,7 +10,7 @@ const Sidebar = styled.div`
   top: 0;
   padding-top: 4%;
   padding-bottom: 2%;
-  width: 20%;
+  max-width: 280px;
   height: 100vh;
   background-color: #4F4F4F;
   display: flex;

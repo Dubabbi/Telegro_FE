@@ -44,7 +44,7 @@ const Mypage = () => {
   };
   return (
     <div style={{ backgroundColor: '#eee' }}>
-      <M.Container style={{ paddingTop: '12%', paddingBottom: '4%' }}>
+      <M.Container style={{ paddingTop: '160px', paddingBottom: '4%' }}>
         <M.ProfileWrapper>
           <M.TopBackground />
           <M.BottomBackground>

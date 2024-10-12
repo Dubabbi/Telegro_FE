@@ -2,12 +2,11 @@ import styled from 'styled-components';
 
 export const Container = styled.div`
   width: 65%; 
-  margin-left: 25%;
+  margin-left: 280px;
   margin-top: 4%;
   @media(max-width: 780px){
     width: 100%; 
-    margin-left: 0px;
-    margin-top: 10%;
+    margin: 0 auto;
   }
 `;
 
@@ -47,6 +46,7 @@ export const Title = styled.h1`
   margin-left: 1%;
   @media(max-width: 780px){
     font-size: 1.9rem;
+    margin-top: 10%;
   }
 `;
 

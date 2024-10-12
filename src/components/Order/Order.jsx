@@ -44,7 +44,7 @@ const Order = () => {
 
   return (
     <N.MainWrapper>
-      <div style={{width: '100%', minHeight: '22.6vh', border: 'none'}}></div>
+      <div style={{width: '100%', minHeight: '160px', border: 'none'}}></div>
       <N.Section>
         <N.PageTitle>
           <N.TitleText>주문 목록</N.TitleText>
