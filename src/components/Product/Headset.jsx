@@ -24,7 +24,7 @@ const Headset = ({ category = 'HEADSET', page = 0, size = 10 }) => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('http://52.78.189.146:8080/products', {
+        const response = await axios.get('/proxy/products', {
           params: { category, page, size },
         });
   

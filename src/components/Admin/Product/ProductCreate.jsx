@@ -254,16 +254,21 @@ const ProductCreate = () => {
             </div>
           </C.NameRowContainer>
           <C.RowContainer>
-            <div>
-              <C.Label htmlFor="category">상품 카테고리 *</C.Label>
-              <C.Input
-                type="text"
-                name="category"
-                id="category"
-                value={product.category}
-                onChange={handleChange}
-              />
-            </div>
+          <div>
+          <C.Label htmlFor="category">상품 카테고리 *</C.Label>
+          <C.Select
+            name="category"
+            id="category"
+            value={product.category}
+            onChange={handleChange}
+          >
+              <option value="">카테고리를 선택하세요</option>
+              <option value="LINE_CORD">라인코드</option>
+              <option value="HEADSET">헤드셋</option>
+              <option value="ACCESSORY">악세서리</option>
+              <option value="RECORDER">녹음기</option>
+          </C.Select>
+        </div>
             <div>
               <C.Label htmlFor="options">옵션 *</C.Label>
               <C.Select
