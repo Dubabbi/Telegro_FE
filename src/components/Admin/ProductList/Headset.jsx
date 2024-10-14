@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import image from './image.svg';
 import { useNavigate } from 'react-router-dom';
 import * as N from '../Notice/NoticeStyle';

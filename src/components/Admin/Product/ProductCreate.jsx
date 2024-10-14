@@ -226,7 +226,7 @@ const ProductCreate = () => {
       <C.SectionTitle style={{margin: '1%', marginBottom: '4%', marginTop: '3%'}}>상품 등록</C.SectionTitle>
       <C.FormWrapper>
       <C.SectionTitleWrapper>
-        <C.SectionTitle style={{fontSize: '1.5vw'}}>상품 등록</C.SectionTitle>
+        <C.SectionTitle style={{fontSize: '1.8rem'}}>상품 등록</C.SectionTitle>
         </C.SectionTitleWrapper>
         <div style={{padding: '2%'}}>
         {/* 모델명 & 상품명 한 줄로 배치 */}
