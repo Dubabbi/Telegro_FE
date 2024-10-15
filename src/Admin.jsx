@@ -39,7 +39,7 @@ export default function Admin() {
         <Route path="recording" element={<Recording />} />
         <Route path="accessory" element={<Accessory />} />
         <Route path="adminproductdetail/:productId" element={<AdminProductDetailPage />} /> 
-        <Route path="adminproductedit" element={<AdminProductEditPage />} />
+        <Route path="adminproductedit/:productId" element={<AdminProductEditPage />} />
         <Route path="adminorderlist" element={<AdminOrderListPage />} />
         <Route path="addclient" element={<AddClientPage />} />
         <Route path="clientedit" element={<ClientEditPage />} />

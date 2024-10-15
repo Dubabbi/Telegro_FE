@@ -82,7 +82,7 @@ const ProductEdit = () => {
 
     try {
       const response = await axios.patch(
-        `/proxy/products/${productId}`,
+        `https://api.telegro.kr/api/products/${productId}`,
         updatedProduct,
         {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }

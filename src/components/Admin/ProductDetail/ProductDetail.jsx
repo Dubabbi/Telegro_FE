@@ -286,23 +286,18 @@ const AdminProductDetail = () => {
   const handleDelete = async () => {
     if (window.confirm('이 제품을 삭제하시겠습니까?')) {
       try {
-        const response = await axios.delete(`https://api.telegro.kr/products/${productId}`);
+        const response = await axios.delete(`https://api.telegro.kr/api/products/${productId}`);
         if (response.status === 200) {
           alert('정상 처리 되었습니다.');
           navigate('/admin/adminproductlist'); 
-        } else {
-          throw new Error('Unknown response');
+        } else if (response.status === 403) {
+          alert("관리자 권한이 필요합니다.");
         }
       } catch (error) {
-        if (error.response && error.response.data.code === 40302) {
-          alert('관리자 권한이 필요합니다.');
-        } else {
-          console.error('Error deleting product:', error);
-          alert('제품 삭제에 실패했습니다.');
-        }
+        console.error(error);
       }
     }
-  };
+    };
 
   if (!product) {
     return <div>로딩 중...</div>; 
