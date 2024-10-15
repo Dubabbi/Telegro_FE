@@ -15,7 +15,7 @@ export default defineConfig({
     port: 5173,
     proxy: {
       '/proxy': {
-        target: 'http://ec2-52-78-189-146.ap-northeast-2.compute.amazonaws.com:8080',
+        target: 'https://api.telegro.kr',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/proxy/, ''),
         secure: false,

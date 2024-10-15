@@ -243,13 +243,12 @@ const ProductDetail = () => {
   const [product, setProduct] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  //const { productId } = useParams(); 
-  const productId = 5; // 추후 동적으로 수정하기
+  const { productId } = useParams(); 
+
   useEffect(() => {
-    const productId = 5;
     const fetchProduct = async () => {
       try {
-        const response = await axios.get(`/proxy/products/${productId}`);
+        const response = await axios.get(`https://api.telegro.kr/products/${productId}`);
         if (response.status === 200) {
           setProduct(response.data.data);
         }
@@ -258,9 +257,9 @@ const ProductDetail = () => {
         alert('상품 정보를 가져오는 데 실패했습니다.');
       }
     };
-
     fetchProduct();
-  }, [productId]); 
+  }, [productId]);
+   
   const openModal = (index) => {
     setCurrentImageIndex(index);
     setIsModalOpen(true);

@@ -287,7 +287,7 @@ const AdminProductDetail = () => {
     if (window.confirm('이 제품을 삭제하시겠습니까?')) {
       try {
         const response = await axios.delete(`https://api.telegro.kr/products/${productId}`);
-        if (response.data.code === 20000) {
+        if (response.status === 200) {
           alert('정상 처리 되었습니다.');
           navigate('/admin/adminproductlist'); 
         } else {
