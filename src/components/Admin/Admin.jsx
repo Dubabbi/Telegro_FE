@@ -12,7 +12,7 @@ function Admin() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post("/proxy/auth/login", {
+      const response = await axios.post("https://api.telegro.kr/auth/login", {
         id: id,
         password: password,
       });

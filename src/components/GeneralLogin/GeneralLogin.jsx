@@ -11,7 +11,7 @@ function GeneralLogin() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post("http://52.78.189.146:8080/auth/login", {
+      const response = await axios.post("https://api.telegro.kr/auth/login", {
         id: id,
         password: password,
       });

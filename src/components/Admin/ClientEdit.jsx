@@ -169,7 +169,7 @@ function ClientEdit() {
     }
 
     try {
-      const response = await axios.delete(`/proxy/api/companies`, {
+      const response = await axios.delete(`https://api.telegro.kr/api/companies`, {
         headers: {
           Authorization: `Bearer ${token}`, // 인증 토큰을 헤더에 포함
         },

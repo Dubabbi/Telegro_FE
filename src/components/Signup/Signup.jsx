@@ -67,7 +67,7 @@ function Signup() {
 
   const handleSignupClick = async () => {
     try {
-      const response = await axios.post("/proxy/auth/signup", {
+      const response = await axios.post("https://api.telegro.kr/auth/signup", {
         userid: id,
         username: name,
         password: password,

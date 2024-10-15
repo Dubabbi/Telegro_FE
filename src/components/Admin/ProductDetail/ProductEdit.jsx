@@ -11,7 +11,7 @@ import '@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-sy
 import * as C from '../Product/ProductCreateStyle';
 
 const ProductEdit = () => {
-  const { productId } = useParams(); // URL에서 productId 가져오기
+  const { productId } = useParams();
   const navigate = useNavigate();
   const editorRef = useRef();
   
@@ -33,7 +33,6 @@ const ProductEdit = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const productId = 5;
     const fetchProduct = async () => {
       try {
         const response = await axios.get(`/proxy/products/${productId}`);

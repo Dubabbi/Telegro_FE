@@ -79,7 +79,7 @@ function AddClient() {
       const DTO = {signUpUserInfoDto, companyRequestDTO}
       
     
-      const response = await axios.post('/proxy/api/companies', DTO, { headers });
+      const response = await axios.post('https://api.telegro.kr/api/companies', DTO, { headers });
       if (response.status === 200) {
         console.log('사용자 정보');
 

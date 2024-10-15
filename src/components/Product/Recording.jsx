@@ -24,7 +24,7 @@ const Recording = ({ category = 'RECORDER', page = 0, size = 10 }) => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('/proxy/products', {
+        const response = await axios.get('https://api.telegro.kr/products', {
           params: { category, page, size },
         });
   

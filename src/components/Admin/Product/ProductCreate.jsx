@@ -206,7 +206,7 @@ const ProductCreate = () => {
   
     try {
       const accessToken = localStorage.getItem('token');
-      const response = await axios.post('/proxy/api/products', formData, {
+      const response = await axios.post('https://api.telegro.kr/api/products', formData, {
         headers: { Authorization: `Bearer ${accessToken}` }
       });
   

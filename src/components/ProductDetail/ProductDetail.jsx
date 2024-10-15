@@ -244,7 +244,7 @@ const ProductDetail = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   //const { productId } = useParams(); 
-  const productId = 5;
+  const productId = 5; // 추후 동적으로 수정하기
   useEffect(() => {
     const productId = 5;
     const fetchProduct = async () => {
@@ -291,6 +291,7 @@ const ProductDetail = () => {
     <MainWrapper>
         <N.PageTitle style={{ margin: '0', padding: '0' }}>
           <h2>제품 상세</h2>
+          <p>category: {product.category}</p>
         </N.PageTitle>
     </MainWrapper>
 

@@ -1,3 +1,4 @@
+import { FaEdit, FaTrash } from 'react-icons/fa'; 
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import img from '../../Check/image.svg'; 
@@ -237,15 +238,15 @@ const MainWrapper = styled.div`
   align-items: center;
   max-width: 70%; 
 `;
+
 const AdminProductDetail = () => {
   const navigate = useNavigate();
   const [product, setProduct] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  //const { productId } = useParams(); 
-  const productId = 5;
+  const { productId } = useParams(); 
+  
   useEffect(() => {
-    const productId = 5;
     const fetchProduct = async () => {
       try {
         const response = await axios.get(`/proxy/products/${productId}`);
@@ -260,6 +261,7 @@ const AdminProductDetail = () => {
 
     fetchProduct();
   }, [productId]); 
+
   const openModal = (index) => {
     setCurrentImageIndex(index);
     setIsModalOpen(true);
@@ -281,47 +283,62 @@ const AdminProductDetail = () => {
     );
   };
 
+  const handleDelete = async () => {
+    if (window.confirm('이 제품을 삭제하시겠습니까?')) {
+      try {
+        const response = await axios.delete(`/proxy/products/${productId}`);
+        if (response.data.code === 20000) {
+          alert('정상 처리 되었습니다.');
+          navigate('/admin/adminproductlist'); 
+        } else {
+          throw new Error('Unknown response');
+        }
+      } catch (error) {
+        if (error.response && error.response.data.code === 40302) {
+          alert('관리자 권한이 필요합니다.');
+        } else {
+          console.error('Error deleting product:', error);
+          alert('제품 삭제에 실패했습니다.');
+        }
+      }
+    }
+  };
+
   if (!product) {
     return <div>로딩 중...</div>; 
   }
 
   return (
     <>
-    <MainWrapper>
-      <div 
-        style={{ 
-          display: 'flex', 
-          justifyContent: 'space-between', 
-          alignItems: 'center', 
-          width: '100%', 
-          maxWidth: '70%', 
-          height: '40px', 
-          margin: '0 auto' 
-        }}
-      >
-        <N.PageTitle style={{ margin: '0', padding: '0' }}>
-          <h2>제품 상세</h2>
-        </N.PageTitle>
-
-        <D.BtLink 
-          as={Link} 
-          to={`/admin/adminproductedit/${productId}`} 
-          style={{
+      <MainWrapper>
+        <div 
+          style={{ 
             display: 'flex', 
+            justifyContent: 'space-between', 
             alignItems: 'center', 
-            justifyContent: 'center',
+            width: '100%', 
+            maxWidth: '80%', 
             height: '40px', 
-            padding: '0 10px', 
-            textDecoration: 'none', 
-            backgroundColor: '#4D44B5', 
-            color: 'white', 
-            borderRadius: '5px'
+            margin: '0 auto',
+            paddingTop: '10%'
           }}
         >
-          수정
-        </D.BtLink>
-      </div>
-    </MainWrapper>
+          <N.PageTitle style={{ margin: '0', padding: '0' }}>
+            <h2>제품 상세</h2>
+          </N.PageTitle>
+
+          <div>
+            <FaEdit
+              onClick={() => navigate(`/admin/adminproductedit/${productId}`)}
+              style={{ cursor: 'pointer', marginRight: '10px', fontSize: '24px', color: '#4D44B5' }}
+            />
+            <FaTrash
+              onClick={handleDelete}
+              style={{ cursor: 'pointer', fontSize: '24px', color: '#E53E3E' }}
+            />
+          </div>
+        </div>
+      </MainWrapper>
       <ProductPageWrapper>
         <ProductDetails>
           <ProductInfoWrapper>
@@ -339,22 +356,22 @@ const AdminProductDetail = () => {
                 alt={`Additional Image ${index + 1}`}
                 onClick={() => openModal(index)} />
             ))}
-                  {/* 모달 */}
-      <Modal
-        isOpen={isModalOpen}
-        onRequestClose={closeModal}
-        style={{
-          content: {
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: 'rgba(0, 0, 0, 0.8)',
-            border: 'none',
-            inset: 0,
-          },
-          overlay: { backgroundColor: 'rgba(0, 0, 0, 0.8)' },
-        }}
-      >
+            {/* 모달 */}
+            <Modal
+              isOpen={isModalOpen}
+              onRequestClose={closeModal}
+              style={{
+                content: {
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                  border: 'none',
+                  inset: 0,
+                },
+                overlay: { backgroundColor: 'rgba(0, 0, 0, 0.8)' },
+              }}
+            >
         <LeftArrow onClick={prevImage}>&lt;</LeftArrow>
         <ModalImage src={product.pictures[currentImageIndex]} onClick={closeModal} alt="Modal" />
         <RightArrow onClick={nextImage}>&gt;</RightArrow>

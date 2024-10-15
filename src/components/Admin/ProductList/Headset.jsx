@@ -20,7 +20,7 @@ const Headset = ({ category = 'HEADSET', page = 0, size = 10 }) => {
           params: { category, page, size },
         });
   
-        console.log('API Response:', response); // 응답 데이터 확인
+        console.log('API Response:', response); 
   
         if (response.status===200) {
           setProducts(response.data.data);
@@ -50,7 +50,7 @@ const Headset = ({ category = 'HEADSET', page = 0, size = 10 }) => {
       </P.Inline>
       <P.GalleryGrid>
         {products.map((product) => (
-          <P.GalleryItem key={product.id} onClick={() => navigate(`'/admin/adminproduct/${product.id}`)}>
+          <P.GalleryItem key={product.id} onClick={() => navigate(`/admin/adminproduct/${product.id}`)}>
             <P.ProductImage src={product.coverImage || image} alt={product.name} />
             <P.ProductInfo>
             <h3>{product.productName}</h3>
