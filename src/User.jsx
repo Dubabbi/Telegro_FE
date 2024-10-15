@@ -33,7 +33,7 @@ export default function User() {
         <Route path="/notice" element={<NoticePage />} />
         <Route path="/noticedetail" element={<NoticeDetailPage />} />
         <Route path="/orderProduct" element={<OrderProductPage />} />
-        <Route path="/productdetail" element={<ProductDetailPage />} />
+        <Route path="/productdetail/:productId" element={<ProductDetailPage />} />
         <Route path="/order" element={<OrderPage />} />
         <Route path="/headset" element={<Headset />} />
         <Route path="/lineCord" element={<LineCord />} />

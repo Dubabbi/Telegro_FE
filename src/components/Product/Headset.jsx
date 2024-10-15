@@ -30,24 +30,24 @@ const Headset = ({ category = 'HEADSET', page = 0, size = 10 }) => {
   
         console.log('API Response:', response); // 응답 데이터 확인
   
-        if (response.status===200) {
-          setProducts(response.data.data);
+        if (response.status === 200) {
+          setProducts(response.data.data);  // 데이터 설정
         } else {
           throw new Error(response.data.message || 'Failed to fetch data');
         }
       } catch (error) {
         console.error('Error fetching data:', error);
-        setError(`Failed to load products: ${error.message}`);
+        setError(`Failed to load products: ${error.message}`);  // 에러 설정
       }
     };
   
     fetchProducts();
   }, [category, page, size]);
-  
 
   if (error) {
-    return <div>{error}</div>;
+    return <div>{error}</div>;  // 에러 표시
   }
+
 
   return (
     <>

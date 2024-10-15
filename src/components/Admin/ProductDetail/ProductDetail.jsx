@@ -249,7 +249,7 @@ const AdminProductDetail = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await axios.get(`/proxy/products/${productId}`);
+        const response = await axios.get(`https://api.telegro.kr/products/${productId}`);
         if (response.status === 200) {
           setProduct(response.data.data);
         }
@@ -286,7 +286,7 @@ const AdminProductDetail = () => {
   const handleDelete = async () => {
     if (window.confirm('이 제품을 삭제하시겠습니까?')) {
       try {
-        const response = await axios.delete(`/proxy/products/${productId}`);
+        const response = await axios.delete(`https://api.telegro.kr/products/${productId}`);
         if (response.data.code === 20000) {
           alert('정상 처리 되었습니다.');
           navigate('/admin/adminproductlist'); 

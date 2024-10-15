@@ -35,7 +35,7 @@ const ProductEdit = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await axios.get(`/proxy/products/${productId}`);
+        const response = await axios.get(`https://api.telegro.kr/products/${productId}`);
         if (response.status === 200) {
           setProduct(response.data.data);
           setIsLoading(false);

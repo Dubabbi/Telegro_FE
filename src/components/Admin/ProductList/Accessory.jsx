@@ -50,7 +50,7 @@ const Accessory = ({ category = 'ACCESSORY', page = 0, size = 10 }) => {
       </P.Inline>
       <P.GalleryGrid>
         {products.map((product) => (
-          <P.GalleryItem key={product.id} onClick={() => navigate(`'/admin/adminproduct/${product.id}`)}>
+          <P.GalleryItem key={product.id} onClick={() => navigate(`/admin/adminproductdetail/${product.id}`)}>
             <P.ProductImage src={product.coverImage || image} alt={product.name} />
             <P.ProductInfo>
             <h3>{product.productName}</h3>

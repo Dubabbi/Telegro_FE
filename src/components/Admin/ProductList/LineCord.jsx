@@ -16,7 +16,7 @@ const LineCord = ({ category = 'LINE_CORD', page = 0, size = 10 }) => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('/proxy/products', {
+        const response = await axios.get('https://api.telegro.kr/products', {
           params: { category, page, size },
         });
   
@@ -50,7 +50,7 @@ const LineCord = ({ category = 'LINE_CORD', page = 0, size = 10 }) => {
       </P.Inline>
       <P.GalleryGrid>
         {products.map((product) => (
-          <P.GalleryItem key={product.id} onClick={() => navigate(`'/admin/adminproduct/${product.id}`)}>
+          <P.GalleryItem key={product.id} onClick={() => navigate(`/admin/adminproductdetail/${product.id}`)}>
             <P.ProductImage src={product.coverImage || image} alt={product.name} />
             <P.ProductInfo>
             <h3>{product.productName}</h3>

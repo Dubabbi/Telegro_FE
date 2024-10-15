@@ -38,7 +38,7 @@ export default function Admin() {
         <Route path="lineCord" element={<LineCord />} />
         <Route path="recording" element={<Recording />} />
         <Route path="accessory" element={<Accessory />} />
-        <Route path="adminproductdetail" element={<AdminProductDetailPage />} /> 
+        <Route path="adminproductdetail/:productId" element={<AdminProductDetailPage />} /> 
         <Route path="adminproductedit" element={<AdminProductEditPage />} />
         <Route path="adminorderlist" element={<AdminOrderListPage />} />
         <Route path="addclient" element={<AddClientPage />} />
