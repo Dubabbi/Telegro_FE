@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import * as N from './NavbarStyle';
 import { FaSearch, FaCog, FaSignOutAlt, FaChevronDown, FaChevronRight, FaBars, FaTimes } from 'react-icons/fa';
 import { useNavigate, useLocation } from 'react-router-dom';
-import LogoImage from '/src/assets/image/Landing/logo.svg';  // 로고 파일 경로
+import LogoImage from '/src/assets/image/Landing/logo.svg'; 
+import Avvvatars from 'avvvatars-react';
 
 const TopBar = styled.div`
   display: flex;
@@ -16,8 +16,6 @@ const TopBar = styled.div`
   border-radius: 10px;
   z-index: 4000;
 `;
-
-
 
 const LogoImg = styled.img`
   width: 30px;
@@ -41,6 +39,7 @@ const MenuButton = styled.button`
     display: block; 
   }
 `;
+
 const Sidebar = styled.div`
   position: fixed;
   left: 0;
@@ -56,13 +55,11 @@ const Sidebar = styled.div`
   padding: 1%;
   z-index: 1000;
   transition: transform 0.3s ease-in-out;
-
   @media (max-width: 780px) {
-    width: 60%; 
-    transform: ${({ show }) => (show ? 'translateX(0)' : 'translateX(-100%)')}; /* 모바일일 때 사이드바의 이동을 제어 */
+    width: 60%;
+    transform: ${({ show }) => (show ? 'translateX(0)' : 'translateX(-100%)')};
   }
 `;
-
 
 const LogoWrapper = styled.div`
   display: flex;
@@ -73,7 +70,6 @@ const LogoWrapper = styled.div`
   flex-direction: row;
   margin-bottom: 4%;
 `;
-
 const LogoImag = styled.img`
   width: 35%;
   height: auto;
@@ -84,6 +80,7 @@ const LogoText = styled.h1`
   font-size: 1.8rem;
   font-weight: bold;
 `;
+
 
 const SearchBar = styled.div`
   display: flex;
@@ -102,6 +99,7 @@ const SearchInput = styled.input`
   width: 100%;
   padding-left: 10px;
 `;
+
 const MenuWrapper = styled.div`
   width: 100%;
   flex-grow: 1;
@@ -114,12 +112,10 @@ const MenuItem = styled.div`
   color: #D3D3D3;
   font-size: 1.1rem;
   cursor: pointer;
-
   &:hover {
     background-color: #6B6B6B;
     color: white;
   }
-  
   svg {
     margin-right: 10px;
   }
@@ -156,10 +152,9 @@ const SubMenuWrapper = styled.div`
 `;
 
 
-
 const FooterWrapper = styled.div`
   margin-top: auto;
-    width: 100%;
+  width: 100%;
 `;
 
 const ProfileWrapper = styled.div`
@@ -170,7 +165,6 @@ const ProfileWrapper = styled.div`
   border-radius: 10px;
   margin-bottom: 3%;
 `;
-
 const ProfilePic = styled.div`
   width: 40px;
   height: 40px;
@@ -178,6 +172,7 @@ const ProfilePic = styled.div`
   border-radius: 50%;
   margin-right: 10px;
 `;
+
 
 const ProfileInfo = styled.div`
   color: white;
@@ -197,43 +192,56 @@ const SettingsWrapper = styled.div`
     color: #fff;
   }
 `;
-
 const LogoutButton = styled.div`
   color: red;
   padding: 10px 20px;
   cursor: pointer;
-
   &:hover {
     color: #ff5a5a;
   }
 `;
 
 export default function MobileNavbar() {
-    const [isSubMenuOpen, setIsSubMenuOpen] = useState(false);
-    const [isMobileSidebarVisible, setIsMobileSidebarVisible] = useState(false);
-    const navigate = useNavigate();
-    const location = useLocation();
-  
-    useEffect(() => {
-      setIsMobileSidebarVisible(false); 
-      setIsSubMenuOpen(false);
-    }, [location.pathname]);
-  
-    const toggleSidebar = () => {
-      setIsMobileSidebarVisible(!isMobileSidebarVisible);
-    };
-    const toggleSubMenu = () => {
-      setIsSubMenuOpen(!isSubMenuOpen);
-    };
-    useEffect(() => {
-      setIsMobileSidebarVisible(false);
-      setIsSubMenuOpen(false); // 서브메뉴 초기화
-    }, [location.pathname]);
-  
+  const [isSubMenuOpen, setIsSubMenuOpen] = useState(false);
+  const [isMobileSidebarVisible, setIsMobileSidebarVisible] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userInfo, setUserInfo] = useState({
+    id: 'Justin Hope',
+    name: '홍길동',
+    avatarUrl: 'https://example.com/avatar.jpg', // User avatar URL
+  });
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    // Reset sidebar visibility when navigating to a new route
+    setIsMobileSidebarVisible(false);
+    setIsSubMenuOpen(false);
+
+    // Check login status
+    const token = localStorage.getItem('token');
+    setIsLoggedIn(!!token); // Set login status based on token existence
+  }, [location.pathname]);
+
+  const toggleSidebar = () => {
+    setIsMobileSidebarVisible(!isMobileSidebarVisible);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setIsLoggedIn(false);
+    navigate('/login'); // Redirect to login after logout
+  };
+  const toggleSubMenu = () => {
+    setIsSubMenuOpen(!isSubMenuOpen);
+  };
+  useEffect(() => {
+    setIsMobileSidebarVisible(false);
+    setIsSubMenuOpen(false); // 서브메뉴 초기화
+  }, [location.pathname]);
 
   return (
     <>
-      {/* 상단 바 */}
       <TopBar>
         <MenuButton onClick={toggleSidebar}>
           {isMobileSidebarVisible ? <FaTimes /> : <FaBars />}
@@ -244,24 +252,21 @@ export default function MobileNavbar() {
         </LogoWrapper>
       </TopBar>
 
-      {/* 사이드바 */}
       <Sidebar show={isMobileSidebarVisible}>
       <LogoWrapper style={{opacity: '0'}}>
           <LogoImg src={LogoImage} alt="Telegro Logo" />
           <LogoText>Telegro</LogoText>
         </LogoWrapper>
-
-        <SearchBar style={{marginTop: '2%'}}>
+        <SearchBar style={{ marginTop: '2%' }}>
           <FaSearch />
           <SearchInput type="text" placeholder="Search" />
         </SearchBar>
 
         <MenuWrapper>
-          <MenuItem style={{cursor: 'default'}} className="active">
+        <MenuItem style={{cursor: 'default'}} className="active">
             <FaCog />
             Dashboard
           </MenuItem>
-
           <MenuItem onClick={() => navigate('/cart')}>
             <FaCog />
             장바구니
@@ -305,18 +310,27 @@ export default function MobileNavbar() {
             </SubMenu>
           </SubMenuWrapper>
         </MenuWrapper>
+
         <FooterWrapper>
-          <ProfileWrapper>
-            <ProfilePic />
-            <ProfileInfo>
-              <div>회원명</div> {/* 비회원인 경우 '비회원' */}
-              <div style={{ fontSize: '0.8rem', color: '#FFD700' }}>일반회원</div> {/* 등급 */}
-            </ProfileInfo>
-          </ProfileWrapper>
-          <LogoutButton onClick={() => navigate('/logout')}>
-            <FaSignOutAlt />
-            Log out
-          </LogoutButton>
+          {isLoggedIn ? (
+            <ProfileWrapper>
+              <Avvvatars value={userInfo.id} size={40} />
+              <ProfileInfo style={{marginLeft: '10px'}}>
+                <div>{userInfo.name}</div>
+                <div style={{ fontSize: '0.8rem', color: '#FFD700' }}>일반회원</div>
+              </ProfileInfo>
+              <LogoutButton onClick={handleLogout}>
+              <FaSignOutAlt />
+              Log out
+            </LogoutButton>
+            </ProfileWrapper>
+          ) : (
+            <ProfileWrapper onClick={() => navigate('/login')}>
+              <ProfileInfo>
+                <div>로그인해주세요</div>
+              </ProfileInfo>
+            </ProfileWrapper>
+          )}
         </FooterWrapper>
       </Sidebar>
     </>
