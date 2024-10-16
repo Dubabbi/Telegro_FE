@@ -151,13 +151,12 @@ const AdditionalImage = styled.img`
 
 const ContentWrapper = styled.div`
   display: flex;
-  flex-direction: row; /* 좌우로 배치 */
-  justify-content: space-between; /* 좌우 정렬 */
+  flex-direction: column;
+  justify-content: center;
   width: 90%;
-  margin-left: 5%;
-  margin-top: 20px;
+  margin: 0 auto;
   padding-bottom: 5%;
-  padding-top: 3%;
+  padding-top: 5%;
 `;
 
 const DescriptionWrapper = styled.div`

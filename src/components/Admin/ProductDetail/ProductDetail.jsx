@@ -151,13 +151,14 @@ const AdditionalImage = styled.img`
   border: 1px solid #d3d3d3;
   `;
 
-const ContentWrapper = styled.div`
+  const ContentWrapper = styled.div`
   display: flex;
-  max-width: 90%;
-  margin-left: 5%;
-  margin-top: 20px;
+  flex-direction: column;
+  justify-content: center;
+  width: 90%;
+  margin: 0 auto;
   padding-bottom: 5%;
-  padding-top: 3%;
+  padding-top: 5%;
 `;
 
 const DescriptionWrapper = styled.div`
