@@ -23,6 +23,10 @@ const ProductPageWrapper = styled.div`
   border-radius: 15px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   flex-direction: column;
+  @media(max-width: 780px){
+    width: 90%;
+    margin: 0 auto;
+  }
 `;
 
 const ProductDetails = styled.div`
@@ -32,6 +36,9 @@ const ProductDetails = styled.div`
   padding: 2%;
   border-radius: 10px;
   margin-bottom: 40px;
+  @media(max-width: 780px){
+    flex-direction: column;
+  }
 `;
 
 const ProductInfoWrapper = styled.div`
@@ -74,6 +81,9 @@ const ProductImage = styled.img`
   width: 250px;
   height: auto;
   margin-right: 30px;
+  @media(max-width: 780px){
+    width: 100px;
+  }
 `;
 
 const ProductInfo = styled.div`
@@ -97,17 +107,6 @@ const ProductSubtitle = styled.h3`
   color: #6B6B6B;
   margin-bottom: 35%;
   margin-left: 8%;
-`;
-
-const BuyButton = styled.button`
-  padding: 10px 25px;
-  background-color: #4D44B5;
-  color: white;
-  font-size: 1rem;
-  border-radius: 1.5rem;
-  border: none;
-  cursor: pointer;
-  margin-bottom: 20px;
 `;
 
 const PriceWrapper = styled.div`
@@ -135,21 +134,26 @@ const PriceTag = styled.span`
 const AdditionalImagesWrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  row-gap: 5px;  /* 위아래 간격을 5px로 설정 */
-  column-gap: 10px;  /* 좌우 간격 */
+  row-gap: 5px;
+  column-gap: 10px; 
   padding-left: 20px;
   align-items: center;
   justify-items: center;
   height: 29.5vh;
   margin: 5% 0;
+  @media(max-width: 780px){
+    grid-template-columns: repeat(4, 1fr);
+  }
 `;
 
 const AdditionalImage = styled.img`
   width: 80px;
-  height: auto;
+  height: 80px;
   border-radius: 5px;
+  cursor: pointer;
   border: 1px solid #d3d3d3;
-  `;
+  object-fit: cover; 
+`;
 
   const ContentWrapper = styled.div`
   display: flex;
@@ -198,38 +202,6 @@ const RequestInputLabel = styled.label`
   display: block;
 `;
 
-const RequestInput = styled.textarea`
-  width: 100%;
-  height: 100px;
-  padding: 10px;
-  border: 1px solid #777;
-  border-radius: 10px;
-  resize: none;
-    &::placeholder {
-      color: #444;
-    }
-    &:focus {
-      outline: 2px solid #94A3D8;
-      border: none;
-    }
-`;
-
-const Title = styled.div`
-  display: flex;
-  flex-direction: row;
-  width: 70%;
-  margin-top: 5%;
-  margin-left: 15%;
-  margin-bottom: 2%;
-  justify-content: space-between;
-  align-items: center;
-  h1 {
-    font-size: 1.5vw;
-    font-weight: bold;
-  }
-  
-
-`;
 const MainWrapper = styled.div`
   width: 70%; 
   margin: 0 auto 0 280px; 
@@ -238,6 +210,9 @@ const MainWrapper = styled.div`
   justify-content: space-between;
   align-items: center;
   max-width: 70%; 
+  @media(max-width: 780px){
+    margin: 0 auto;
+  }
 `;
 
 const AdminProductDetail = () => {
@@ -307,18 +282,7 @@ const AdminProductDetail = () => {
   return (
     <>
       <MainWrapper>
-        <div 
-          style={{ 
-            display: 'flex', 
-            justifyContent: 'space-between', 
-            alignItems: 'center', 
-            width: '100%', 
-            maxWidth: '80%', 
-            height: '40px', 
-            margin: '0 auto',
-            paddingTop: '10%'
-          }}
-        >
+
           <N.PageTitle style={{ margin: '0', padding: '0' }}>
             <h2>제품 상세</h2>
           </N.PageTitle>
@@ -333,7 +297,7 @@ const AdminProductDetail = () => {
               style={{ cursor: 'pointer', fontSize: '24px', color: '#E53E3E' }}
             />
           </div>
-        </div>
+
       </MainWrapper>
       <ProductPageWrapper>
         <ProductDetails>

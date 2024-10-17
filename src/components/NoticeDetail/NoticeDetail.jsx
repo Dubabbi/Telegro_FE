@@ -23,7 +23,12 @@ const NoticeDetail = () => {
         </N.PageTitle>
         <D.BoardViewWrap>
           <D.BoardView>
-            <D.Title>제목 <span style={{marginLeft:'1%', marginRight: '1%', color: '#aaa', fontSize: '1.6rem'}}>|</span> {notice.title}</D.Title>
+            <D.Title>제목 
+            <span style={{ display: 'inline-block', marginLeft: '20px', marginRight: '20px', color: '#aaa', fontSize: '1.6rem' }}>
+              |
+            </span> 
+            {notice.title}
+          </D.Title>
             <D.Info>
               <D.InfoItem>
               <D.InfoItemText>No</D.InfoItemText>
@@ -58,6 +63,7 @@ const NoticeDetail = () => {
           </D.BtWrap>
         </D.BoardViewWrap>
       </N.Section>
+      <div style={{height: '50px'}}></div>
     </N.MainWrapper>
   );
 }

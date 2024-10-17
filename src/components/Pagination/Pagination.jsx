@@ -7,8 +7,8 @@ const PaginationWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 20px;
-  padding: 10px;
+  margin: 0 auto;
+  padding: 40px 0;
 `;
 
 const PageButton = styled.button`

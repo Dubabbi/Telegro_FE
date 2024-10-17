@@ -10,13 +10,14 @@ const Table = styled.table`
 
 const TableHeaderColumn = styled.th`
   border-bottom: 1px solid #e8e8e8;
-  padding: 0;
-  font-size: 1.5rem;
+  font-size: 1.3rem;
+  font-family: inter;
   padding: 1% 1%;
   font-weight: bold;
-  @media(max-width: 800px){
-    font-size: 1.3rem;
-    padding: 1.5% 1%;
+  border-right: 1px solid #ccc;
+  width: ${props => props.width};  
+  &:last-child {
+    border-right: none;
   }
 `;
 

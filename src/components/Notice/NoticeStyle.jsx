@@ -2,43 +2,40 @@
 import styled from 'styled-components';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-export const NoticeWrapper = styled.div`
-    color: black;
-    width: 80%;
-    margin-left: 10%;
-`
+
 export const MainWrapper = styled.div`
-    color: black;
-    max-width: 1200px;
-    margin: 0px auto;
+  color: black;
+  max-width: 1000px;
+  margin: 0px auto;
+  min-height: 100vh;
+  padding-top: 3%;
 `;
 
+// 섹션 스타일
 export const Section = styled.section`
-  padding: 50px 0;
-`
-
-export const PageTitle = styled.div`
-  margin-bottom: 30px;
-  white-space: nowrap;
-  font-weight: bold;
-  h2{
-    font-size: 2.3rem;
-    @media(max-width: 780px){
-      font-size: 1.9rem;
+  text-align: left;
+  h1 {
+    font-size: 2.5rem;
+    color: #2F327D;
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  p {
+    font-size: 1.5rem;
+    text-align: center;
+  }
+  @media (max-width: 768px) {
+    margin-top: 4%;
+    h1 {
+      font-size: 2rem;
+    }
+    p {
+      font-size: 1.7rem;
     }
   }
-`
+`;
 
-export const TitleText = styled.h3`
-  margin-top: 15px;  
-  margin-left: 10px;
-  color: #333333;
-  font-weight: bold; 
-  font-size: 2.3rem;
-  @media(max-width: 780px){
-    font-size: 1.9rem;
-  }
-`
+
 
 export const BoardSearchArea = styled.div`
   justify-content: flex-end;
@@ -69,6 +66,111 @@ export const SearchWrap = styled.div`
     width: 90%; /* 더 작은 화면에서 검색창을 적절히 줄임 */
   }
 `;
+
+// 검색 버튼
+export const StyledButton = styled(Button)`
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  transform: translateY(-50%);
+  height: 30px;
+  width: 30px;
+  font-size: 1rem;
+  background-color: #fefefe;
+  border-radius: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+    background: #F8F9FA;
+    transition: 0.5s;
+  }
+
+  @media (max-width: 780px) {
+    height: 25px;
+    width: 25px;
+    font-size: 0.8rem;
+  }
+`;
+
+export const BoardTable = styled.table`
+  width: 100%;
+  margin: 0 auto;
+  border-collapse: collapse;
+  font-size: 1.2rem;
+
+  th, td {
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+  }
+
+  th {
+    background-color: #f8f8f8;
+    font-weight: bold;
+  }
+
+  tr:hover {
+    background-color: #f1f1f1;
+    cursor: pointer;
+  }
+
+  @media (max-width: 780px) {
+    font-size: 1rem;
+    th, td {
+      padding: 10px;
+    }
+  }
+`;
+
+export const PaginationWrapper = styled.div`
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+`;
+
+export const NoticeTitle = styled.h2`
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #2F327D;
+`;
+
+export const NoticeWrapper = styled.div`
+    color: black;
+    width: 80%;
+    margin-left: 10%;
+`
+export const PageTitle = styled.div`
+  margin-bottom: 30px;
+  white-space: nowrap;
+  h2{
+    font-size: 2.3rem;
+    font-weight: bold;
+    @media(max-width: 780px){
+      font-size: 1.9rem;
+    }
+  }
+  p{
+    font-size: 1.4rem;
+    @media(max-width: 780px){
+      font-size: 1.2rem;
+    }
+  }
+  `
+
+export const TitleText = styled.h3`
+  margin-top: 15px;  
+  margin-left: 10px;
+  color: #333333;
+  font-weight: bold; 
+  font-size: 2.3rem;
+  @media(max-width: 780px){
+    font-size: 1.9rem;
+  }
+`
+
+
 
 export const SearchButton = styled.button`
   position: absolute; /* 수정된 부분 */
@@ -131,31 +233,44 @@ export const BoardListArea = styled.div`
 
 `
 
-export const BoardTable = styled.table`
-  font-size: 13px;
-  max-width: 100%;
-  border-top: 1px solid #ccc;
-  border-bottom: 1px solid #ccc;
-  border: 2px solid #111;
-`
 
 export const TableHead = styled.thead`
   text-align: center;
   font-weight: bold;
 `
 
-export const TableBody = styled.tbody`
-  text-align: center;
-`
+export const TableBody = styled.td`
+  padding: 1.7% 1.7%;
+  font-family: inter;
+  font-size: 1.3rem;
+  border-right: 1px solid #ccc;
+  &:last-child {
+    border-right: none;
+  }
+`;
 
 export const TableRow = styled.tr`
-  height: 60px;
-  font-size: 20px;
-  display: flex;
-  align-items: center;
   border-bottom: 1px solid #ccc;
-  text-align: center;
-`
+  &:nth-child(odd) {
+    background-color: #F8F9FA;  // 홀수 행
+    &:hover {
+        background-color: #eceaea;
+        cursor: pointer;
+    }
+  }
+
+  &:nth-child(even) {
+    background-color: #FFFFFF;  // 짝수 행
+        &:hover {
+        background-color: #eceaea;
+        cursor: pointer;
+    }
+  }
+
+  &:last-child {
+    border-bottom: none;
+  }
+`;
 
 export const ThNum = styled.th`
   width: 150px;
@@ -197,32 +312,6 @@ export const Search_Container=styled.div`
     display: flex;
     justify-content: center;
 `
-export const StyledButton = styled(Button)`
-  position: absolute;
-  top: 50%;
-  right: 8px; 
-  transform: translateY(-50%);
-  height: 30px; 
-  width: 30px; 
-  font-size: 1rem; 
-  background-color: #fefefe; 
-  border-radius: 50px; 
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  &:hover {
-    background: #F8F9FA;
-    transition: 0.5s;
-  }
-
-  @media (max-width: 780px) {
-    height: 25px; 
-    width: 25px; 
-    font-size: 0.8rem;
-  }
-`;
-
 export const StyledForm = styled(Form)`
   width: 300px;
   height: 37px; 

@@ -1,13 +1,29 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const TableRow = styled.tr`
-  &:hover {
-    background-color: #eceaea;
-    cursor: pointer;
+
+export const TableRow = styled.tr`
+  border-bottom: 1px solid #ccc;
+  &:nth-child(odd) {
+    background-color: #FCFCFD; 
+    &:hover {
+        background-color: #eceaea;
+        cursor: pointer;
+    }
+  }
+
+  &:nth-child(even) {
+    background-color: #FFFFFF; 
+        &:hover {
+        background-color: #eceaea;
+        cursor: pointer;
+    }
+  }
+
+  &:last-child {
+    border-bottom: none;
   }
 `;
-
 const CommonTableRow = ({ children }) => {
   return <TableRow>{children}</TableRow>;
 };

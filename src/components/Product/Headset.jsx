@@ -54,7 +54,7 @@ const Headset = ({ category = 'HEADSET', page = 0, size = 12 }) => {
       <Div />
       <P.Inline>
         <h1>헤드셋</h1>
-        <p>r</p>
+        {/*<p>sorted</p>*/}
       </P.Inline>
       <P.GalleryGrid>
         {products.map((product) => (

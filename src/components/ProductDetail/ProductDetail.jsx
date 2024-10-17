@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import img from './example.svg'; 
-import * as P from '../Product/ProductStyle';
-import * as D from '../NoticeDetail/NoticeDetailStyle';
 import * as N from '../Notice/NoticeStyle';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
@@ -21,6 +19,10 @@ const ProductPageWrapper = styled.div`
   border-radius: 15px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   flex-direction: column;
+  @media(max-width: 780px){
+    width: 90%;
+    margin: 0 auto;
+  }
 `;
 
 const ProductDetails = styled.div`
@@ -30,6 +32,9 @@ const ProductDetails = styled.div`
   padding: 2%;
   border-radius: 10px;
   margin-bottom: 40px;
+  @media(max-width: 780px){
+    flex-direction: column;
+  }
 `;
 
 const ProductInfoWrapper = styled.div`
@@ -73,6 +78,9 @@ const ProductImage = styled.img`
   width: 250px;
   height: auto;
   margin-right: 30px;
+  @media(max-width: 780px){
+    width: 100px;
+  }
 `;
 
 const ProductInfo = styled.div`
@@ -98,16 +106,6 @@ const ProductSubtitle = styled.h3`
   margin-left: 8%;
 `;
 
-const BuyButton = styled.button`
-  padding: 10px 25px;
-  background-color: #4D44B5;
-  color: white;
-  font-size: 1rem;
-  border-radius: 1.5rem;
-  border: none;
-  cursor: pointer;
-  margin-bottom: 20px;
-`;
 
 const PriceWrapper = styled.div`
   display: flex;
@@ -134,22 +132,26 @@ const PriceTag = styled.span`
 const AdditionalImagesWrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  row-gap: 5px;  /* 위아래 간격을 5px로 설정 */
-  column-gap: 10px;  /* 좌우 간격 */
+  row-gap: 5px;
+  column-gap: 10px; 
   padding-left: 20px;
   align-items: center;
   justify-items: center;
   height: 29.5vh;
   margin: 5% 0;
+  @media(max-width: 780px){
+    grid-template-columns: repeat(4, 1fr);
+  }
 `;
 
 const AdditionalImage = styled.img`
   width: 80px;
-  height: auto;
+  height: 80px;
   border-radius: 5px;
-  cusor: pointer;
+  cursor: pointer;
   border: 1px solid #d3d3d3;
-  `;
+  object-fit: cover; 
+`;
 
 const ContentWrapper = styled.div`
   display: flex;
@@ -181,16 +183,25 @@ const DescriptionList = styled.ul`
 const DescriptionItem = styled.li`
   margin-bottom: 5px;
 `;
-
+const Div = styled.div`
+  height: 10px;
+  @media(max-width: 780px){
+    height: 100px;
+  }
+`;
 
 const MainWrapper = styled.div`
-  width: 70%; /* 가운데 정렬을 위해 고정된 너비 설정 */
+  width: 70%;
   margin: 160px auto 0 auto; 
   padding: 2%;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  max-width: 70%; /* 최대 너비 설정 */
+  max-width: 70%;
+  @media(max-width: 780px){
+    margin: 0 auto;
+    padding-top: 60px;
+  }
 `;
 const ProductDetail = () => {
   const navigate = useNavigate();
@@ -244,7 +255,7 @@ const ProductDetail = () => {
     <MainWrapper>
         <N.PageTitle style={{ margin: '0', padding: '0' }}>
           <h2>제품 상세</h2>
-          <p>category: {product.category}</p>
+          <div style={{backgroundColor: '#EAEDF7', borderRadius: '5px', padding: '2px 4px', marginTop: '5px'}}><p>category: {product.category}</p></div>
         </N.PageTitle>
     </MainWrapper>
 
@@ -302,6 +313,7 @@ const ProductDetail = () => {
 
         </ContentWrapper>
       </ProductPageWrapper>
+      <Div></Div>
     </>
   );
 };

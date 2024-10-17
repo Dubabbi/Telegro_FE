@@ -19,7 +19,6 @@ const MainWrapper = styled.div`
   }
 `;
 
-// 표 테이블 스타일
 const Table = styled.table`
   width: 100%;
   border-collapse: collapse;
@@ -35,6 +34,13 @@ const TableHead = styled.thead`
 const TableRow = styled.tr`
   border-bottom: 1px solid #ddd;
   white-space: nowrap;
+  &:nth-child(even) {
+    background-color: #FCFCFD;
+  }
+  &:hover {
+    background-color: #ececec;
+    cursor: pointer;
+  }
 `;
 
 const TableHeader = styled.th`

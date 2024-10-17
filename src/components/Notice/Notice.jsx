@@ -106,8 +106,8 @@ const Notice = () => {
             </N.SearchWrap>
           </N.SearchWindow>
         </N.BoardSearchArea>
-        <div><hr/>
-          <CommonTable headersName={['No', '제목', '첨부', '작성자', '등록일', '조회수']}>{items}</CommonTable><hr/>
+        <div>
+          <CommonTable headersName={['No', '제목', '첨부', '작성자', '등록일', '조회수']}>{items}</CommonTable>
         </div>
       </N.Section>
     </N.MainWrapper>

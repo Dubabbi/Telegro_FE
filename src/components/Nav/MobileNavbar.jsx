@@ -173,18 +173,6 @@ const ProfileInfo = styled.div`
 `;
 
 
-const SettingsWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding: 10px 20px;
-  color: #D3D3D3;
-  font-size: 1rem;
-  cursor: pointer;
-
-  &:hover {
-    color: #fff;
-  }
-`;
 const LogoutButton = styled.div`
   color: red;
   padding: 10px 20px;
@@ -201,19 +189,17 @@ export default function MobileNavbar() {
   const [userInfo, setUserInfo] = useState({
     id: 'Justin Hope',
     name: '홍길동',
-    avatarUrl: 'https://example.com/avatar.jpg', // User avatar URL
+    avatarUrl: 'https://example.com/avatar.jpg', 
   });
   const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
-    // Reset sidebar visibility when navigating to a new route
     setIsMobileSidebarVisible(false);
     setIsSubMenuOpen(false);
 
-    // Check login status
     const token = localStorage.getItem('token');
-    setIsLoggedIn(!!token); // Set login status based on token existence
+    setIsLoggedIn(!!token); 
   }, [location.pathname]);
 
   const toggleSidebar = () => {
@@ -223,14 +209,14 @@ export default function MobileNavbar() {
   const handleLogout = () => {
     localStorage.removeItem('token');
     setIsLoggedIn(false);
-    navigate('/login'); // Redirect to login after logout
+    navigate('/login'); 
   };
   const toggleSubMenu = () => {
     setIsSubMenuOpen(!isSubMenuOpen);
   };
   useEffect(() => {
     setIsMobileSidebarVisible(false);
-    setIsSubMenuOpen(false); // 서브메뉴 초기화
+    setIsSubMenuOpen(false); 
   }, [location.pathname]);
 
   return (
@@ -239,7 +225,7 @@ export default function MobileNavbar() {
         <MenuButton onClick={toggleSidebar}>
           {isMobileSidebarVisible ? <FaTimes /> : <FaBars />}
         </MenuButton>
-        <LogoWrapper>
+        <LogoWrapper style={{cursor: 'pointer'}} onClick={() => navigate('/main')}>
           <LogoImg src={LogoImage} alt="Telegro Logo" />
           <LogoText>Telegro</LogoText>
         </LogoWrapper>

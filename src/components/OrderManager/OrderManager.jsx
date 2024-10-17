@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import Pagination from '../Pagination/Pagination';
 import * as N from '../Notice/NoticeStyle';
-import { Link } from 'react-router-dom';
 import { FaSearch } from 'react-icons/fa';
 import Form from 'react-bootstrap/Form';
+
 export const Div = styled.div`
   width: 100%;
   min-height: 160px;
@@ -41,40 +41,63 @@ const SearchSection = styled.div`
   margin-bottom: 20px;
 `;
 
-// Date input styles
 const DateInput = styled.input`
   padding: 5px;
   border: 1px solid #ccc;
   border-radius: 4px;
 `;
 
-
-// Table
 const OrderTable = styled.table`
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
+  font-size: 1rem;
+
+  th, td {
+    padding: 10px;
+    border: 1px solid #ccc;
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  th {
+    background-color: #f0f0f0;
+    font-weight: bold;
+  }
+
+  tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+
+  @media (max-width: 780px) {
+    th, td {
+      padding: 8px;
+    }
+  }
 `;
 
-// Table head
 const TableHead = styled.thead`
-  background-color: #f0f0f0;
   font-weight: bold;
-  text-align: left;
 `;
 
-// Table cell
 const TableCell = styled.td`
   border: 1px solid #ccc;
   padding: 10px;
   text-align: center;
-  vertical-align: middle; /* This will vertically align content to the middle */
+  vertical-align: middle;
 `;
 
-// Table row
 const TableRow = styled.tr`
   &:nth-child(even) {
-    background-color: #f9f9f9;
+    background-color: #FCFCFD;
+    &:hover {
+      background-color: #eceaea;
+      cursor: pointer;
+    }
+  }
+  &:hover {
+    background-color: #eceaea;
+    cursor: pointer;
   }
 `;
 
@@ -82,7 +105,7 @@ const CheckOrder = () => {
   const [orders, setOrders] = useState([
     {
       id: 1,
-      productImage: 'https://via.placeholder.com/100',  // 실제 이미지 URL로 변경
+      productImage: 'https://via.placeholder.com/100',
       productName: '단방향 자브라 마이크 (KJ 337 QD)',
       option: '17mm 전용',
       quantity: 1,
@@ -93,7 +116,7 @@ const CheckOrder = () => {
     },
     {
       id: 2,
-      productImage: 'https://via.placeholder.com/100',  // 실제 이미지 URL로 변경
+      productImage: 'https://via.placeholder.com/100',
       productName: '단방향 자브라 마이크 (KJ 337 QD)',
       option: '17mm 전용',
       quantity: 1,
@@ -103,44 +126,48 @@ const CheckOrder = () => {
       point: '₩0'
     },
     {
-        id: 2,
-        productImage: 'https://via.placeholder.com/100',  // 실제 이미지 URL로 변경
-        productName: '단방향 자브라 마이크 (KJ 337 QD)',
-        option: '17mm 전용',
-        quantity: 1,
-        unitPrice: '1',
-        totalPrice: '₩280,000',
-        orderDate: '2024-09-06',
-        point: '₩0'
-      }
+      id: 3,
+      productImage: 'https://via.placeholder.com/100',
+      productName: '단방향 자브라 마이크 (KJ 337 QD)',
+      option: '17mm 전용',
+      quantity: 1,
+      unitPrice: '1',
+      totalPrice: '₩280,000',
+      orderDate: '2024-09-06',
+      point: '₩0'
+    }
   ]);
+
   const [searchValue, setSearchValue] = useState('');
 
   const handleSubmit = (e) => {
-      e.preventDefault();
-      console.log("검색어:", searchValue);
-      setSearchValue('');
+    e.preventDefault();
+    console.log('검색어:', searchValue);
+    setSearchValue('');
   };
+
   return (
     <MainWrapper>
-      <Div></Div>
+      <Div />
       <Title>주문확인</Title>
-      <SearchSection >
+      <SearchSection>
         <div>
           <label>기간: </label>
           <DateInput type="date" /> - <DateInput type="date" />
         </div>
-        <N.SearchWrap style={{marginLeft: '20%'}}>
-            <N.StyledForm onSubmit={handleSubmit}>
-                <Form.Control
-                  type="text"
-                  placeholder="게시글 검색"
-                  value={searchValue}
-                  onChange={(e) => setSearchValue(e.target.value)}
-                />
-              <N.StyledButton type="submit" variant="none"><FaSearch size={15} /></N.StyledButton>
-              </N.StyledForm>
-            </N.SearchWrap>
+        <N.SearchWrap style={{ marginLeft: '20%' }}>
+          <N.StyledForm onSubmit={handleSubmit}>
+            <Form.Control
+              type="text"
+              placeholder="주문 목록 검색"
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
+            />
+            <N.StyledButton type="submit" variant="none">
+              <FaSearch size={15} />
+            </N.StyledButton>
+          </N.StyledForm>
+        </N.SearchWrap>
       </SearchSection>
 
       <OrderTable>

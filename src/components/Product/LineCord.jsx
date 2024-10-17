@@ -1,4 +1,3 @@
-//LINE_CORD
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
@@ -29,33 +28,33 @@ const LineCord = ({ category = 'LINE_CORD', page = 0, size = 12 }) => {
           params: { category, page, size },
         });
   
-        console.log('API Response:', response); 
+        console.log('API Response:', response); // 응답 데이터 확인
   
-        if (response.status===200) {
-          setProducts(response.data.data);
+        if (response.status === 200) {
+          setProducts(response.data.data);  // 데이터 설정
         } else {
           throw new Error(response.data.message || 'Failed to fetch data');
         }
       } catch (error) {
         console.error('Error fetching data:', error);
-        setError(`Failed to load products: ${error.message}`);
+        setError(`Failed to load products: ${error.message}`);  // 에러 설정
       }
     };
   
     fetchProducts();
   }, [category, page, size]);
-  
 
   if (error) {
-    return <div>{error}</div>;
+    return <div>{error}</div>;  // 에러 표시
   }
+
 
   return (
     <>
       <Div />
       <P.Inline>
-        <h1>헤드셋</h1>
-        <p>r</p>
+        <h1>라인코드</h1>
+        {/*<p>sorted</p>*/}
       </P.Inline>
       <P.GalleryGrid>
         {products.map((product) => (

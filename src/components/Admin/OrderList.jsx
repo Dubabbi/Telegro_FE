@@ -5,7 +5,6 @@ import * as N from './Notice/NoticeStyle';
 import { FaSearch } from 'react-icons/fa';
 import Form from 'react-bootstrap/Form';
 
-// Wrapper for the whole page
 const MainWrapper = styled.div`
   width: 65%; 
   margin-left: 280px;
@@ -32,7 +31,7 @@ export const SearchWrap = styled.div`
     width: 90%; /* 더 작은 화면에서 검색창을 적절히 줄임 */
   }
 `;
-// Title
+
 const Title = styled.h2`
   font-size: 2.3rem;
   font-weight: bold;
@@ -43,7 +42,7 @@ const Title = styled.h2`
   }
 `;
 
-// Search section
+
 const SearchSection = styled.div`
   display: flex;
   justify-content: space-between;
@@ -56,7 +55,6 @@ const SearchSection = styled.div`
   }
 `;
 
-// Date input styles
 const DateInput = styled.input`
   padding: 5px;
   border: 1px solid #ccc;
@@ -76,21 +74,42 @@ const SearchInput = styled.input`
   border-radius: 4px;
 `;
 
-// Table
+
 const OrderTable = styled.table`
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
+  font-size: 1rem;
+
+  th, td {
+    padding: 10px;
+    border: 1px solid #ccc;
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  th {
+    background-color: #f0f0f0;
+    font-weight: bold;
+  }
+
+  tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+
+  @media (max-width: 780px) {
+    th, td {
+      padding: 8px;
+    }
+  }
 `;
 
-// Table head
 const TableHead = styled.thead`
   background-color: #f0f0f0;
   font-weight: bold;
   text-align: left;
 `;
 
-// Table cell
 const TableCell = styled.td`
   border: 1px solid #ccc;
   padding: 10px;
@@ -98,10 +117,17 @@ const TableCell = styled.td`
   vertical-align: middle; /* This will vertically align content to the middle */
 `;
 
-// Table row
 const TableRow = styled.tr`
   &:nth-child(even) {
-    background-color: #f9f9f9;
+    background-color: #FCFCFD;
+    &:hover {
+      background-color: #eceaea;
+      cursor: pointer;
+    }
+  }
+  &:hover {
+    background-color: #eceaea;
+    cursor: pointer;
   }
 `;
 

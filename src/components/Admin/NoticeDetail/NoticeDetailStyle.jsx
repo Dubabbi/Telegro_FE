@@ -25,38 +25,20 @@ export const BoardView = styled.div`
 `;
 
 
-export const Titlde = styled.div`
-  position: relative; // 선을 위한 상대 위치 지정
-  padding-right:30px;
-  margin-right: 30px; // 선과 내용 사이의 간격
-  border-bottom: 1px dashed #ddd;
-    padding: 20px 15px;
-    font-size: 2rem;
-  &::after {
-    content: ""; // 선을 만들기 위한 가상 요소
-    position: absolute; // 선의 위치를 제목 요소 기준으로 설정
-    top: 0; // 선의 상단 위치
-    right: 0; // 선의 오른쪽 위치
-    display: block; // 선을 블록 요소로 표시
-    width: 1px; // 선의 두께
-    height: 100%; // 선의 높이를 제목의 높이와 동일하게 설정
-    background: #ddd; // 선의 색상
-  }
-`;
-
 export const Title = styled.div`
-  position: relative; // 선을 위한 상대 위치 지정
-  padding-right: 30px; // 제목과 선 사이의 간격
-  margin-right: 30px; // 선과 내용 사이의 추가 간격
-  font-size: 2rem; // 제목의 글자 크기
-  padding: 20px 15px; // 상하, 좌우 패딩
-  display: flex; // Flexbox 레이아웃 적용
-  align-items: center; // 중앙 정렬
+  position: relative; 
+  padding-right: 30px; 
+  margin: 0 auto;
+  font-size: 1.8rem;
+  padding: 20px 15px; 
+  display: flex; 
+  align-items: center;
   border-bottom: 1px dashed #ddd;
   @media(max-width: 780px){
     font-size: 1.6rem;
   }
 `;
+
 
 export const Info = styled.div`
   padding: 15px;
@@ -86,14 +68,16 @@ export const InfoItem = styled.dl`
   &:first-child::before {
     display: none;
   }
+  @media(max-width: 780px){
+    padding: 0 10px;
+  }
 `;
 
 export const InfoItemText = styled.div`
   display: inline-block;
   font-size: 1.4rem;
-  white-space: nowrap;
   @media(max-width: 780px){
-    font-size: 1.1rem;
+    font-size: 1.3rem;
   }
 `;
 

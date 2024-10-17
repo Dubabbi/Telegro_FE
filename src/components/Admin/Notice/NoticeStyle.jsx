@@ -9,15 +9,24 @@ export const NoticeWrapper = styled.div`
 `
 export const MainWrapper = styled.div`
     color: black;
-    max-width: 1100px;
+    max-width: 95%;
     margin: 0px auto;
-    margin-left: 280px;
     @media(max-width: 780px){
       max-width: 100%;
       min-width: 100%;
       margin: 0 auto;
     }
 `;
+
+export const Div = styled.div`
+    margin-left: 260px;
+    padding-top: 0;
+    @media(max-width: 780px){
+      margin-left: 0px;
+      padding-top: 6%;
+    }
+`;
+
 
 export const MainWrapper2 = styled.div`
     color: black;

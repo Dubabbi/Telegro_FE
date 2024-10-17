@@ -63,8 +63,8 @@ const Notice = () => {
   ));
   return (
     <>
+    <N.Div>
     <N.MainWrapper>
-      <div style={{width: '100%', minHeight: '2.6vh', border: 'none'}}></div>
       <N.Section2 style={{marginTop: '3%'}}>
         <N.PageTitle>
           <N.TitleText>공지사항</N.TitleText>
@@ -85,8 +85,8 @@ const Notice = () => {
             </N.SearchWrap>
           </N.SearchWindow>
         </N.BoardSearchArea>
-        <div><hr/>
-          <CommonTable headersName={['No', '제목', '첨부', '작성자', '등록일', '조회수']}>{items}</CommonTable><hr/>
+        <div>
+          <CommonTable headersName={['No', '제목', '첨부', '작성자', '등록일', '조회수']}>{items}</CommonTable>
         </div>      
       </N.Section2>
       <N.Add  onClick={() => navigate('/admin/noticecreate')} src={editpost} />
@@ -94,6 +94,7 @@ const Notice = () => {
         <P.Pagediv>
         <Pagination />
       </P.Pagediv>
+      </N.Div>
       </>
   );
 };
