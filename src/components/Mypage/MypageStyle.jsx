@@ -108,7 +108,7 @@ export const AddressCard = styled.div`
   background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 8px;
-  margin-bottom: 10px;
+  margin-bottom: 13px;
   padding: 15px;
   position: relative;
 `;

@@ -8,7 +8,7 @@ import * as P from './ProductStyle';
 import axios from 'axios';
 
 
-const Recording = ({ category = 'RECORDER', page = 0, size = 10 }) => {
+const Recording = ({ category = 'RECORDER', page = 0, size = 12 }) => {
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [error, setError] = useState('');

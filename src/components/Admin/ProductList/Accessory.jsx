@@ -8,7 +8,7 @@ import * as P from './ProductStyle';
 import axios from 'axios';
 
 
-const Accessory = ({ category = 'ACCESSORY', page = 0, size = 10 }) => {
+const Accessory = ({ category = 'ACCESSORY', page = 0, size = 12 }) => {
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [error, setError] = useState('');
@@ -16,7 +16,7 @@ const Accessory = ({ category = 'ACCESSORY', page = 0, size = 10 }) => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('/proxy/products', {
+        const response = await axios.get('https://api.telegro.kr/products', {
           params: { category, page, size },
         });
   

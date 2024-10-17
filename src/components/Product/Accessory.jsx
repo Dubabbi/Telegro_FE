@@ -16,7 +16,7 @@ export const Div = styled.div`
   }
 `;
 
-const Accessory = ({ category = 'ACCESSORY', page = 0, size = 10 }) => {
+const Accessory = ({ category = 'ACCESSORY', page = 0, size = 12 }) => {
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [error, setError] = useState('');
