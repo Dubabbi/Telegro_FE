@@ -12,6 +12,8 @@ import '@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-sy
 
 const ProductCreate = () => {
   const navigate = useNavigate();
+  const [selectedImageIndex, setSelectedImageIndex] = useState(null); // 삭제 버튼 표시할 이미지
+const [coverImage, setCoverImage] = useState(null); 
   const editorRef = useRef();
   const [product, setProduct] = useState({
     productModel: '',
@@ -65,6 +67,26 @@ const ProductCreate = () => {
       }));
     }
   };
+  const handleImageClick = (index) => {
+    setSelectedImageIndex(index); // 클릭한 이미지를 삭제할 이미지로 선택
+  };
+  
+
+  
+  // 다른 곳을 클릭했을 때 선택된 이미지 초기화
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (event.target.closest('.image-preview') === null) {
+        setSelectedImageIndex(null); // 이미지 외부를 클릭하면 선택 취소
+      }
+    };
+  
+    document.addEventListener('click', handleClickOutside);
+  
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
   
   const handleEditorChange = () => {
     if (editorRef.current) {
@@ -165,7 +187,7 @@ const ProductCreate = () => {
       }, {
         headers: {
           'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json' 
         }
       });
   
@@ -186,8 +208,14 @@ const ProductCreate = () => {
     }
   };
   
+  const handleRemoveImage = (index) => {
+    setProduct((prev) => ({
+      ...prev,
+      pictures: prev.pictures.filter((_, i) => i !== index),
+    }));
+    setSelectedImageIndex(null); 
+  };
   
- 
 
   const handleCreateProduct = async () => {
     const formData = {
@@ -334,62 +362,83 @@ const ProductCreate = () => {
               </div>
             </C.RightColumn>
             <C.RightColumn>
-  <div>
-    <C.Label htmlFor="photo">사진 업로드 (최대 4개) *</C.Label>
-    <C.FileInput
-      type="file"
-      name="photo"
-      id="photo"
-      multiple
-      onChange={handleAddImage}
-    />
-    <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
-      {product.pictures.map((image, index) => (
-        <div key={index} style={{ position: 'relative' }}>
-          <img
-            src={image}
-            alt={`preview-${index}`}
-            style={{
-              width: '100px',
-              height: '100px',
-              objectFit: 'cover',
-              border: product.coverImage === image ? '2px solid green' : 'none',
-            }}
-          />
-          <button
-            style={{
-              position: 'absolute',
-              top: '5px',
-              right: '5px',
-              background: product.coverImage === image ? 'green' : 'white',
-              color: product.coverImage === image ? 'white' : 'black',
-              border: '1px solid black',
-              borderRadius: '50%',
-            }}
-            onClick={(e) => {
-              e.stopPropagation(); // 이벤트 버블링 방지
-              setProduct((prev) => ({
-                ...prev,
-                coverImage: image,
-              }));
-            }}
-          >
-            {product.coverImage === image ? '✔' : '☆'}
-          </button>
-        </div>
-      ))}
-    </div>
-  </div>
-</C.RightColumn>
+              <div>
+                <C.Label htmlFor="photo">사진 업로드 (최대 4개) *</C.Label>
+                <C.FileInput
+                  type="file"
+                  name="photo"
+                  id="photo"
+                  multiple
+                  onChange={handleAddImage}
+                />
+                <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+                  {product.pictures.map((image, index) => (
+                    <div key={index} className="image-preview" style={{ position: 'relative' }}>
+                      <img
+                        src={image}
+                        alt={`preview-${index}`}
+                        style={{
+                          width: '100px',
+                          height: '100px',
+                          objectFit: 'cover',
+                          border: product.coverImage === image ? '2px solid green' : 'none',
+                        }}
+                        onClick={() => handleImageClick(index)} // 클릭 시 이미지를 선택 상태로 만듦
+                      />
 
+                      {/* 기존 별/체크 표시 버튼 */}
+                      <button
+                        style={{
+                          position: 'absolute',
+                          top: '5px',
+                          right: '5px',
+                          background: product.coverImage === image ? 'green' : 'white',
+                          color: product.coverImage === image ? 'white' : 'black',
+                          border: '1px solid black',
+                          borderRadius: '50%',
+                        }}
+                        onClick={(e) => {
+                          e.stopPropagation(); // 이벤트 버블링 방지
+                          setProduct((prev) => ({
+                            ...prev,
+                            coverImage: image,
+                          }));
+                        }}
+                      >
+                        {product.coverImage === image ? '✔' : '☆'}
+                      </button>
 
-
+                      {/* 삭제 버튼 추가 */}
+                      <button
+                        style={{
+                          position: 'absolute',
+                          top: '5px',
+                          left: '5px',
+                          background: '#ddd',
+                          color: 'white',
+                          border: 'none',
+                          borderRadius: '50%',
+                          padding: '3px',
+                          cursor: 'pointer',
+                        }}
+                        onClick={(e) => {
+                          e.stopPropagation(); // 이벤트 버블링 방지
+                          handleRemoveImage(index); // 이미지 삭제 함수 호출
+                        }}
+                      >
+                        X
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </C.RightColumn>
             {/* Toast UI Editor */}
             <div>
               <div style={{marginBottom: '10px'}}><C.Label  htmlFor="content">상품 설명 *</C.Label></div>
               <Editor
                 ref={editorRef}
-                initialValue="상품 설명을 입력하세요."
+                initialValue=" "
                 previewStyle="vertical"
                 height="500px"
                 initialEditType="wysiwyg"

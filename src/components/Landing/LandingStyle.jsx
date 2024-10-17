@@ -219,7 +219,7 @@ export const List = styled.div`
 `
 
 export const FooterWrapper = styled.div`
-    background-color: #697077;
+    background-color: #595F64;
     font-size: 1.2rem;
     padding: 2% 0;
 

@@ -163,14 +163,7 @@ const ProfileWrapper = styled.div`
   padding: 15px 20px;
   background-color: #303030;
   border-radius: 10px;
-  margin-bottom: 3%;
-`;
-const ProfilePic = styled.div`
-  width: 40px;
-  height: 40px;
-  background-color: #C4C4C4;
-  border-radius: 50%;
-  margin-right: 10px;
+  margin-bottom: 12%;
 `;
 
 
@@ -313,7 +306,7 @@ export default function MobileNavbar() {
 
         <FooterWrapper>
           {isLoggedIn ? (
-            <ProfileWrapper>
+            <ProfileWrapper onClick={() => navigate('/mypage')}>
               <Avvvatars value={userInfo.id} size={40} />
               <ProfileInfo style={{marginLeft: '10px'}}>
                 <div>{userInfo.name}</div>

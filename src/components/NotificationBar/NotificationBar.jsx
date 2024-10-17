@@ -20,14 +20,10 @@ const NotificationWrapper = styled.div`
 `;
 
 const NotificationText = styled.div`
-  font-size: 1vw; /* 기본적으로 화면 너비의 4% */
+  font-size: 1.4rem;
 
   @media (max-width: 768px) {
-    font-size: 2.2vw; /* 화면 너비가 768px 이하일 때는 6%로 설정 */
-  }
-
-  @media (max-width: 480px) {
-    font-size: 2vw; /* 화면 너비가 480px 이하일 때는 8%로 설정 */
+    font-size: 1.1rem;
   }
 `;
 

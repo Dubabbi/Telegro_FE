@@ -41,6 +41,7 @@ const ModalImage = styled.img`
   width: 80%;
   height: auto;
   max-height: 80vh;
+  cursor: pointer;
   object-fit: contain;
   margin: auto;
 `;
@@ -146,6 +147,7 @@ const AdditionalImage = styled.img`
   width: 80px;
   height: auto;
   border-radius: 5px;
+  cusor: pointer;
   border: 1px solid #d3d3d3;
   `;
 
@@ -159,10 +161,6 @@ const ContentWrapper = styled.div`
   padding-top: 5%;
 `;
 
-const DescriptionWrapper = styled.div`
-  flex: 1;
-  margin-right: 20px;
-`;
 
 const DescriptionTitle = styled.h4`
   font-size: 1.6rem;
@@ -184,50 +182,7 @@ const DescriptionItem = styled.li`
   margin-bottom: 5px;
 `;
 
-const RequestInputWrapper = styled.div`
-  flex: 1;
-`;
 
-const RequestInputLabel = styled.label`
-  font-size: 1.6rem;
-  color: #444;
-  font-weight: bold;
-  margin-bottom: 10px;
-  display: block;
-`;
-
-const RequestInput = styled.textarea`
-  width: 100%;
-  height: 100px;
-  padding: 10px;
-  border: 1px solid #777;
-  border-radius: 10px;
-  resize: none;
-    &::placeholder {
-      color: #444;
-    }
-    &:focus {
-      outline: 2px solid #94A3D8;
-      border: none;
-    }
-`;
-
-const Title = styled.div`
-  display: flex;
-  flex-direction: row;
-  width: 70%;
-  margin-top: 5%;
-  margin-left: 15%;
-  margin-bottom: 2%;
-  justify-content: space-between;
-  align-items: center;
-  h1 {
-    font-size: 1.5vw;
-    font-weight: bold;
-  }
-  
-
-`;
 const MainWrapper = styled.div`
   width: 70%; /* 가운데 정렬을 위해 고정된 너비 설정 */
   margin: 160px auto 0 auto; 
@@ -305,6 +260,7 @@ const ProductDetail = () => {
           <AdditionalImagesWrapper>
             {product.pictures.slice(1).map((picture, index) => (
               <AdditionalImage
+                style={{cursor: 'pointer'}}
                 key={index}
                 src={picture}
                 alt={`Additional Image ${index + 1}`}

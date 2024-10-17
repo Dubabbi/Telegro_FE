@@ -347,6 +347,7 @@ const AdminProductDetail = () => {
           <AdditionalImagesWrapper>
             {product.pictures.slice(1).map((picture, index) => (
               <AdditionalImage
+                style={{cursor: 'pointer'}}
                 key={index}
                 src={picture}
                 alt={`Additional Image ${index + 1}`}
@@ -369,7 +370,7 @@ const AdminProductDetail = () => {
               }}
             >
         <LeftArrow onClick={prevImage}>&lt;</LeftArrow>
-        <ModalImage src={product.pictures[currentImageIndex]} onClick={closeModal} alt="Modal" />
+        <ModalImage src={product.pictures[currentImageIndex]} style={{cursor: 'pointer'}} onClick={closeModal} alt="Modal" />
         <RightArrow onClick={nextImage}>&gt;</RightArrow>
       </Modal>
           </AdditionalImagesWrapper>
