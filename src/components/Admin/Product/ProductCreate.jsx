@@ -118,7 +118,7 @@ const [coverImage, setCoverImage] = useState(null);
   
           // presigned URL 가져오기
           const presignedUrlResponse = await axios.post(
-            '/proxy/api/file?prefix=product',
+            'https://api.telegro.kr/api/file?prefix=product',
             {
               metadata: {
                 description: '이미지 설명',
@@ -179,7 +179,7 @@ const [coverImage, setCoverImage] = useState(null);
   
     try {
       // 백엔드에서 프리사인 URL 가져오기
-      const response = await axios.post(`/proxy/api/file?prefix=product`, {
+      const response = await axios.post(`https://api.telegro.kr/api/file?prefix=product`, {
         metadata: {
           description: "새로운 이미지 설명",
           tags: ["태그1", "태그2"]
