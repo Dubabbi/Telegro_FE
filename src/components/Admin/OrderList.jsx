@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Pagination from '../Pagination/Pagination';
+import * as P from './ProductList/ProductStyle';
 import * as N from './Notice/NoticeStyle';
 import { FaSearch } from 'react-icons/fa';
 import Form from 'react-bootstrap/Form';
@@ -166,9 +167,9 @@ const OrderList = () => {
   };
 
   return (
+    <>
     <MainWrapper>
       <Title>주문확인</Title>
-
       <SearchSection style={{whiteSpace: 'nowrap'}}>
         <div>
           <label>기간: </label>
@@ -216,8 +217,11 @@ const OrderList = () => {
           ))}
         </tbody>
       </OrderTable>
-      <Pagination />
     </MainWrapper>
+      <P.Pagediv>
+          <Pagination />
+      </P.Pagediv>
+      </>
   );
 };
 

@@ -3,20 +3,12 @@ import * as N from '../Notice/NoticeStyle';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import * as D from './NoticeDetailStyle';
+import * as C from '../Product/ProductCreateStyle';
 
-// 공지사항 작성 스타일
-const FormWrapper = styled.div`
-  width: 70%;
-  margin-left: 10%;
-  margin-top: 3%;
-  background-color: #fff;
+export const FormWrapper = styled.div`
+  width: 100%;
   border: 1px solid #e5e5e5;
   border-radius: 8px;
-  @media(max-width: 780px){
-    width: 100%;
-    margin-left: 0px;
-    
-  }
 `;
 
 
@@ -88,27 +80,11 @@ const FileInput = styled.input`
   box-sizing: border-box;
 `;
 
-const Button = styled.button`
-  padding: 12px 20px;
-  background-color: #4D44B5;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  font-size: 1rem;
-  cursor: pointer;
-  width: 100%;
-  margin-top: 20px;
-
-  &:hover {
-    background-color: #3b3a9d;
-  }
-`;
-
 const NoticeEdit = () => {
   return (
     <>
     <N.MainWrapper>
-    <SectionTitle><h1>공지사항</h1></SectionTitle>
+    <C.SectionTitle style={{margin: '1%', marginBottom: '4%', marginTop: '3%'}}>공지사항</C.SectionTitle>
       <FormWrapper>
       <SectionTitleWrapper>
         <SectionTitle><h2>게시글 수정</h2></SectionTitle>

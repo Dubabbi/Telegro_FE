@@ -5,6 +5,12 @@ export const MainWrapper = styled.div`
   width: 78%; 
   margin-left: 280px;
   padding: 20px;
+  @media(max-width: 780px){
+    margin: 0 auto;
+    max-width: 100%;
+    padding-top: 40px;
+    width: 100%;
+  }
 `;
 
 
@@ -23,7 +29,6 @@ export const SectionTitle = styled.h3`
   font-size: 2.3rem;
   font-weight: bold;
 `;
-
 
 export const Label = styled.label`
   font-size: 1.2rem;

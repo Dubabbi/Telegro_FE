@@ -7,12 +7,18 @@ import * as N from './Notice/NoticeStyle';
 import Pagination from '../Pagination/Pagination';
 import * as P from './ProductList/ProductStyle';
 
-// 메인 컨테이너
 const MainWrapper = styled.div`
-  width: 70%;
-  margin-left: 23%;
+  width: 95%;
+  margin: 0 auto;
   margin-top: 3vh;
   padding: 2%;
+  @media(max-width: 780px) {
+    margin-left: 0px;
+    margin-top: 7vh;
+  }
+`;
+const Div = styled.div`
+  margin-left: 270px;
   @media(max-width: 780px) {
     margin-left: 0px;
     margin-top: 7vh;
@@ -111,6 +117,7 @@ const ClientManagement = () => {
 
   return (
     <>
+    <Div>
       <MainWrapper>
         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
           <N.PageTitle>
@@ -155,6 +162,7 @@ const ClientManagement = () => {
           </tbody>
         </Table>
       </MainWrapper>
+      </Div>
       <P.Pagediv>
         <Pagination />
       </P.Pagediv>

@@ -8,24 +8,17 @@ export const NoticeWrapper = styled.div`
     margin-left: 0px;
 `
 export const MainWrapper = styled.div`
-    color: black;
-    max-width: 95%;
-    margin: 0px auto;
-    @media(max-width: 780px){
-      max-width: 100%;
-      min-width: 100%;
-      margin: 0 auto;
-    }
+  width: 78%; 
+  margin-left: 280px;
+  padding: 20px;
+  @media(max-width: 780px){
+    margin: 0 auto;
+    max-width: 100%;
+    padding-top: 40px;
+    width: 100%;
+  }
 `;
 
-export const Div = styled.div`
-    margin-left: 260px;
-    padding-top: 0;
-    @media(max-width: 780px){
-      margin-left: 0px;
-      padding-top: 6%;
-    }
-`;
 
 
 export const MainWrapper2 = styled.div`

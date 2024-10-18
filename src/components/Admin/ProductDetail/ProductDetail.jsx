@@ -113,11 +113,34 @@ const PriceWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-direction: row;
   width: 90%;
-  margin-left: 5%;
+  margin: 0 auto;
+  h1{
+    font-size: 1.4rem;
+  }
+  @media(max-width: 780px){
+    flex-direction: column;
+    text-align: left;
+    width: 100%;
+  }
+`;
+
+const PriceListWrapper = styled.div`
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  justify-content: space-between;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  width: 90%;
   margin-bottom: 20px;
   h1{
     font-size: 1.4rem;
+  }
+  @media(max-width: 780px){
+    grid-template-columns: repeat(2, 1fr);
+    margin-top: 20px;
   }
 `;
 
@@ -165,13 +188,9 @@ const AdditionalImage = styled.img`
   padding-top: 5%;
 `;
 
-const DescriptionWrapper = styled.div`
-  flex: 1;
-  margin-right: 20px;
-`;
-
 const DescriptionTitle = styled.h4`
   font-size: 1.6rem;
+  white-space: nowrap;
   color: #303972;
   font-weight: bold;
   margin-bottom: 10px;
@@ -184,22 +203,22 @@ const DescriptionList = styled.ul`
   font-size: 1.4rem;
   line-height: 1.7;
   color: #444;
+  position: relative;
 `;
 
 const DescriptionItem = styled.li`
   margin-bottom: 5px;
-`;
-
-const RequestInputWrapper = styled.div`
-  flex: 1;
-`;
-
-const RequestInputLabel = styled.label`
-  font-size: 1.6rem;
-  color: #444;
-  font-weight: bold;
-  margin-bottom: 10px;
+  white-space: pre-wrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  overflow: hidden;
   display: block;
+  img {
+    max-width: 80%;
+    margin: 0 auto;
+    height: auto;
+    object-fit: contain; /* 이미지를 비율에 맞게 축소 */
+  }
 `;
 
 const MainWrapper = styled.div`
@@ -339,12 +358,16 @@ const AdminProductDetail = () => {
       </Modal>
           </AdditionalImagesWrapper>
         </ProductDetails>
+        <div style={{display: 'flex', justifyContent: 'flex-start', margin: '0 auto', width: '90%'}}>
+          <DescriptionTitle style={{ textAlign: 'left', marginBottom: '20px', alignItems: 'center' }}>가격</DescriptionTitle>
+          </div>
         <PriceWrapper>
-          <DescriptionTitle style={{ marginBottom: '0px', alignItems: 'center' }}>가격</DescriptionTitle>
-          <PriceTag>Biz: ₩{product.priceBusiness}</PriceTag>
-          <PriceTag>B: ₩{product.priceBest}</PriceTag>
-          <PriceTag>D: ₩{product.priceDealer}</PriceTag>
-          <PriceTag>C: ₩{product.priceCustomer}</PriceTag>
+          <PriceListWrapper>
+            <PriceTag>Biz: ₩{product.priceBussiness}</PriceTag>
+            <PriceTag>B: ₩{product.priceBest}</PriceTag>
+            <PriceTag>D: ₩{product.priceDealer}</PriceTag>
+            <PriceTag>C: ₩{product.priceCustomer}</PriceTag>
+          </PriceListWrapper>
         </PriceWrapper>
         <ContentWrapper>
             <DescriptionTitle>상품 설명</DescriptionTitle>

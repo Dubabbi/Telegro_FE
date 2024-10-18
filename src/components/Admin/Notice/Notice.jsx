@@ -63,7 +63,6 @@ const Notice = () => {
   ));
   return (
     <>
-    <N.Div>
     <N.MainWrapper>
       <N.Section2 style={{marginTop: '3%'}}>
         <N.PageTitle>
@@ -94,7 +93,6 @@ const Notice = () => {
         <P.Pagediv>
         <Pagination />
       </P.Pagediv>
-      </N.Div>
       </>
   );
 };

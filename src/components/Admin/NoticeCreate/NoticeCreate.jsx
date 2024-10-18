@@ -1,24 +1,21 @@
-import React from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import * as N from '../Notice/NoticeStyle';
+import * as C from '../Product/ProductCreateStyle';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import * as D from '../NoticeDetail/NoticeDetailStyle';
+import { Editor } from '@toast-ui/react-editor'; 
+import '@toast-ui/editor/dist/toastui-editor.css'; 
+import color from '@toast-ui/editor-plugin-color-syntax';
+import 'tui-color-picker/dist/tui-color-picker.css';
+import '@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css';
 
-// 공지사항 작성 스타일
-const FormWrapper = styled.div`
-  width: 70%;
-  margin-left: 10%;
-  margin-top: 3%;
-  background-color: #fff;
+
+export const FormWrapper = styled.div`
+  width: 100%;
   border: 1px solid #e5e5e5;
   border-radius: 8px;
-  @media(max-width: 780px){
-    width: 100%;
-    margin-left: 0px;
-    
-  }
 `;
-
 
 const SectionTitleWrapper = styled.div`
   background-color: #f2f2f2; /* 회색 배경 */
@@ -88,30 +85,32 @@ const FileInput = styled.input`
   box-sizing: border-box;
 `;
 
-const Button = styled.button`
-  padding: 12px 20px;
-  background-color: #4D44B5;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  font-size: 1rem;
-  cursor: pointer;
-  width: 100%;
-  margin-top: 20px;
-
-  &:hover {
-    background-color: #3b3a9d;
-  }
-`;
 
 const NoticeCreate = () => {
+  const editorRef = useRef();
+  useEffect(() => {
+    if (editorRef.current) {
+      const editorInstance = editorRef.current.getInstance();
+
+      console.log(editorInstance.getHTML()); 
+    }
+  }, []);
+  const handleEditorChange = () => {
+    const editorRef = useRef();
+    if (editorRef.current) {
+      const htmlContent = editorRef.current.getInstance().getHTML();
+      
+    } else {
+      console.error('Editor not initialized');
+    }
+  };
   return (
     <>
     <N.MainWrapper>
-    <SectionTitle><h1>공지사항</h1></SectionTitle>
+    <C.SectionTitle style={{margin: '1%', marginBottom: '4%', marginTop: '3%'}}>공지사항</C.SectionTitle>
       <FormWrapper>
       <SectionTitleWrapper>
-        <SectionTitle><h2>게시글 수정</h2></SectionTitle>
+        <SectionTitle><h2>게시글 작성</h2></SectionTitle>
         </SectionTitleWrapper>
         <div style={{  padding: '2%'}}>
         <Label htmlFor="title">제목 *</Label>
@@ -119,12 +118,35 @@ const NoticeCreate = () => {
 
         <Label htmlFor="author">작성자 *</Label>
         <Input type="email" id="author" placeholder="user@email.com" />
-
-        <Label htmlFor="content">내용 *</Label>
-        <Textarea id="content" placeholder="내용을 입력해 주세요." />
-
         <Label htmlFor="attachment">첨부</Label>
         <FileInput type="file" id="attachment" />
+
+        <Label htmlFor="content">내용 *</Label>
+        <div>
+              <Editor
+                ref={editorRef}
+                initialValue=" "
+                previewStyle="vertical"
+                height="500px"
+                initialEditType="wysiwyg"
+                useCommandShortcut={true}
+                /*
+                hooks={{
+                  addImageBlobHook: addImageBlobHook
+                }} 
+                  */
+                toolbarItems={[
+                  ['heading', 'bold', 'italic', 'strike'],
+                  ['hr', 'quote'],
+                  ['ul', 'ol', 'task', 'indent', 'outdent'],
+                  ['table', 'link', 'image']
+                ]}
+                plugins={[color]}
+                onChange={handleEditorChange}
+            />
+
+            </div>
+
         </div>
       </FormWrapper>
       </N.MainWrapper>

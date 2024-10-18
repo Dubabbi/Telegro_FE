@@ -163,12 +163,36 @@ const ContentWrapper = styled.div`
   padding-top: 5%;
 `;
 
+const BuyButton = styled.button`
+  padding: 10px 25px;
+  background-color: rgba(77, 68, 181, 0.3);
+  color: #4D44B5;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1.3rem;
+  font-weight: bold;
+  width: 120px;
+  margin: 0 auto;
+  &:hover {
+    background-color: rgba(77, 68, 181, 0.6); 
+    color: #fff;    
+  }
+`;
+
+const ButtonWrapper = styled.div`
+  text-align: center;
+  width: 100%;
+  margin: 30px 0;
+`;
+
 
 const DescriptionTitle = styled.h4`
   font-size: 1.6rem;
   color: #303972;
   font-weight: bold;
   margin-bottom: 10px;
+  white-space: nowrap;
 `;
 
 const DescriptionList = styled.ul`
@@ -178,11 +202,24 @@ const DescriptionList = styled.ul`
   font-size: 1.4rem;
   line-height: 1.7;
   color: #444;
+  position: relative;
 `;
 
 const DescriptionItem = styled.li`
   margin-bottom: 5px;
+  white-space: pre-wrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: block;
+  img {
+    max-width: 80%;
+    margin: 0 auto;
+    height: auto;
+    object-fit: contain; /* 이미지를 비율에 맞게 축소 */
+  }
 `;
+
 const Div = styled.div`
   height: 10px;
   @media(max-width: 780px){
@@ -301,10 +338,7 @@ const ProductDetail = () => {
         </ProductDetails>
         <PriceWrapper>
           <DescriptionTitle style={{ marginBottom: '0px', alignItems: 'center' }}>가격</DescriptionTitle>
-          <PriceTag>Biz: ₩{product.priceBusiness}</PriceTag>
-          <PriceTag>B: ₩{product.priceBest}</PriceTag>
-          <PriceTag>D: ₩{product.priceDealer}</PriceTag>
-          <PriceTag>C: ₩{product.priceCustomer}</PriceTag>
+          <PriceTag>Biz: ₩{product.priceCustomer}</PriceTag>
         </PriceWrapper>
         <ContentWrapper>
             <DescriptionTitle>상품 설명</DescriptionTitle>
@@ -313,6 +347,9 @@ const ProductDetail = () => {
 
         </ContentWrapper>
       </ProductPageWrapper>
+      <ButtonWrapper>
+      <BuyButton onClick={() => navigate('/orderprocess')}>구매하기</BuyButton>
+      </ButtonWrapper>
       <Div></Div>
     </>
   );

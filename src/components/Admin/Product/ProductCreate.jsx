@@ -13,7 +13,7 @@ import '@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-sy
 const ProductCreate = () => {
   const navigate = useNavigate();
   const [selectedImageIndex, setSelectedImageIndex] = useState(null); // 삭제 버튼 표시할 이미지
-const [coverImage, setCoverImage] = useState(null); 
+  const [coverImage, setCoverImage] = useState(null); 
   const editorRef = useRef();
   const [product, setProduct] = useState({
     productModel: '',

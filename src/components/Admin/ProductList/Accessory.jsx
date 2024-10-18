@@ -61,10 +61,10 @@ const Accessory = ({ category = 'ACCESSORY', page = 0, size = 12 }) => {
         ))}
       </P.GalleryGrid>
       <N.Add  onClick={() => navigate('/admin/productcreate')} src={editpost} />
-      <P.Pagediv>
+    </P.PageContainer>
+    <P.Pagediv>
       <Pagination currentPage={page} />
       </P.Pagediv>
-    </P.PageContainer>
     </>
   );
 };

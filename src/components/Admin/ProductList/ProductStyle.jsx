@@ -144,11 +144,13 @@ export const PageContainer = styled.div`
   }
 `;
 
-export const Pagediv = styled.div`
 
-  @media(max-width: 780px){
-    text-align: center;
-    margin-left: 10%;
-  }
+
+export const Pagediv = styled.div`
+    margin-left: 255px;
+    padding-top: 0;
+    @media(max-width: 780px){
+      margin-left: 0px;
+    }
 `;
 
