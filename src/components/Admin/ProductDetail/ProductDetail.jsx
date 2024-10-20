@@ -278,22 +278,51 @@ const AdminProductDetail = () => {
     );
   };
 
+
+
   const handleDelete = async () => {
-    if (window.confirm('이 제품을 삭제하시겠습니까?')) {
+    const confirmDelete = window.confirm("정말로 이 상품을 삭제하시겠습니까?");
+    
+    if (confirmDelete) {
       try {
-        const response = await axios.delete(`https://api.telegro.kr/api/products/${productId}`);
-        if (response.status === 200) {
-          alert('정상 처리 되었습니다.');
-          navigate('/admin/adminproductlist'); 
-        } else if (response.status === 403) {
-          alert("관리자 권한이 필요합니다.");
+        const response = await axios.delete(`https://api.telegro.kr/api/products/${productId}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+  
+        if (response.status === 200 && response.data.code === 20000) {
+          alert('상품이 성공적으로 삭제되었습니다.');
+  
+          // 카테고리에 따라 페이지 이동
+          switch (product.category) {
+            case 'HEADSET':
+              navigate('/admin/headset');
+              break;
+            case 'LINE_CORD':
+              navigate('/admin/linecord');
+              break;
+            case 'ACCESSORY':
+              navigate('/admin/accessory');
+              break;
+            case 'RECORDER':
+              navigate('/admin/recording');
+              break;
+            default:
+              navigate('/admin/headset');  // 기본 페이지로 이동
+              break;
+          }
         }
       } catch (error) {
-        console.error(error);
+        if (error.response && error.response.status === 403) {
+          setError('관리자 계정으로 로그인되지 않았습니다.');
+        } else {
+          setError('상품을 삭제하는 동안 오류가 발생했습니다.');
+        }
       }
     }
-    };
-
+  };
+  
   if (!product) {
     return <div>로딩 중...</div>; 
   }
