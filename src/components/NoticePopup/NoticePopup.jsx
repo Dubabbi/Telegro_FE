@@ -29,18 +29,12 @@ const PopupWrapper = styled.div`
   z-index: 1000;
   display: flex;
   flex-direction: column;
-  @media (max-width: 1400px ) {
-    max-width: 400px;
-    max-height: 500px;
-  }
+
   @media (max-width: 700px) {
-    max-width: 350px;
-    max-height: 450px;
+    max-width: 90%;
+    max-height: 520px;
   }
-  @media (max-width: 480px) {
-    width: 100%;
-    height: 400px;
-  }
+
 `;
 
 const Header = styled.div`
@@ -69,32 +63,40 @@ const HeaderTitle = styled.div`
   align-items: center;
   font-size: 2rem;
   @media(max-width: 800px){
-    font-size: 1.5rem;
+    font-size: 1.7rem;
   }
 `;
 
 const Content = styled.div`
   flex: 1;
-  padding: 20px;
+  padding: 15px 30px;
   color: #30313D;
-  text-align: left;
+  text-align: center;
   line-height: 1.8;
-  h2{
+  overflow-y: auto; /* 내용이 넘칠 때 스크롤 가능하게 설정 */
+  max-height: calc(100% - 100px); /* 헤더와 푸터를 제외한 최대 높이 설정 */
+  
+  h2 {
     font-size: 1.6rem;
     font-weight: bold;
     margin-left: 1%;
-    @media(max-width: 800px){
-      font-size: 1.3rem;
+    @media(max-width: 800px) {
+      font-size: 1.6rem;
       margin-left: 2%;
     }
   }
-  p{
-    font-size: 1.2rem;
+
+  p {
+    font-size: 1.3rem;
     margin-left: 1%;
-    @media(max-width: 800px){
+    @media(max-width: 800px) {
       font-size: 1.2rem;
       margin-left: 2%;
     }
+  }
+  
+  img{
+    max-width: 300px;
   }
 `;
 
@@ -203,7 +205,6 @@ const NoticePopup = () => {
           <CloseButton onClick={() => handleClose(false)} />
         </Header>
         <Content>
-          <HorizontalRule />
           <h2>{notice.noticeTitle}</h2>
           <HorizontalRule />
           <p dangerouslySetInnerHTML={{ __html: notice.noticeContent }} /> {/* 공지사항 내용 */}

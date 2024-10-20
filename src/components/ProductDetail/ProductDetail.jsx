@@ -2,26 +2,51 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import img from './example.svg'; 
 import * as N from '../Notice/NoticeStyle';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import Modal from 'react-modal';
 
+const getCategoryBackground = (category) => {
+  switch (category) {
+    case 'electronics':
+      return '#EAEDF7';
+    case 'clothing':
+      return '#F0F8E2';
+    case 'furniture':
+      return '#E6F0F8';
+    default:
+      return '#F3F3F3';
+  }
+};
 const ProductPageWrapper = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  margin-top: 2%;
-  width: 70%;
-  margin: 0 auto;
+  width: 65%;
   padding: 2%;
-  margin-bottom: 4%;
+  margin-bottom: 2%;
   background-color: #fff;
   border: 1px solid #d3d3d3;
   border-radius: 15px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  flex-direction: column;
-  @media(max-width: 780px){
+  @media (max-width: 780px) {
     width: 90%;
     margin: 0 auto;
+  }
+`;
+
+const StickyBarWrapper = styled.div`
+  position: sticky;
+  top: 180px; 
+  width: 20%;
+  margin-left: 20px;
+  padding: 2%;
+  background-color: #fff;
+  border: 1px solid #d3d3d3;
+  border-radius: 15px;
+  @media (max-width: 780px) {
+    width: 90%;
+    margin: 0 auto;
+    position: static;  /* 모바일 화면에서는 고정되지 않도록 */
   }
 `;
 
@@ -32,7 +57,7 @@ const ProductDetails = styled.div`
   padding: 2%;
   border-radius: 10px;
   margin-bottom: 40px;
-  @media(max-width: 780px){
+  @media (max-width: 780px) {
     flex-direction: column;
   }
 `;
@@ -42,6 +67,7 @@ const ProductInfoWrapper = styled.div`
   align-items: center;
   flex: 2;
 `;
+
 const ModalImage = styled.img`
   width: 80%;
   height: auto;
@@ -78,7 +104,7 @@ const ProductImage = styled.img`
   width: 250px;
   height: auto;
   margin-right: 30px;
-  @media(max-width: 780px){
+  @media (max-width: 780px) {
     width: 100px;
   }
 `;
@@ -92,10 +118,8 @@ const ProductInfo = styled.div`
 const ProductTitle = styled.h2`
   font-weight: bold;
   font-size: 2rem;
-  white-space: nowrap;
   color: #303972;
   margin-bottom: 10px;
-  margin-left: 6%;
 `;
 
 const ProductSubtitle = styled.h3`
@@ -103,43 +127,70 @@ const ProductSubtitle = styled.h3`
   font-size: 1.6rem;
   color: #6B6B6B;
   margin-bottom: 35%;
-  margin-left: 8%;
 `;
 
-
-const PriceWrapper = styled.div`
+const OptionSelectWrapper = styled.div`
+  margin-top: 20px;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 90%;
-  margin-left: 5%;
-  margin-bottom: 20px;
-  h1{
-    font-size: 1.4rem;
-  }
+  flex-direction: column;
+  align-items: flex-start;
 `;
 
-const PriceTag = styled.span`
-  padding: 5px 15px;
-  background: rgba(77, 68, 181, 0.2);
-  border-radius: 1rem;
+const Select = styled.select`
+  padding: 10px;
+  width: 200px;
+  font-size: 1.2rem;
+  border-radius: 5px;
+  border: 1px solid #d3d3d3;
+`;
+
+const QuantityInput = styled.input`
+  padding: 10px;
+  font-size: 1.2rem;
+  border-radius: 5px;
+  width: 200px;
+  text-align: left;
+  border: 1px solid #d3d3d3;
+`;
+
+const ButtonWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 2%;
   align-items: center;
-  color: #444;
-  font-weight: semibold;
+  margin-top: 20px;
+  width: 100%;
+`;
+
+const BuyButton = styled.button`
+  padding: 8px 18px;
+  background-color: rgba(77, 68, 181, 0.3);
+  color: #4D44B5;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
   font-size: 1.3rem;
+  font-weight: bold;
+  width: 100px;
+  margin-bottom: 10px;
+  &:hover {
+    background-color: rgba(77, 68, 181, 0.6);
+    color: #fff;
+  }
 `;
 
 const AdditionalImagesWrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   row-gap: 5px;
-  column-gap: 10px; 
+  column-gap: 10px;
   padding-left: 20px;
   align-items: center;
   justify-items: center;
   height: 29.5vh;
   margin: 5% 0;
-  @media(max-width: 780px){
+  @media (max-width: 780px) {
     grid-template-columns: repeat(4, 1fr);
   }
 `;
@@ -162,30 +213,6 @@ const ContentWrapper = styled.div`
   padding-bottom: 5%;
   padding-top: 5%;
 `;
-
-const BuyButton = styled.button`
-  padding: 10px 25px;
-  background-color: rgba(77, 68, 181, 0.3);
-  color: #4D44B5;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 1.3rem;
-  font-weight: bold;
-  width: 120px;
-  margin: 0 auto;
-  &:hover {
-    background-color: rgba(77, 68, 181, 0.6); 
-    color: #fff;    
-  }
-`;
-
-const ButtonWrapper = styled.div`
-  text-align: center;
-  width: 100%;
-  margin: 30px 0;
-`;
-
 
 const DescriptionTitle = styled.h4`
   font-size: 1.6rem;
@@ -216,8 +243,21 @@ const DescriptionItem = styled.li`
     max-width: 80%;
     margin: 0 auto;
     height: auto;
-    object-fit: contain; /* 이미지를 비율에 맞게 축소 */
+    object-fit: contain;
   }
+`;
+
+const CategoryTag = styled.div`
+  background-color: ${(props) => getCategoryBackground(props.category)};
+  max-width: 170px;
+  border-radius: 5px;
+  padding: 2px 8px;
+  margin-top: 5px;
+  margin-left: 12px;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #303972;
 `;
 
 const Div = styled.div`
@@ -228,25 +268,78 @@ const Div = styled.div`
 `;
 
 const MainWrapper = styled.div`
-  width: 70%;
-  margin: 160px auto 0 auto; 
-  padding: 2%;
+  display: flex;
+  padding-top: 160px;
+  justify-content: space-around;
+  align-items: flex-start;
+  width: 90%;
+  margin-left: 10%;
+  @media (max-width: 780px) {
+    flex-direction: column;
+    margin: 0 auto;
+    gap: 15px;
+  }
+`;
+
+const PriceWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  max-width: 70%;
-  @media(max-width: 780px){
-    margin: 0 auto;
-    padding-top: 60px;
+  width: 90%;
+  margin-left: 5%;
+  margin-bottom: 20px;
+  h1{
+    font-size: 1.4rem;
   }
 `;
+
+const PriceTag = styled.span`
+  padding: 5px 15px;
+  background: rgba(77, 68, 181, 0.2);
+  border-radius: 1rem;
+  color: #444;
+  font-weight: semibold;
+  font-size: 1.3rem;
+`;
+
 const ProductDetail = () => {
   const navigate = useNavigate();
   const [product, setProduct] = useState(null);
+  const [selectedOption, setSelectedOption] = useState('');
+  const [quantity, setQuantity] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const { productId } = useParams(); 
+  const { productId } = useParams();
 
+  const handlePurchase = async () => {
+    if (!selectedOption) {
+      alert('옵션을 선택해주세요.');
+      return;
+    }
+  
+    try {
+      const accessToken = localStorage.getItem('token');
+      const response = await axios.post(
+        `https://api.telegro.kr/api/carts/${productId}`,
+        {
+          productOption: selectedOption, // 요청 본문에 포함되는 데이터
+          quantity: quantity,
+        },
+        {
+          headers: { Authorization: `Bearer ${accessToken}` }, // 헤더
+        }
+      );
+  
+      if (response.status === 200) {
+        alert('상품이 장바구니에 담겼습니다!');
+      } else {
+        alert('장바구니에 담기 실패: ' + response.data.message);
+      }
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+      alert('장바구니에 물건을 담는 중 오류가 발생했습니다.');
+    }
+  };
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -261,7 +354,7 @@ const ProductDetail = () => {
     };
     fetchProduct();
   }, [productId]);
-   
+
   const openModal = (index) => {
     setCurrentImageIndex(index);
     setIsModalOpen(true);
@@ -283,74 +376,106 @@ const ProductDetail = () => {
     );
   };
 
+  const handleOptionChange = (e) => {
+    setSelectedOption(e.target.value);
+  };
+
+  const handleQuantityChange = (e) => {
+    const value = Math.max(1, Math.min(99, e.target.value));
+    setQuantity(value);
+  };
+
+
+
   if (!product) {
-    return <div>로딩 중...</div>; 
+    return <div>로딩 중...</div>;
   }
 
   return (
     <>
-    <MainWrapper>
-        <N.PageTitle style={{ margin: '0', padding: '0' }}>
-          <h2>제품 상세</h2>
-          <div style={{backgroundColor: '#EAEDF7', borderRadius: '5px', padding: '2px 4px', marginTop: '5px'}}><p>category: {product.category}</p></div>
-        </N.PageTitle>
-    </MainWrapper>
+      <MainWrapper>
+        <ProductPageWrapper>
+          <CategoryTag category={product.category}>
+            <p>category: {product.category}</p>
+          </CategoryTag>
+          <ProductDetails>
+            <ProductInfoWrapper>
+              <ProductImage src={product.pictures[0] || img} alt="Main Product" />
+              <div>
+                <ProductTitle>{product.productName}</ProductTitle>
+                <ProductSubtitle>{product.productModel}</ProductSubtitle>
+                <PriceTag>₩{product.priceCustomer}</PriceTag>
+              </div>
+            </ProductInfoWrapper>
 
-      <ProductPageWrapper>
-        <ProductDetails>
-          <ProductInfoWrapper>
-            <ProductImage src={product.pictures[0] || img} alt="Main Product" /> {/* 메인 이미지 표시 */}
-            <ProductInfo>
-              <ProductTitle>{product.productName}</ProductTitle> {/* 상품명 */}
-              <ProductSubtitle>{product.productModel}</ProductSubtitle> {/* 모델명 */}
-            </ProductInfo>
-          </ProductInfoWrapper>
-          <AdditionalImagesWrapper>
-            {product.pictures.slice(1).map((picture, index) => (
-              <AdditionalImage
-                style={{cursor: 'pointer'}}
-                key={index}
-                src={picture}
-                alt={`Additional Image ${index + 1}`}
-                onClick={() => openModal(index)} />
-            ))}
-                  {/* 모달 */}
-            <Modal
-              isOpen={isModalOpen}
-              onRequestClose={closeModal}
-              style={{
-                content: {
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                  border: 'none',
-                  inset: 0,
-                },
-                overlay: { backgroundColor: 'rgba(0, 0, 0, 0.8)' },
-              }}
-            >
-        <LeftArrow onClick={prevImage}>&lt;</LeftArrow>
-        <ModalImage src={product.pictures[currentImageIndex]} onClick={closeModal} alt="Modal" />
-        <RightArrow onClick={nextImage}>&gt;</RightArrow>
-      </Modal>
-          </AdditionalImagesWrapper>
-        </ProductDetails>
-        <PriceWrapper>
-          <DescriptionTitle style={{ marginBottom: '0px', alignItems: 'center' }}>가격</DescriptionTitle>
-          <PriceTag>Biz: ₩{product.priceCustomer}</PriceTag>
-        </PriceWrapper>
-        <ContentWrapper>
+            <AdditionalImagesWrapper>
+              {product.pictures.slice(1).map((picture, index) => (
+                <AdditionalImage
+                  style={{ cursor: 'pointer' }}
+                  key={index}
+                  src={picture}
+                  alt={`Additional Image ${index + 1}`}
+                  onClick={() => openModal(index)}
+                />
+              ))}
+
+              <Modal
+                isOpen={isModalOpen}
+                onRequestClose={closeModal}
+                style={{
+                  content: {
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    border: 'none',
+                    inset: 0,
+                  },
+                  overlay: { backgroundColor: 'rgba(0, 0, 0, 0.8)' },
+                }}
+              >
+                <LeftArrow onClick={prevImage}>&lt;</LeftArrow>
+                <ModalImage src={product.pictures[currentImageIndex]} onClick={closeModal} alt="Modal" />
+                <RightArrow onClick={nextImage}>&gt;</RightArrow>
+              </Modal>
+            </AdditionalImagesWrapper>
+          </ProductDetails>
+          <ContentWrapper>
             <DescriptionTitle>상품 설명</DescriptionTitle>
-            <DescriptionList> <DescriptionItem dangerouslySetInnerHTML={{ __html: product.content }} /> 
+            <DescriptionList>
+              <DescriptionItem dangerouslySetInnerHTML={{ __html: product.content }} />
             </DescriptionList>
+          </ContentWrapper>
+        </ProductPageWrapper>
 
-        </ContentWrapper>
-      </ProductPageWrapper>
-      <ButtonWrapper>
-      <BuyButton onClick={() => navigate('/orderprocess')}>구매하기</BuyButton>
-      </ButtonWrapper>
-      <Div></Div>
+        <StickyBarWrapper>
+          <OptionSelectWrapper>
+            <DescriptionTitle style={{fontSize: '1.2rem'}} htmlFor="optionSelect">옵션 선택</DescriptionTitle>
+            <Select id="optionSelect" value={selectedOption} onChange={handleOptionChange}>
+              <option value="">옵션을 선택하세요</option>
+              {product.options.map((option, index) => (
+                <option key={index} value={option}>{option}</option>
+              ))}
+            </Select>
+
+            <DescriptionTitle style={{fontSize: '1.2rem', paddingTop: '3%'}} htmlFor="quantity">수량</DescriptionTitle>
+            <QuantityInput
+              type="number"
+              id="quantity"
+              value={quantity}
+              onChange={handleQuantityChange}
+              min="1"
+              max="99"
+            />
+          </OptionSelectWrapper>
+
+          <ButtonWrapper>
+            <BuyButton onClick={() => handlePurchase()}>구매하기</BuyButton>
+            <BuyButton onClick={handlePurchase}>장바구니</BuyButton>
+          </ButtonWrapper>
+        </StickyBarWrapper>
+        <Div></Div>
+      </MainWrapper>
     </>
   );
 };
