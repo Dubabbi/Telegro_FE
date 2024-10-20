@@ -309,7 +309,7 @@ const AdminProductDetail = () => {
               navigate('/admin/recording');
               break;
             default:
-              navigate('/admin/headset');  // 기본 페이지로 이동
+              navigate('/admin/headset');  
               break;
           }
         }

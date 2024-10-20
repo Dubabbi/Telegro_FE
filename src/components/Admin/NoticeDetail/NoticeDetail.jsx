@@ -10,6 +10,7 @@ const NoticeDetail = () => {
   const [notice, setNotice] = useState(null);  // 공지사항 데이터 상태 관리
   const [isPopup, setIsPopup] = useState(false); // 팝업 설정 여부 상태 관리
   const navigate = useNavigate();
+  const [error, setError] = useState('');
 
   useEffect(() => {
     const fetchNoticeDetail = async () => {
@@ -23,12 +24,52 @@ const NoticeDetail = () => {
       }
     };
 
+    const fetchPopupSetting = async () => {
+      try {
+        const response = await axios.get('https://api.telegro.kr/notices/popup'); // 팝업 설정된 게시글 ID 가져오기
+        if (response.status === 200 && response.data.data.id === parseInt(noticeId)) {
+          setIsPopup(true); 
+        } else {
+          setIsPopup(false); 
+        }
+      } catch (error) {
+        console.error('Failed to fetch popup settings:', error);
+      }
+    };
+
     fetchNoticeDetail();
+    fetchPopupSetting();
   }, [noticeId]);
+
+  const handlePopup = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.post(
+        `https://api.telegro.kr/api/notices/${noticeId}/popup`,
+        { isPopup: !isPopup },  
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+
+      if (response.status === 200) {
+        alert('팝업 설정이 성공적으로 변경되었습니다.');
+      } else {
+        throw new Error('팝업 설정 변경에 실패했습니다.');
+      }
+    } catch (error) {
+      console.error('Error while updating popup setting:', error);
+      alert('팝업 설정 변경 중 오류가 발생했습니다.');
+    }
+  };
 
   const handleCheckboxChange = () => {
     setIsPopup(!isPopup); 
+    handlePopup();  // 팝업 설정 상태 전송
   };
+
   const handleDelete = async () => {
     const confirmDelete = window.confirm("정말로 이 공지를 삭제하시겠습니까?");
     if (confirmDelete) {
@@ -52,6 +93,7 @@ const NoticeDetail = () => {
       }
     }
   };
+
   if (!notice) {
     return <div>Loading...</div>;  // 공지사항 데이터가 아직 로드되지 않았을 경우 로딩 표시
   }

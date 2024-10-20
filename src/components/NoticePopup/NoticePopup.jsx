@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { FaTimes } from 'react-icons/fa';
+import axios from 'axios';
 import Img from '/src/assets/image/Landing/logo.svg'; // 로고 이미지
 
 const Overlay = styled.div`
@@ -81,7 +82,7 @@ const Content = styled.div`
   h2{
     font-size: 1.6rem;
     font-weight: bold;
-      margin-left: 1%;
+    margin-left: 1%;
     @media(max-width: 800px){
       font-size: 1.3rem;
       margin-left: 2%;
@@ -89,7 +90,7 @@ const Content = styled.div`
   }
   p{
     font-size: 1.2rem;
-      margin-left: 1%;
+    margin-left: 1%;
     @media(max-width: 800px){
       font-size: 1.2rem;
       margin-left: 2%;
@@ -101,6 +102,7 @@ const HorizontalRule = styled.hr`
   border: none;
   border-top: 2px solid #D5DBE1;
   margin: 20px 0;
+  line-height: 1.7;
 `;
 
 const CloseButton = styled(FaTimes)`
@@ -143,11 +145,35 @@ const ConfirmButton = styled.button`
 
 const NoticePopup = () => {
   const [visible, setVisible] = useState(true);
+  const [notice, setNotice] = useState(null);  // 공지사항 데이터 상태 관리
+  const [error, setError] = useState('');
+
+  // 팝업 설정된 공지사항 ID 가져오기 및 공지사항 세부 정보 가져오기
+  const fetchPopupNotice = async () => {
+    try {
+      // 팝업 설정된 공지사항 ID 가져오기
+      const popupResponse = await axios.get('https://api.telegro.kr/notices/popup');
+      if (popupResponse.status === 200) {
+        const noticeId = popupResponse.data.data.id; // 팝업 설정된 공지사항 ID
+
+        // 해당 공지사항의 세부 정보 가져오기
+        const noticeResponse = await axios.get(`https://api.telegro.kr/notices/${noticeId}`);
+        if (noticeResponse.status === 200) {
+          setNotice(noticeResponse.data.data);  // 서버에서 받은 데이터로 상태 업데이트
+        }
+      }
+    } catch (error) {
+      console.error('Failed to fetch popup notice details:', error);
+      setError('공지사항 정보를 불러오는 중 오류가 발생했습니다.');
+    }
+  };
 
   useEffect(() => {
+    fetchPopupNotice();
+
+    // 팝업 표시 여부를 로컬 스토리지에서 확인
     const hidePopupDate = localStorage.getItem('hidePopupDate');
     const todayDate = new Date().toISOString().split('T')[0];
-
     if (hidePopupDate === todayDate) {
       setVisible(false);
     }
@@ -161,7 +187,7 @@ const NoticePopup = () => {
     setVisible(false);
   };
 
-  if (!visible) {
+  if (!visible || !notice) {
     return null;
   }
 
@@ -178,11 +204,9 @@ const NoticePopup = () => {
         </Header>
         <Content>
           <HorizontalRule />
-          <h2>공지 드립니다.</h2>
+          <h2>{notice.noticeTitle}</h2>
           <HorizontalRule />
-          <p>공지사항의 내용입니다.</p>
-          <p>공지사항 제목과 내용, 그리고 확인 및 삭제 버튼이 있습니다.</p>
-          <p>다른 공지 목록은 자료실에서 확인 가능합니다.</p>
+          <p dangerouslySetInnerHTML={{ __html: notice.noticeContent }} /> {/* 공지사항 내용 */}
         </Content>
         <Footer>
           <ConfirmButton onClick={() => handleClose(true)}>오늘 하루 보지 않기</ConfirmButton>
