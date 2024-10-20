@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaSearch } from 'react-icons/fa';
 import Form from 'react-bootstrap/Form';
@@ -11,8 +12,44 @@ import Pagination from '../../Pagination/Pagination';
 import * as P from '../ProductList/ProductStyle';
 import { FaFilePdf, FaFileImage, FaFileWord, FaFileExcel, FaFile } from 'react-icons/fa';
 
-const Notice = () => {
+const Notice = ({ page = 0, size = 10 }) => {
+  const navigate = useNavigate();
+  const [notice, setNotice] = useState([]);
+  const [error, setError] = useState('');
+  
+  useEffect(() => {
+    const fetchNotices = async () => {
+      try {
+        const response = await axios.get('https://api.telegro.kr/notices', {
+          params: { page, size },
+        });
+  
+        console.log('API Response:', response); 
+  
+        if (response.status === 200) {
+          setNotice(response.data.data.notices); 
+        } else {
+          throw new Error(response.data.message || 'Failed to fetch data');
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setError(`Failed to load products: ${error.message}`);  // 에러 설정
+      }
+    };
+  
+    fetchNotices();
+  }, [ page, size]);
+
+  if (error) {
+    return <div>{error}</div>;  // 에러 표시
+  }
+
+  // noticeFileName 값이 있는 경우 파일 확장자에 따라 아이콘을 반환하는 함수
   const getFileIcon = (filename) => {
+    if (!filename) {
+      return <FaFile />; // 파일 이름이 없을 때 기본 파일 아이콘 반환
+    }
+  
     const extension = filename.split('.').pop().toLowerCase();
     switch (extension) {
       case 'pdf':
@@ -30,16 +67,8 @@ const Notice = () => {
         return <FaFile />; // 기본 파일 아이콘
     }
   };
-  
-  const [notice, setNotice] = useState([
-    { id: 1, title: "공지사항 1", created_at: "2023-01-01", view_count: 150, author: "Admin", attachment: "File.pdf" },
-    { id: 2, title: "공지사항 2", created_at: "2023-01-02", view_count: 80, author: "Manager", attachment: "Image.jpg" },
-    { id: 3, title: "공지사항 3", created_at: "2023-01-01", view_count: 150, author: "Admin", attachment: "Document.docx" },
-    { id: 4, title: "공지사항 4", created_at: "2023-01-02", view_count: 80, author: "Staff", attachment: "No File" },
-    { id: 5, title: "공지사항 5", created_at: "2023-01-03", view_count: 90, author: "Coordinator", attachment: "Chart.xlsx" }
-  ]);
+
   const [searchValue, setSearchValue] = useState('');
-  const navigate = useNavigate();
   const handleSubmit = (e) => {
       e.preventDefault();
       console.log("검색어:", searchValue);
@@ -51,16 +80,17 @@ const Notice = () => {
     <CommonTableRow key={notice.id}>
       <CommonTableColumn>{notice.id}</CommonTableColumn>
       <CommonTableColumn>
-        <Link to={`/admin/adminnoticedetail`}>{notice.title}</Link>
+        <Link to={`/admin/adminnoticedetail/${notice.id}`}>{notice.noticeTitle}</Link>
       </CommonTableColumn>
       <CommonTableColumn>
-        {getFileIcon(notice.attachment)}
+        {getFileIcon(notice.noticeFileName)}  {/* 파일 이름에 따라 아이콘 결정 */}
       </CommonTableColumn>
-      <CommonTableColumn>{notice.author}</CommonTableColumn>
-      <CommonTableColumn>{new Date(notice.created_at).toLocaleDateString()}</CommonTableColumn>
-      <CommonTableColumn>{notice.view_count}</CommonTableColumn>
+      <CommonTableColumn>{notice.noticeAuthor}</CommonTableColumn>
+      <CommonTableColumn>{new Date(notice.noticeCreateDate).toLocaleDateString()}</CommonTableColumn>
+      <CommonTableColumn>{notice.viewCount}</CommonTableColumn>
     </CommonTableRow>
   ));
+  
   return (
     <>
     <N.MainWrapper>
@@ -88,12 +118,12 @@ const Notice = () => {
           <CommonTable headersName={['No', '제목', '첨부', '작성자', '등록일', '조회수']}>{items}</CommonTable>
         </div>      
       </N.Section2>
-      <N.Add  onClick={() => navigate('/admin/noticecreate')} src={editpost} />
+      <N.Add onClick={() => navigate('/admin/noticecreate')} src={editpost} />
     </N.MainWrapper>
-        <P.Pagediv>
-        <Pagination />
-      </P.Pagediv>
-      </>
+    <P.Pagediv>
+      <Pagination />
+    </P.Pagediv>
+    </>
   );
 };
 

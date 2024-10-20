@@ -31,7 +31,7 @@ export default function User() {
       <Route path="/" element={<LoginPage />} />
         <Route path="/main" element={<MainPage />} />
         <Route path="/notice" element={<NoticePage />} />
-        <Route path="/noticedetail" element={<NoticeDetailPage />} />
+        <Route path="/noticedetail/:noticeId" element={<NoticeDetailPage />} />
         <Route path="/orderProduct" element={<OrderProductPage />} />
         <Route path="/productdetail/:productId" element={<ProductDetailPage />} />
         <Route path="/order" element={<OrderPage />} />

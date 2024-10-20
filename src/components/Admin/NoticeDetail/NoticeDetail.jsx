@@ -1,70 +1,113 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
 import * as D from './NoticeDetailStyle'; 
 import * as N from '../Notice/NoticeStyle'; 
 import edit from '/src/assets/icon/Admin/editpost.svg';
+import { Link, useNavigate, useParams } from 'react-router-dom'; 
+import axios from 'axios'; 
 
 const NoticeDetail = () => {
-  const notice = {
-    id: 1,
-    title: "공지사항 제목",
-    created_at: "2023-01-01",
-    creator: "홍길동",
-    view_count: 150,
-    content: "공지사항의 내용입니다. 여기에 자세한 설명이 포함됩니다."
-  };
+  const { noticeId } = useParams();  // URL에서 공지사항 ID 추출
+  const [notice, setNotice] = useState(null);  // 공지사항 데이터 상태 관리
   const [isPopup, setIsPopup] = useState(false); // 팝업 설정 여부 상태 관리
+  const navigate = useNavigate();
 
+  useEffect(() => {
+    const fetchNoticeDetail = async () => {
+      try {
+        const response = await axios.get(`https://api.telegro.kr/notices/${noticeId}`);
+        if (response.status === 200) {
+          setNotice(response.data.data);  // 서버에서 받은 데이터로 상태 업데이트
+        }
+      } catch (error) {
+        console.error('Failed to fetch notice details:', error);
+      }
+    };
 
+    fetchNoticeDetail();
+  }, [noticeId]);
 
   const handleCheckboxChange = () => {
     setIsPopup(!isPopup); 
   };
-  const navigate = useNavigate('');
+  const handleDelete = async () => {
+    const confirmDelete = window.confirm("정말로 이 공지를 삭제하시겠습니까?");
+    if (confirmDelete) {
+      try {
+        const response = await axios.delete(`https://api.telegro.kr/api/notices/${noticeId}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`  // 토큰 필요
+          }
+        });
+
+        if (response.status === 200 && response.data.code === 20000) {
+          alert('공지사항이 성공적으로 삭제되었습니다.');
+          navigate('/admin/adminnotice');  // 목록 페이지로 이동
+        }
+      } catch (error) {
+        if (error.response && error.response.status === 403) {
+          setError('관리자 계정으로 로그인되지 않았습니다.');
+        } else {
+          setError('공지사항을 삭제하는 동안 오류가 발생했습니다.');
+        }
+      }
+    }
+  };
+  if (!notice) {
+    return <div>Loading...</div>;  // 공지사항 데이터가 아직 로드되지 않았을 경우 로딩 표시
+  }
 
   return (
     <N.MainWrapper2>
-      <N.Section style={{width: '90%', minHeight: '2.6vh', border: 'none'}}>
-        <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
-        <N.PageTitle>
-          <N.TitleText>공지사항</N.TitleText>
-        </N.PageTitle>
-        <D.EditImg src={edit} onClick={e=>navigate("/admin/adminnoticeedit")}/>
+      <N.Section style={{ width: '90%', minHeight: '2.6vh', border: 'none' }}>
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+          <N.PageTitle>
+            <N.TitleText>공지사항</N.TitleText>
+          </N.PageTitle>
+          <D.EditImg src={edit} onClick={() => navigate(`/admin/adminnoticeedit/${notice.id}`)} />
         </div>
+
         <D.BoardViewWrap>
           <D.BoardView>
-          <D.Title>제목 
-            <span style={{ display: 'inline-block', marginLeft: '20px', marginRight: '20px', color: '#aaa', fontSize: '1.6rem' }}>
-              |
-            </span> 
-            {notice.title}
-          </D.Title>
+            <D.Title>제목 
+              <span style={{ display: 'inline-block', marginLeft: '20px', marginRight: '20px', color: '#aaa', fontSize: '1.6rem' }}>
+                |
+              </span> 
+              {notice.noticeTitle}
+            </D.Title>
+
             <D.Info>
               <D.InfoItem>
-              <D.InfoItemText>No</D.InfoItemText>
+                <D.InfoItemText>No</D.InfoItemText>
                 <D.InfoItemText>: {notice.id}</D.InfoItemText>
               </D.InfoItem>
               <D.InfoItem>
                 <D.InfoItemText>작성일</D.InfoItemText>
-                <D.InfoItemText>: {new Date(notice.created_at).toLocaleDateString()}</D.InfoItemText>
+                <D.InfoItemText>: {new Date(notice.noticeCreateDate).toLocaleDateString()}</D.InfoItemText>
               </D.InfoItem>
               <D.InfoItem>
                 <D.InfoItemText>작성자</D.InfoItemText>
-                <D.InfoItemText>: {notice.creator}</D.InfoItemText>
+                <D.InfoItemText>: {notice.noticeAuthor}</D.InfoItemText>
               </D.InfoItem>
               <D.InfoItem>
                 <D.InfoItemText>조회</D.InfoItemText>
-                <D.InfoItemText>: {notice.view_count}</D.InfoItemText>
+                <D.InfoItemText>: {notice.viewCount}</D.InfoItemText>
               </D.InfoItem>
             </D.Info>
-            <D.Cont>
-              {notice.content.split('\n').map((content, index) => (
-                <React.Fragment key={index}>
-                  {content}
-                  <br />
-                </React.Fragment>
-              ))}
-            </D.Cont>
+
+            <D.Cont dangerouslySetInnerHTML={{ __html: notice.noticeContent }} />
+            <div style={{ marginTop: '20px' }}>
+              <h4>첨부 파일</h4>
+              <ul>
+                {notice.noticeFiles.map(file => (
+                  <li key={file.id}>
+                    <a href={file.fileUrl} target="_blank" rel="noopener noreferrer">
+                      {file.fileName}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
             <div style={{ display: 'flex', alignItems: 'center', marginTop: '10px' }}>
               <D.Checkbox
                 type="checkbox"
@@ -76,18 +119,19 @@ const NoticeDetail = () => {
                 팝업으로 설정
               </label>
             </div>
-            <hr style={{ margin: '20px 0', border: '1.3px solid #000' }} />
 
+            <hr style={{ margin: '20px 0', border: '1.3px solid #000' }} />
           </D.BoardView>
         </D.BoardViewWrap>
-      <D.BtWrap>
-            <D.BtLink as={Link} to="/admin/adminnotice">
-              목록
-            </D.BtLink>
-            <D.DeleteBtLink as={Link} to="">
-              삭제
-            </D.DeleteBtLink>
-          </D.BtWrap>
+
+        <D.BtWrap>
+          <D.BtLink as={Link} to="/admin/adminnotice">
+            목록
+          </D.BtLink>
+          <D.DeleteBtLink as={Link} onClick={handleDelete}>
+            삭제
+          </D.DeleteBtLink>
+        </D.BtWrap>
       </N.Section>
     </N.MainWrapper2>
   );

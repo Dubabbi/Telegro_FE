@@ -1,18 +1,32 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import axios from 'axios';
 import * as D from './NoticeDetailStyle'; // 스타일 파일을 가져옵니다.
 import * as N from '../Notice/NoticeStyle'; // 스타일 파일을 가져옵니다.
 
 const NoticeDetail = () => {
-  const notice = {
-    id: 1,
-    title: "공지사항 제목",
-    created_at: "2023-01-01",
-    creator: "홍길동",
-    view_count: 150,
-    content: "공지사항의 내용입니다. 여기에 자세한 설명이 포함됩니다."
-  };
+  const { noticeId } = useParams();  // URL에서 noticeId 추출
+  const [notice, setNotice] = useState(null);
 
+  useEffect(() => {
+    const fetchNoticeDetail = async () => {
+      try {
+        const response = await axios.get(`https://api.telegro.kr/notices/${noticeId}`);
+        if (response.status === 200) {
+          setNotice(response.data.data);  
+        }
+      } catch (error) {
+        console.error('Failed to fetch notice details:', error);
+      }
+    };
+
+    fetchNoticeDetail();
+  }, [noticeId]);
+
+  if (!notice) {
+    // 공지사항 데이터가 로드되지 않았을 때 로딩 상태 표시
+    return <div>Loading...</div>;
+  }
 
   return (
     <N.MainWrapper>
@@ -27,7 +41,7 @@ const NoticeDetail = () => {
             <span style={{ display: 'inline-block', marginLeft: '20px', marginRight: '20px', color: '#aaa', fontSize: '1.6rem' }}>
               |
             </span> 
-            {notice.title}
+            {notice.noticeTitle}
           </D.Title>
             <D.Info>
               <D.InfoItem>
@@ -36,25 +50,32 @@ const NoticeDetail = () => {
               </D.InfoItem>
               <D.InfoItem>
                 <D.InfoItemText>작성일</D.InfoItemText>
-                <D.InfoItemText>: {new Date(notice.created_at).toLocaleDateString()}</D.InfoItemText>
+                <D.InfoItemText>: {new Date(notice.noticeCreateDate).toLocaleDateString()}</D.InfoItemText>
               </D.InfoItem>
               <D.InfoItem>
                 <D.InfoItemText>작성자</D.InfoItemText>
-                <D.InfoItemText>: {notice.creator}</D.InfoItemText>
+                <D.InfoItemText>: {notice.noticeAuthor}</D.InfoItemText>
               </D.InfoItem>
               <D.InfoItem>
                 <D.InfoItemText>조회</D.InfoItemText>
-                <D.InfoItemText>: {notice.view_count}</D.InfoItemText>
+                <D.InfoItemText>: {notice.viewCount}</D.InfoItemText>
               </D.InfoItem>
             </D.Info>
-            <D.Cont>
-              {notice.content.split('\n').map((content, index) => (
-                <React.Fragment key={index}>
-                  {content}
-                  <br />
-                </React.Fragment>
-              ))}
-            </D.Cont>
+            <D.Cont dangerouslySetInnerHTML={{ __html: notice.noticeContent }} />
+            
+            <div style={{ marginTop: '20px' }}>
+              <h4>첨부 파일</h4>
+              <ul>
+                {notice.noticeFiles.map(file => (
+                  <li key={file.id}>
+                    <a href={file.fileUrl} target="_blank" rel="noopener noreferrer">
+                      {file.fileName}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <hr style={{ margin: '20px 0', border: '1.3px solid #000' }} />
           </D.BoardView>
           <D.BtWrap>
             <D.BtLink as={Link} to="/notice">

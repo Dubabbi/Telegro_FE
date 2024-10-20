@@ -30,8 +30,8 @@ export default function Admin() {
         <Route path="clientmanagement" element={<ClientManagementPage />} />
         <Route path="adminnotice" element={<AdminNoticePage />} />
         <Route path="noticecreate" element={<NoticeCreatePage />} />
-        <Route path="adminnoticeedit" element={<AdminNoticeEditPage />} />
-        <Route path="adminnoticedetail" element={<AdminNoticeDetailPage />} />
+        <Route path="adminnoticeedit/:noticeId" element={<AdminNoticeEditPage />} />
+        <Route path="adminnoticedetail/:noticeId" element={<AdminNoticeDetailPage />} />
         <Route path="stat" element={<StatPage />} /> 
         <Route path="productcreate" element={<ProductCreatePage />} />
         <Route path="headset" element={<Headset />} />
