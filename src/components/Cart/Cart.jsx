@@ -29,9 +29,11 @@ export const OrderPageWrapper = styled.div`
 
 export const LeftSection = styled.div`
   width: 60%;
-  background-color: #f8f9fa;
+  background-color: #fff;
   padding: 20px;
+  border: 1px solid #d3d3d3;
   border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
   @media (max-width: 780px) {
     width: 100%;

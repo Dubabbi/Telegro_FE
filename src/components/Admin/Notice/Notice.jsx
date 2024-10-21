@@ -74,21 +74,35 @@ const Notice = ({ page = 0, size = 10 }) => {
   };
 
   const [searchValue, setSearchValue] = useState('');
+  const [filteredNotice, setFilteredNotice] = useState([]); 
+
   const handleSubmit = (e) => {
       e.preventDefault();
       console.log("검색어:", searchValue);
       setSearchValue('');
   };
 
+  // 검색 처리 함수
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchValue) {
+      const filtered = notice.filter((item) => 
+        item.noticeTitle.toLowerCase().includes(searchValue.toLowerCase()) // 대소문자 구분 없이 필터링
+      );
+      setFilteredNotice(filtered);  // 검색 결과로 상태 업데이트
+    } else {
+      setFilteredNotice(notice);  // 검색어가 없으면 전체 리스트로 설정
+    }
+  };
 
-  const items = notice.map((notice) => (
+  const items = filteredNotice.map((notice) => (
     <CommonTableRow key={notice.id}>
       <CommonTableColumn>{notice.id}</CommonTableColumn>
       <CommonTableColumn>
-        <Link to={`/admin/adminnoticedetail/${notice.id}`}>{notice.noticeTitle}</Link>
+        <Link to={`/noticedetail/${notice.id}`}>{notice.noticeTitle}</Link>
       </CommonTableColumn>
       <CommonTableColumn>
-        {getFileIcon(notice.noticeFileName)}  {/* 파일 이름에 따라 아이콘 결정 */}
+        {getFileIcon(notice.noticeFileName)}
       </CommonTableColumn>
       <CommonTableColumn>{notice.noticeAuthor}</CommonTableColumn>
       <CommonTableColumn>{new Date(notice.noticeCreateDate).toLocaleDateString()}</CommonTableColumn>
@@ -103,11 +117,11 @@ const Notice = ({ page = 0, size = 10 }) => {
         <N.PageTitle>
           <N.TitleText>공지사항</N.TitleText>
         </N.PageTitle>
-        <div style={{textAlign: 'right'}}> 총 게시물 수 : 58  현재 페이지 : 1 / 6</div>
+        <div style={{textAlign: 'right'}}> 총 게시물 수 : {filteredNotice.length}  현재 페이지 : 1 / 6</div>
         <N.BoardSearchArea>
           <N.SearchWindow marginLeft>
             <N.SearchWrap>
-            <N.StyledForm onSubmit={handleSubmit}>
+            <N.StyledForm onSubmit={handleSearch}>
                 <Form.Control
                   type="text"
                   placeholder="게시글 검색"

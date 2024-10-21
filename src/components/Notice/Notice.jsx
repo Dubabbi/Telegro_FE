@@ -14,6 +14,8 @@ const Notice = ({ page = 0, size = 10 }) => {
   const navigate = useNavigate();
   const [notice, setNotice] = useState([]);
   const [error, setError] = useState('');
+  const [searchValue, setSearchValue] = useState('');
+  const [filteredNotice, setFilteredNotice] = useState([]);  // 검색 결과를 담는 상태 추가
 
   useEffect(() => {
     const fetchNotices = async () => {
@@ -29,7 +31,8 @@ const Notice = ({ page = 0, size = 10 }) => {
           const sortedNotices = response.data.data.notices.sort((a, b) => {
             return new Date(b.noticeCreateDate) - new Date(a.noticeCreateDate);
           });
-          setNotice(sortedNotices); // 정렬된 데이터로 상태 업데이트
+          setNotice(sortedNotices);  // 데이터를 상태에 저장
+          setFilteredNotice(sortedNotices);  // 검색 초기 상태
         } else {
           throw new Error(response.data.message || 'Failed to fetch data');
         }
@@ -42,11 +45,9 @@ const Notice = ({ page = 0, size = 10 }) => {
     fetchNotices();
   }, [ page, size]);
 
-
   if (error) {
     return <div>{error}</div>;  // 에러 표시
   }
-
 
   const getFileIcon = (filename) => {
     if (!filename) {
@@ -70,16 +71,20 @@ const Notice = ({ page = 0, size = 10 }) => {
     }
   };
 
-
-  const [searchValue, setSearchValue] = useState('');
-
-  const handleSubmit = (e) => {
-      e.preventDefault();
-      console.log("검색어:", searchValue);
-      setSearchValue('');
+  // 검색 처리 함수
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchValue) {
+      const filtered = notice.filter((item) => 
+        item.noticeTitle.toLowerCase().includes(searchValue.toLowerCase()) // 대소문자 구분 없이 필터링
+      );
+      setFilteredNotice(filtered);  // 검색 결과로 상태 업데이트
+    } else {
+      setFilteredNotice(notice);  // 검색어가 없으면 전체 리스트로 설정
+    }
   };
 
-  const items = notice.map((notice) => (
+  const items = filteredNotice.map((notice) => (
     <CommonTableRow key={notice.id}>
       <CommonTableColumn>{notice.id}</CommonTableColumn>
       <CommonTableColumn>
@@ -94,7 +99,6 @@ const Notice = ({ page = 0, size = 10 }) => {
     </CommonTableRow>
   ));
   
-  
   return (
     <>
     <N.MainWrapper>
@@ -103,11 +107,11 @@ const Notice = ({ page = 0, size = 10 }) => {
         <N.PageTitle>
           <N.TitleText>공지사항</N.TitleText>
         </N.PageTitle>
-        <div style={{textAlign: 'right'}}> 총 게시물 수 : 58  현재 페이지 : 1 / 6</div>
+        <div style={{textAlign: 'right'}}> 총 게시물 수 : {filteredNotice.length} </div>
         <N.BoardSearchArea>
           <N.SearchWindow>
             <N.SearchWrap>
-            <N.StyledForm onSubmit={handleSubmit}>
+            <N.StyledForm onSubmit={handleSearch}>
                 <Form.Control
                   type="text"
                   placeholder="게시글 검색"
