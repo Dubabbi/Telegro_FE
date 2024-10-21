@@ -196,7 +196,6 @@ export default function MobileNavbar() {
   });
   const navigate = useNavigate();
   const location = useLocation();
-
   const fetchProductsByCategory = async (category, page = 0) => {
     try {
       const response = await axios.get(`https://api.telegro.kr/products`, {
@@ -213,7 +212,6 @@ export default function MobileNavbar() {
       return [];
     }
   };
-  
   useEffect(() => {
     const fetchAllProducts = async () => {
       const categories = ['HEADSET', 'LINE_CORD', 'RECORDER', 'ACCESSORY'];
@@ -230,6 +228,20 @@ export default function MobileNavbar() {
   
     fetchAllProducts();
   }, []);
+  // 로그인 여부 확인하는 함수
+  const checkLoginStatus = () => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+  };
+
+  // 컴포넌트 로드 시 로그인 여부 확인
+  useEffect(() => {
+    checkLoginStatus();
+  }, []);
 
   const toggleSidebar = () => {
     setIsMobileSidebarVisible(!isMobileSidebarVisible);
@@ -244,6 +256,7 @@ export default function MobileNavbar() {
   const toggleSubMenu = () => {
     setIsSubMenuOpen(!isSubMenuOpen);
   };
+
   useEffect(() => {
     setIsMobileSidebarVisible(false);
     setIsSubMenuOpen(false); 

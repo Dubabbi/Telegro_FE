@@ -8,9 +8,9 @@ import axios from 'axios';
 export default function Navbar() {
   const [searchValue, setSearchValue] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [products, setProducts] = useState([]);  // 상품 데이터를 저장할 상태
+  const [products, setProducts] = useState([]);  
   const [filteredProducts, setFilteredProducts] = useState([]);  // 검색 결과를 저장할 상태
-  const [isLoading, setIsLoading] = useState(true);  
+  const [isLoading, setIsLoading] = useState(true); 
   const navigate = useNavigate();
   
   const [userInfo, setUserInfo] = useState({
@@ -21,6 +21,20 @@ export default function Navbar() {
     avatarUrl: 'https://example.com/avatar.jpg' 
   });
 
+  // 로그인 여부를 확인하는 함수
+  const checkLoginStatus = () => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+  };
+
+  // 컴포넌트가 로드될 때 로그인 상태를 확인
+  useEffect(() => {
+    checkLoginStatus();
+  }, []);
   const fetchProductsByCategory = async (category, page = 0) => {
     try {
       const response = await axios.get(`https://api.telegro.kr/products`, {
