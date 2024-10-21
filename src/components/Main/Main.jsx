@@ -15,7 +15,6 @@ export default function Main() {
     const images = [image1, image2, image3, image4, image5, image6];
     const [currentIndex, setCurrentIndex] = useState(0);
     const [showArrows, setShowArrows] = useState(false);
-    const [isMobile, setIsMobile] = useState(window.innerWidth <= 780);
 
     const goToPrevious = () => {
         const isFirstSlide = currentIndex === 0;
@@ -30,44 +29,32 @@ export default function Main() {
     };
 
     useEffect(() => {
-        // 780px 이하일 때 자동 슬라이드 설정
-        const handleResize = () => {
-            setIsMobile(window.innerWidth <= 780);
-        };
-
-        window.addEventListener('resize', handleResize);
-
-        let interval;
-        if (isMobile) {
-            interval = setInterval(() => {
-                goToNext();
-            }, 3000);
-        }
+        // 자동 슬라이드 설정
+        const interval = setInterval(() => {
+            goToNext();
+        }, 3000); // 3초마다 슬라이드 이동
 
         return () => {
             clearInterval(interval);
-            window.removeEventListener('resize', handleResize);
         };
-    }, [currentIndex, isMobile]);
+    }, [currentIndex]);
 
     return (
         <>
         <div style={{width: '100%', minHeight: '160px', backgroundColor: '#000', border: 'none'}}></div>
         <M.NewContainer
-          onMouseEnter={() => setShowArrows(!isMobile && true)}
+          onMouseEnter={() => setShowArrows(true)}
           onMouseLeave={() => setShowArrows(false)}
         >
-            {/* 780px 초과일 때만 화살표 표시 */}
-            {!isMobile && (
-                <>
+            {/* 화살표 표시 */}
+            <>
                 <img src={arrowleft} alt="Previous" onClick={goToPrevious}
                     style={{ cursor: 'pointer', position: 'absolute', top: '50%', left: '32px', zIndex: 100, transform: 'translateY(-50%)', 
                              opacity: showArrows ? 1 : 0, transition: 'opacity 1s ease-in-out', transitionDelay: showArrows ? '0.5s' : '0s' }} />
                 <img src={arrowright} alt="Next" onClick={goToNext}
                     style={{ cursor: 'pointer', position: 'absolute', top: '50%', right: '32px', zIndex: 100, transform: 'translateY(-50%)',
                              opacity: showArrows ? 1 : 0, transition: 'opacity 1s ease-in-out', transitionDelay: showArrows ? '0.5s' : '0s' }} />
-                </>
-            )}
+            </>
             <div style={{
                 display: 'flex',
                 transition: 'transform 0.5s ease-in-out',
