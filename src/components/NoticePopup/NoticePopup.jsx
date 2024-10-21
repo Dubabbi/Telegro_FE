@@ -20,7 +20,8 @@ const PopupWrapper = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   max-width: 500px;
-  max-height: 600px;
+  height: 600px;
+  max-height: 90%;
   width: 500px;
   height: 600px;
   background-color: white;

@@ -74,12 +74,10 @@ export const ProductItem = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 10px 0;
+  max-width: 100%;
   border-bottom: 1px solid #e0e0e0;
+  overflow: auto;
 
-  input[type="checkbox"] {
-    margin-right: 15px; /* 체크박스와 상품 정보 사이의 간격을 설정 */
-    transform: scale(1.5); /* 체크박스 크기 조절 */
-  }
 `;
 export const ProductInfo = styled.div`
   display: flex;
@@ -120,16 +118,10 @@ export const ProductPrice = styled.div`
   font-size: 1.2rem;
   font-weight: bold;
   color: #000;
+  white-space: nowrap;
 `;
 
-export const QuantityWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  @media(max-width: 780px){
-    gap: 2px;
-  }
-`;
+
 
 export const QuantityButton = styled.button`
   background-color: #eee;
@@ -139,11 +131,22 @@ export const QuantityButton = styled.button`
   cursor: pointer;
 `;
 
+export const QuantityWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 5px; /* 요소 간의 간격 조정 */
+  width: 100px; /* 고정 너비 설정 */
+  @media(max-width: 780px){
+    gap: 2px;
+    width: 80px; /* 작은 화면에서의 너비 조정 */
+  }
+`;
+
 export const QuantityInput = styled.input`
   width: 40px;
   text-align: center;
   @media(max-width: 780px){
-    width: 20px;
+    width: 30px; /* 작은 화면에서 입력 필드 크기 조정 */
   }
 `;
 
@@ -325,7 +328,6 @@ const Cart = () => {
   };
   
   
-
   const handleIncreaseQuantity = (id, productOption, currentQuantity) => {
     const newQuantity = currentQuantity + 1;
     setProducts(products.map(product => 
@@ -342,24 +344,15 @@ const Cart = () => {
     updateCartItem(id, productOption, newQuantity); 
   };
   
-
-  // 체크박스 변경 함수
-  const handleCheckboxChange = (id) => {
-    setProducts(products.map(product =>
-      product.id === id ? { ...product, selected: !product.selected } : product
+  // 상품 옵션 변경 함수
+  const handleOptionChange = (id, selectedOption) => {
+    setProducts(products.map(product => 
+      product.id === id ? { ...product, productOption: selectedOption } : product
     ));
+    const product = products.find(product => product.id === id);
+    updateCartItem(id, selectedOption, product.quantity);
   };
-
-  // 선택한 상품만 구매하기
-  const handlePurchase = () => {
-    const selectedProducts = products.filter(product => product.selected);
-    if (selectedProducts.length === 0) {
-      alert('구매할 상품을 선택해주세요.');
-      return;
-    }
-    console.log("구매할 상품들:", selectedProducts);
-    navigate('/orderprocess', { state: { products: selectedProducts } });
-  };
+  
   const updateCartItem = async (cartId, productOption, quantity) => {
     try {
       const accessToken = localStorage.getItem('token');
@@ -385,6 +378,25 @@ const Cart = () => {
       alert('장바구니 항목을 업데이트하는 중 오류가 발생했습니다.');
     }
   };
+
+  // 체크박스 변경 함수
+  const handleCheckboxChange = (id) => {
+    setProducts(products.map(product =>
+      product.id === id ? { ...product, selected: !product.selected } : product
+    ));
+  };
+
+  // 선택한 상품만 구매하기
+  const handlePurchase = () => {
+    const selectedProducts = products.filter(product => product.selected);
+    if (selectedProducts.length === 0) {
+      alert('구매할 상품을 선택해주세요.');
+      return;
+    }
+    console.log("구매할 상품들:", selectedProducts);
+    navigate('/orderprocess', { state: { products: selectedProducts } });
+  };
+ 
   
   
   return (
@@ -411,15 +423,18 @@ const Cart = () => {
             <ProductDetails>
               <ProductName>{product.productName}</ProductName>
               <ProductModel>{product.productModel}</ProductModel>
-              <select
-                value={product.productOption} 
-                onChange={(e) => updateCartItem(product.id, e.target.value, product.quantity)}
-              >
-               
-                  <option value={product.productOption}>
-                    {product.productOption}
-                  </option>
-              </select>
+                {/* productOptions 배열을 사용하여 옵션을 드롭다운으로 표시 */}
+                <select
+                  value={product.productOption}
+                  onChange={(e) => updateCartItem(product.id, e.target.value, product.quantity)}
+                >
+                  {/* productOptions 배열의 각 항목을 드롭다운 옵션으로 추가 */}
+                  {product.productOptions.map((option, index) => (
+                    <option key={index} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </select>
             </ProductDetails>
 
             </ProductInfo>

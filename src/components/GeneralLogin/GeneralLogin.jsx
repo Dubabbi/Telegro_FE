@@ -52,13 +52,7 @@ function GeneralLogin() {
               <L.Checkbox type="checkbox" id="checkId" />
               <L.CheckboxLabel htmlFor="checkId">아이디 저장</L.CheckboxLabel>
             </L.CheckboxContainer>
-            <div>
-              <L.Text>일반고객</L.Text>
-              <L.Account>            
-                <L.Span color="#94A3D8">ID: guest</L.Span>
-                <L.Span color="#94A3D8">PW: 0000</L.Span>
-              </L.Account>
-            </div>
+
           </div>
           <L.Button2 type="submit" onClick={handleSubmit}>로그인</L.Button2>
           <L.Button onClick={e=>navigate('/signup')}>회원가입</L.Button>

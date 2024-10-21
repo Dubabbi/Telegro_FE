@@ -302,13 +302,16 @@ const PriceTag = styled.span`
 
 const ProductDetail = () => {
   const navigate = useNavigate();
+  const [inputOption, setInputOption] = useState('');
   const [product, setProduct] = useState(null);
   const [selectedOption, setSelectedOption] = useState('');
   const [quantity, setQuantity] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const { productId } = useParams();
-
+  const handleInputOptionChange = (e) => {
+    setInputOption(e.target.value);
+  };
   const handlePurchase = async () => {
     if (!selectedOption) {
       alert('옵션을 선택해주세요.');
@@ -338,6 +341,43 @@ const ProductDetail = () => {
       alert('장바구니에 물건을 담는 중 오류가 발생했습니다.');
     }
   };
+
+  {/*
+  const handleInputOptionChange = (e) => {
+    setInputOption(e.target.value);
+  };
+  // 서버로 요청을 보낼 때 기재형 옵션 값도 포함
+  const handlePurchase = async () => {
+    if (!selectedOption) {
+      alert('옵션을 선택해주세요.');
+      return;
+    }
+
+    try {
+      const accessToken = localStorage.getItem('token');
+      const response = await axios.post(
+        `https://api.telegro.kr/api/carts/${productId}`,
+        {
+          productOption: selectedOption, // 기존 옵션
+          quantity: quantity, // 수량
+          inputOption: inputOption, // 추가된 기재형 옵션 값
+        },
+        {
+          headers: { Authorization: `Bearer ${accessToken}` }, // 헤더
+        }
+      );
+
+      if (response.status === 200) {
+        alert('상품이 장바구니에 담겼습니다!');
+      } else {
+        alert('장바구니에 담기 실패: ' + response.data.message);
+      }
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+      alert('장바구니에 물건을 담는 중 오류가 발생했습니다.');
+    }
+  };
+    */}
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -455,7 +495,18 @@ const ProductDetail = () => {
                 <option key={index} value={option}>{option}</option>
               ))}
             </Select>
-
+            {(product.category === 'HEADSET' || product.category === 'LINE_CORD') && (
+              <>
+                <DescriptionTitle style={{fontSize: '1.2rem', paddingTop: '3%'}} htmlFor="inputoption">사용 전화기 모델명 기재(전화기뒷면)</DescriptionTitle>
+                <QuantityInput
+                  type="text" 
+                  id="inputoption" 
+                  value={inputOption}
+                  onChange={handleInputOptionChange} 
+                  placeholder="옵션을 입력하세요"
+                />
+              </>
+            )}
             <DescriptionTitle style={{fontSize: '1.2rem', paddingTop: '3%'}} htmlFor="quantity">수량</DescriptionTitle>
             <QuantityInput
               type="number"
@@ -465,6 +516,7 @@ const ProductDetail = () => {
               min="1"
               max="99"
             />
+
           </OptionSelectWrapper>
 
           <ButtonWrapper>
