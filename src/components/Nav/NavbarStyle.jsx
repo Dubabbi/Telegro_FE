@@ -28,7 +28,26 @@ export const SearchResultContainer = styled.div`
     font-weight: bold;
   }
   @media(max-width: 780px){
-    padding-top: 20px;
+    padding-top: 50px;
+  }
+`;
+
+export const AdminResultContainer = styled.div`
+  display: flex;
+  flex-direction: column; 
+  align-items: center;  
+  padding-left: 270px;
+  padding-top: 50px;
+  min-height: 100vh;
+
+  h1 {
+    font-size: 2rem;
+    color: #0000ff;
+    text-align: center;
+    font-weight: bold;
+  }
+  @media(max-width: 780px){
+    padding-left: 0px;
   }
 `;
 

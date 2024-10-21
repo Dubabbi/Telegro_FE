@@ -237,15 +237,19 @@ export const TotalPrice = styled.div`
 export const ConfirmButton = styled.button`
   width: 100%;
   padding: 15px;
-  background-color: #4d44b5;
-  color: white;
-  font-size: 1rem;
-  border-radius: 5px;
+  background-color: rgba(77, 68, 181, 0.3);
+  color: #4D44B5;
   border: none;
+  font-weight: bold;
+  border-radius: 5px;
+  font-size: 1rem;
   cursor: pointer;
   margin-top: 2%;
+  &:hover {
+    background-color: rgba(77, 68, 181, 0.6);  /* 호버 시 배경을 진한 보라색으로 */
+    color: #fff;    
+  }
 `;
-
 export const Title = styled.div`
   display: flex;
   flex-direction: row;

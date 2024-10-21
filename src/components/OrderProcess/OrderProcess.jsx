@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import img from '../Check/image.svg'; // Adjust the actual image path
 import { Postcode } from '../Postcode/Postcode'; // 주소 검색 컴포넌트
 import * as C from '../Cart/Cart';
+import { useNavigate } from 'react-router-dom';
 
 export const Div = styled.div`
   width: 100%;
@@ -13,6 +14,7 @@ export const Div = styled.div`
     min-height: 6vh;
   }
 `;
+
 export const OrderPageWrapper = styled.div`
   display: flex;
   justify-content: space-between;
@@ -27,12 +29,7 @@ export const OrderPageWrapper = styled.div`
 
 const LeftSection = styled.div`
   width: 50%;
-  background-color: #f8f9fa;
-  background-color: #fff;
-  padding: 2%;
-  border: 1px solid #d3d3d3;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
   @media (max-width: 780px) {
     width: 100%;
     margin-bottom: 20px;
@@ -45,16 +42,45 @@ const DeliveryInfoForm = styled.div`
   margin-bottom: 30px;
 `;
 
+const RightSection = styled.div`
+  width: 45%;
+  padding: 20px;
+  @media (max-width: 780px) {
+    width: 100%;
+  }
+`;
+
 const SectionTitle = styled.h3`
   font-size: 1.5rem;
   margin-bottom: 20px;
   font-weight: bold;
 `;
 
-const FormRow = styled.div`
+const ProductInfo = styled.div`
   display: flex;
-  justify-content: space-between;
+  align-items: center;
   margin-bottom: 20px;
+
+  img {
+    width: 80px;
+    height: 80px;
+    margin-right: 20px;
+  }
+
+  div {
+    display: flex;
+    flex-direction: column;
+  }
+
+  h4 {
+    font-size: 1.2rem;
+    margin: 0;
+  }
+
+  p {
+    font-size: 1rem;
+    margin: 5px 0;
+  }
 `;
 
 const FormInput = styled.input`
@@ -70,7 +96,11 @@ const AddressInput = styled.input`
   border: 1px solid #ccc;
   border-radius: 5px;
 `;
-
+const FormRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+`;
 const AddressSearchRow = styled(FormRow)`
   display: flex;
   align-items: center;
@@ -98,14 +128,11 @@ const TextArea = styled.textarea`
   height: 100px;
 `;
 
-
 const OrderTitle = styled.h2`
   font-size: 1.5rem;
   margin-bottom: 20px;
   font-weight: bold;
 `;
-
-
 
 const PriceDetail = styled.div`
   display: flex;
@@ -119,7 +146,6 @@ const TotalPrice = styled.div`
   font-size: 1.3rem;
   font-weight: bold;
 `;
-
 
 const PaymentMethodWrapper = styled.div`
   margin-top: 20px;
@@ -137,9 +163,6 @@ const PaymentOption = styled.div`
   margin-bottom: 10px;
 `;
 
-const RadioButton = styled.input`
-  margin-right: 10px;
-`;
 export const Checkbox = styled.input`
   margin-right: 6px;
   margin-top: 6px;
@@ -150,12 +173,13 @@ export const Checkbox = styled.input`
   &:checked {
     background-color: #bbb;
   }
- @media(max-width: 800px){
+  @media (max-width: 800px) {
     width: 20px;
     height: 20px;
     border-radius: 5px;
   }
 `;
+
 export const Select = styled.select`
   width: 50%;
   border: 1px solid #ddd;
@@ -164,6 +188,7 @@ export const Select = styled.select`
   border-radius: 5px;
   font-size: 1rem;
 `;
+
 const CheckboxWrapper = styled.div`
   display: flex;
   align-items: center;
@@ -175,15 +200,21 @@ const CheckboxLabel = styled.label`
   font-size: 1rem;
 `;
 
-const OrderProcess = () => {
-  const [isDefaultChecked, setIsDefaultChecked] = useState(false);
-  const [selectedAddress, setSelectedAddress] = useState(''); // 선택된 배송지 관리
-  const handleChange = (e) => {
-    const selectedKey = e.target.value;
-    const selectedAddressValue = AddressList[selectedKey];
+const BoxSection = styled.div`
+  background-color: #fff;
+  border: 1px solid #d3d3d3;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 10px;
+`;
 
-    setSelectedAddress(selectedKey);
-  };
+const OrderProcess = () => {
+  const navigate = useNavigate();
+  const [isCreditCardChecked, setIsCreditCardChecked] = useState(false);
+  const [isBankTransferChecked, setIsBankTransferChecked] = useState(false);
+  const [isKakaoPayChecked, setIsKakaoPayChecked] = useState(false);
+  const [isAgreementChecked, setIsAgreementChecked] = useState(false);
+  const [selectedAddress, setSelectedAddress] = useState(''); // 선택된 배송지 관리
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -192,11 +223,13 @@ const OrderProcess = () => {
     detailedAddress: '',
     request: ''
   });
+
   const AddressList = {
     A: '배송지1',
     B: '배송지2',
     C: '배송지3'
   };
+
   // Postcode로부터 주소와 우편번호 가져오는 함수
   const handleAddressComplete = ({ fullAddress, zonecode }) => {
     setFormData({
@@ -209,126 +242,168 @@ const OrderProcess = () => {
   return (
     <>
       <Div></Div>
-      <C.Title><h1>주문 관리</h1></C.Title>
+      <C.Title style={{paddingLeft: '20px'}}><h1>결제하기</h1></C.Title>
       <OrderPageWrapper>
-        {/* 좌측 배송 정보 입력란 */}
+        {/* 좌측 섹션 */}
         <LeftSection>
-          <SectionTitle>배송 정보</SectionTitle>
-          <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
-          <CheckboxWrapper>
-            <Checkbox
-              type="checkbox"
-              checked={isDefaultChecked}
-              onChange={() => {
-                setIsDefaultChecked(!isDefaultChecked);
-                handleDefaultAddress();
-              }}
-          />
-            <CheckboxLabel>기본 배송지 불러오기</CheckboxLabel>
-          </CheckboxWrapper>
-          <Select
-              name="AddressList"
-              value={selectedAddress} // 선택된 값 상태 반영
-              onChange={handleChange}
-            >
-              <option value="">배송지 선택</option>
-              {Object.entries(AddressList).map(([key, value]) => (
-                <option key={key} value={key}>
-                  {value}
-                </option>
-              ))}
-            </Select>
-          </div>
-          <DeliveryInfoForm>
-            <FormRow>
-              <FormInput
-                type="text"
-                placeholder="받는 분 이름 *"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+          <BoxSection>
+            <SectionTitle>주문 상품 정보</SectionTitle>
+            <ProductInfo>
+              <img src={img} alt="상품 이미지" />
+              <div>
+                <h4>Daily Facial Soap</h4>
+                <p>₩18,000원</p>
+              </div>
+            </ProductInfo>
+          </BoxSection>
+          <BoxSection>
+            <SectionTitle>주문자 정보</SectionTitle>
+            <div>
+              <p>홍길동</p>
+              <p>01012345678</p>
+              <p>user@imweb.me</p>
+            </div>
+          </BoxSection>
+          <BoxSection>
+            <SectionTitle>배송 정보</SectionTitle>
+            <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+              <CheckboxWrapper>
+                <Checkbox
+                  type="checkbox"
+                  checked={false}
+                  onChange={() => {}}
+                />
+                <CheckboxLabel>기본 배송지 불러오기</CheckboxLabel>
+              </CheckboxWrapper>
+              <Select
+                name="AddressList"
+                value={selectedAddress} // 선택된 값 상태 반영
+                onChange={(e) => setSelectedAddress(e.target.value)}
+              >
+                <option value="">배송지 선택</option>
+                {Object.entries(AddressList).map(([key, value]) => (
+                  <option key={key} value={key}>
+                    {value}
+                  </option>
+                ))}
+              </Select>
+            </div>
+            <DeliveryInfoForm>
+              <FormRow>
+                <FormInput
+                  type="text"
+                  placeholder="받는 분 이름 *"
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                />
+                <FormInput
+                  type="text"
+                  placeholder="전화번호 *"
+                  value={formData.phone}
+                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                />
+              </FormRow>
+              <AddressSearchRow>
+                <AddressInput
+                  type="text"
+                  placeholder="주소 *"
+                  value={formData.address}
+                  readOnly
+                />
+                <AddressButton onClick={handleAddressComplete}>
+                  <Postcode onComplete={handleAddressComplete} />
+                </AddressButton>
+              </AddressSearchRow>
+              <FormRow>
+                <FormInput
+                  type="text"
+                  placeholder="우편번호 *"
+                  value={formData.postalCode}
+                  readOnly
+                />
+                <FormInput
+                  type="text"
+                  placeholder="상세 주소 *"
+                  value={formData.detailedAddress}
+                  onChange={(e) => setFormData({ ...formData, detailedAddress: e.target.value })}
+                />
+              </FormRow>
+              <TextArea
+                placeholder="요청 사항 (선택 사항)"
+                value={formData.request}
+                onChange={(e) => setFormData({ ...formData, request: e.target.value })}
               />
-              <FormInput
-                type="text"
-                placeholder="전화번호 *"
-                value={formData.phone}
-                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-              />
-            </FormRow>
-            <AddressSearchRow>
-              <AddressInput
-                type="text"
-                placeholder="주소 *"
-                value={formData.address}
-                readOnly
-              />
-              <AddressButton onClick={handleAddressComplete}>
-                <Postcode onComplete={handleAddressComplete} />
-              </AddressButton>
-            </AddressSearchRow>
-            <FormRow>
-              <FormInput
-                type="text"
-                placeholder="우편번호 *"
-                value={formData.postalCode}
-                readOnly
-              />
-              <FormInput
-                type="text"
-                placeholder="상세 주소 *"
-                value={formData.detailedAddress}
-                onChange={(e) => setFormData({ ...formData, detailedAddress: e.target.value })}
-              />
-            </FormRow>
-            <TextArea
-              placeholder="요청 사항 (선택 사항)"
-              value={formData.request}
-              onChange={(e) => setFormData({ ...formData, request: e.target.value })}
-            />
-          </DeliveryInfoForm>
+            </DeliveryInfoForm>
+          </BoxSection>
         </LeftSection>
 
-        {/* 우측 주문 금액 및 결제 수단 영역 */}
-        <C.RightSection>
-          <OrderTitle>결제 수단</OrderTitle>
-          <PriceDetail>
-            <span>총 상품 금액</span>
-            <span>₩880,000원</span>
-          </PriceDetail>
-          <PriceDetail>
-            <span>할인 금액</span>
-            <span style={{ color: 'red' }}>-₩80,000원</span>
-          </PriceDetail>
-          <PriceDetail>
-            <span>배송비</span>
-            <span>₩0원</span>
-          </PriceDetail>
-          <hr />
-          <PriceDetail>
-            <TotalPrice>합계</TotalPrice>
-            <TotalPrice>₩800,000원</TotalPrice>
-          </PriceDetail>
-          <PriceDetail>
-            <span>적립금</span>
-            <span>₩8,000원</span>
-          </PriceDetail>
+        {/* 우측 섹션 */}
+        <RightSection>
+          <BoxSection>
+            <SectionTitle>최종 결제금액</SectionTitle>
+            <PriceDetail>
+              <span>상품 가격</span>
+              <span>₩18,000원</span>
+            </PriceDetail>
+            <PriceDetail>
+              <span>쿠폰 할인</span>
+              <span style={{ color: 'red' }}>-₩1,000원</span>
+            </PriceDetail>
+            <PriceDetail>
+              <span>배송비</span>
+              <span>₩2,500원</span>
+            </PriceDetail>
+            <hr />
+            <PriceDetail>
+              <TotalPrice>총 결제금액</TotalPrice>
+              <TotalPrice>₩19,500원</TotalPrice>
+            </PriceDetail>
+            <PriceDetail>
+              <span>포인트 적립 예정</span>
+              <span>700P</span>
+            </PriceDetail>
+          </BoxSection>
+          <BoxSection>
+            <PaymentMethodWrapper>
+              <PaymentTitle>결제 방법</PaymentTitle>
+              <PaymentOption>
+                <Checkbox
+                  type="checkbox"
+                  checked={isCreditCardChecked}
+                  onChange={() => setIsCreditCardChecked(!isCreditCardChecked)}
+                />
+                <CheckboxLabel>신용카드</CheckboxLabel>
+              </PaymentOption>
+              <PaymentOption>
+                <Checkbox
+                  type="checkbox"
+                  checked={isBankTransferChecked}
+                  onChange={() => setIsBankTransferChecked(!isBankTransferChecked)}
+                />
+                <CheckboxLabel>무통장 입금</CheckboxLabel>
+              </PaymentOption>
+              <PaymentOption>
+                <Checkbox
+                  type="checkbox"
+                  checked={isKakaoPayChecked}
+                  onChange={() => setIsKakaoPayChecked(!isKakaoPayChecked)}
+                />
+                <CheckboxLabel>카카오페이</CheckboxLabel>
+              </PaymentOption>
+            </PaymentMethodWrapper>
+            <hr />
+            <CheckboxWrapper>
+            <Checkbox
+                type="checkbox"
+                checked={isAgreementChecked}
+                onChange={() => setIsAgreementChecked(!isAgreementChecked)}
+              />
+                <CheckboxLabel>구매조건 확인 및 결제진행에 동의</CheckboxLabel>
+            </CheckboxWrapper>
+            <C.ConfirmButton onClick={()=>navigate('/completeorder')}>결제하기</C.ConfirmButton>
+          </BoxSection>
 
-          {/* 결제 수단 선택 */}
-          <PaymentMethodWrapper>
-            <PaymentTitle>결제 수단</PaymentTitle>
-            <PaymentOption>
-              <RadioButton type="radio" name="payment" /> 신용카드
-            </PaymentOption>
-            <PaymentOption>
-              <RadioButton type="radio" name="payment" /> 무통장 입금
-            </PaymentOption>
-            <PaymentOption>
-              <RadioButton type="radio" name="payment" /> 카카오페이
-            </PaymentOption>
-          </PaymentMethodWrapper>
-
-          {/* 구매하기 버튼 */}
-          <C.ConfirmButton>구매하기</C.ConfirmButton>
-        </C.RightSection>
+        </RightSection>
       </OrderPageWrapper>
     </>
   );

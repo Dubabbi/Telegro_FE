@@ -8,7 +8,7 @@ const AdminSearchResult = () => {
   const { filteredProducts } = location.state || { filteredProducts: [] }; // 검색 결과 가져오기
 
   return (
-    <N.SearchResultContainer>
+    <N.AdminResultContainer>
       {filteredProducts.length > 0 ? (
         filteredProducts.map(product => (
           <N.ProductItem key={product.id} onClick={() => navigate(`admin/productdetail/${product.id}`)}>
@@ -20,7 +20,7 @@ const AdminSearchResult = () => {
       ) : (
         <h1 style={{backgroundColor: 'white'}}>검색 결과가 없습니다.</h1>
       )}
-    </N.SearchResultContainer>
+    </N.AdminResultContainer>
   );
 };
 
