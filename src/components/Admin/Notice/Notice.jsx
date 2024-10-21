@@ -12,11 +12,13 @@ import Pagination from '../../Pagination/Pagination';
 import * as P from '../ProductList/ProductStyle';
 import { FaFilePdf, FaFileImage, FaFileWord, FaFileExcel, FaFile } from 'react-icons/fa';
 
-const Notice = ({ page = 0, size = 10 }) => {
+const AdminNotice = ({ page = 0, size = 10 }) => {
   const navigate = useNavigate();
   const [notice, setNotice] = useState([]);
   const [error, setError] = useState('');
-  
+  const [searchValue, setSearchValue] = useState('');
+  const [filteredNotice, setFilteredNotice] = useState([]); 
+
   useEffect(() => {
     const fetchNotices = async () => {
       try {
@@ -27,22 +29,23 @@ const Notice = ({ page = 0, size = 10 }) => {
         console.log('API Response:', response); 
   
         if (response.status === 200) {
-          // 날짜를 기준으로 최신순 정렬
           const sortedNotices = response.data.data.notices.sort((a, b) => {
             return new Date(b.noticeCreateDate) - new Date(a.noticeCreateDate);
           });
-          setNotice(sortedNotices); // 정렬된 데이터로 상태 업데이트
+          setNotice(sortedNotices);
+          setFilteredNotice(sortedNotices); // 여기서 초기값 설정
         } else {
           throw new Error(response.data.message || 'Failed to fetch data');
         }
       } catch (error) {
         console.error('Error fetching data:', error);
-        setError(`Failed to load products: ${error.message}`);  // 에러 설정
+        setError(`Failed to load products: ${error.message}`);
       }
     };
   
     fetchNotices();
-  }, [ page, size]);
+  }, [page, size]);
+  
 
 
   if (error) {
@@ -73,16 +76,7 @@ const Notice = ({ page = 0, size = 10 }) => {
     }
   };
 
-  const [searchValue, setSearchValue] = useState('');
-  const [filteredNotice, setFilteredNotice] = useState([]); 
 
-  const handleSubmit = (e) => {
-      e.preventDefault();
-      console.log("검색어:", searchValue);
-      setSearchValue('');
-  };
-
-  // 검색 처리 함수
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchValue) {
@@ -99,7 +93,7 @@ const Notice = ({ page = 0, size = 10 }) => {
     <CommonTableRow key={notice.id}>
       <CommonTableColumn>{notice.id}</CommonTableColumn>
       <CommonTableColumn>
-        <Link to={`/noticedetail/${notice.id}`}>{notice.noticeTitle}</Link>
+        <Link to={`/admin/adminnoticedetail/${notice.id}`}>{notice.noticeTitle}</Link>
       </CommonTableColumn>
       <CommonTableColumn>
         {getFileIcon(notice.noticeFileName)}
@@ -146,4 +140,4 @@ const Notice = ({ page = 0, size = 10 }) => {
   );
 };
 
-export default Notice;
+export default AdminNotice;
