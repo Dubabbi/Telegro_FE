@@ -37,13 +37,16 @@ const ProductPageWrapper = styled.div`
 const StickyBarWrapper = styled.div`
   position: sticky;
   top: 180px; 
-  width: 20%;
+  max-width: 250px;
+  justify-content: center;
+  width: 250px;
   margin-left: 20px;
   padding: 2%;
   background-color: #fff;
   border: 1px solid #d3d3d3;
   border-radius: 15px;
   @media (max-width: 780px) {
+    max-width: 90%;
     width: 90%;
     margin: 0 auto;
     position: static;  /* 모바일 화면에서는 고정되지 않도록 */
@@ -107,12 +110,6 @@ const ProductImage = styled.img`
   @media (max-width: 780px) {
     width: 100px;
   }
-`;
-
-const ProductInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
 `;
 
 const ProductTitle = styled.h2`
@@ -278,6 +275,7 @@ const MainWrapper = styled.div`
     flex-direction: column;
     margin: 0 auto;
     gap: 15px;
+    padding-top: 10%;
   }
 `;
 

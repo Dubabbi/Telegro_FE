@@ -402,20 +402,23 @@ const Cart = () => {
             
             <ProductInfo>
               <ProductImage src={product.coverImage} alt="상품 이미지" />
-              <ProductDetails>
-                <ProductName>{product.productName}</ProductName>
-                <ProductModel>{product.productModel}</ProductModel>
-                
-                {/* 옵션 선택 UI */}
-                <select value={product.productOption} onChange={(e) => updateCartItem(product.id, e.target.value, product.quantity)}>
-                  <option value="Option1">Option1</option>
-                  <option value="Option2">Option2</option>
-                  {/* 다른 옵션들 */}
-                </select>
-              </ProductDetails>
+            <ProductDetails>
+              <ProductName>{product.productName}</ProductName>
+              <ProductModel>{product.productModel}</ProductModel>
+              <select
+                value={product.productOption} 
+                onChange={(e) => updateCartItem(product.id, e.target.value, product.quantity)}
+              >
+               
+                  <option value={product.productOption}>
+                    {product.productOption}
+                  </option>
+              </select>
+            </ProductDetails>
+
             </ProductInfo>
 
-            <ProductPrice>₩{product.productPrice}</ProductPrice>
+            <ProductPrice>{product.productPrice}원</ProductPrice>
             
             <QuantityWrapper>
             <QuantityButton onClick={() => handleDecreaseQuantity(product.id, product.productOption, product.quantity)}>-</QuantityButton>
@@ -439,25 +442,22 @@ const Cart = () => {
           <OrderTitle>주문 금액</OrderTitle>
           <PriceDetail>
             <span>총 상품 금액</span>
-            <span>₩880,000원</span>
+            <span>880,000원</span>
           </PriceDetail>
           <PriceDetail>
-            <span>할인 금액</span>
-            <span style={{ color: 'red' }}>-₩80,000원</span>
+            <span>선택한 상품 금액</span>
+            <span style={{ color: 'red' }}>80,000원</span>
           </PriceDetail>
           <PriceDetail>
             <span>배송비</span>
-            <span>₩0원</span>
+            <span>0원</span>
           </PriceDetail>
           <hr />
           <PriceDetail>
             <TotalPrice>합계</TotalPrice>
-            <TotalPrice>₩800,000원</TotalPrice>
+            <TotalPrice>800,000원</TotalPrice>
           </PriceDetail>
-          <PriceDetail>
-            <span>적립금</span>
-            <span>₩8,000원</span>
-          </PriceDetail>
+
 
           {/* 할인 코드 입력 */}
           <PriceDetailsWrapper>

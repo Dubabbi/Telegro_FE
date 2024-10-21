@@ -246,7 +246,7 @@ function AddClient() {
         </div>
       </A.FormWrapper>
     </A.Container>
-        <D.BtWrap style={{ width: '70%', marginLeft: '22.5%', marginBottom: '3%'}}>
+        <D.BtWrap>
         <D.BtLink as={Link} to="/admin/clientmanagement">
                 취소
               </D.BtLink>

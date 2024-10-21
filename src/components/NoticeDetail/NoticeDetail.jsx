@@ -29,9 +29,9 @@ const NoticeDetail = () => {
   }
 
   return (
-    <N.MainWrapper>
+    <N.MainWrapper style={{textAlign: 'left'}}>
       <N.Div></N.Div>
-      <N.Section>
+      <N.Section style={{textAlign: 'left'}}>
         <N.PageTitle>
           <N.TitleText>공지사항</N.TitleText>
         </N.PageTitle>
@@ -61,20 +61,21 @@ const NoticeDetail = () => {
                 <D.InfoItemText>: {notice.viewCount}</D.InfoItemText>
               </D.InfoItem>
             </D.Info>
+            <div style={{textAlign: 'left !important'}}>
             <D.Cont dangerouslySetInnerHTML={{ __html: notice.noticeContent }} />
-            
-            <div style={{ marginTop: '20px' }}>
-              <h4>첨부 파일</h4>
-              <ul>
-                {notice.noticeFiles.map(file => (
-                  <li key={file.id}>
-                    <a href={file.fileUrl} target="_blank" rel="noopener noreferrer">
-                      {file.fileName}
-                    </a>
-                  </li>
-                ))}
-              </ul>
             </div>
+            <div style={{ marginTop: '20px' }}>
+            <h4>첨부 파일</h4>
+            <ul>
+              {notice.noticeFiles.map(file => (
+                <li key={file.id}>
+                  <a href={file.fileUrl} download={file.fileName} target="_blank" rel="noopener noreferrer">
+                    {file.fileName}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
             <hr style={{ margin: '20px 0', border: '1.3px solid #000' }} />
           </D.BoardView>
           <D.BtWrap>

@@ -25,7 +25,11 @@ const Notice = ({ page = 0, size = 10 }) => {
         console.log('API Response:', response); 
   
         if (response.status === 200) {
-          setNotice(response.data.data.notices); 
+          // 날짜를 기준으로 최신순 정렬
+          const sortedNotices = response.data.data.notices.sort((a, b) => {
+            return new Date(b.noticeCreateDate) - new Date(a.noticeCreateDate);
+          });
+          setNotice(sortedNotices); // 정렬된 데이터로 상태 업데이트
         } else {
           throw new Error(response.data.message || 'Failed to fetch data');
         }
@@ -38,29 +42,11 @@ const Notice = ({ page = 0, size = 10 }) => {
     fetchNotices();
   }, [ page, size]);
 
+
   if (error) {
     return <div>{error}</div>;  // 에러 표시
   }
-  {/*
-    useEffect(() => {
-    axios.get('')
-      .then(response => {
-        if (response.data.isSuccess) {
-          const sortedData = response.data.data.sort((a, b) => {
-            // 날짜를 Date 객체로 변환하여 비교
-            return new Date(b.createdAt) - new Date(a.createdAt);
-          });
-          setNotices(sortedData);
-        } else {
-          throw new Error('Failed to fetch data');
-        }
-      })
-      .catch(error => {
-        console.error('Error fetching data:', error);
-        setError(`Failed to load word sets: ${error.message}`);
-      });
-  }, []);
-  */}
+
 
   const getFileIcon = (filename) => {
     if (!filename) {

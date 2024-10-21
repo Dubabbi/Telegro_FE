@@ -80,11 +80,17 @@ export const InfoItemText = styled.div`
 `;
 
 export const Cont = styled.div`
+  all: unset;
   padding: 100px 15px;
   border-bottom: 1px solid #000;
   line-height: 2;
   font-size: 1.3rem;
+  text-align: left;
+  display: block;
+  box-sizing: border-box;
 `;
+
+
 
 export const BtWrap = styled.div`
   margin-top: 30px;

@@ -250,11 +250,12 @@ const ProductCreate = () => {
   
 
   return (
+    <>
     <C.MainWrapper>
-      <C.SectionTitle style={{margin: '1%', marginBottom: '4%', marginTop: '3%'}}>상품 등록</C.SectionTitle>
+      <C.SectionTitle>상품 등록</C.SectionTitle>
       <C.FormWrapper>
       <C.SectionTitleWrapper>
-        <C.SectionTitle style={{fontSize: '1.8rem'}}>상품 등록</C.SectionTitle>
+        <C.SectionTitle2>상품 등록</C.SectionTitle2>
         </C.SectionTitleWrapper>
         <div style={{padding: '2%'}}>
         {/* 모델명 & 상품명 한 줄로 배치 */}
@@ -460,18 +461,17 @@ const ProductCreate = () => {
 
             </div>
             </C.FormWrapper>
-            <N.Section style={{margin: '0'}}>
+            </C.MainWrapper>
             <D.BtWrap>
               <D.BtLink as={Link} to="">
-                취소
+                  취소
               </D.BtLink>
-              <D.BtLink onClick={handleCreateProduct}>
+            <D.BtLink onClick={handleCreateProduct}>
                 등록
-              </D.BtLink>
-            </D.BtWrap>
-            </N.Section>
-            </C.MainWrapper>
-            );
+            </D.BtLink>
+          </D.BtWrap>
+        </>
+  );
 };
 
 export default ProductCreate;

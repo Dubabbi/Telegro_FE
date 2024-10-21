@@ -86,12 +86,16 @@ export const Cont = styled.div`
   border-bottom: 1px solid #000;
   line-height: 2;
   font-size: 1.3rem;
+  justify-content: flex-start;
+  text-align: left;
 `;
 
 export const BtWrap = styled.div`
   margin-top: 30px;
+  margin-bottom: 30px;
   text-align: center;
   font-size: 0;
+  margin-left: 275px;
 `;
 
 export const BtLink = styled.a`

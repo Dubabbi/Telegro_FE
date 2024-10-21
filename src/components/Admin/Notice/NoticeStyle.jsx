@@ -8,13 +8,15 @@ export const NoticeWrapper = styled.div`
     margin-left: 0px;
 `
 export const MainWrapper = styled.div`
-  width: 78%; 
-  margin-left: 280px;
-  padding: 20px;
+  max-width: 100%;
+  width: 100%;
+  padding-left: 270px;
+  amrgin: 0 auto;
   @media(max-width: 780px){
     margin: 0 auto;
     max-width: 100%;
     padding-top: 40px;
+    padding-left: 0;
     width: 100%;
   }
 `;
@@ -23,7 +25,7 @@ export const MainWrapper = styled.div`
 
 export const MainWrapper2 = styled.div`
     color: black;
-    max-width: 1200px;
+    max-width: 100%;
     margin: 0px auto;
     margin-left: 7%;
     margin-top: 6%;
@@ -35,10 +37,9 @@ export const MainWrapper2 = styled.div`
 `;
 
 export const Section = styled.section`
-  padding: 50px 0;
+  padding: 20px 0;
   min-width: 90%;
   margin-left: 15%;
-  min-height: 2.6vh;
   border: none;
   @media(max-width: 780px){
     max-width: 99%;
@@ -47,8 +48,9 @@ export const Section = styled.section`
   }
 `
 export const Section2 = styled.section`
-  padding: 50px 0;
-  min-width: 90%;
+  padding: 20px 0;
+  min-width: 95%;
+  width: 95%;
   min-height: 2.6vh;
   border: none;
   @media(max-width: 780px){

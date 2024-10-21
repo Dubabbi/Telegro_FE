@@ -1,9 +1,10 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  width: 65%; 
-  margin-left: 280px;
-  margin-top: 4%;
+  padding-left: 280px;
+  padding-top: 4%;
+  margin: 0 auto;
+  max-width: 90%;
   @media(max-width: 780px){
     width: 100%; 
     margin: 0 auto;

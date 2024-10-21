@@ -99,8 +99,9 @@ const NoticeDetail = () => {
   }
 
   return (
-    <N.MainWrapper2>
-      <N.Section style={{ width: '90%', minHeight: '2.6vh', border: 'none' }}>
+    <>
+    <N.MainWrapper>
+      <N.Section2 style={{ width: '90%', minHeight: '2.6vh', border: 'none' }}>
         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
           <N.PageTitle>
             <N.TitleText>공지사항</N.TitleText>
@@ -138,18 +139,17 @@ const NoticeDetail = () => {
 
             <D.Cont dangerouslySetInnerHTML={{ __html: notice.noticeContent }} />
             <div style={{ marginTop: '20px' }}>
-              <h4>첨부 파일</h4>
-              <ul>
-                {notice.noticeFiles.map(file => (
-                  <li key={file.id}>
-                    <a href={file.fileUrl} target="_blank" rel="noopener noreferrer">
-                      {file.fileName}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
+            <h4>첨부 파일</h4>
+            <ul>
+              {notice.noticeFiles.map(file => (
+                <li key={file.id}>
+                  <a href={file.fileUrl} download={file.fileName} target="_blank" rel="noopener noreferrer">
+                    {file.fileName}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
             <div style={{ display: 'flex', alignItems: 'center', marginTop: '10px' }}>
               <D.Checkbox
                 type="checkbox"
@@ -165,17 +165,17 @@ const NoticeDetail = () => {
             <hr style={{ margin: '20px 0', border: '1.3px solid #000' }} />
           </D.BoardView>
         </D.BoardViewWrap>
-
-        <D.BtWrap>
-          <D.BtLink as={Link} to="/admin/adminnotice">
-            목록
-          </D.BtLink>
-          <D.DeleteBtLink as={Link} onClick={handleDelete}>
-            삭제
-          </D.DeleteBtLink>
-        </D.BtWrap>
-      </N.Section>
-    </N.MainWrapper2>
+      </N.Section2>
+    </N.MainWrapper>
+      <D.BtWrap>
+        <D.BtLink as={Link} to="/admin/adminnotice">
+          목록
+        </D.BtLink>
+        <D.DeleteBtLink as={Link} onClick={handleDelete}>
+          삭제
+        </D.DeleteBtLink>
+      </D.BtWrap>
+    </>
   );
 }
 

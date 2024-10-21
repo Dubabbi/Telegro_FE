@@ -27,7 +27,11 @@ const Notice = ({ page = 0, size = 10 }) => {
         console.log('API Response:', response); 
   
         if (response.status === 200) {
-          setNotice(response.data.data.notices); 
+          // 날짜를 기준으로 최신순 정렬
+          const sortedNotices = response.data.data.notices.sort((a, b) => {
+            return new Date(b.noticeCreateDate) - new Date(a.noticeCreateDate);
+          });
+          setNotice(sortedNotices); // 정렬된 데이터로 상태 업데이트
         } else {
           throw new Error(response.data.message || 'Failed to fetch data');
         }
@@ -39,6 +43,7 @@ const Notice = ({ page = 0, size = 10 }) => {
   
     fetchNotices();
   }, [ page, size]);
+
 
   if (error) {
     return <div>{error}</div>;  // 에러 표시

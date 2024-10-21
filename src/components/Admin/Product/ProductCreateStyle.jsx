@@ -26,9 +26,22 @@ export const SectionTitleWrapper = styled.div`
 `;
 
 export const SectionTitle = styled.h3`
-  font-size: 2.3rem;
+  font-size: 2.2rem;
   font-weight: bold;
+  padding: 40px 10px;
+  @media(max-width: 780px){
+    font-size: 1.8rem;
+  }
 `;
+
+export const SectionTitle2 = styled.h3`
+  font-size: 2.2rem;
+  font-weight: bold;
+  @media(max-width: 780px){
+    font-size: 1.8rem;
+  }
+`;
+
 
 export const Label = styled.label`
   font-size: 1.2rem;

@@ -26,10 +26,10 @@ const SectionTitleWrapper = styled.div`
 `;
 
 const SectionTitle = styled.h3`
-  font-size: 2.3rem;
+  font-size: 1.8rem;
   font-weight: bold;
   @media(max-width: 780px){
-    font-size: 1.9rem;
+    font-size: 1.5rem;
   }
 `;
 
@@ -239,7 +239,7 @@ const NoticeCreate = () => {
           </div>
         </FormWrapper>
       </N.MainWrapper>
-      <D.BtWrap style={{ width: '70%', marginLeft: '21%', marginBottom: '2%' }}>
+      <D.BtWrap>
         <D.BtLink as={Link} to="/admin/adminnotice">취소</D.BtLink>
         <D.BtLink onClick={handleSubmit}>등록</D.BtLink>
       </D.BtWrap>

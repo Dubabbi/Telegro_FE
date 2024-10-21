@@ -135,11 +135,10 @@ export const Inline = styled.div`
 
 export const PageContainer = styled.div`
   margin-left: 280px; /* 좌측 네비게이션 바와의 간격 */
-  padding: 2%;
+  padding: 0;
   margin-top: 1%;
   width: 78%; /* 전체 화면의 78% 차지 */
   @media(max-width: 780px){
-    padding: 1%;
     margin: 0 auto;
   }
 `;
