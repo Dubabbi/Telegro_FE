@@ -43,18 +43,7 @@ export default function Main() {
         <>
         <div style={{width: '100%', minHeight: '160px', backgroundColor: '#000', border: 'none'}}></div>
         <M.NewContainer
-          onMouseEnter={() => setShowArrows(true)}
-          onMouseLeave={() => setShowArrows(false)}
         >
-            {/* 화살표 표시 */}
-            <>
-                <img src={arrowleft} alt="Previous" onClick={goToPrevious}
-                    style={{ cursor: 'pointer', position: 'absolute', top: '50%', left: '32px', zIndex: 100, transform: 'translateY(-50%)', 
-                             opacity: showArrows ? 1 : 0, transition: 'opacity 1s ease-in-out', transitionDelay: showArrows ? '0.5s' : '0s' }} />
-                <img src={arrowright} alt="Next" onClick={goToNext}
-                    style={{ cursor: 'pointer', position: 'absolute', top: '50%', right: '32px', zIndex: 100, transform: 'translateY(-50%)',
-                             opacity: showArrows ? 1 : 0, transition: 'opacity 1s ease-in-out', transitionDelay: showArrows ? '0.5s' : '0s' }} />
-            </>
             <div style={{
                 display: 'flex',
                 transition: 'transform 0.5s ease-in-out',
