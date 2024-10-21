@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import Img from '/src/assets/image/Landing/image1.png';
 import Img2 from '/src/assets/image/Landing/image2.png';
+import Img3 from '/src/assets/image/Landing/image3.png';
+import Img4 from '/src/assets/image/Landing/image4.png';
 import Next from '/src/assets/image/Landing/next.svg';
 import NextBlue from '/src/assets/image/Landing/nextBlue.svg';
 import Logo from '/src/assets/image/Landing/logo.svg';
@@ -17,7 +19,7 @@ export default function Landing() {
   
     // 이미지 전환 효과
     useEffect(() => {
-      const images = [Img, Img2];
+      const images = [Img, Img2, Img3, Img4];
       let currentIndex = 0;
   
       const intervalId = setInterval(() => {
