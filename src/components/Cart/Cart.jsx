@@ -75,9 +75,13 @@ export const ProductItem = styled.div`
   align-items: center;
   padding: 10px 0;
   max-width: 100%;
+  position: relative; 
   border-bottom: 1px solid #e0e0e0;
-  overflow: auto;
 
+  @media (max-width: 780px) {
+    flex-direction: column;
+    align-items: flex-start; /* 요소들을 왼쪽 정렬 */
+  }
 `;
 export const ProductInfo = styled.div`
   display: flex;
@@ -95,6 +99,10 @@ export const ProductImage = styled.img`
 export const ProductDetails = styled.div`
   display: flex;
   flex-direction: column;
+
+  @media (max-width: 780px) {
+    flex-grow: 1; /* 남은 공간을 모두 차지 */
+  }
 `;
 
 export const ProductName = styled.span`
@@ -119,9 +127,12 @@ export const ProductPrice = styled.div`
   font-weight: bold;
   color: #000;
   white-space: nowrap;
+
+  @media (max-width: 780px) {
+    width: 100%; /* 전체 너비 사용 */
+    margin-bottom: 10px; /* 수량 선택 부분과의 간격 */
+  }
 `;
-
-
 
 export const QuantityButton = styled.button`
   background-color: #eee;
@@ -134,11 +145,12 @@ export const QuantityButton = styled.button`
 export const QuantityWrapper = styled.div`
   display: flex;
   align-items: center;
-  gap: 5px; /* 요소 간의 간격 조정 */
-  width: 100px; /* 고정 너비 설정 */
-  @media(max-width: 780px){
-    gap: 2px;
-    width: 80px; /* 작은 화면에서의 너비 조정 */
+  gap: 5px;
+  width: 100px;
+
+  @media (max-width: 780px) {
+    width: 20%; /* 전체 너비 사용 */
+    justify-content: space-between; /* 버튼을 양쪽 끝으로 분산 */
   }
 `;
 
@@ -150,13 +162,23 @@ export const QuantityInput = styled.input`
   }
 `;
 
+
 export const DeleteButton = styled.button`
   background-color: transparent;
   border: none;
   cursor: pointer;
   color: red;
   font-size: 1.5rem;
+  position: absolute; // 절대 위치
+  top: 10px; // 상단에서 10px 떨어진 곳
+  right: 10px; // 우측에서 10px 떨어진 곳
+
+  @media (max-width: 780px) {
+    top: 5px; // 더 작은 화면에서는 위치 조정
+    right: 5px;
+  }
 `;
+
 export const CheckboxContainer = styled.div`
   display: flex;
   align-items: center;
@@ -253,6 +275,7 @@ export const ConfirmButton = styled.button`
     color: #fff;    
   }
 `;
+
 export const Title = styled.div`
   display: flex;
   flex-direction: row;
@@ -275,6 +298,13 @@ export const Title = styled.div`
       font-size: 1.9rem;
     }
   }
+`;
+
+export const OptionInputWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 5px;
 `;
 
 const Cart = () => {
@@ -301,20 +331,21 @@ const Cart = () => {
 
     fetchCartItems();
   }, []);
+
   // 상품 삭제 함수
   const handleDelete = async (id) => {
     const confirmDelete = window.confirm('정말로 이 상품을 장바구니에서 삭제하시겠습니까?');
-    
+
     if (!confirmDelete) {
       return; // 사용자가 취소를 누르면 삭제를 진행하지 않음
     }
-  
+
     try {
       const accessToken = localStorage.getItem('token');
       const response = await axios.delete(`https://api.telegro.kr/api/carts/${id}`, {
         headers: { Authorization: `Bearer ${accessToken}` },
       });
-      
+
       if (response.status === 200) {
         setProducts(products.filter(product => product.id !== id));
         alert('상품이 장바구니에서 삭제되었습니다.');
@@ -326,48 +357,99 @@ const Cart = () => {
       alert('장바구니 항목을 삭제하는 중 오류가 발생했습니다.');
     }
   };
-  
-  
-  const handleIncreaseQuantity = (id, productOption, currentQuantity) => {
-    const newQuantity = currentQuantity + 1;
-    setProducts(products.map(product => 
-      product.id === id ? { ...product, quantity: newQuantity } : product
+
+  const setInputOptionTemp = (id, value) => {
+    setProducts(products.map(product =>
+      product.id === id ? { ...product, inputOptionTemp: value } : product
     ));
-    updateCartItem(id, productOption, newQuantity); 
   };
-  
-  const handleDecreaseQuantity = (id, productOption, currentQuantity) => {
-    const newQuantity = Math.max(currentQuantity - 1, 1); 
-    setProducts(products.map(product => 
-      product.id === id ? { ...product, quantity: newQuantity } : product
-    ));
-    updateCartItem(id, productOption, newQuantity); 
-  };
-  
-  // 상품 옵션 변경 함수
-  const handleOptionChange = (id, selectedOption) => {
-    setProducts(products.map(product => 
-      product.id === id ? { ...product, productOption: selectedOption } : product
+
+  // 입력값 확인 및 업데이트 반영 함수
+  const handleConfirmInputOption = (id, inputOption) => {
+    setProducts(products.map(product =>
+      product.id === id ? { ...product, inputOption, inputOptionTemp: undefined } : product
     ));
     const product = products.find(product => product.id === id);
-    updateCartItem(id, selectedOption, product.quantity);
+    if (product) {
+      updateCartItem(id, product.selectOption, product.quantity, inputOption);
+    }
+  };
+  const [updatedProduct, setUpdatedProduct] = useState(null);
+
+  useEffect(() => {
+    if (updatedProduct) {
+      updateCartItem(updatedProduct.id, updatedProduct.selectOption, updatedProduct.inputOption, updatedProduct.quantity);
+    }
+  }, [updatedProduct]);
+  
+  // In your handlers, set the updated product:
+  const handleIncreaseQuantity = (id) => {
+    const newProducts = products.map(product =>
+      product.id === id ? { ...product, quantity: product.quantity + 1 } : product
+    );
+    setProducts(newProducts);
+    const updated = newProducts.find(p => p.id === id);
+    setUpdatedProduct(updated);
   };
   
-  const updateCartItem = async (cartId, productOption, quantity) => {
+  
+  const handleDecreaseQuantity = (id) => {
+    setProducts(products.map(product =>
+      product.id === id ? { ...product, quantity: Math.max(product.quantity - 1, 1) } : product
+    ));
+  };
+  
+  useEffect(() => {
+    products.forEach(product => {
+      updateCartItem(product.id, product.selectOption, product.inputOption, product.quantity);
+    });
+  }, [products]); 
+  
+  
+  const handleQuantityChange = (id, newQuantity) => {
+    newQuantity = parseInt(newQuantity, 10); 
+    if (isNaN(newQuantity) || newQuantity <= 0) {
+      newQuantity = 1; 
+    }
+    setProducts(products.map(product =>
+      product.id === id ? { ...product, quantity: newQuantity } : product
+    ));
+  };
+  
+  
+
+  const handleOptionChange = (id, selectedOption) => {
+    setProducts(products.map(product =>
+      product.id === id ? { ...product, selectOption: selectedOption } : product
+    ));
+    const product = products.find(product => product.id === id);
+    if (product) {
+      updateCartItem(id, selectedOption, product.inputOption, product.quantity);
+    }
+  };
+
+  const handleInputOptionChange = (id, inputOptionValue) => {
+    setProducts(products.map(product =>
+      product.id === id ? { ...product, inputOption: inputOptionValue } : product
+    ));
+  };
+
+  const updateCartItem = async (cartId, productOption, inputOption, quantity) => {
     try {
       const accessToken = localStorage.getItem('token');
-      
+
       const response = await axios.put(
         `https://api.telegro.kr/api/carts/${cartId}`,
         {
           productOption,
-          quantity: parseInt(quantity, 10)  
+          inputOption,
+          quantity: parseInt(quantity, 10)
         },
         {
           headers: { Authorization: `Bearer ${accessToken}` }
         }
       );
-  
+
       if (response.status === 200) {
         console.log('장바구니가 성공적으로 업데이트되었습니다.');
       } else {
@@ -378,6 +460,8 @@ const Cart = () => {
       alert('장바구니 항목을 업데이트하는 중 오류가 발생했습니다.');
     }
   };
+
+
 
   // 체크박스 변경 함수
   const handleCheckboxChange = (id) => {
@@ -396,9 +480,7 @@ const Cart = () => {
     console.log("구매할 상품들:", selectedProducts);
     navigate('/orderprocess', { state: { products: selectedProducts } });
   };
- 
-  
-  
+
   return (
     <>
       <Div></Div>
@@ -417,39 +499,49 @@ const Cart = () => {
               />
               <CheckboxLabel htmlFor={`checkbox-${product.id}`} />
             </CheckboxContainer>
-            
+
             <ProductInfo>
               <ProductImage src={product.coverImage} alt="상품 이미지" />
-            <ProductDetails>
-              <ProductName>{product.productName}</ProductName>
-              <ProductModel>{product.productModel}</ProductModel>
-                {/* productOptions 배열을 사용하여 옵션을 드롭다운으로 표시 */}
-                <select
-                  value={product.productOption}
-                  onChange={(e) => updateCartItem(product.id, e.target.value, product.quantity)}
-                >
-                  {/* productOptions 배열의 각 항목을 드롭다운 옵션으로 추가 */}
-                  {product.productOptions.map((option, index) => (
-                    <option key={index} value={option}>
-                      {option}
-                    </option>
-                  ))}
-                </select>
-            </ProductDetails>
+              <ProductDetails>
+            <ProductName>{product.productName}</ProductName>
+            <ProductModel>{product.productModel}</ProductModel>
+            <select
+              value={product.selectOption || ''}
+              onChange={(e) => handleOptionChange(product.id, e.target.value)}
+            >
+              {product.productOptions.map((option, index) => (
+                <option key={index} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+            <OptionInputWrapper>
+              <input
+                style={{border: '1px solid #555', borderRadius: '3px'}}
+                type="text"
+                value={product.inputOption || ''}
+                onChange={(e) => handleInputOptionChange(product.id, e.target.value)}
+                placeholder="기타 옵션 기재"
+              />
+              <button style={{backgroundColor: '#eee', borderRadius: '3px', padding: '1px 3px', whiteSpace: 'nowrap'}} onClick={() => updateCartItem(product.id, product.selectOption, product.inputOption, product.quantity)}>확인</button>
+            </OptionInputWrapper>
+          </ProductDetails>
+
 
             </ProductInfo>
 
             <ProductPrice>{product.productPrice}원</ProductPrice>
-            
-            <QuantityWrapper>
-            <QuantityButton onClick={() => handleDecreaseQuantity(product.id, product.productOption, product.quantity)}>-</QuantityButton>
-            <QuantityInput 
-              type="number" 
-              value={product.quantity} 
-              onChange={(e) => updateCartItem(product.id, product.productOption, parseInt(e.target.value, 10))} // 수동 입력 시
+
+          <QuantityWrapper>
+            <QuantityButton onClick={() => handleDecreaseQuantity(product.id, product.selectOption, product.quantity)}>-</QuantityButton>
+            <QuantityInput
+              type="number"
+              value={product.quantity}
+              onChange={(e) => handleQuantityChange(product.id, e.target.value)}  
             />
-            <QuantityButton onClick={() => handleIncreaseQuantity(product.id, product.productOption, product.quantity)}>+</QuantityButton>
+            <QuantityButton onClick={() => handleIncreaseQuantity(product.id, product.selectOption, product.quantity)}>+</QuantityButton>
           </QuantityWrapper>
+
             <DeleteButton onClick={() => handleDelete(product.id)}>
               <DeleteIcon src={Delete} />
             </DeleteButton>

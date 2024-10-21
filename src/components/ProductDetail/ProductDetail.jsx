@@ -44,6 +44,7 @@ const StickyBarWrapper = styled.div`
   padding: 2%;
   background-color: #fff;
   border: 1px solid #d3d3d3;
+  overflow: auto;
   border-radius: 15px;
   @media (max-width: 780px) {
     max-width: 90%;
@@ -161,9 +162,10 @@ const ButtonWrapper = styled.div`
 `;
 
 const BuyButton = styled.button`
-  padding: 8px 18px;
+  padding: 7px 17px;
   background-color: rgba(77, 68, 181, 0.3);
   color: #4D44B5;
+  white-space: nowrap;
   border: none;
   border-radius: 10px;
   cursor: pointer;
@@ -309,6 +311,9 @@ const ProductDetail = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const { productId } = useParams();
+
+
+
   const handleInputOptionChange = (e) => {
     setInputOption(e.target.value);
   };
@@ -323,8 +328,9 @@ const ProductDetail = () => {
       const response = await axios.post(
         `https://api.telegro.kr/api/carts/${productId}`,
         {
-          productOption: selectedOption, // 요청 본문에 포함되는 데이터
+          selectOption: selectedOption,
           quantity: quantity,
+          inputOption: inputOption
         },
         {
           headers: { Authorization: `Bearer ${accessToken}` }, // 헤더
@@ -342,42 +348,6 @@ const ProductDetail = () => {
     }
   };
 
-  {/*
-  const handleInputOptionChange = (e) => {
-    setInputOption(e.target.value);
-  };
-  // 서버로 요청을 보낼 때 기재형 옵션 값도 포함
-  const handlePurchase = async () => {
-    if (!selectedOption) {
-      alert('옵션을 선택해주세요.');
-      return;
-    }
-
-    try {
-      const accessToken = localStorage.getItem('token');
-      const response = await axios.post(
-        `https://api.telegro.kr/api/carts/${productId}`,
-        {
-          productOption: selectedOption, // 기존 옵션
-          quantity: quantity, // 수량
-          inputOption: inputOption, // 추가된 기재형 옵션 값
-        },
-        {
-          headers: { Authorization: `Bearer ${accessToken}` }, // 헤더
-        }
-      );
-
-      if (response.status === 200) {
-        alert('상품이 장바구니에 담겼습니다!');
-      } else {
-        alert('장바구니에 담기 실패: ' + response.data.message);
-      }
-    } catch (error) {
-      console.error('Error adding to cart:', error);
-      alert('장바구니에 물건을 담는 중 오류가 발생했습니다.');
-    }
-  };
-    */}
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -497,7 +467,7 @@ const ProductDetail = () => {
             </Select>
             {(product.category === 'HEADSET' || product.category === 'LINE_CORD') && (
               <>
-                <DescriptionTitle style={{fontSize: '1.2rem', paddingTop: '3%'}} htmlFor="inputoption">사용 전화기 모델명 기재(전화기뒷면)</DescriptionTitle>
+                <DescriptionTitle style={{fontSize: '1.2rem', paddingTop: '3%'}} htmlFor="inputoption">사용 전화기명 기재(전화기뒷면)</DescriptionTitle>
                 <QuantityInput
                   type="text" 
                   id="inputoption" 
