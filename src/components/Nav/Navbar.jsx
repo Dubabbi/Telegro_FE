@@ -104,7 +104,7 @@ export default function Navbar() {
           {!isLoggedIn ? (
             <li><a href="/login">로그인</a></li>
           ) : (
-            <li><a onClick={(e) => { e.preventDefault(); handleLogout(); }}>로그아웃</a></li>
+            <li><a style = {{cursor: 'pointer'}} onClick={(e) => { e.preventDefault(); handleLogout(); }}>로그아웃</a></li>
           )}
           <li><a href="/cart">장바구니</a></li>
           <li><a href="mailto:Telegro@telegro.com">Contact Us</a></li>

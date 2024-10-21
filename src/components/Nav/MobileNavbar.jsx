@@ -378,7 +378,7 @@ export default function MobileNavbar() {
               </LogoutButton>
             </ProfileWrapper>
           ) : (
-            <ProfileWrapper onClick={() => navigate('/login')}>
+            <ProfileWrapper style = {{cursor: 'pointer'}} onClick={() => navigate('/login')}>
               <ProfileInfo>
                 <div>로그인해주세요</div>
               </ProfileInfo>
