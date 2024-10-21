@@ -4,6 +4,7 @@ import { FaSearch, FaCog, FaSignOutAlt, FaChevronDown, FaChevronRight, FaBars, F
 import { useNavigate, useLocation } from 'react-router-dom';
 import LogoImage from '/src/assets/image/Landing/logo.svg'; 
 import Avvvatars from 'avvvatars-react';
+import axios from 'axios';
 
 const TopBar = styled.div`
   display: flex;
@@ -181,11 +182,13 @@ const LogoutButton = styled.div`
     color: #ff5a5a;
   }
 `;
-
 export default function MobileNavbar() {
+  const [searchValue, setSearchValue] = useState('');
   const [isSubMenuOpen, setIsSubMenuOpen] = useState(false);
   const [isMobileSidebarVisible, setIsMobileSidebarVisible] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [products, setProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);   
   const [userInfo, setUserInfo] = useState({
     id: 'Justin Hope',
     name: '홍길동',
@@ -194,13 +197,39 @@ export default function MobileNavbar() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const fetchProductsByCategory = async (category, page = 0) => {
+    try {
+      const response = await axios.get(`https://api.telegro.kr/products`, {
+        params: { category, page, size: 10 }
+      });
+      if (response.data.code === 20000) {
+        return response.data.data;  // 상품 목록 반환
+      } else {
+        console.error(`Error fetching products for ${category}:`, response.data.message);
+        return [];
+      }
+    } catch (error) {
+      console.error('Error fetching products:', error);
+      return [];
+    }
+  };
+  
   useEffect(() => {
-    setIsMobileSidebarVisible(false);
-    setIsSubMenuOpen(false);
-
-    const token = localStorage.getItem('token');
-    setIsLoggedIn(!!token); 
-  }, [location.pathname]);
+    const fetchAllProducts = async () => {
+      const categories = ['HEADSET', 'LINE_CORD', 'RECORDER', 'ACCESSORY'];
+      let allProducts = [];
+      
+      for (const category of categories) {
+        const products = await fetchProductsByCategory(category);
+        allProducts = [...allProducts, ...products];
+      }
+  
+      setProducts(allProducts);
+      setIsLoading(false);  // 로딩 완료
+    };
+  
+    fetchAllProducts();
+  }, []);
 
   const toggleSidebar = () => {
     setIsMobileSidebarVisible(!isMobileSidebarVisible);
@@ -211,6 +240,7 @@ export default function MobileNavbar() {
     setIsLoggedIn(false);
     navigate('/login'); 
   };
+
   const toggleSubMenu = () => {
     setIsSubMenuOpen(!isSubMenuOpen);
   };
@@ -218,6 +248,28 @@ export default function MobileNavbar() {
     setIsMobileSidebarVisible(false);
     setIsSubMenuOpen(false); 
   }, [location.pathname]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // 검색어로 상품 필터링
+    let filtered = [];
+    if (searchValue.trim() !== '') {
+      filtered = products.filter(product =>
+        product.productName.toLowerCase().includes(searchValue.toLowerCase())  // 검색어로 필터링
+      );
+    }
+
+    // 검색 결과가 없을 경우 alert를 띄우고 페이지 이동을 하지 않음
+    if (filtered.length === 0) {
+      alert('검색 결과가 없습니다.');
+    } else {
+      // 검색 결과 페이지로 이동하고, 필터링된 결과를 state로 전달
+      navigate('/search', { state: { filteredProducts: filtered } });
+    }
+    
+    setSearchValue('');  // 검색어 초기화
+  };
 
   return (
     <>
@@ -232,17 +284,26 @@ export default function MobileNavbar() {
       </TopBar>
 
       <Sidebar show={isMobileSidebarVisible}>
-      <LogoWrapper style={{opacity: '0'}}>
+        <LogoWrapper style={{opacity: '0'}}>
           <LogoImg src={LogoImage} alt="Telegro Logo" />
           <LogoText>Telegro</LogoText>
         </LogoWrapper>
+
+        {/* 검색 바 추가 */}
         <SearchBar style={{ marginTop: '2%' }}>
           <FaSearch />
-          <SearchInput type="text" placeholder="Search" />
+          <form onSubmit={handleSubmit}>
+            <SearchInput
+              type="text"
+              placeholder="Search"
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
+            />
+          </form>
         </SearchBar>
 
         <MenuWrapper>
-        <MenuItem style={{cursor: 'default'}} className="active">
+          <MenuItem style={{cursor: 'default'}} className="active">
             <FaCog />
             Dashboard
           </MenuItem>
@@ -274,7 +335,7 @@ export default function MobileNavbar() {
               {isSubMenuOpen ? <FaChevronDown /> : <FaChevronRight />}
             </MenuItem>
             <SubMenu open={isSubMenuOpen}>
-              <MenuItem onClick={() => navigate('/headset')}>
+            <MenuItem onClick={() => navigate('/headset')}>
                 헤드셋
               </MenuItem>
               <MenuItem onClick={() => navigate('/lineCord')}>
@@ -286,7 +347,7 @@ export default function MobileNavbar() {
               <MenuItem onClick={() => navigate('/accessory')}>
                 악세서리
               </MenuItem>
-            </SubMenu>
+              </SubMenu>
           </SubMenuWrapper>
         </MenuWrapper>
 
@@ -299,9 +360,9 @@ export default function MobileNavbar() {
                 <div style={{ fontSize: '0.8rem', color: '#FFD700' }}>일반회원</div>
               </ProfileInfo>
               <LogoutButton onClick={handleLogout}>
-              <FaSignOutAlt />
-              Log out
-            </LogoutButton>
+                <FaSignOutAlt />
+                Log out
+              </LogoutButton>
             </ProfileWrapper>
           ) : (
             <ProfileWrapper onClick={() => navigate('/login')}>

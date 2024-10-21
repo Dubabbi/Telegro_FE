@@ -21,13 +21,14 @@ import NoticePopup from './components/NoticePopup/NoticePopup';
 import CartPage from './pages/Cart';
 import ScrollToTop from './ScrollToTop';
 import MypagePage from './pages/Mypage';
-
+import SearchResult from './components/Nav/SearchResult';
 export default function User() {
   return (
     <div>
       <ResponseNav />
       <ScrollToTop />
       <Routes>
+      <Route path="/search" element={<SearchResult />} />
       <Route path="/" element={<LoginPage />} />
         <Route path="/main" element={<MainPage />} />
         <Route path="/notice" element={<NoticePage />} />

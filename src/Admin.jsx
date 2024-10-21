@@ -18,6 +18,7 @@ import AddClientPage from './pages/AddClient';
 import AdminProductEditPage from './pages/AdminProductEdit';
 import ClientEditPage from'./pages/ClientEdit';
 import ScrollToTop from './ScrollToTop';
+import AdminSearchResult from './components/AdminNav/AdminSearchResult';
 
 export default function Admin() {
   return (
@@ -43,6 +44,7 @@ export default function Admin() {
         <Route path="adminorderlist" element={<AdminOrderListPage />} />
         <Route path="addclient" element={<AddClientPage />} />
         <Route path="clientedit" element={<ClientEditPage />} />
+        <Route path="adminsearch" element={<AdminSearchResult />} />
       </Routes>
     </div>
   );

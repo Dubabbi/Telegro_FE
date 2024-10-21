@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { FaSearch, FaCog, FaSignOutAlt, FaChevronDown, FaChevronRight, FaBars, FaTimes } from 'react-icons/fa';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Logo from '/src/assets/image/Landing/logo.svg';
+import axios from 'axios';
 
 const Sidebar = styled.div`
   position: fixed;
@@ -185,8 +186,11 @@ const LogoutButton = styled.div`
 
 const AdminNav = () => {
   const [isSubMenuOpen, setIsSubMenuOpen] = useState(false);
+  const [searchValue, setSearchValue] = useState('');
   const navigate = useNavigate();
   const location = useLocation();
+  const [products, setProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);   
   const [isMobileSidebarVisible, setIsMobileSidebarVisible] = useState(false);
   const handleLogout = () => {
     localStorage.removeItem('token'); 
@@ -194,6 +198,65 @@ const AdminNav = () => {
     alert('로그아웃되었습니다.')
   };
 
+  const fetchProductsByCategory = async (category, page = 0) => {
+    try {
+      const response = await axios.get(`https://api.telegro.kr/products`, {
+        params: { category, page, size: 10 }
+      });
+      if (response.data.code === 20000) {
+        return response.data.data;
+      } else {
+        console.error(`Error fetching products for ${category}:`, response.data.message);
+        return [];
+      }
+    } catch (error) {
+      console.error('Error fetching products:', error);
+      return [];
+    }
+  };
+  
+
+  useEffect(() => {
+    setIsMobileSidebarVisible(false);
+    setIsSubMenuOpen(false); 
+  }, [location.pathname]);
+  useEffect(() => {
+    const fetchAllProducts = async () => {
+      const categories = ['HEADSET', 'LINE_CORD', 'RECORDER', 'ACCESSORY'];
+      let allProducts = [];
+      
+      for (const category of categories) {
+        const products = await fetchProductsByCategory(category);
+        allProducts = [...allProducts, ...products];
+      }
+  
+      setProducts(allProducts);
+      setIsLoading(false);  
+    };
+  
+    fetchAllProducts();
+  }, []);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // 검색어로 상품 필터링
+    let filtered = [];
+    if (searchValue.trim() !== '') {
+      filtered = products.filter(product =>
+        product.productName.toLowerCase().includes(searchValue.toLowerCase())  // 검색어로 필터링
+      );
+    }
+
+    // 검색 결과가 없을 경우 alert를 띄우고 페이지 이동을 하지 않음
+    if (filtered.length === 0) {
+      alert('검색 결과가 없습니다.');
+    } else {
+      // 검색 결과 페이지로 이동하고, 필터링된 결과를 state로 전달
+      navigate('/admin/adminsearch', { state: { filteredProducts: filtered } });
+    }
+    
+    setSearchValue('');  // 검색어 초기화
+  };
   // 토글 버튼 클릭 시 모달 열기/닫기
   const toggleSidebar = () => {
     setIsMobileSidebarVisible(!isMobileSidebarVisible);
@@ -221,12 +284,17 @@ const AdminNav = () => {
           <LogoImage src={Logo} alt="Telegro Logo" />
           <LogoText>Telegro</LogoText>
         </LogoWrapper>
-
-        <SearchBar>
+        <SearchBar style={{ marginTop: '2%' }}>
           <FaSearch />
-          <SearchInput type="text" placeholder="Search" />
+          <form onSubmit={handleSubmit}>
+            <SearchInput
+              type="text"
+              placeholder="Search"
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
+            />
+          </form>
         </SearchBar>
-
         <MenuWrapper>
           <MenuItem style={{cursor: 'default'}} className="active">
             <FaCog />

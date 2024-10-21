@@ -14,6 +14,70 @@ export const NavWrapper = styled.div`
   height: 150px;
 `;
 
+export const SearchResultContainer = styled.div`
+  display: flex;
+  flex-direction: column;  // 상품들이 세로로 나열되도록 설정
+  align-items: center;  // 중앙 정렬
+  padding-top: 200px;
+  min-height: 100vh;
+
+  h1 {
+    font-size: 2rem;
+    color: #0000ff;
+    text-align: center;
+    font-weight: bold;
+  }
+  @media(max-width: 780px){
+    padding-top: 20px;
+  }
+`;
+
+export const ProductItem = styled.div`
+  display: flex; 
+  flex-direction: row;  
+  align-items: center; 
+  justify-content: space-between;  
+  width: 90%; 
+  cursor: pointer;
+  max-width: 800px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #fff;
+  text-align: left;  // 텍스트를 왼쪽 정렬
+  padding: 10px;
+  margin-bottom: 20px;  // 각 상품 간의 간격 설정
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  img {
+    width: 120px;  // 이미지의 고정 너비
+    height: 120px;  // 이미지의 고정 높이
+    object-fit: cover;
+    border-radius: 8px;  // 이미지의 둥근 모서리
+    margin-right: 20px;  // 이미지와 텍스트 간의 간격
+  }
+
+  p {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0;  // 텍스트의 여백 제거
+    color: #333;
+    flex-grow: 1;  // 제목이 공간을 넓게 차지하도록 설정
+  }
+
+  span {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #000;
+    margin-left: 20px;  // 가격과 텍스트 간의 간격 설정
+  }
+`;
 export const NavContainer = styled.div`
   display: flex;
   justify-content: space-between;

@@ -7,7 +7,7 @@ import SignupPage from './pages/Signup';
 import AdminPage from './pages/Admin'; // 관리자 첫 페이지
 import User from './User';  // 일반 사용자 페이지
 import Admin from './Admin';  // 관리자 전용 페이지
-import ScrollToTop from './ScrollToTop';
+
 
 export default function Router() {
   return (
