@@ -61,10 +61,10 @@ export default function Main() {
             {!isMobile && (
                 <>
                 <img src={arrowleft} alt="Previous" onClick={goToPrevious}
-                    style={{ cursor: 'pointer', position: 'absolute', top: '50%', left: '32px', zIndex: 1000, transform: 'translateY(-50%)', 
+                    style={{ cursor: 'pointer', position: 'absolute', top: '50%', left: '32px', zIndex: 100, transform: 'translateY(-50%)', 
                              opacity: showArrows ? 1 : 0, transition: 'opacity 1s ease-in-out', transitionDelay: showArrows ? '0.5s' : '0s' }} />
                 <img src={arrowright} alt="Next" onClick={goToNext}
-                    style={{ cursor: 'pointer', position: 'absolute', top: '50%', right: '32px', zIndex: 1000, transform: 'translateY(-50%)',
+                    style={{ cursor: 'pointer', position: 'absolute', top: '50%', right: '32px', zIndex: 100, transform: 'translateY(-50%)',
                              opacity: showArrows ? 1 : 0, transition: 'opacity 1s ease-in-out', transitionDelay: showArrows ? '0.5s' : '0s' }} />
                 </>
             )}

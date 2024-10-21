@@ -227,7 +227,7 @@ export const NewContainer = styled.div`
 export const ItemImage = styled.img`
   flex-shrink: 0;  
   width: 100%;  
-  height: 80vh;
+  height: auto;
   object-fit: cover;
   @media(max-width: 780px){
     width: 100%;  
