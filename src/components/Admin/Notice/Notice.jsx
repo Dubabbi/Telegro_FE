@@ -12,18 +12,20 @@ import Pagination from '../../Pagination/Pagination';
 import * as P from '../ProductList/ProductStyle';
 import { FaFilePdf, FaFileImage, FaFileWord, FaFileExcel, FaFile } from 'react-icons/fa';
 
-const AdminNotice = ({ page = 0, size = 10 }) => {
+const AdminNotice = ({ page = 0, size = 20 }) => {
   const navigate = useNavigate();
   const [notice, setNotice] = useState([]);
   const [error, setError] = useState('');
   const [searchValue, setSearchValue] = useState('');
-  const [filteredNotice, setFilteredNotice] = useState([]); 
+  const [filteredNotice, setFilteredNotice] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 상태
+  const [totalPages, setTotalPages] = useState(1); // 전체 페이지 수
 
   useEffect(() => {
     const fetchNotices = async () => {
       try {
         const response = await axios.get('https://api.telegro.kr/notices', {
-          params: { page, size },
+          params: { page: currentPage - 1, size },
         });
   
         console.log('API Response:', response); 
@@ -33,7 +35,8 @@ const AdminNotice = ({ page = 0, size = 10 }) => {
             return new Date(b.noticeCreateDate) - new Date(a.noticeCreateDate);
           });
           setNotice(sortedNotices);
-          setFilteredNotice(sortedNotices); // 여기서 초기값 설정
+          setFilteredNotice(sortedNotices); // 초기값 설정
+          setTotalPages(response.data.data.totalPage); // 전체 페이지 수 설정
         } else {
           throw new Error(response.data.message || 'Failed to fetch data');
         }
@@ -44,9 +47,8 @@ const AdminNotice = ({ page = 0, size = 10 }) => {
     };
   
     fetchNotices();
-  }, [page, size]);
+  }, [currentPage, size]); // currentPage가 변경될 때마다 데이터를 다시 가져옴
   
-
 
   if (error) {
     return <div>{error}</div>;  // 에러 표시
@@ -89,6 +91,10 @@ const AdminNotice = ({ page = 0, size = 10 }) => {
     }
   };
 
+  const handlePageChange = (page) => {
+    setCurrentPage(page); // 페이지 변경 시 상태 업데이트
+  };
+
   const items = filteredNotice.map((notice) => (
     <CommonTableRow key={notice.id}>
       <CommonTableColumn>{notice.id}</CommonTableColumn>
@@ -111,7 +117,7 @@ const AdminNotice = ({ page = 0, size = 10 }) => {
         <N.PageTitle>
           <N.TitleText>공지사항</N.TitleText>
         </N.PageTitle>
-        <div style={{textAlign: 'right'}}> 총 게시물 수 : {filteredNotice.length}  현재 페이지 : 1 / 6</div>
+        <div style={{textAlign: 'right'}}> 총 게시물 수 : {filteredNotice.length}  현재 페이지 : {currentPage} / {totalPages}</div>
         <N.BoardSearchArea>
           <N.SearchWindow marginLeft>
             <N.SearchWrap>
@@ -134,7 +140,11 @@ const AdminNotice = ({ page = 0, size = 10 }) => {
       <N.Add onClick={() => navigate('/admin/noticecreate')} src={editpost} />
     </N.MainWrapper>
     <P.Pagediv>
-      <Pagination />
+      <Pagination 
+        currentPage={currentPage} 
+        totalPages={totalPages} 
+        onPageChange={handlePageChange} 
+      />
     </P.Pagediv>
     </>
   );

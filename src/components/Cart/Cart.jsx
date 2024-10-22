@@ -178,13 +178,13 @@ export const DeleteButton = styled.button`
   border: none;
   cursor: pointer;
   color: red;
-  font-size: 1.5rem;
-  position: absolute; // 절대 위치
-  top: 10px; // 상단에서 10px 떨어진 곳
-  right: 10px; // 우측에서 10px 떨어진 곳
+  font-size: 1.3rem;
+  position: absolute; 
+  top: 10px;
+  right: 10px; 
 
   @media (max-width: 780px) {
-    top: 5px; // 더 작은 화면에서는 위치 조정
+    top: 5px; 
     right: 5px;
   }
 `;
@@ -370,22 +370,7 @@ const Cart = () => {
     }
   };
 
-  const setInputOptionTemp = (id, value) => {
-    setProducts(products.map(product =>
-      product.id === id ? { ...product, inputOptionTemp: value } : product
-    ));
-  };
 
-  // 입력값 확인 및 업데이트 반영 함수
-  const handleConfirmInputOption = (id, inputOption) => {
-    setProducts(products.map(product =>
-      product.id === id ? { ...product, inputOption, inputOptionTemp: undefined } : product
-    ));
-    const product = products.find(product => product.id === id);
-    if (product) {
-      updateCartItem(id, product.selectOption, product.quantity, inputOption);
-    }
-  };
   const [updatedProduct, setUpdatedProduct] = useState(null);
 
   useEffect(() => {
@@ -394,7 +379,6 @@ const Cart = () => {
     }
   }, [updatedProduct]);
   
-  // In your handlers, set the updated product:
   const handleIncreaseQuantity = (id) => {
     const newProducts = products.map(product =>
       product.id === id ? { ...product, quantity: product.quantity + 1 } : product
@@ -431,7 +415,6 @@ const Cart = () => {
   
 
   const handleOptionChange = (id, selectedOption) => {
-    // 옵션이 변경되면 products 상태를 업데이트
     setProducts(products.map(product =>
       product.id === id ? { ...product, selectOption: selectedOption } : product
     ));
@@ -478,8 +461,6 @@ const Cart = () => {
   };
 
 
-
-  // 체크박스 변경 함수
   const handleCheckboxChange = (id) => {
     setProducts(products.map(product =>
       product.id === id ? { ...product, selected: !product.selected } : product
@@ -532,8 +513,8 @@ const Cart = () => {
                 ))}
               </select>
 
-              {/* inputOption이 있을 때만 input 박스가 보이도록 조건 추가 */}
-              {product.inputOption && (
+              {(product.productCategory === 'HEADSET' || product.productCategory === 'LINE_CORD' || product.productCategory === 'RECORDER') && (
+              <>
                 <OptionInputWrapper>
                   <input
                     style={{ border: '1px solid #555', borderRadius: '3px'}}
@@ -556,6 +537,7 @@ const Cart = () => {
                     확인
                   </button>
                 </OptionInputWrapper>
+                </>
               )}
             </ProductDetails>
             </ProductInfo>
@@ -571,7 +553,6 @@ const Cart = () => {
             />
             <QuantityButton onClick={() => handleIncreaseQuantity(product.id, product.selectOption, product.quantity)}>+</QuantityButton>
           </QuantityWrapper>
-
             <DeleteButton onClick={() => handleDelete(product.id)}>
               <DeleteIcon src={Delete} />
             </DeleteButton>

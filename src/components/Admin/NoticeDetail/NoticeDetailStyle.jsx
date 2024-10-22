@@ -82,11 +82,10 @@ export const InfoItemText = styled.div`
 `;
 
 export const Cont = styled.div`
-  padding: 100px 15px;
+  padding: 10px 15px;
   border-bottom: 1px solid #000;
   line-height: 2;
   font-size: 1.3rem;
-  justify-content: flex-start;
   text-align: left;
 `;
 

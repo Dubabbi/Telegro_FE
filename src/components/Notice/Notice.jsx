@@ -10,40 +10,42 @@ import * as N from './NoticeStyle';
 import Pagination from '../Pagination/Pagination';
 import { FaFilePdf, FaFileImage, FaFileWord, FaFileExcel, FaFile } from 'react-icons/fa';
 
-const Notice = ({ page = 0, size = 10 }) => {
+const Notice = ({ size = 10 }) => {
   const navigate = useNavigate();
   const [notice, setNotice] = useState([]);
   const [error, setError] = useState('');
   const [searchValue, setSearchValue] = useState('');
-  const [filteredNotice, setFilteredNotice] = useState([]);  // 검색 결과를 담는 상태 추가
+  const [filteredNotice, setFilteredNotice] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 상태
+  const [totalPages, setTotalPages] = useState(1); // 전체 페이지 수
 
   useEffect(() => {
     const fetchNotices = async () => {
       try {
         const response = await axios.get('https://api.telegro.kr/notices', {
-          params: { page, size },
+          params: { page: currentPage - 1, size },
         });
   
         console.log('API Response:', response); 
   
         if (response.status === 200) {
-          // 날짜를 기준으로 최신순 정렬
           const sortedNotices = response.data.data.notices.sort((a, b) => {
             return new Date(b.noticeCreateDate) - new Date(a.noticeCreateDate);
           });
-          setNotice(sortedNotices);  // 데이터를 상태에 저장
-          setFilteredNotice(sortedNotices);  // 검색 초기 상태
+          setNotice(sortedNotices);
+          setFilteredNotice(sortedNotices); // 초기값 설정
+          setTotalPages(response.data.data.totalPage); // 전체 페이지 수 설정
         } else {
           throw new Error(response.data.message || 'Failed to fetch data');
         }
       } catch (error) {
         console.error('Error fetching data:', error);
-        setError(`Failed to load products: ${error.message}`);  // 에러 설정
+        setError(`Failed to load products: ${error.message}`);
       }
     };
   
     fetchNotices();
-  }, [ page, size]);
+  }, [currentPage, size]); // currentPage가 변경될 때마다 데이터를 다시 가져옴
 
   if (error) {
     return <div>{error}</div>;  // 에러 표시
@@ -82,6 +84,10 @@ const Notice = ({ page = 0, size = 10 }) => {
     } else {
       setFilteredNotice(notice);  // 검색어가 없으면 전체 리스트로 설정
     }
+  };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page); // 페이지 변경 시 상태 업데이트
   };
 
   const items = filteredNotice.map((notice) => (
@@ -128,7 +134,11 @@ const Notice = ({ page = 0, size = 10 }) => {
         </div>
       </N.Section>
     </N.MainWrapper>
-    <Pagination />
+    <Pagination 
+      currentPage={currentPage} 
+      totalPages={totalPages} 
+      onPageChange={handlePageChange} 
+    />
     </>
   );
 };

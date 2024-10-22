@@ -1,9 +1,9 @@
 import { FaEdit, FaTrash } from 'react-icons/fa'; 
 import React, { useState, useEffect } from 'react';
+import '@toast-ui/editor/dist/toastui-editor.css';
+import '@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css';
 import styled from 'styled-components';
 import img from '../../Check/image.svg'; 
-import * as P from '../ProductList/ProductStyle';
-import * as D from '../NoticeDetail/NoticeDetailStyle';
 import * as N from '../Notice/NoticeStyle';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
@@ -401,7 +401,7 @@ const AdminProductDetail = () => {
         <ContentWrapper>
             <DescriptionTitle>상품 설명</DescriptionTitle>
             <DescriptionList> 
-              <DescriptionItem dangerouslySetInnerHTML={{ __html: product.content }} /> {/* 상품 설명 */}
+              <DescriptionItem className="toastui-editor-contents" dangerouslySetInnerHTML={{ __html: product.content }} /> {/* 상품 설명 */}
             </DescriptionList>
 
         </ContentWrapper>

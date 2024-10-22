@@ -455,7 +455,7 @@ const ProductDetail = () => {
           <ContentWrapper>
             <DescriptionTitle>상품 설명</DescriptionTitle>
             <DescriptionList>
-              <DescriptionItem dangerouslySetInnerHTML={{ __html: product.content }} />
+              <DescriptionItem className="toastui-editor-contents" dangerouslySetInnerHTML={{ __html: product.content }} />
             </DescriptionList>
           </ContentWrapper>
         </ProductPageWrapper>

@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 
-// 페이지네이션 스타일
 const PaginationWrapper = styled.div`
   display: flex;
   justify-content: center;

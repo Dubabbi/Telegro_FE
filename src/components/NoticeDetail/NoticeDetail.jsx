@@ -3,7 +3,8 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import * as D from './NoticeDetailStyle'; // 스타일 파일을 가져옵니다.
 import * as N from '../Notice/NoticeStyle'; // 스타일 파일을 가져옵니다.
-
+import '@toast-ui/editor/dist/toastui-editor.css';
+import '@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css';
 const NoticeDetail = () => {
   const { noticeId } = useParams();  // URL에서 noticeId 추출
   const [notice, setNotice] = useState(null);
@@ -61,9 +62,7 @@ const NoticeDetail = () => {
                 <D.InfoItemText>: {notice.viewCount}</D.InfoItemText>
               </D.InfoItem>
             </D.Info>
-            <div style={{textAlign: 'left !important'}}>
-            <D.Cont dangerouslySetInnerHTML={{ __html: notice.noticeContent }} />
-            </div>
+            <D.Cont className="toastui-editor-contents" dangerouslySetInnerHTML={{ __html: notice.noticeContent }} />
             <div style={{ marginTop: '20px' }}>
             <h4>첨부 파일</h4>
             <ul>

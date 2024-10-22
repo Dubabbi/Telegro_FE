@@ -4,7 +4,8 @@ import * as N from '../Notice/NoticeStyle';
 import edit from '/src/assets/icon/Admin/editpost.svg';
 import { Link, useNavigate, useParams } from 'react-router-dom'; 
 import axios from 'axios'; 
-
+import '@toast-ui/editor/dist/toastui-editor.css';
+import '@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css';
 const NoticeDetail = () => {
   const { noticeId } = useParams();  // URL에서 공지사항 ID 추출
   const [notice, setNotice] = useState(null);  // 공지사항 데이터 상태 관리
@@ -136,8 +137,7 @@ const NoticeDetail = () => {
                 <D.InfoItemText>: {notice.viewCount}</D.InfoItemText>
               </D.InfoItem>
             </D.Info>
-
-            <D.Cont dangerouslySetInnerHTML={{ __html: notice.noticeContent }} />
+            <D.Cont className="toastui-editor-contents" dangerouslySetInnerHTML={{ __html: notice.noticeContent }} />
             <div style={{ marginTop: '20px' }}>
             <h4>첨부 파일</h4>
             <ul>

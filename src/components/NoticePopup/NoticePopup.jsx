@@ -3,7 +3,8 @@ import styled from 'styled-components';
 import { FaTimes } from 'react-icons/fa';
 import axios from 'axios';
 import Img from '/src/assets/image/Landing/logo.svg'; // 로고 이미지
-
+import '@toast-ui/editor/dist/toastui-editor.css';
+import '@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css';
 const Overlay = styled.div`
   position: fixed;
   top: 0;
@@ -72,7 +73,7 @@ const Content = styled.div`
   flex: 1;
   padding: 15px 30px;
   color: #30313D;
-  text-align: center;
+  text-align: left;
   line-height: 1.8;
   overflow-y: auto; /* 내용이 넘칠 때 스크롤 가능하게 설정 */
   max-height: calc(100% - 100px); /* 헤더와 푸터를 제외한 최대 높이 설정 */
@@ -208,7 +209,7 @@ const NoticePopup = () => {
         <Content>
           <h2>{notice.noticeTitle}</h2>
           <HorizontalRule />
-          <p dangerouslySetInnerHTML={{ __html: notice.noticeContent }} /> {/* 공지사항 내용 */}
+          <p className="toastui-editor-contents" dangerouslySetInnerHTML={{ __html: notice.noticeContent }} /> {/* 공지사항 내용 */}
         </Content>
         <Footer>
           <ConfirmButton onClick={() => handleClose(true)}>오늘 하루 보지 않기</ConfirmButton>

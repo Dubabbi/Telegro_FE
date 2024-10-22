@@ -80,14 +80,13 @@ export const InfoItemText = styled.div`
 `;
 
 export const Cont = styled.div`
-  all: unset;
-  padding: 100px 15px;
   border-bottom: 1px solid #000;
+  display: flex;
   line-height: 2;
   font-size: 1.3rem;
   text-align: left;
-  display: block;
-  box-sizing: border-box;
+  flex-direction: column;
+  justify-content: flex-start;
 `;
 
 
