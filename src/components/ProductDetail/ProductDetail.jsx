@@ -322,7 +322,11 @@ const ProductDetail = () => {
       alert('옵션을 선택해주세요.');
       return;
     }
-  
+    if ((product.category === 'HEADSET' || product.category === 'LINE_CORD') && !inputOption) {
+      alert('사용 전화기명을 입력해주세요.');
+      return;
+    }
+    
     try {
       const accessToken = localStorage.getItem('token');
       const response = await axios.post(

@@ -99,11 +99,20 @@ export const ProductImage = styled.img`
 export const ProductDetails = styled.div`
   display: flex;
   flex-direction: column;
-
+  width: 100%;
+  overflow: auto; 
+  
   @media (max-width: 780px) {
-    flex-grow: 1; /* 남은 공간을 모두 차지 */
+    flex-grow: 1; /
+  }
+
+  span {
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow: ellipsis; 
   }
 `;
+
 
 export const ProductName = styled.span`
   font-weight: bold;
@@ -112,8 +121,9 @@ export const ProductName = styled.span`
 `;
 
 export const ProductModel = styled.span`
-  color: #666;
-  font-size: 1rem;
+  color: #111;
+  font-size: 1.2rem;
+  margin-bottom: 10px;
 `;
 
 export const ProductColor = styled.span`
@@ -302,8 +312,10 @@ export const Title = styled.div`
 
 export const OptionInputWrapper = styled.div`
   display: flex;
+  width: auto;
   align-items: center;
   justify-content: space-between;
+  gap: 5px;
   margin-top: 5px;
 `;
 
@@ -419,14 +431,18 @@ const Cart = () => {
   
 
   const handleOptionChange = (id, selectedOption) => {
+    // 옵션이 변경되면 products 상태를 업데이트
     setProducts(products.map(product =>
       product.id === id ? { ...product, selectOption: selectedOption } : product
     ));
+  
+    // 옵션이 변경된 해당 상품만 PUT 요청을 보냄
     const product = products.find(product => product.id === id);
     if (product) {
       updateCartItem(id, selectedOption, product.inputOption, product.quantity);
     }
   };
+  
 
   const handleInputOptionChange = (id, inputOptionValue) => {
     setProducts(products.map(product =>
@@ -503,31 +519,45 @@ const Cart = () => {
             <ProductInfo>
               <ProductImage src={product.coverImage} alt="상품 이미지" />
               <ProductDetails>
-            <ProductName>{product.productName}</ProductName>
-            <ProductModel>{product.productModel}</ProductModel>
-            <select
-              value={product.selectOption || ''}
-              onChange={(e) => handleOptionChange(product.id, e.target.value)}
-            >
-              {product.productOptions.map((option, index) => (
-                <option key={index} value={option}>
-                  {option}
-                </option>
-              ))}
-            </select>
-            <OptionInputWrapper>
-              <input
-                style={{border: '1px solid #555', borderRadius: '3px'}}
-                type="text"
-                value={product.inputOption || ''}
-                onChange={(e) => handleInputOptionChange(product.id, e.target.value)}
-                placeholder="기타 옵션 기재"
-              />
-              <button style={{backgroundColor: '#eee', borderRadius: '3px', padding: '1px 3px', whiteSpace: 'nowrap'}} onClick={() => updateCartItem(product.id, product.selectOption, product.inputOption, product.quantity)}>확인</button>
-            </OptionInputWrapper>
-          </ProductDetails>
+              <ProductName>{product.productName}</ProductName>
+              <ProductModel>{product.productModel}</ProductModel>
+              <select
+                value={product.selectOption || ''}
+                onChange={(e) => handleOptionChange(product.id, e.target.value)}
+              >
+                {product.productOptions.map((option, index) => (
+                  <option key={index} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
 
-
+              {/* inputOption이 있을 때만 input 박스가 보이도록 조건 추가 */}
+              {product.inputOption && (
+                <OptionInputWrapper>
+                  <input
+                    style={{ border: '1px solid #555', borderRadius: '3px'}}
+                    type="text"
+                    value={product.inputOption || ''}
+                    onChange={(e) => handleInputOptionChange(product.id, e.target.value)}
+                    placeholder="기타 옵션 기재"
+                  />
+                  <button
+                    style={{
+                      backgroundColor: '#eee',
+                      borderRadius: '3px',
+                      padding: '2px 8px',
+                      whiteSpace: 'nowrap',
+                    }}
+                    onClick={() =>
+                      updateCartItem(product.id, product.selectOption, product.inputOption, product.quantity)
+                    }
+                  >
+                    확인
+                  </button>
+                </OptionInputWrapper>
+              )}
+            </ProductDetails>
             </ProductInfo>
 
             <ProductPrice>{product.productPrice}원</ProductPrice>
