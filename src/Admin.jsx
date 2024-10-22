@@ -2,6 +2,7 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import AdminNav from './components/AdminNav/AdminNav'; 
 import ClientManagementPage from './pages/ClientManagement';
+import ClientDetail from './components/Admin/ClientDetail';
 import StatPage from './pages/Stat';
 import AdminNoticePage from './pages/AdminNotice';
 import NoticeCreatePage from './pages/NoticeCreate';
@@ -29,6 +30,7 @@ export default function Admin() {
       <Routes>
         {/* 각 관리자 페이지로의 서브 라우트 설정 */}
         <Route path="clientmanagement" element={<ClientManagementPage />} />
+        <Route path="clientdetail/:clientId" element={<ClientDetail />} />
         <Route path="adminnotice" element={<AdminNoticePage />} />
         <Route path="noticecreate" element={<NoticeCreatePage />} />
         <Route path="adminnoticeedit/:noticeId" element={<AdminNoticeEditPage />} />
@@ -43,7 +45,7 @@ export default function Admin() {
         <Route path="adminproductedit/:productId" element={<AdminProductEditPage />} />
         <Route path="adminorderlist" element={<AdminOrderListPage />} />
         <Route path="addclient" element={<AddClientPage />} />
-        <Route path="clientedit" element={<ClientEditPage />} />
+        <Route path="clientedit/:clientId" element={<ClientEditPage />} />
         <Route path="adminsearch" element={<AdminSearchResult />} />
       </Routes>
     </div>

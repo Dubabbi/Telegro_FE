@@ -14,6 +14,36 @@ export const Container = styled.div`
     padding-top: 60px;
   }
 `;
+
+export const AdminContainer = styled.div`
+  display: flex;
+  width: 95%;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding-left: 260px;
+  padding-top: 4%;
+  padding-bottom: 4%;
+  flex-grow: 1;
+  flex-direction: column;
+  text-align: left;
+  @media(max-width: 780px){
+    flex-direction: column;
+    padding-top: 60px;
+    padding-left: 0px;
+  }
+`;
+
+export const AdminProfileWrapper = styled.div`
+  width: 90%;
+  background-color: #fff;
+  border-radius: 10px;
+  text-align: left;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  max-height: 90vh;
+  margin: 0 auto;
+`;
+
 export const ProfileWrapper = styled.div`
   width: 60%;
   background-color: #fff;

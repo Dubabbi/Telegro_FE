@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
-import {Link, useNavigate} from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { Postcode } from '../Postcode/Postcode'; // 우편번호 검색 컴포넌트
+import axios from 'axios';
 import * as D from './NoticeDetail/NoticeDetailStyle';
-import { VscWhitespace } from 'react-icons/vsc';
+
 const Container = styled.div`
   width: 65%; 
   margin-left: 25%;
@@ -15,12 +16,13 @@ const Container = styled.div`
   }
 `;
 
+
 const SearchButton = styled.button`
   border: none;
   background-color: #f2f2f2;
   height: auto;
   border: 1px solid #E0E0E0;
-  padding: 1.7% 2%;
+  padding: 1.7% 4%;
   margin-top: 1.1%;
   color: white;
   border-radius: 2px;
@@ -91,9 +93,9 @@ const Select = styled.select`
 `;
 
 const Button = styled.button`
-  grid-column: span 2; /* 버튼을 2열 차지하도록 설정 */
-  padding: 10px;
+  padding: 10px 20px;
   background-color: #4D44B5;
+  white-space: nowrap;
   color: white;
   border: none;
   border-radius: 5px;
@@ -122,29 +124,71 @@ const ContactFormWrapper = styled.div`
 `;
 
 function ClientEdit() {
+  const { clientId } = useParams(); 
+  const navigate = useNavigate();
+  const [isDealer, setIsDealer] = useState(false); // 공급업체 여부
   const [form, setForm] = useState({
-    companyName: '',
-    phone: '',
     username: '',
+    userid: '',
     password: '',
+    phone: '',
     email: '',
-    priceApplication: '',
-    contactName: '',
-    contactPhone: '',
-    businessName: '',
-    businessNumber: '',
     address: '',
+    addressDetail: '',
     zipCode: '',
-    detailAddress: '',
-    industry: '',
-    category: '',
+    managerName: '',
+    managerPhone: '',
+    companyName: '',
+    companyNumber: '',
+    companyType: '',
+    companyItem: '',
   });
+
+  useEffect(() => {
+    const fetchCompanyData = async () => {
+      const token = localStorage.getItem('token');
+      try {
+        const response = await axios.get(`https://api.telegro.kr/api/users/${clientId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (response.status === 200) {
+          const companyData = response.data.data;
+          setForm({
+            userid: companyData.userid || '', 
+            username: companyData.username || '', 
+            phone: companyData.phone || '',
+            email: companyData.email || '',
+            address: companyData.address || '',
+            zipCode: companyData.zipCode || '',
+            addressDetail: companyData.addressDetail || '',
+            managerName: companyData.managerName || '', 
+            managerPhone: companyData.managerPhone || '', 
+            companyName: companyData.companyName || '', 
+            companyNumber: companyData.companyNumber || '', 
+            companyType: companyData.companyType || '', 
+            companyItem: companyData.companyItem || '', 
+          });
+          setIsDealer(companyData.role === 'DEALER');
+        } else {
+          alert('회사 정보를 불러오는 데 실패했습니다.');
+        }
+      } catch (error) {
+        console.error('Error fetching company data:', error);
+        alert('회사 정보를 불러오는 중 오류가 발생했습니다.');
+      }
+    };
+    fetchCompanyData();
+  }, [clientId]);
 
   const handleAddressComplete = ({ fullAddress, zonecode }) => {
     setForm((prevState) => ({
       ...prevState,
-      address: fullAddress,  // 도로명 주소 설정
-      zipCode: zonecode,     // 우편번호 설정
+      address: fullAddress,
+      zipCode: zonecode,
     }));
   };
 
@@ -155,36 +199,85 @@ function ClientEdit() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form Data:', form);
-  };
-  // DELETE 요청을 처리하는 함수
-  const handleDelete = async (companyId) => {
-    const token = localStorage.getItem('token'); // JWT 토큰을 로컬 스토리지에서 가져옴
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert('로그인이 필요합니다.');
+      return;
+    }
 
+    // PATCH 요청에서 일반 회원과 공급업체를 구분
+    const payload = {
+      user: {
+        username: form.username,
+        userId: form.userid,
+        password: form.password,
+        role: isDealer ? 'DEALER' : 'MEMBER',
+        phone: form.phone,
+        email: form.email,
+        address: form.address,
+        addressDetail: form.addressDetail,
+        zipCode: form.zipCode,
+      },
+    };
+
+    if (isDealer) {
+      payload.company = {
+        managerName: form.managerName,
+        managerPhone: form.managerPhone,
+        companyName: form.companyName,
+        companyNumber: form.companyNumber,
+        companyType: form.companyType,
+        companyItem: form.companyItem,
+      };
+    }
+
+    try {
+      const response = await axios.patch(
+        `https://api.telegro.kr/api/users/${clientId}`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        alert('회사 정보가 성공적으로 수정되었습니다.');
+        navigate('/admin/clientmanagement');
+      }
+    } catch (error) {
+      console.error('Error updating company information:', error);
+      alert('회사 정보를 수정하는 데 실패했습니다.');
+    }
+  };
+
+  const handleDelete = async () => {
+    const token = localStorage.getItem('token');
     if (!token) {
       alert('로그인이 필요합니다.');
       return;
     }
 
     try {
-      const response = await axios.delete(`https://api.telegro.kr/api/companies`, {
+      const response = await axios.delete(`https://api.telegro.kr/api/users/${clientId}`, {
         headers: {
-          Authorization: `Bearer ${token}`, // 인증 토큰을 헤더에 포함
+          Authorization: `Bearer ${token}`,
         },
-        params: { id: companyId }, // 삭제할 공급업체 ID를 쿼리로 전달
       });
-      alert('정말 회원을 삭제하시겠습니까?');
+
       if (response.status === 200) {
         alert('공급업체가 성공적으로 삭제되었습니다.');
-        navigate('/admin/clientmanagement'); // 삭제 후 관리 페이지로 이동
+        navigate('/admin/clientmanagement');
       }
     } catch (error) {
       if (error.response) {
         if (error.response.status === 401) {
           alert('유저 인증 실패: 다시 로그인해 주세요.');
-          navigate('/admin'); // 로그인 페이지로 리다이렉트
+          navigate('/admin');
         } else if (error.response.status === 404) {
           alert('해당 리소스를 찾을 수 없습니다.');
         } else {
@@ -195,190 +288,109 @@ function ClientEdit() {
       }
     }
   };
+
   return (
     <>
-    <Container>
-      <Title>회원 정보 수정</Title>
-      <FormWrapper>
-        <SectionTitleWrapper>
-          <SectionTitle>공급업체 회원가입</SectionTitle>
-        </SectionTitleWrapper>
-        <div style={{ padding: '2%' }}>
-          <Form onSubmit={handleSubmit}>
-            <div>
-              <Label>회원명 *</Label>
-              <Input
-                name="companyName"
-                value={form.companyName}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div>
-              <Label>전화번호 *</Label>
-              <Input
-                name="phone"
-                value={form.phone}
-                onChange={handleChange}
-                required
-              />
-            </div>
+      <Container>
+        <Title>회원 정보 수정</Title>
+        <FormWrapper>
+          <SectionTitleWrapper>
+            <SectionTitle>공급업체 회원가입</SectionTitle>
+          </SectionTitleWrapper>
+          <div style={{ padding: '2%' }}>
+            <Form onSubmit={handleSubmit}>
+              <div>
+                <Label>회원명 *</Label>
+                <Input name="username" value={form.username || ''} onChange={handleChange} required />
+              </div>
+              <div>
+                <Label>전화번호 *</Label>
+                <Input name="phone" value={form.phone} onChange={handleChange} required />
+              </div>
+              <InlineFormWrapper style={{ gridTemplateColumns: 'repeat(2, 1fr)' }}>
+                <div>
+                  <Label>아이디 *</Label>
+                  <Input name="userid" value={form.userid} onChange={handleChange} required />
+                </div>
+                <div>
+                  <Label>이메일 *</Label>
+                  <Input name="email" type="email" value={form.email} onChange={handleChange} required />
+                </div>
+              </InlineFormWrapper>
 
-            {/* 아이디, 비밀번호, 이메일, 단가적용을 한 줄로 정렬 */}
-            <InlineFormWrapper>
-              <div>
-                <Label>아이디 *</Label>
-                <Input
-                  name="username"
-                  value={form.username}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <div>
-                <Label>비밀번호 *</Label>
-                <Input
-                  name="password"
-                  type="password"
-                  value={form.password}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <div>
-                <Label>이메일 *</Label>
-                <Input
-                  name="email"
-                  type="email"
-                  value={form.email}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <div>
-                <Label>단가적용 *</Label>
-                <Select
-                  name="priceApplication"
-                  value={form.priceApplication}
-                  onChange={handleChange}
-                  required
-                >
-                  <option value="">단가 선택</option>
-                  <option value="A">A</option>
-                  <option value="B">B</option>
-                </Select>
-              </div>
-            </InlineFormWrapper>
-
-            {/* 담당자 이름, 담당자 전화번호, 상호명 1:1:2 비율로 배치 */}
-            <ContactFormWrapper>
-              <div>
-                <Label>담당자 이름 *</Label>
-                <Input
-                  style={{width: '97%'}}
-                  name="contactName"
-                  value={form.contactName}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <div>
-                <Label>담당자 전화번호 *</Label>
-                <Input
-                  style={{width: '97%'}}
-                  name="contactPhone"
-                  value={form.contactPhone}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <div>
-                <Label>상호명 *</Label>
-                <Input
-                  name="businessName"
-                  value={form.businessName}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-            </ContactFormWrapper>
-            <div>
-              <Label>주소 *</Label>
-              <div style={{ display: 'flex', whiteSpace: 'nowrap', alignItems: 'center' }}>
-                <Input
-                  name="address"
-                  value={form.address}
-                  placeholder="주소를 검색해 주세요."
-                  readOnly
-                />
-                <SearchButton>
-                <Postcode onComplete={handleAddressComplete} />
-                </SearchButton>
-              </div>
-            </div>
-            <div>
-              <Label>사업자 번호 *</Label>
-              <Input
-                name="businessNumber"
-                value={form.businessNumber}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div>
-              <Label>우편번호 *</Label>
-              <Input
-                name="zipCode"
-                value={form.zipCode}
-                readOnly
-              />
-            </div>
-            <div>
-              <Label>업태 *</Label>
-              <Input
-                name="industry"
-                value={form.industry}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div>
-              <Label>상세주소 *</Label>
-              <Input
-                name="detailAddress"
-                value={form.detailAddress}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div>
-              <Label>종목 *</Label>
-              <Input
-                name="category"
-                value={form.category}
-                onChange={handleChange}
-                required
-              />
-            </div>
-          </Form>
-        </div>
-        <D.BtLink
-          as="button"
-          onClick={() => handleDelete('공급업체-ID')}
-        >
-          삭제
-          </D.BtLink>
-      </FormWrapper>
-    </Container>
-        <D.BtWrap style={{ width: '70%', marginLeft: '22.5%', marginBottom: '3%'}}>
+              {/* 공급업체일 경우 추가 필드 */}
+              {isDealer && (
+                <>
+                  <ContactFormWrapper>
+                    <div>
+                      <Label>담당자 이름 *</Label>
+                      <Input
+                        style={{ width: '97%' }}
+                        name="managerName"
+                        value={form.managerName}
+                        onChange={handleChange}
+                        required
+                      />
+                    </div>
+                    <div>
+                      <Label>담당자 전화번호 *</Label>
+                      <Input
+                        style={{ width: '97%' }}
+                        name="managerPhone"
+                        value={form.managerPhone}
+                        onChange={handleChange}
+                        required
+                      />
+                    </div>
+                    <div>
+                      <Label>상호명 *</Label>
+                      <Input name="companyName" value={form.companyName} onChange={handleChange} required />
+                    </div>
+                  </ContactFormWrapper>
+                  <div>
+                    <Label>주소 *</Label>
+                    <div style={{ display: 'flex', whiteSpace: 'nowrap', alignItems: 'center' }}>
+                      <Input name="address" value={form.address} placeholder="주소를 검색해 주세요." readOnly />
+                      <SearchButton>
+                        <Postcode onComplete={handleAddressComplete} />
+                      </SearchButton>
+                    </div>
+                  </div>
+                  <div>
+                    <Label>사업자 번호 *</Label>
+                    <Input name="companyNumber" value={form.companyNumber} onChange={handleChange} required />
+                  </div>
+                  <div>
+                    <Label>우편번호 *</Label>
+                    <Input name="zipCode" value={form.zipCode} readOnly />
+                  </div>
+                  <div>
+                    <Label>업태 *</Label>
+                    <Input name="companyType" value={form.companyType} onChange={handleChange} required />
+                  </div>
+                  <div>
+                    <Label>상세주소 *</Label>
+                    <Input name="addressDetail" value={form.addressDetail} onChange={handleChange} required />
+                  </div>
+                  <div>
+                    <Label>종목 *</Label>
+                    <Input name="companyItem" value={form.companyItem} onChange={handleChange} required />
+                  </div>
+                </>
+              )}
+            </Form>
+          </div>
+        </FormWrapper>
+      </Container>
+      <D.BtWrap style={{ width: '70%', marginLeft: '22.5%', marginBottom: '3%' }}>
         <D.BtLink as={Link} to="/admin/clientmanagement">
-                취소
-              </D.BtLink>
-              <D.BtLink as={Link} to="">
-                등록
-              </D.BtLink>
-            </D.BtWrap>
-        </>
+          취소
+        </D.BtLink>
+        <D.BtLink as={Link} to="" onClick={handleSubmit}>
+          등록
+        </D.BtLink>
+      </D.BtWrap>
+    </>
   );
 }
 
