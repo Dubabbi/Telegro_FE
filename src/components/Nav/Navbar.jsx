@@ -58,12 +58,17 @@ export default function Navbar() {
       let allProducts = [];
       
       for (const category of categories) {
-        const products = await fetchProductsByCategory(category);
-        allProducts = [...allProducts, ...products];
+        const response = await fetchProductsByCategory(category);
+        
+        // 응답 데이터가 객체일 경우, 배열을 추출
+        const productsArray = response.data?.products || [];
+        
+        // allProducts에 병합
+        allProducts = [...allProducts, ...productsArray];
       }
   
-      setProducts(allProducts);
-      setIsLoading(false);  // 로딩 완료
+      setProducts(allProducts); // 병합된 제품 배열로 상태 업데이트
+      setIsLoading(false);  
     };
   
     fetchAllProducts();
@@ -76,14 +81,20 @@ export default function Navbar() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
+  
+    // 검색어로 상품 필터링
     let filtered = [];
     if (searchValue.trim() !== '') {
-      filtered = products.filter(product => 
+      filtered = products.filter(product =>
         product.productName.toLowerCase().includes(searchValue.toLowerCase())  // 검색어로 필터링
       );
     }
-
+  
+    // 검색 결과가 있으면 ID 기준으로 역순 정렬
+    if (filtered.length > 0) {
+      filtered = filtered.sort((a, b) => b.id - a.id);  // ID 기준으로 역순 정렬
+    }
+  
     // 검색 결과가 없을 경우 alert를 띄우고 페이지 이동을 하지 않음
     if (filtered.length === 0) {
       alert('검색 결과가 없습니다.');
@@ -91,7 +102,7 @@ export default function Navbar() {
       // 검색 결과 페이지로 이동하고, 필터링된 결과를 state로 전달
       navigate('/search', { state: { filteredProducts: filtered } });
     }
-    
+  
     setSearchValue('');  // 검색어 초기화
   };
 

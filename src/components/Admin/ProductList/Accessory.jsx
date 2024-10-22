@@ -19,21 +19,25 @@ const Accessory = ({ category = 'ACCESSORY', page = 0, size = 12 }) => {
         const response = await axios.get('https://api.telegro.kr/products', {
           params: { category, page, size },
         });
-  
-        console.log('API Response:', response); // 응답 데이터 확인
-  
-        if (response.status===200) {
-          const sortedProducts = response.data.data.sort((a, b) => b.id - a.id); 
-          setProducts(sortedProducts);  
+
+        console.log('API Response:', response);
+
+        // 응답 데이터가 객체인 경우, 그 안에서 배열을 찾음
+        const productsData = response.data.data.products || []; // products 필드에 배열이 있을 경우 접근
+
+        if (Array.isArray(productsData)) {
+          // ID 기준으로 역순 정렬
+          const sortedProducts = productsData.sort((a, b) => b.id - a.id);
+          setProducts(sortedProducts);
         } else {
-          throw new Error(response.data.message || 'Failed to fetch data');
+          throw new Error('Invalid data format: expected an array inside products');
         }
       } catch (error) {
         console.error('Error fetching data:', error);
-        setError(`Failed to load products: ${error.message}`);
+        setError(`Failed to load products: ${error.message}`); // 에러 설정
       }
     };
-  
+
     fetchProducts();
   }, [category, page, size]);
   
