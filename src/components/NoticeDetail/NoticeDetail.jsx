@@ -30,23 +30,27 @@ const NoticeDetail = () => {
   }
 
   return (
-    <N.MainWrapper style={{textAlign: 'left'}}>
-      <N.Div></N.Div>
-      <N.Section style={{textAlign: 'left'}}>
-        <N.PageTitle>
-          <N.TitleText>공지사항</N.TitleText>
-        </N.PageTitle>
+    <>
+      <N.MainWrapper>
+      <D.Section2 style={{ width: '90%', minHeight: '2.6vh', border: 'none' }}>
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+          <N.PageTitle>
+            <N.TitleText>공지사항</N.TitleText>
+          </N.PageTitle>
+        </div>
+
         <D.BoardViewWrap>
           <D.BoardView>
             <D.Title>제목 
-            <span style={{ display: 'inline-block', marginLeft: '20px', marginRight: '20px', color: '#aaa', fontSize: '1.6rem' }}>
-              |
-            </span> 
-            {notice.noticeTitle}
-          </D.Title>
+              <span style={{ display: 'inline-block', marginLeft: '20px', marginRight: '20px', color: '#aaa', fontSize: '1.6rem' }}>
+                |
+              </span> 
+              {notice.noticeTitle}
+            </D.Title>
+
             <D.Info>
               <D.InfoItem>
-              <D.InfoItemText>No</D.InfoItemText>
+                <D.InfoItemText>No</D.InfoItemText>
                 <D.InfoItemText>: {notice.id}</D.InfoItemText>
               </D.InfoItem>
               <D.InfoItem>
@@ -75,17 +79,16 @@ const NoticeDetail = () => {
               ))}
             </ul>
           </div>
-            <hr style={{ margin: '20px 0', border: '1.3px solid #000' }} />
           </D.BoardView>
-          <D.BtWrap>
-            <D.BtLink as={Link} to="/notice">
-              목록
-            </D.BtLink>
-          </D.BtWrap>
         </D.BoardViewWrap>
-      </N.Section>
-      <div style={{height: '50px'}}></div>
+      </D.Section2>
     </N.MainWrapper>
+      <D.BtWrap>
+        <D.BtLink as={Link} to="/admin/adminnotice">
+          목록
+        </D.BtLink>
+      </D.BtWrap>
+    </>
   );
 }
 

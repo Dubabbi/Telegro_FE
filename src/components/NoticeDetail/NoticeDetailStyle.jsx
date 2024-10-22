@@ -24,6 +24,7 @@ export const BoardView = styled.div`
   width: 100%;
 `;
 
+
 export const Title = styled.div`
   position: relative; 
   padding-right: 30px; 
@@ -37,6 +38,7 @@ export const Title = styled.div`
     font-size: 1.6rem;
   }
 `;
+
 
 export const Info = styled.div`
   padding: 15px;
@@ -80,21 +82,19 @@ export const InfoItemText = styled.div`
 `;
 
 export const Cont = styled.div`
+  padding: 10px 15px;
   border-bottom: 1px solid #000;
-  display: flex;
   line-height: 2;
   font-size: 1.3rem;
   text-align: left;
-  flex-direction: column;
-  justify-content: flex-start;
 `;
-
-
 
 export const BtWrap = styled.div`
   margin-top: 30px;
+  margin-bottom: 30px;
   text-align: center;
   font-size: 0;
+  margin-left: 275px;
 `;
 
 export const BtLink = styled.a`
@@ -142,6 +142,18 @@ export const DeleteBtLink = styled.a`
   }
 `;
 
+export const Section2 = styled.section`
+  padding: 150px 0;
+  min-width: 95%;
+  width: 95%;
+  min-height: 2.6vh;
+  border: none;
+  @media(max-width: 780px){
+    max-width: 99%;
+    margin-left: 0px;
+    padding: 50px 10px;
+  }
+`
 
 export const SubmitButton = styled.button`
   border: none;
@@ -159,5 +171,35 @@ export const SubmitButton = styled.button`
     background: #141414ae;
     border-radius: 5px;
     color: #ccc;
+  }
+`;
+
+export const EditImg = styled.img`
+  padding: 1%;
+  text-align: center;
+  align-items: center;
+  height: 60px;
+  cursor: pointer;
+
+  @media(max-width: 780px){
+    height: 40px;
+  }
+`;
+
+
+export const Checkbox = styled.input`
+  margin-right: 6px;
+  margin-top: 6px;
+  width: 23px;
+  border: 1px solid #ddd;
+  height: 23px;
+  border-radius: 8px;
+  &:checked {
+    background-color: #bbb;
+  }
+ @media(max-width: 800px){
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
   }
 `;
