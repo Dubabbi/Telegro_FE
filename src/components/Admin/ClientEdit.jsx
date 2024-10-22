@@ -270,7 +270,7 @@ function ClientEdit() {
       });
 
       if (response.status === 200) {
-        alert('공급업체가 성공적으로 삭제되었습니다.');
+        alert('회원이 성공적으로 삭제되었습니다.');
         navigate('/admin/clientmanagement');
       }
     } catch (error) {
@@ -295,7 +295,7 @@ function ClientEdit() {
         <Title>회원 정보 수정</Title>
         <FormWrapper>
           <SectionTitleWrapper>
-            <SectionTitle>공급업체 회원가입</SectionTitle>
+            <SectionTitle>회원 정보 수정</SectionTitle>
           </SectionTitleWrapper>
           <div style={{ padding: '2%' }}>
             <Form onSubmit={handleSubmit}>

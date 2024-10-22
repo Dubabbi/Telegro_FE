@@ -283,36 +283,34 @@ const ProductCreate = () => {
             </div>
           </C.NameRowContainer>
           <C.RowContainer>
-          <div>
-          <C.Label htmlFor="category">상품 카테고리 *</C.Label>
-          <C.Select
-            name="category"
-            id="category"
-            value={product.category}
-            onChange={handleChange}
-          >
-              <option value="">카테고리를 선택하세요</option>
-              <option value="LINE_CORD">라인코드</option>
-              <option value="HEADSET">헤드셋</option>
-              <option value="ACCESSORY">악세서리</option>
-              <option value="RECORDER">녹음기</option>
-          </C.Select>
-        </div>
             <div>
-              <C.Label htmlFor="options">옵션 *</C.Label>
+              <C.Label htmlFor="category">상품 카테고리 *</C.Label>
               <C.Select
-                name="options"
-                id="options"
-                value={product.options.join(', ')}
+                name="category"
+                id="category"
+                value={product.category}
                 onChange={handleChange}
               >
-                <option value="">옵션 선택</option>
-                <option value="Noise Cancelling">Noise Cancelling</option>
-                <option value="Bluetooth 5.0">Bluetooth 5.0</option>
-                <option value="Built-in Microphone">Built-in Microphone</option>
+                  <option value="">카테고리를 선택하세요</option>
+                  <option value="LINE_CORD">라인코드</option>
+                  <option value="HEADSET">헤드셋</option>
+                  <option value="ACCESSORY">악세서리</option>
+                  <option value="RECORDER">녹음기</option>
               </C.Select>
             </div>
-            </C.RowContainer>
+            <div>
+              <C.Label htmlFor="options">옵션 *</C.Label>
+              <C.Input
+                type="text"
+                name="options"
+                id="options"
+                placeholder="옵션을 콤마(,)로 구분하여 입력하세요"
+                value={product.options.join(', ')}
+                onChange={handleChange}
+              />
+            </div>
+          </C.RowContainer>
+
             <C.RightColumn>
               <div>
                 <C.Label htmlFor="priceBussiness">Business *</C.Label>

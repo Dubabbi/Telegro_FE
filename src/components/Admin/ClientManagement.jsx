@@ -203,7 +203,7 @@ const ClientManagement = () => {
       });
   
       if (response.status === 200) {
-        alert('공급업체가 성공적으로 삭제되었습니다.');
+        alert('회원이 성공적으로 삭제되었습니다.');
         // 삭제 후 목록에서 제거
         setClients(clients.filter(client => client.id !== clientId));
       }

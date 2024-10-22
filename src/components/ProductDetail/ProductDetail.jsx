@@ -322,7 +322,7 @@ const ProductDetail = () => {
       alert('옵션을 선택해주세요.');
       return;
     }
-    if ((product.category === 'HEADSET' || product.category === 'LINE_CORD') && !inputOption) {
+    if ((product.category === 'HEADSET' || product.category === 'LINE_CORD' || product.category === 'RECORDER') && !inputOption) {
       alert('사용 전화기명을 입력해주세요.');
       return;
     }
@@ -469,7 +469,7 @@ const ProductDetail = () => {
                 <option key={index} value={option}>{option}</option>
               ))}
             </Select>
-            {(product.category === 'HEADSET' || product.category === 'LINE_CORD') && (
+            {(product.category === 'HEADSET' || product.category === 'LINE_CORD' || product.category === 'RECORDER') && (
               <>
                 <DescriptionTitle style={{fontSize: '1.2rem', paddingTop: '3%'}} htmlFor="inputoption">사용 전화기명 기재(전화기뒷면)</DescriptionTitle>
                 <QuantityInput
