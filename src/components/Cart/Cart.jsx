@@ -21,7 +21,7 @@ export const OrderPageWrapper = styled.div`
   width: 80%;
   margin: 2% auto;
 
-  @media (max-width: 780px) {
+  @media (max-width: 1024px) {
     flex-direction: column;
     width: 90%;
   }
@@ -35,7 +35,7 @@ export const LeftSection = styled.div`
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
-  @media (max-width: 780px) {
+  @media (max-width: 1024px) {
     width: 100%;
     margin-bottom: 20px;
   }
@@ -57,7 +57,7 @@ export const RightSection = styled.div`
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
-  @media (max-width: 780px) {
+  @media (max-width: 1024px) {
     width: 100%;
     padding: 5.5%;
   }

@@ -101,7 +101,14 @@ const TableRow = styled.tr`
   }
 `;
 
-const CheckOrder = () => {
+const TotalAmount = styled.div`
+  margin-top: 20px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-align: right;
+`;
+
+const OrderManager = () => {
   const [orders, setOrders] = useState([
     {
       id: 1,
@@ -109,10 +116,10 @@ const CheckOrder = () => {
       productName: '단방향 자브라 마이크 (KJ 337 QD)',
       option: '17mm 전용',
       quantity: 1,
-      unitPrice: '1',
-      totalPrice: '₩280,000',
+      unitPrice: 280000,
+      totalPrice: 280000,
       orderDate: '2024-09-06',
-      point: '₩0'
+      point: 0
     },
     {
       id: 2,
@@ -120,10 +127,10 @@ const CheckOrder = () => {
       productName: '단방향 자브라 마이크 (KJ 337 QD)',
       option: '17mm 전용',
       quantity: 1,
-      unitPrice: '1',
-      totalPrice: '₩280,000',
-      orderDate: '2024-09-06',
-      point: '₩0'
+      unitPrice: 280000,
+      totalPrice: 280000,
+      orderDate: '2024-09-10',
+      point: 0
     },
     {
       id: 3,
@@ -131,20 +138,55 @@ const CheckOrder = () => {
       productName: '단방향 자브라 마이크 (KJ 337 QD)',
       option: '17mm 전용',
       quantity: 1,
-      unitPrice: '1',
-      totalPrice: '₩280,000',
-      orderDate: '2024-09-06',
-      point: '₩0'
+      unitPrice: 280000,
+      totalPrice: 280000,
+      orderDate: '2024-09-15',
+      point: 0
     }
   ]);
 
   const [searchValue, setSearchValue] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('검색어:', searchValue);
     setSearchValue('');
   };
+
+  // 날짜 필터링 함수
+  const filterOrdersByDate = () => {
+    if (!startDate || !endDate) {
+      return orders; // 날짜가 선택되지 않으면 전체 주문 목록을 반환
+    }
+
+    return orders.filter(order => {
+      const orderDate = new Date(order.orderDate);
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+      return orderDate >= start && orderDate <= end;
+    });
+  };
+
+  // 주문명(상품명)으로 필터링하는 함수
+  const filterOrdersByName = (filteredOrders) => {
+    if (!searchValue) {
+      return filteredOrders; // 검색어가 없으면 필터링된 전체 목록 반환
+    }
+
+    return filteredOrders.filter(order =>
+      order.productName.toLowerCase().includes(searchValue.toLowerCase())
+    );
+  };
+
+  // 필터링된 주문의 총 주문 금액 계산
+  const calculateTotalAmount = (filteredOrders) => {
+    return filteredOrders.reduce((acc, order) => acc + order.totalPrice, 0);
+  };
+
+  // 필터링된 주문 목록 (날짜와 주문명에 따라)
+  const filteredOrders = filterOrdersByName(filterOrdersByDate());
 
   return (
     <MainWrapper>
@@ -153,13 +195,22 @@ const CheckOrder = () => {
       <SearchSection>
         <div>
           <label>기간: </label>
-          <DateInput type="date" /> - <DateInput type="date" />
+          <DateInput 
+            type="date" 
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+          /> - 
+          <DateInput 
+            type="date" 
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+          />
         </div>
         <N.SearchWrap style={{ marginLeft: '20%' }}>
           <N.StyledForm onSubmit={handleSubmit}>
             <Form.Control
               type="text"
-              placeholder="주문 목록 검색"
+              placeholder="주문명 검색"
               value={searchValue}
               onChange={(e) => setSearchValue(e.target.value)}
             />
@@ -183,7 +234,7 @@ const CheckOrder = () => {
           </tr>
         </TableHead>
         <tbody>
-          {orders.map((order, index) => (
+          {filteredOrders.map((order, index) => (
             <TableRow key={order.id}>
               <TableCell>{index + 1}</TableCell>
               <TableCell>
@@ -192,16 +243,20 @@ const CheckOrder = () => {
               </TableCell>
               <TableCell>{order.option}</TableCell>
               <TableCell>{order.quantity}</TableCell>
-              <TableCell>{order.unitPrice}</TableCell>
-              <TableCell>{order.totalPrice}<br />({order.point})</TableCell>
+              <TableCell>{order.unitPrice}원</TableCell>
+              <TableCell>{order.totalPrice}원<br />({order.point}원)</TableCell>
               <TableCell>{order.orderDate}</TableCell>
             </TableRow>
           ))}
         </tbody>
       </OrderTable>
+      
+      {/* 총 주문 금액 */}
+      <TotalAmount>총 주문 금액: ₩{calculateTotalAmount(filteredOrders).toLocaleString()}</TotalAmount>
+      
       <Pagination />
     </MainWrapper>
   );
 };
 
-export default CheckOrder;
+export default OrderManager;
