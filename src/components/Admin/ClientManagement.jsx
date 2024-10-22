@@ -7,7 +7,34 @@ import AddClient from '/src/assets/icon/Admin/addclient.svg';
 import * as N from './Notice/NoticeStyle';
 import Pagination from '../Pagination/Pagination';
 import * as P from './ProductList/ProductStyle';
+const roleColors = {
+  MEMBER: { background: '#D8EBFF', color: '#007BFF' }, // 파란색 배경, 파란 텍스트
+  DEALER: { background: '#E8F5E9', color: '#4CAF50' }, // 초록색 배경, 초록 텍스트
+  BEST: { background: '#FFF3E0', color: '#FB8C00' }, // 주황색 배경, 주황 텍스트
+  BUSINESS: { background: '#FFEBEE', color: '#D32F2F' }, // 빨간색 배경, 빨간 텍스트
+  ADMIN: { background: '#EDE7F6', color: '#7E57C2' } // 보라색 배경, 보라 텍스트
+};
+const RoleTag = styled.div`
+  display: flex;
+  align-items: center;
+  background-color: ${({ role }) => roleColors[role]?.background || '#F0F0F0'};
+  color: ${({ role }) => roleColors[role]?.color || '#333'};
+  padding: 0.2rem 0.6rem;
+  border-radius: 1.5rem;
+  font-size: 0.9rem;
+  font-weight: bold;
+  white-space: nowrap;
+`;
 
+// 작은 원 아이콘
+const Dot = styled.span`
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background-color: ${({ role }) => roleColors[role]?.color || '#333'};
+  border-radius: 50%;
+  margin-right: 0.5rem;
+`;
 const MainWrapper = styled.div`
   width: 95%;
   margin: 0 auto;
@@ -102,8 +129,10 @@ const ClientManagement = () => {
   const [clients, setClients] = useState([]); // 사용자 데이터
   const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
   const [roleFilter, setRoleFilter] = useState(''); // role 필터링용 상태
+  const [filteredClients, setFilteredClients] = useState([]); // 필터링된 사용자 데이터
   const pageSize = 20; // 페이지 크기
 
+  // 사용자 데이터 불러오기
   useEffect(() => {
     const fetchClients = async () => {
       try {
@@ -112,12 +141,7 @@ const ClientManagement = () => {
           page: currentPage - 1,
           size: pageSize,
         };
-  
-        // roleFilter가 빈 값이 아닐 때만 role 필터를 추가
-        if (roleFilter) {
-          params.role = roleFilter;
-        }
-  
+
         const response = await axios.get('https://api.telegro.kr/api/users', {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -125,9 +149,9 @@ const ClientManagement = () => {
           },
           params: params,
         });
-  
+
         if (response.status === 200) {
-          setClients(response.data.data.users); // users 데이터 접근
+          setClients(response.data.data.users); // 전체 사용자 데이터 저장
         } else {
           alert('사용자 데이터를 불러오는 데 실패했습니다.');
         }
@@ -136,10 +160,21 @@ const ClientManagement = () => {
         alert('사용자 데이터를 불러오는 중 오류가 발생했습니다.');
       }
     };
-  
+
     fetchClients();
-  }, [currentPage, roleFilter]);
-  
+  }, [currentPage]);
+
+  // role 필터링 처리
+  useEffect(() => {
+    if (roleFilter) {
+      // roleFilter 값이 있을 경우 필터링
+      const filtered = clients.filter(client => client.role === roleFilter);
+      setFilteredClients(filtered);
+    } else {
+      // roleFilter 값이 없을 경우 전체 사용자 데이터 표시
+      setFilteredClients(clients);
+    }
+  }, [roleFilter, clients]);
 
   // role 필터링 핸들러
   const handleRoleChange = (e) => {
@@ -169,7 +204,7 @@ const ClientManagement = () => {
   
       if (response.status === 200) {
         alert('공급업체가 성공적으로 삭제되었습니다.');
-        // 삭제 후 목록을 새로 불러오기 위해 데이터를 다시 요청
+        // 삭제 후 목록에서 제거
         setClients(clients.filter(client => client.id !== clientId));
       }
     } catch (error) {
@@ -187,8 +222,6 @@ const ClientManagement = () => {
       }
     }
   };
-  
-  
 
   return (
     <>
@@ -227,11 +260,16 @@ const ClientManagement = () => {
               </TableRow>
             </TableHead>
             <tbody>
-              {clients.length > 0 ? (
-                clients.map((client, index) => (
+              {filteredClients.length > 0 ? (
+                filteredClients.map((client, index) => (
                   <TableRow key={client.id}>
                     <TableData>{index + 1}</TableData>
-                    <TableData>{client.role === 'BEST' ? 'B' : 'A'}</TableData>
+                    <TableData>
+                      <RoleTag role={client.role}>
+                        <Dot role={client.role} />
+                        {client.role}
+                      </RoleTag>
+                    </TableData>
                     <TableData onClick={() => navigate(`/admin/ClientDetail/${client.id}`)}>{client.userName}</TableData>
                     <TableData>{client.phone}</TableData>
                     <TableData>{client.email}</TableData>
