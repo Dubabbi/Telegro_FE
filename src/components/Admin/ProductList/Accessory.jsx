@@ -22,8 +22,7 @@ const Accessory = ({ category = 'ACCESSORY', page = 0, size = 12 }) => {
 
         console.log('API Response:', response);
 
-        // 응답 데이터가 객체인 경우, 그 안에서 배열을 찾음
-        const productsData = response.data.data.products || []; // products 필드에 배열이 있을 경우 접근
+        const productsData = response.data.data.products || []; 
 
         if (Array.isArray(productsData)) {
           // ID 기준으로 역순 정렬

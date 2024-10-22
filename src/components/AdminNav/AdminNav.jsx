@@ -23,7 +23,7 @@ const Sidebar = styled.div`
 
   @media (max-width: 780px) {
     width: 60%; 
-    transform: ${({ show }) => (show ? 'translateX(0)' : 'translateX(-100%)')}; /* 모바일일 때 사이드바의 이동을 제어 */
+    transform: ${({ show }) => (show ? 'translateX(0)' : 'translateX(-100%)')}; 
   }
 `;
 
@@ -192,10 +192,11 @@ const AdminNav = () => {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);   
   const [isMobileSidebarVisible, setIsMobileSidebarVisible] = useState(false);
+  
   const handleLogout = () => {
     localStorage.removeItem('token'); 
     navigate('/admin');
-    alert('로그아웃되었습니다.')
+    alert('로그아웃되었습니다.');
   };
 
   const fetchProductsByCategory = async (category, page = 0) => {
@@ -204,7 +205,7 @@ const AdminNav = () => {
         params: { category, page, size: 10 }
       });
       if (response.data.code === 20000) {
-        return response.data.data;
+        return response.data.data.products || [];
       } else {
         console.error(`Error fetching products for ${category}:`, response.data.message);
         return [];
@@ -214,8 +215,6 @@ const AdminNav = () => {
       return [];
     }
   };
-  
-
   useEffect(() => {
     setIsMobileSidebarVisible(false);
     setIsSubMenuOpen(false); 
@@ -226,49 +225,40 @@ const AdminNav = () => {
       let allProducts = [];
       
       for (const category of categories) {
-        const response = await fetchProductsByCategory(category);
-        
-        // 응답 데이터가 객체일 경우, 배열을 추출
-        const productsArray = response.data?.products || [];
-        
-        // allProducts에 병합
+        const productsArray = await fetchProductsByCategory(category);
         allProducts = [...allProducts, ...productsArray];
       }
   
-      setProducts(allProducts); // 병합된 제품 배열로 상태 업데이트
+      setProducts(allProducts);
       setIsLoading(false);  
     };
   
     fetchAllProducts();
   }, []);
-  
+
   const handleSubmit = (e) => {
     e.preventDefault();
   
-    // 검색어로 상품 필터링
     let filtered = [];
     if (searchValue.trim() !== '') {
       filtered = products.filter(product =>
-        product.productName.toLowerCase().includes(searchValue.toLowerCase())  // 검색어로 필터링
+        product.productName.toLowerCase().includes(searchValue.toLowerCase())
       );
     }
   
-    // 검색 결과가 있으면 ID 기준으로 역순 정렬
     if (filtered.length > 0) {
-      filtered = filtered.sort((a, b) => b.id - a.id);  // ID 기준으로 역순 정렬
+      filtered = filtered.sort((a, b) => b.id - a.id);
     }
-  
-    // 검색 결과가 없을 경우 alert를 띄우고 페이지 이동을 하지 않음
+
     if (filtered.length === 0) {
       alert('검색 결과가 없습니다.');
     } else {
-      navigate('/admin/search', { state: { filteredProducts: filtered } });
+      navigate('/admin/adminsearch', { state: { filteredProducts: filtered } });
     }
-  
-    setSearchValue('');  // 검색어 초기화
+
+    setSearchValue('');
   };
-  
-  // 토글 버튼 클릭 시 모달 열기/닫기
+
   const toggleSidebar = () => {
     setIsMobileSidebarVisible(!isMobileSidebarVisible);
   };
@@ -277,17 +267,15 @@ const AdminNav = () => {
     setIsSubMenuOpen(!isSubMenuOpen);
   };
 
-  // 페이지가 변경되면 사이드바를 자동으로 닫고 서브메뉴도 초기화
   useEffect(() => {
     setIsMobileSidebarVisible(false);
-    setIsSubMenuOpen(false); // 서브메뉴 초기화
+    setIsSubMenuOpen(false);
   }, [location.pathname]);
 
   return (
     <>
-      {/* 모바일에서 사이드바 상태에 따라 아이콘 변경 */}
       <MenuButton onClick={toggleSidebar}>
-        {isMobileSidebarVisible ? <FaTimes /> : <FaBars />} {/* X 아이콘과 햄버거 메뉴 아이콘 전환 */}
+        {isMobileSidebarVisible ? <FaTimes /> : <FaBars />}
       </MenuButton>
 
       <Sidebar show={isMobileSidebarVisible || window.innerWidth > 780}>
@@ -327,7 +315,6 @@ const AdminNav = () => {
             자료실
           </MenuItem>
 
-          {/* 상품 관리 메뉴 및 하위 카테고리 */}
           <SubMenuWrapper>
             <MenuItem onClick={toggleSubMenu}>
               <FaCog />

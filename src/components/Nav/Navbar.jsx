@@ -9,7 +9,6 @@ export default function Navbar() {
   const [searchValue, setSearchValue] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [products, setProducts] = useState([]);  
-  const [filteredProducts, setFilteredProducts] = useState([]);  // 검색 결과를 저장할 상태
   const [isLoading, setIsLoading] = useState(true); 
   const navigate = useNavigate();
   
@@ -35,13 +34,15 @@ export default function Navbar() {
   useEffect(() => {
     checkLoginStatus();
   }, []);
+
+  // 카테고리별로 제품 데이터를 가져오는 함수
   const fetchProductsByCategory = async (category, page = 0) => {
     try {
       const response = await axios.get(`https://api.telegro.kr/products`, {
         params: { category, page, size: 10 }
       });
       if (response.data.code === 20000) {
-        return response.data.data;  
+        return response.data.data.products;  // 응답 데이터에서 products 배열 반환
       } else {
         console.error(`Error fetching products for ${category}:`, response.data.message);
         return [];
@@ -52,19 +53,15 @@ export default function Navbar() {
     }
   };
   
+  // 모든 카테고리의 제품을 가져오는 함수
   useEffect(() => {
     const fetchAllProducts = async () => {
       const categories = ['HEADSET', 'LINE_CORD', 'RECORDER', 'ACCESSORY'];
       let allProducts = [];
       
       for (const category of categories) {
-        const response = await fetchProductsByCategory(category);
-        
-        // 응답 데이터가 객체일 경우, 배열을 추출
-        const productsArray = response.data?.products || [];
-        
-        // allProducts에 병합
-        allProducts = [...allProducts, ...productsArray];
+        const productsArray = await fetchProductsByCategory(category);
+        allProducts = [...allProducts, ...productsArray];  // products 배열을 병합
       }
   
       setProducts(allProducts); // 병합된 제품 배열로 상태 업데이트
@@ -79,6 +76,7 @@ export default function Navbar() {
     setIsLoggedIn(false);
   };
 
+  // 검색 기능
   const handleSubmit = (e) => {
     e.preventDefault();
   

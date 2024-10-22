@@ -71,17 +71,12 @@ const LogoWrapper = styled.div`
   flex-direction: row;
   margin-bottom: 4%;
 `;
-const LogoImag = styled.img`
-  width: 35%;
-  height: auto;
-`;
 
 const LogoText = styled.h1`
   color: #ccc;
   font-size: 1.8rem;
   font-weight: bold;
 `;
-
 
 const SearchBar = styled.div`
   display: flex;
@@ -152,7 +147,6 @@ const SubMenuWrapper = styled.div`
   position: relative;
 `;
 
-
 const FooterWrapper = styled.div`
   margin-top: auto;
   width: 100%;
@@ -167,12 +161,10 @@ const ProfileWrapper = styled.div`
   margin-bottom: 12%;
 `;
 
-
 const ProfileInfo = styled.div`
   color: white;
   font-size: 1rem;
 `;
-
 
 const LogoutButton = styled.div`
   color: red;
@@ -182,6 +174,7 @@ const LogoutButton = styled.div`
     color: #ff5a5a;
   }
 `;
+
 export default function MobileNavbar() {
   const [searchValue, setSearchValue] = useState('');
   const [isSubMenuOpen, setIsSubMenuOpen] = useState(false);
@@ -196,13 +189,14 @@ export default function MobileNavbar() {
   });
   const navigate = useNavigate();
   const location = useLocation();
+
   const fetchProductsByCategory = async (category, page = 0) => {
     try {
       const response = await axios.get(`https://api.telegro.kr/products`, {
         params: { category, page, size: 10 }
       });
       if (response.data.code === 20000) {
-        return response.data.data;  // 상품 목록 반환
+        return response.data.data.products;  // 상품 목록 반환 (products 배열)
       } else {
         console.error(`Error fetching products for ${category}:`, response.data.message);
         return [];
@@ -212,19 +206,15 @@ export default function MobileNavbar() {
       return [];
     }
   };
+
   useEffect(() => {
     const fetchAllProducts = async () => {
       const categories = ['HEADSET', 'LINE_CORD', 'RECORDER', 'ACCESSORY'];
       let allProducts = [];
       
       for (const category of categories) {
-        const response = await fetchProductsByCategory(category);
-        
-        // 응답 데이터가 객체일 경우, 배열을 추출
-        const productsArray = response.data?.products || [];
-        
-        // allProducts에 병합
-        allProducts = [...allProducts, ...productsArray];
+        const productsArray = await fetchProductsByCategory(category);
+        allProducts = [...allProducts, ...productsArray];  // products 배열을 병합
       }
   
       setProducts(allProducts); // 병합된 제품 배열로 상태 업데이트
@@ -233,7 +223,34 @@ export default function MobileNavbar() {
   
     fetchAllProducts();
   }, []);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
   
+    // 검색어로 상품 필터링
+    let filtered = [];
+    if (searchValue.trim() !== '') {
+      filtered = products.filter(product =>
+        product.productName.toLowerCase().includes(searchValue.toLowerCase())  // 검색어로 필터링
+      );
+    }
+  
+    // 검색 결과가 있으면 ID 기준으로 역순 정렬
+    if (filtered.length > 0) {
+      filtered = filtered.sort((a, b) => b.id - a.id);  // ID 기준으로 역순 정렬
+    }
+  
+    // 검색 결과가 없을 경우 alert를 띄우고 페이지 이동을 하지 않음
+    if (filtered.length === 0) {
+      alert('검색 결과가 없습니다.');
+    } else {
+      // 검색 결과 페이지로 이동하고, 필터링된 결과를 state로 전달
+      navigate('/search', { state: { filteredProducts: filtered } });
+    }
+  
+    setSearchValue('');  // 검색어 초기화
+  };
+
   // 로그인 여부 확인하는 함수
   const checkLoginStatus = () => {
     const token = localStorage.getItem('token');
@@ -267,34 +284,6 @@ export default function MobileNavbar() {
     setIsMobileSidebarVisible(false);
     setIsSubMenuOpen(false); 
   }, [location.pathname]);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-  
-    // 검색어로 상품 필터링
-    let filtered = [];
-    if (searchValue.trim() !== '') {
-      filtered = products.filter(product =>
-        product.productName.toLowerCase().includes(searchValue.toLowerCase())  // 검색어로 필터링
-      );
-    }
-  
-    // 검색 결과가 있으면 ID 기준으로 역순 정렬
-    if (filtered.length > 0) {
-      filtered = filtered.sort((a, b) => b.id - a.id);  // ID 기준으로 역순 정렬
-    }
-  
-    // 검색 결과가 없을 경우 alert를 띄우고 페이지 이동을 하지 않음
-    if (filtered.length === 0) {
-      alert('검색 결과가 없습니다.');
-    } else {
-      // 검색 결과 페이지로 이동하고, 필터링된 결과를 state로 전달
-      navigate('/search', { state: { filteredProducts: filtered } });
-    }
-  
-    setSearchValue('');  // 검색어 초기화
-  };
-  
 
   return (
     <>
@@ -360,7 +349,7 @@ export default function MobileNavbar() {
               {isSubMenuOpen ? <FaChevronDown /> : <FaChevronRight />}
             </MenuItem>
             <SubMenu open={isSubMenuOpen}>
-            <MenuItem onClick={() => navigate('/headset')}>
+              <MenuItem onClick={() => navigate('/headset')}>
                 헤드셋
               </MenuItem>
               <MenuItem onClick={() => navigate('/lineCord')}>
@@ -372,7 +361,7 @@ export default function MobileNavbar() {
               <MenuItem onClick={() => navigate('/accessory')}>
                 악세서리
               </MenuItem>
-              </SubMenu>
+            </SubMenu>
           </SubMenuWrapper>
         </MenuWrapper>
 
@@ -390,7 +379,7 @@ export default function MobileNavbar() {
               </LogoutButton>
             </ProfileWrapper>
           ) : (
-            <ProfileWrapper style = {{cursor: 'pointer'}} onClick={() => navigate('/login')}>
+            <ProfileWrapper style={{cursor: 'pointer'}} onClick={() => navigate('/login')}>
               <ProfileInfo>
                 <div>로그인해주세요</div>
               </ProfileInfo>
