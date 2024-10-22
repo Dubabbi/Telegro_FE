@@ -23,7 +23,8 @@ const Headset = ({ category = 'HEADSET', page = 0, size = 12 }) => {
         console.log('API Response:', response); 
   
         if (response.status===200) {
-          setProducts(response.data.data);
+          const sortedProducts = response.data.data.sort((a, b) => b.id - a.id); 
+          setProducts(sortedProducts);  
         } else {
           throw new Error(response.data.message || 'Failed to fetch data');
         }

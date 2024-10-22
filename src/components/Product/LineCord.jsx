@@ -28,16 +28,17 @@ const LineCord = ({ category = 'LINE_CORD', page = 0, size = 12 }) => {
           params: { category, page, size },
         });
   
-        console.log('API Response:', response); // 응답 데이터 확인
+        console.log('API Response:', response); 
   
         if (response.status === 200) {
-          setProducts(response.data.data);  // 데이터 설정
+          const sortedProducts = response.data.data.sort((a, b) => b.id - a.id); 
+          setProducts(sortedProducts);  
         } else {
           throw new Error(response.data.message || 'Failed to fetch data');
         }
       } catch (error) {
         console.error('Error fetching data:', error);
-        setError(`Failed to load products: ${error.message}`);  // 에러 설정
+        setError(`Failed to load products: ${error.message}`);  
       }
     };
   

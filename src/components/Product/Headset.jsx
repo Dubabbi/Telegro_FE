@@ -28,10 +28,11 @@ const Headset = ({ category = 'HEADSET', page = 0, size = 12 }) => {
           params: { category, page, size },
         });
   
-        console.log('API Response:', response); // 응답 데이터 확인
+        console.log('API Response:', response);
   
         if (response.status === 200) {
-          setProducts(response.data.data);  // 데이터 설정
+          const sortedProducts = response.data.data.sort((a, b) => b.id - a.id);  // id 역순으로 정렬
+          setProducts(sortedProducts);  
         } else {
           throw new Error(response.data.message || 'Failed to fetch data');
         }
@@ -47,7 +48,6 @@ const Headset = ({ category = 'HEADSET', page = 0, size = 12 }) => {
   if (error) {
     return <div>{error}</div>;  // 에러 표시
   }
-
 
   return (
     <>

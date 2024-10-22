@@ -23,7 +23,8 @@ const LineCord = ({ category = 'LINE_CORD', page = 0, size = 12 }) => {
         console.log('API Response:', response); // 응답 데이터 확인
   
         if (response.status===200) {
-          setProducts(response.data.data);
+          const sortedProducts = response.data.data.sort((a, b) => b.id - a.id); 
+          setProducts(sortedProducts);  
         } else {
           throw new Error(response.data.message || 'Failed to fetch data');
         }
