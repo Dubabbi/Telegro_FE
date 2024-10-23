@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 // 기존 스타일 정의
@@ -17,6 +17,7 @@ const DashboardWrapper = styled.div`
 const TableContainer = styled.div`
   width: 90%;
   margin-top: 2%;
+  margin-bottom: 2%;
   @media(max-width: 780px){
     width: 90%;
   }
@@ -36,7 +37,17 @@ const Title = styled.h2`
     font-size: 1.9rem;
   }
 `;
+const SearchSection = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
 
+  @media(max-width: 780px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+`;
 const CategorySelect = styled.select`
   padding: 10px;
   border-radius: 5px;
@@ -99,6 +110,17 @@ const PercentageCell = styled.td`
   font-size: 1rem;
   align-items: center;
 `;
+const DateInput = styled.input`
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: auto;
+
+  @media(max-width: 780px) {
+    max-width: 700px;
+    width: 70%;
+  }
+`;
 
 const SummaryRow = styled.tr`
   font-weight: bold;
@@ -107,27 +129,27 @@ const SummaryRow = styled.tr`
 `;
 
 const StatsData = [
-  { day: '1일', hit: 12, percentage: 5 },
-  { day: '1일', hit: 30, percentage: 20 },
-  { day: '1일', hit: 20, percentage: 40 },
-  { day: '1일', hit: 20, percentage: 17 },
-  { day: '1일', hit: 20, percentage: 10 },
-  { day: '1일', hit: 0, percentage: 5 },
-  { day: '1일', hit: 0, percentage: 0 },
-  { day: '1일', hit: 0, percentage: 0 },
-  { day: '1일', hit: 0, percentage: 0 },
-  { day: '1일', hit: 0, percentage: 0 },
-  { day: '1일', hit: 0, percentage: 0 },
-  { day: '1일', hit: 0, percentage: 0 },
+  { name: '1일', hit: 12, percentage: 5 },
+  { name: '1일', hit: 30, percentage: 20 },
+  { name: '1일', hit: 20, percentage: 40 },
+  { name: '1일', hit: 20, percentage: 17 },
+  { name: '1일', hit: 20, percentage: 10 },
+  { name: '1일', hit: 0, percentage: 5 },
+  { name: '1일', hit: 0, percentage: 0 },
+  { name: '1일', hit: 0, percentage: 0 },
+  { name: '1일', hit: 0, percentage: 0 },
+  { name: '1일', hit: 0, percentage: 0 },
+  { name: '1일', hit: 0, percentage: 0 },
+  { name: '1일', hit: 0, percentage: 0 },
 ];
-
-const averageHit = StatsData.reduce((sum, row) => sum + row.hit, 0) / StatsData.length;
-const totalHit = StatsData.reduce((sum, row) => sum + row.hit, 0);
 
 const Stat = () => {
   const [category, setCategory] = useState('일별');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+  const averageHit = StatsData.reduce((sum, row) => sum + row.hit, 0) / StatsData.length;
+  const totalHit = StatsData.reduce((sum, row) => sum + row.hit, 0);
 
-  // 카테고리 변경 핸들러
   const handleCategoryChange = (event) => {
     setCategory(event.target.value);
   };
@@ -135,18 +157,30 @@ const Stat = () => {
   return (
     <DashboardWrapper>
       <TableContainer>
-        {/* HeaderContainer로 카테고리 선택과 제목을 한 줄로 정렬 */}
         <HeaderContainer>
           <Title>상점 접속 현황</Title>
           <CategorySelect value={category} onChange={handleCategoryChange}>
             <option value="일별">일별</option>
             <option value="월별">월별</option>
             <option value="요일별">요일별</option>
-            <option value="시간별">시간별</option>
             <option value="업체별">업체별</option>
           </CategorySelect>
         </HeaderContainer>
-
+        <SearchSection style={{whiteSpace: 'nowrap'}}>
+          <div>
+            <label>기간: </label>
+            <DateInput 
+              type="date" 
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+            /> - 
+            <DateInput 
+              type="date" 
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+            />
+          </div>
+          </SearchSection>
         <StatsTable>
           <TableHead>
             <TableRow>
@@ -159,7 +193,7 @@ const Stat = () => {
           <tbody>
             {StatsData.map((row, index) => (
               <TableRow key={index}>
-                <TableCell>{row.day}</TableCell>
+                <TableCell>{row.name}</TableCell>
                 <HitCell>{row.hit}</HitCell>
                 <GraphCell>
                   <ProgressBar>

@@ -23,11 +23,11 @@ export default function Landing() {
       let currentIndex = 0;
   
       const intervalId = setInterval(() => {
-        currentIndex = (currentIndex + 1) % images.length; // 0과 1을 반복
+        currentIndex = (currentIndex + 1) % images.length; 
         setCurrentImage(images[currentIndex]);
       }, 3000); // 3초마다 이미지 교체
   
-      return () => clearInterval(intervalId); // 컴포넌트 언마운트 시 인터벌 정리
+      return () => clearInterval(intervalId); 
     }, []);
   
   return (
