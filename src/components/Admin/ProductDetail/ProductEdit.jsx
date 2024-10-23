@@ -127,6 +127,7 @@ const ProductEdit = () => {
       setProduct((prev) => ({
         ...prev,
         pictures: [...prev.pictures, ...newImages],
+        coverImage: prev.coverImage || newImages[0] 
       }));
 
       console.log('이미지 업로드에 성공했습니다.');

@@ -85,7 +85,9 @@ function Signup() {
       } 
     } catch (error) {
       console.error("Error while signing up:", error);
-    }
+      if (error.response && error.response.status === 409) {
+        alert("이미 사용 중인 ID입니다.");
+      }}
   };
 
   // Submit 처리

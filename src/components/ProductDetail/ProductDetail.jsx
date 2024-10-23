@@ -239,7 +239,7 @@ const DescriptionItem = styled.li`
   overflow: hidden;
   display: block;
   img {
-    max-width: 80%;
+    width: 100%;
     margin: 0 auto;
     height: auto;
     object-fit: contain;
@@ -416,7 +416,7 @@ const ProductDetail = () => {
               <div>
                 <ProductTitle>{product.productName}</ProductTitle>
                 <ProductSubtitle>{product.productModel}</ProductSubtitle>
-                <PriceTag>₩{product.priceCustomer}</PriceTag>
+                <PriceTag>₩{product.price}</PriceTag>
               </div>
             </ProductInfoWrapper>
 
