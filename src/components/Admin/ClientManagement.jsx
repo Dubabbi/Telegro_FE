@@ -239,7 +239,6 @@ const ClientManagement = () => {
                 <option value="DEALER">DEALER</option>
                 <option value="BEST">BEST</option>
                 <option value="BUSINESS">BUSINESS</option>
-                <option value="ADMIN">ADMIN</option>
               </select>
             </div>
           </div>
