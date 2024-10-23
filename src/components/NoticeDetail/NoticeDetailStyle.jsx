@@ -90,11 +90,9 @@ export const Cont = styled.div`
 `;
 
 export const BtWrap = styled.div`
-  margin-top: 30px;
   margin-bottom: 30px;
   text-align: center;
   font-size: 0;
-  margin-left: 275px;
 `;
 
 export const BtLink = styled.a`

@@ -127,11 +127,11 @@ const Add = styled.img`
 const ClientManagement = () => {
   const navigate = useNavigate();
   const [clients, setClients] = useState([]); // 사용자 데이터
-  const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
   const [roleFilter, setRoleFilter] = useState(''); // role 필터링용 상태
   const [filteredClients, setFilteredClients] = useState([]); // 필터링된 사용자 데이터
   const pageSize = 20; // 페이지 크기
-
+  const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 상태
+  const [totalPages, setTotalPages] = useState(1); 
   // 사용자 데이터 불러오기
   useEffect(() => {
     const fetchClients = async () => {
@@ -175,8 +175,9 @@ const ClientManagement = () => {
       setFilteredClients(clients);
     }
   }, [roleFilter, clients]);
-
-  // role 필터링 핸들러
+  const handlePageChange = (page) => {
+    setCurrentPage(page); // 페이지 변경 시 상태 업데이트
+  };
   const handleRoleChange = (e) => {
     setRoleFilter(e.target.value);
     setCurrentPage(1); 
@@ -293,8 +294,12 @@ const ClientManagement = () => {
         </MainWrapper>
       </Div>
       <P.Pagediv>
-        <Pagination currentPage={currentPage} onPageChange={setCurrentPage} />
-      </P.Pagediv>
+      <Pagination 
+          currentPage={currentPage} 
+          totalPages={totalPages} 
+          onPageChange={handlePageChange} 
+        />
+        </P.Pagediv>
     </>
   );
 };
