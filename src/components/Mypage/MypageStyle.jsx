@@ -94,6 +94,21 @@ export const UserInfoWrapper = styled.div`
     flex-direction: column;
   }
 `;
+export const ClientInfoWrapper = styled.div`
+  display: grid;
+  width: 90%;
+  margin: 0 auto;
+  grid-template-columns: 1.5fr 1.5fr 1fr;
+  gap: 20px; /* 열 간격 */
+  padding: 0 20px;
+  margin: 20px 0;
+  align-items: start; /* 열 안의 내용이 상단에 정렬되도록 설정 */
+  @media(max-width: 780px){
+    grid-template-columns: 1fr; /* 화면이 좁아질 때 단일 열로 변경 */
+  }
+`;
+
+
 
 export const UserDetail = styled.div`
   text-align: left;
@@ -115,7 +130,7 @@ export const UserInfo = styled.p`
   color: #333;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   @media(max-width: 780px){
     justify-content: flex-start;
     margin-top: 5px;

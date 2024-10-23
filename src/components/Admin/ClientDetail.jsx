@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { FaPhone, FaEnvelope, FaUser, FaMapMarkerAlt } from 'react-icons/fa';
+import { FaPhone, FaEnvelope, FaUser, FaBuilding, FaBriefcase ,FaUserTie, FaBox  } from 'react-icons/fa';
 import * as M from '../Mypage/MypageStyle';
 import Avvvatars from 'avvvatars-react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -52,7 +52,7 @@ const ClientDetail = () => {
               <Avvvatars value={userInfo.username} style="Shapes" size="150" round={true} />
             </M.ProfileImage>
             <M.Name>{userInfo.username}</M.Name>
-            <M.UserInfoWrapper>
+            <M.ClientInfoWrapper>
               <M.UserDetail>
                 <M.UserLabel>ID</M.UserLabel>
                 <M.UserInfo>
@@ -74,7 +74,7 @@ const ClientDetail = () => {
                   {userInfo.email}
                 </M.UserInfo>
               </M.UserDetail>
-            </M.UserInfoWrapper>
+            </M.ClientInfoWrapper>
             <div style={{ textAlign: 'left' }}>
               <M.OrderButton onClick={() => navigate('/ordermanager')}>주문 확인</M.OrderButton>
             </div>
@@ -87,54 +87,54 @@ const ClientDetail = () => {
         {isDealer && (
           <M.AdminProfileWrapper>
             <M.BottomBackground>
-              <M.UserInfoWrapper>
-                <M.UserDetail>
-                  <M.UserLabel>Manager Phone</M.UserLabel>
-                  <M.UserInfo>
-                    <FaPhone style={{ marginRight: '10px' }} />
-                    {userInfo.managerPhone}
-                  </M.UserInfo>
-                </M.UserDetail>
-                <M.UserDetail>
-                  <M.UserLabel>Manager Name</M.UserLabel>
-                  <M.UserInfo>
-                    <FaEnvelope style={{ marginRight: '10px' }} />
-                    {userInfo.managerName}
-                  </M.UserInfo>
-                </M.UserDetail>
-                <M.UserDetail>
-                  <M.UserLabel>Company Number</M.UserLabel>
-                  <M.UserInfo>
-                    <FaEnvelope style={{ marginRight: '10px' }} />
-                    {userInfo.companyNumber}
-                  </M.UserInfo>
-                </M.UserDetail>
-              </M.UserInfoWrapper>
-              <M.UserInfoWrapper>
-                <M.UserDetail>
-                  <M.UserLabel>Company Type</M.UserLabel>
-                  <M.UserInfo>
-                    <FaEnvelope style={{ marginRight: '10px' }} />
-                    {userInfo.companyType}
-                  </M.UserInfo>
-                </M.UserDetail>
-                <M.UserDetail>
-                  <M.UserLabel>Company Item</M.UserLabel>
-                  <M.UserInfo>
-                    <FaEnvelope style={{ marginRight: '10px' }} />
-                    {userInfo.companyItem}
-                  </M.UserInfo>
-                </M.UserDetail>
-                <M.UserDetail>
-                  <M.UserLabel>Role</M.UserLabel>
-                  <M.UserInfo>
-                    <FaEnvelope style={{ marginRight: '10px' }} />
-                    {userInfo.role}
-                  </M.UserInfo>
-                </M.UserDetail>
-              </M.UserInfoWrapper>
+              <M.ClientInfoWrapper>
+              <M.UserDetail>
+              <M.UserLabel>Manager Phone</M.UserLabel>
+              <M.UserInfo>
+                <FaPhone style={{ marginRight: '10px' }} /> {/* 전화 관련 정보이므로 FaPhone 아이콘 적합 */}
+                {userInfo.managerPhone}
+              </M.UserInfo>
+            </M.UserDetail>
+            <M.UserDetail>
+              <M.UserLabel>Manager Name</M.UserLabel>
+              <M.UserInfo>
+                <FaUser style={{ marginRight: '10px' }} /> {/* 사용자/관리자 이름이므로 FaUser 아이콘 적합 */}
+                {userInfo.managerName}
+              </M.UserInfo>
+            </M.UserDetail>
+            <M.UserDetail>
+              <M.UserLabel>Company Number</M.UserLabel>
+              <M.UserInfo>
+                <FaBuilding style={{ marginRight: '10px' }} /> {/* 회사 번호 관련 정보이므로 FaBuilding 아이콘 적합 */}
+                {userInfo.companyNumber}
+              </M.UserInfo>
+            </M.UserDetail>
+            </M.ClientInfoWrapper>
+            <M.ClientInfoWrapper>
+            <M.UserDetail>
+              <M.UserLabel>Company Type</M.UserLabel>
+              <M.UserInfo>
+                <FaBriefcase style={{ marginRight: '10px' }} /> {/* 회사 유형이므로 FaBriefcase 아이콘 적합 */}
+                {userInfo.companyType}
+              </M.UserInfo>
+            </M.UserDetail>
+            <M.UserDetail>
+              <M.UserLabel>Company Item</M.UserLabel>
+              <M.UserInfo>
+                <FaBox style={{ marginRight: '10px' }} /> {/* 회사가 제공하는 품목이므로 FaBox 아이콘 적합 */}
+                {userInfo.companyItem}
+              </M.UserInfo>
+            </M.UserDetail>
+            <M.UserDetail>
+              <M.UserLabel>Role</M.UserLabel>
+              <M.UserInfo>
+                <FaUserTie style={{ marginRight: '10px' }} /> {/* 사용자의 역할이므로 FaUserTie 아이콘 적합 */}
+                {userInfo.role}
+              </M.UserInfo>
+            </M.UserDetail>
+            </M.ClientInfoWrapper>
             </M.BottomBackground>
-          </M.AdminProfileWrapper>
+            </M.AdminProfileWrapper>
         )}
       </M.AdminContainer>
     </div>
