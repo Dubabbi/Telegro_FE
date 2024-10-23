@@ -3,50 +3,118 @@ import { FaPhone, FaEnvelope, FaUser, FaMapMarkerAlt, FaEdit, FaTrash } from 're
 import * as M from './MypageStyle';
 import Avvvatars from 'avvvatars-react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import add from '/src/assets/icon/mypage/addaddress.svg';
 import AddressModal from './AddressModal'; 
 import EditAddressModal from './EditAddressModal';
 
 const Mypage = () => {
   const navigate = useNavigate();
+  const [nickname, setNickname] = useState('');
+  const [roadAddress, setRoadAddress] = useState(''); 
+  const [zipCode, setZipCode] = useState(''); 
+  const [detailAddress, setDetailAddress] = useState('');
+  const [isDefault, setIsDefault] = useState(false); 
+
   const [userInfo, setUserInfo] = useState({
-    id: 'Justin Hope',
-    phone: '010-1234-5678',
-    email: 'example@email.com',
-    name: '홍길동',
+    id: '',
+    phone: '',
+    email: '',
+    name: '',
   });
-
-  const [addressList, setAddressList] = useState([
-    { name: '우리 집', address: '서울시 도봉구 창일로 14길 33(쌍문동)', detail: '상세 주소', code: '우편번호', isDefault: true },
-    { name: '우리 학교', address: '서울시 도봉구 창일로 14길 33(쌍문동)', detail: '상세 주소', code: '우편번호', isDefault: false },
-    { name: '배송지1', address: '서울시 도봉구 창일로 14길 33(쌍문동)', detail: '상세 주소', code: '우편번호', isDefault: false },
-    { name: '배송지 2', address: '서울시 도봉구 창일로 14길 33(쌍문동)', detail: '상세 주소', code: '우편번호', isDefault: false },
-    { name: '배송지 3', address: '서울시 도봉구 창일로 14길 33(쌍문동)', detail: '상세 주소', code: '우편번호', isDefault: false },
-    { name: '배송지 4', address: '서울시 도봉구 창일로 14길 33(쌍문동)', detail: '상세 주소', code: '우편번호', isDefault: false },
-    { name: '배송지 5', address: '서울시 도봉구 창일로 14길 33(쌍문동)', detail: '상세 주소', code: '우편번호', isDefault: false },
-    { name: '배송지 6', address: '서울시 도봉구 창일로 14길 33(쌍문동)', detail: '상세 주소', code: '우편번호', isDefault: false },
-  ]);
-
+  const [addressList, setAddressList] = useState([]);
   const [currentVisible, setCurrentVisible] = useState(4);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false); 
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [selectedAddress, setSelectedAddress] = useState(null); // 수정할 주소 정보
 
   const boxRefs = useRef([]);
-  const [inView, setInView] = useState([]); 
+  const [inView, setInView] = useState([]);
 
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        navigate('/login');
+        return;
+      }
+
+      try {
+        const response = await axios.get('https://api.telegro.kr/api/users/my', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (response.status === 200) {
+          const userData = response.data.data;
+          setUserInfo({
+            id: userData.userId,
+            phone: userData.phone,
+            email: userData.email,
+            name: userData.userName,
+          });
+          const sortedAddressList = userData.addressList.sort((a, b) => b.isDefault - a.isDefault);
+          setAddressList(sortedAddressList);
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+        if (error.response && error.response.status === 401) {
+          navigate('/login');
+        }
+      }
+    };
+
+    fetchUserData();
+  }, []);
+  const handleDeleteAddress = async (addressId) => {
+    const confirmDelete = window.confirm('정말 이 배송지를 삭제하시겠습니까?'); 
+    if (!confirmDelete) {
+      return;
+    }
+
+    const token = localStorage.getItem('token');
+    if (!token) {
+      navigate('/login');
+      return;
+    }
+  
+    try {
+      const response = await axios.delete(`https://api.telegro.kr/api/users/address/${addressId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      if (response.data.code === 20000) {
+        // 삭제된 주소를 주소 리스트에서 제거
+        setAddressList((prevAddressList) =>
+          prevAddressList.filter((address) => address.id !== addressId)
+        );
+      } else {
+        alert('주소 삭제에 실패했습니다.');
+      }
+    } catch (error) {
+      console.error('Error deleting address:', error);
+      alert('주소 삭제 중 오류가 발생했습니다.');
+    }
+  };
+  
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           const index = Number(entry.target.dataset.index);
           if (entry.isIntersecting) {
-            setInView((prev) => [...prev, index]); 
+            setInView((prev) => [...prev, index]);
           } else {
             setInView((prev) => prev.filter((i) => i !== index));
           }
         });
       },
-      { threshold: 0.1 } 
+      { threshold: 0.1 }
     );
 
     boxRefs.current.forEach((ref) => ref && observer.observe(ref));
@@ -62,20 +130,44 @@ const Mypage = () => {
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
+    if (!isModalOpen) {
+      resetModalFields(); // 모달 종료 시 입력값 초기화
+    }
+  };
+  const toggleEditModal = (address) => {
+    setSelectedAddress(address); // 수정하려는 주소 정보 저장
+    setIsEditModalOpen(!isEditModalOpen);
   };
 
-  const toggleEditModal = () => {
-    setIsEditModalOpen(!isEditModalOpen);
+    // 새 주소 추가 함수
+    const handleAddAddress = (newAddress) => {
+      setAddressList((prevAddressList) => [...prevAddressList, newAddress]);
+    };
+  const handleUpdateAddress = (updatedAddress) => {
+    setAddressList((prevAddressList) =>
+      prevAddressList.map((address) =>
+        address.id === updatedAddress.id ? updatedAddress : address
+      )
+    );
+  };
+  
+  const resetModalFields = () => {
+    setNickname('');
+    setRoadAddress('');
+    setZipCode('');
+    setDetailAddress('');
+    setIsDefault(false);
   };
 
   return (
     <div style={{ backgroundColor: '#eee' }}>
       <M.Container>
-      <M.ProfileWrapper>
+        <M.ProfileWrapper>
+          {/* 사용자 정보 */}
           <M.TopBackground />
           <M.BottomBackground>
             <M.ProfileImage>
-              <Avvvatars value={userInfo.username} style="Shapes" size="150" round={true} />
+              <Avvvatars value={userInfo.name} style="Shapes" size="150" round={true} />
             </M.ProfileImage>
             <M.Name>{userInfo.name}</M.Name>
             <M.UserInfoWrapper>
@@ -101,8 +193,8 @@ const Mypage = () => {
                 </M.UserInfo>
               </M.UserDetail>
             </M.UserInfoWrapper>
-            <div style={{textAlign: 'left'}}>
-            <M.OrderButton onClick={() => navigate('/ordermanager')}>주문 확인</M.OrderButton>
+            <div style={{ textAlign: 'left' }}>
+              <M.OrderButton onClick={() => navigate('/ordermanager')}>주문 확인</M.OrderButton>
             </div>
           </M.BottomBackground>
         </M.ProfileWrapper>
@@ -110,7 +202,7 @@ const Mypage = () => {
         <M.AddressListWrapper>
           <M.AddressWrapper>
             <M.AddressTitle>배송지 목록</M.AddressTitle>
-            <img src={add} alt="Add Address" onClick={toggleModal} />
+            <img src={add} alt="Add Address"  onClick={toggleModal} />
           </M.AddressWrapper>
           {addressList.slice(0, currentVisible).map((address, index) => (
             <M.AddressCard
@@ -118,8 +210,8 @@ const Mypage = () => {
               ref={(el) => (boxRefs.current[index] = el)}
               data-index={index}
               style={{
-                transform: inView.includes(index) ? 'scale(1)' : 'scale(0.9)', 
-                transition: 'transform 0.3s ease-in-out'
+                transform: inView.includes(index) ? 'scale(1.02)' : 'scale(1)',
+                transition: 'transform 0.3s ease-in-out',
               }}
             >
               <M.AddressBar isDefault={address.isDefault} />
@@ -127,16 +219,22 @@ const Mypage = () => {
                 <M.AddressName>{address.name}</M.AddressName>
                 <M.AddressDetail>
                   <FaMapMarkerAlt style={{ marginRight: '5px' }} />
-                  {address.address} ({address.code})
+                  {address.address} ({address.zipcode})
                 </M.AddressDetail>
                 <M.AddressDetail>
                   <FaMapMarkerAlt style={{ marginRight: '5px' }} />
-                  {address.detail}
+                  {address.addressDetail}
                 </M.AddressDetail>
               </M.AddressContent>
               <M.AddressActions>
-                <FaEdit style={{ cursor: 'pointer', marginRight: '10px' }} onClick={toggleEditModal} />
-                <FaTrash style={{ cursor: 'pointer' }} />
+                <FaEdit
+                  style={{ cursor: 'pointer', marginRight: '10px' }}
+                  onClick={() => toggleEditModal(address)} // 수정할 주소를 전달
+                />
+                  <FaTrash
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => handleDeleteAddress(address.id)} // 삭제할 주소 ID 전달
+                  />
               </M.AddressActions>
             </M.AddressCard>
           ))}
@@ -145,8 +243,15 @@ const Mypage = () => {
           )}
         </M.AddressListWrapper>
       </M.Container>
-      <AddressModal isOpen={isModalOpen} toggleModal={toggleModal} />
-      <EditAddressModal isOpen={isEditModalOpen} toggleEditModal={toggleEditModal} />
+      <AddressModal isOpen={isModalOpen} toggleModal={toggleModal} onAddAddress={handleAddAddress} />
+      {isEditModalOpen && selectedAddress && (
+        <EditAddressModal
+          isOpen={isEditModalOpen}
+          toggleEditModal={toggleEditModal}
+          address={selectedAddress} // 수정할 주소 정보 전달
+          onUpdateAddress={handleUpdateAddress}
+        />
+      )}
     </div>
   );
 };

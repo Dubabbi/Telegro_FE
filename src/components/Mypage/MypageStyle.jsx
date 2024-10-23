@@ -126,7 +126,7 @@ export const UserInfo = styled.p`
 
 export const AddressListWrapper = styled.div`
   width: 35%;
-  padding: 20px;
+  padding: 10px;
   img{
     cursor: pointer;
   }
