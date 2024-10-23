@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import img from '../Check/image.svg'; // Adjust the actual image path
-import { Postcode } from '../Postcode/Postcode'; // 주소 검색 컴포넌트
+import img from '../Check/image.svg'; 
+import { Postcode } from '../Postcode/Postcode'; 
 import * as C from '../Cart/Cart';
 import { useNavigate } from 'react-router-dom';
 
@@ -127,12 +127,35 @@ const TextArea = styled.textarea`
   resize: none;
   height: 100px;
 `;
-
-const OrderTitle = styled.h2`
-  font-size: 1.5rem;
-  margin-bottom: 20px;
-  font-weight: bold;
+export const PriceDetailsWrapper = styled.div`
+  padding-top: 5px;
+  padding-bottom: 10px;
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-between;
+  border-bottom: 1px solid #dcdcdc;
+  input{
+    width: 74%;
+    padding: 9px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  button{
+    padding: 9px 20px;
+    background-color: #000;
+    color: #fff;
+    width: 24%;
+    border-radius: 5px;
+    text-align: center;
+  }
+  p{
+    white-space: nowrap;
+    margin: 1%;
+    text-align: center;
+  }
 `;
+
 
 const PriceDetail = styled.div`
   display: flex;
@@ -346,15 +369,18 @@ const OrderProcess = () => {
               <span>₩18,000원</span>
             </PriceDetail>
             <PriceDetail>
-              <span>쿠폰 할인</span>
-              <span style={{ color: 'red' }}>-₩1,000원</span>
-            </PriceDetail>
-            <PriceDetail>
               <span>배송비</span>
               <span>₩2,500원</span>
             </PriceDetail>
-            <hr />
             <PriceDetail>
+              <span>적립금 할인</span>
+              <span style={{ color: 'red' }}>-₩1,000원</span>
+            </PriceDetail>
+            <PriceDetailsWrapper>
+            <input type="text" placeholder="사용할 적립금 입력" />
+            <button><p>모두 사용</p></button>
+          </PriceDetailsWrapper>
+            <PriceDetail  style={{marginTop: '10px'}}>
               <TotalPrice>총 결제금액</TotalPrice>
               <TotalPrice>₩19,500원</TotalPrice>
             </PriceDetail>
@@ -410,3 +436,8 @@ const OrderProcess = () => {
 };
 
 export default OrderProcess;
+
+{/*
+
+
+  */}

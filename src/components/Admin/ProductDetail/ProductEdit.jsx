@@ -70,11 +70,10 @@ const ProductEdit = () => {
   const handleEditorChange = () => {
     if (editorRef.current) {
       const htmlContent = editorRef.current.getInstance().getHTML();
-      setProduct((prev) => ({ ...prev, content: htmlContent })); // 상품 설명 업데이트
+      setProduct((prev) => ({ ...prev, content: htmlContent }));
     }
   };
 
-  // 이미지 추가 함수
   const handleAddImage = async (event) => {
     const files = Array.from(event.target.files);
 
@@ -118,7 +117,7 @@ const ProductEdit = () => {
             },
           });
 
-          const imageUrl = presignedUrl.split('?')[0]; // URL에서 쿼리스트링 제거
+          const imageUrl = presignedUrl.split('?')[0]; 
           return imageUrl;
         })
       );
@@ -206,6 +205,43 @@ const ProductEdit = () => {
     return <div>로딩 중...</div>;
   }
 
+  const addImageBlobHook = async (blob, callback) => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert('로그인이 필요합니다.');
+      return;
+    }
+  
+    try {
+      // 백엔드에서 프리사인 URL 가져오기
+      const response = await axios.post(`https://api.telegro.kr/api/file?prefix=product`, {
+        metadata: {
+          description: "새로운 이미지 설명",
+          tags: ["태그1", "태그2"]
+        }
+      }, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json' 
+        }
+      });
+  
+      const presignedUrl = response.data.data.url;
+  
+      // 이미지 업로드
+      await axios.put(presignedUrl, blob, {
+        headers: {
+          'Content-Type': blob.type,
+        }
+      });
+  
+      // 업로드 완료 후 콜백 호출
+      callback(presignedUrl.split('?')[0], 'Image');
+    } catch (error) {
+      console.error('Image upload failed:', error.response ? error.response.data : error.message);
+      alert('이미지 업로드 실패: ' + (error.response ? error.response.data.message : error.message));
+    }
+  };
   return (
     <C.MainWrapper>
       <C.SectionTitle style={{margin: '1%', marginBottom: '4%', marginTop: '3%'}}>상품 수정</C.SectionTitle>
@@ -247,16 +283,13 @@ const ProductEdit = () => {
           </div>
           <div>
             <C.Label htmlFor="options">옵션 *</C.Label>
-            <C.Select
+            <C.Input
+              type="text"
               name="options"
               value={product.options.join(', ')}
               onChange={handleChange}
             >
-              <option value="">옵션 선택</option>
-              <option value="Noise Cancelling">Noise Cancelling</option>
-              <option value="Bluetooth 5.0">Bluetooth 5.0</option>
-              <option value="Built-in Microphone">Built-in Microphone</option>
-            </C.Select>
+            </C.Input>
           </div>
         </C.RowContainer>
         <C.RightColumn>
@@ -385,6 +418,15 @@ const ProductEdit = () => {
             height="500px"
             initialEditType="wysiwyg"
             useCommandShortcut
+            hooks={{
+              addImageBlobHook: addImageBlobHook
+            }}
+            toolbarItems={[
+              ['heading', 'bold', 'italic', 'strike'],
+              ['hr', 'quote'],
+              ['ul', 'ol', 'task', 'indent', 'outdent'],
+              ['table', 'link', 'image']
+            ]}
             plugins={[color]}
             onChange={handleEditorChange}
           />

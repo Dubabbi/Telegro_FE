@@ -355,7 +355,12 @@ const ProductDetail = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await axios.get(`https://api.telegro.kr/products/${productId}`);
+        const response = await axios.get(`https://api.telegro.kr/products/${productId}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+
         if (response.status === 200) {
           setProduct(response.data.data);
         }
@@ -494,7 +499,7 @@ const ProductDetail = () => {
           </OptionSelectWrapper>
 
           <ButtonWrapper>
-            <BuyButton onClick={() => handlePurchase()}>구매하기</BuyButton>
+            <BuyButton onClick={() => navigate('/orderprocess')}>구매하기</BuyButton>
             <BuyButton onClick={handlePurchase}>장바구니</BuyButton>
           </ButtonWrapper>
         </StickyBarWrapper>

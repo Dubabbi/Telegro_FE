@@ -17,7 +17,8 @@ export const Div = styled.div`
 
 export const OrderPageWrapper = styled.div`
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: center;
   width: 80%;
   margin: 2% auto;
 
@@ -29,12 +30,8 @@ export const OrderPageWrapper = styled.div`
 
 export const LeftSection = styled.div`
   width: 60%;
-  background-color: #fff;
-  padding: 20px;
-  border: 1px solid #d3d3d3;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-
+  padding: 5px;
+  margin: 0 auto;
   @media (max-width: 1024px) {
     width: 100%;
     margin-bottom: 20px;
@@ -90,9 +87,12 @@ export const ProductInfo = styled.div`
 `;
 
 export const ProductImage = styled.img`
+  max-width: 100px;
   width: 100px;
-  height: auto;
+  min-width: 100px;
+  height: 80px;
   border-radius: 10px;
+  object-fit: cover; 
   margin-right: 20px;
 `;
 
@@ -289,10 +289,9 @@ export const ConfirmButton = styled.button`
 export const Title = styled.div`
   display: flex;
   flex-direction: row;
-  width: 70%;
-  margin-top: 5%;
-  margin-left: 12%;
-  justify-content: space-between;
+  width: 45%;
+  padding: 20px 0;
+  margin: 0 auto;
   align-items: center;
   @media (max-width: 780px) {
     flex-direction: column;
@@ -557,12 +556,9 @@ const Cart = () => {
               <DeleteIcon src={Delete} />
             </DeleteButton>
           </ProductItem>
-
           ))}
-        </LeftSection>
-
-        {/* 우측 주문 금액 영역 */}
-        <RightSection>
+          </LeftSection>
+          <LeftSection>
           <OrderTitle>주문 금액</OrderTitle>
           <PriceDetail>
             <span>총 상품 금액</span>
@@ -572,26 +568,9 @@ const Cart = () => {
             <span>선택한 상품 금액</span>
             <span style={{ color: 'red' }}>80,000원</span>
           </PriceDetail>
-          <PriceDetail>
-            <span>배송비</span>
-            <span>0원</span>
-          </PriceDetail>
-          <hr />
-          <PriceDetail>
-            <TotalPrice>합계</TotalPrice>
-            <TotalPrice>800,000원</TotalPrice>
-          </PriceDetail>
-
-
-          {/* 할인 코드 입력 */}
-          <PriceDetailsWrapper>
-            <input type="text" placeholder="할인 코드 입력" />
-            <button><p>확인</p></button>
-          </PriceDetailsWrapper>
-
-          {/* 구매하기 버튼 */}
           <ConfirmButton onClick={handlePurchase}>구매하기</ConfirmButton>
-        </RightSection>
+        </LeftSection>
+
       </OrderPageWrapper>
     </>
   );

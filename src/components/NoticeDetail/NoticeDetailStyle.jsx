@@ -87,6 +87,12 @@ export const Cont = styled.div`
   line-height: 2;
   font-size: 1.3rem;
   text-align: left;
+  img {
+    width: 100%;
+    margin: 0 auto;
+    height: auto;
+    object-fit: contain; /* 이미지를 비율에 맞게 축소 */
+  }
 `;
 
 export const BtWrap = styled.div`
