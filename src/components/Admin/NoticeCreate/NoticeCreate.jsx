@@ -76,9 +76,9 @@ const NoticeCreate = () => {
 
   const handleAddFile = async (event) => {
     const selectedFiles = Array.from(event.target.files);
-    const fileNamesArray = selectedFiles.map(file => file.name); // 파일 이름 추출
+    const fileNamesArray = selectedFiles.map(file => file.name);
     
-    setFileNames(prev => [...prev, ...fileNamesArray]); // 파일 이름 상태 업데이트
+    setFileNames(prev => [...prev, ...fileNamesArray]);
 
     try {
       const uploadedFiles = await Promise.all(
@@ -86,7 +86,6 @@ const NoticeCreate = () => {
           const formData = new FormData();
           formData.append('file', file);
 
-          // presigned URL 가져오기
           const presignedUrlResponse = await axios.post(
             'https://api.telegro.kr/api/file?prefix=notice',
             {
@@ -174,7 +173,7 @@ const NoticeCreate = () => {
     const noticeData = {
       title,
       context: content, 
-      noticeFiles, // 업로드된 파일들의 정보 포함
+      noticeFiles,
     };
 
     try {
@@ -259,7 +258,7 @@ const NoticeCreate = () => {
       </N.MainWrapper>
       <D.BtWrap>
         <D.BtLink as={Link} to="/admin/adminnotice">취소</D.BtLink>
-        <D.BtLink onClick={handleSubmit}>등록</D.BtLink>
+        <D.BtLink as={Link} onClick={handleSubmit}>등록</D.BtLink>
       </D.BtWrap>
     </>
   );

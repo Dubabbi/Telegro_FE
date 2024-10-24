@@ -140,9 +140,9 @@ const NoticeEdit = () => {
     const contentValue = editorRef.current.getInstance().getHTML();
   
     const noticeData = {
-      title: title, // 제목
-      context: contentValue, // 에디터에서 가져온 HTML 내용
-      noticeFiles: noticeFiles // 업로드된 파일들
+      title: title, 
+      context: contentValue, 
+      noticeFiles: noticeFiles 
     };
   
     try {
@@ -233,7 +233,7 @@ const NoticeEdit = () => {
       </N.MainWrapper>
       <D.BtWrap>
         <D.BtLink as={Link} to="/admin/adminnotice">취소</D.BtLink>
-        <D.BtLink onClick={handleSubmit}>수정</D.BtLink>
+        <D.BtLink as={Link} onClick={handleSubmit}>수정</D.BtLink>
       </D.BtWrap>
     </>
   );

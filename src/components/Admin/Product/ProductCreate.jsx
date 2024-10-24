@@ -463,10 +463,10 @@ const ProductCreate = () => {
             </C.FormWrapper>
             </C.MainWrapper>
             <D.BtWrap>
-              <D.BtLink as={Link} to="">
+              <D.BtLink as={Link} to="/admin/headset">
                   취소
               </D.BtLink>
-            <D.BtLink onClick={handleCreateProduct}>
+            <D.BtLink as={Link} onClick={handleCreateProduct}>
                 등록
             </D.BtLink>
           </D.BtWrap>

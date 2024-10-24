@@ -73,7 +73,6 @@ const TableRow = styled.tr`
   }
   &:hover {
     background-color: #ececec;
-    cursor: pointer;
   }
 `;
 
@@ -98,6 +97,26 @@ const TableData = styled.td`
     }
   }
 `;
+
+const TableDataName = styled.td`
+  padding: 12px;
+  text-align: left;
+  cursor: pointer;
+  font-weight: bold;
+  border-bottom: 1px solid #ddd;
+  font-size: 1.05rem;
+
+  @media(max-width: 780px) {
+    &:nth-child(4), &:nth-child(6), &:nth-child(7) {
+      display: none;
+    }
+  }
+  &:hover {
+    color: blue;
+    text-decoration: underline; 
+  }
+`;
+
 
 const IconButton = styled.button`
   background: none;
@@ -128,7 +147,7 @@ const ClientManagement = () => {
   const [clients, setClients] = useState([]); 
   const [roleFilter, setRoleFilter] = useState(''); 
   const [filteredClients, setFilteredClients] = useState([]);
-  const pageSize = 20; // 페이지 크기
+  const pageSize = 20; 
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1); 
 
@@ -265,7 +284,7 @@ const ClientManagement = () => {
                         {client.role}
                       </RoleTag>
                     </TableData>
-                    <TableData onClick={() => navigate(`/admin/ClientDetail/${client.id}`)}>{client.userName}</TableData>
+                    <TableDataName onClick={() => navigate(`/admin/ClientDetail/${client.id}`)}>{client.userName}</TableDataName>
                     <TableData>{client.phone}</TableData>
                     <TableData>{client.email}</TableData>
                     <TableData>{client.userId}</TableData>

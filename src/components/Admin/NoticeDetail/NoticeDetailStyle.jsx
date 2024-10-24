@@ -91,8 +91,7 @@ export const Cont = styled.div`
     width: 100%;
     margin: 0 auto;
     height: auto;
-    object-fit: contain; /* 이미지를 비율에 맞게 축소 */
-  }
+    object-fit: contain;
 `;
 
 export const BtWrap = styled.div`
@@ -101,6 +100,10 @@ export const BtWrap = styled.div`
   text-align: center;
   font-size: 0;
   margin-left: 275px;
+  @media(max-width: 780px){
+    margin: 0 auto;
+    padding: 20px 0;
+  }
 `;
 
 export const BtLink = styled.a`

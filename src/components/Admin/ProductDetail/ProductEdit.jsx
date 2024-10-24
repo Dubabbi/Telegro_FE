@@ -440,7 +440,7 @@ const ProductEdit = () => {
           <D.BtLink as={Link} to={`/admin/headset`}>
             취소
           </D.BtLink>
-          <D.BtLink onClick={handleUpdateProduct}>수정</D.BtLink>
+          <D.BtLink as={Link} onClick={handleUpdateProduct}>수정</D.BtLink>
         </D.BtWrap>
       </N.Section>
     </C.MainWrapper>
