@@ -34,7 +34,7 @@ const SectionTitle = styled.h3`
 `;
 
 const Label = styled.label`
-  font-size: 1rem;
+  font-size: 1.3rem;
   font-weight: bold;
   display: block;
   margin-bottom: 10px;
@@ -60,17 +60,26 @@ const FileInput = styled.input`
   box-sizing: border-box;
 `;
 
+const FileList = styled.ul`
+  margin-top: 10px;
+  padding-left: 20px;
+  list-style-type: disc;
+`;
+
 const NoticeCreate = () => {
   const editorRef = useRef();
   const navigate = useNavigate();
   const [title, setTitle] = useState('');
-  const [files, setFiles] = useState([]);
   const [noticeFiles, setNoticeFiles] = useState([]);
+  const [fileNames, setFileNames] = useState([]); 
   const [error, setError] = useState('');
 
   const handleAddFile = async (event) => {
     const selectedFiles = Array.from(event.target.files);
-  
+    const fileNamesArray = selectedFiles.map(file => file.name); // 파일 이름 추출
+    
+    setFileNames(prev => [...prev, ...fileNamesArray]); // 파일 이름 상태 업데이트
+
     try {
       const uploadedFiles = await Promise.all(
         selectedFiles.map(async (file) => {
@@ -96,16 +105,14 @@ const NoticeCreate = () => {
   
           const presignedUrl = presignedUrlResponse.data.data.url;
 
-          // presigned URL로 파일 업로드
           await axios.put(presignedUrl, file, {
             headers: {
               'Content-Type': file.type,
             },
           });
   
-          const fileUrl = presignedUrl.split('?')[0]; // 쿼리 파라미터 제거
+          const fileUrl = presignedUrl.split('?')[0];
 
-          // 파일의 이름과 URL 저장
           return {
             fileName: file.name,
             fileUrl: fileUrl
@@ -113,7 +120,6 @@ const NoticeCreate = () => {
         })
       );
 
-      // noticeFiles 상태 업데이트
       setNoticeFiles((prev) => [...prev, ...uploadedFiles]);
 
       console.log('파일 업로드에 성공했습니다.');
@@ -122,7 +128,10 @@ const NoticeCreate = () => {
       alert(`파일 업로드 중 오류가 발생했습니다: ${error.message}`);
     }
   };
-  
+  const handleDeleteFile = (indexToDelete) => {
+    setNoticeFiles(prevFiles => prevFiles.filter((_, index) => index !== indexToDelete));
+    setFileNames(prevNames => prevNames.filter((_, index) => index !== indexToDelete));
+  };
   const addImageBlobHook = async (blob, callback) => {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -131,7 +140,6 @@ const NoticeCreate = () => {
     }
   
     try {
-      // 백엔드에서 프리사인 URL 가져오기
       const response = await axios.post(`https://api.telegro.kr/api/file?prefix=notice`, {
         metadata: {
           description: "새로운 이미지 설명",
@@ -146,27 +154,26 @@ const NoticeCreate = () => {
   
       const presignedUrl = response.data.data.url;
   
-      // 이미지 업로드
       await axios.put(presignedUrl, blob, {
         headers: {
           'Content-Type': blob.type,
         }
       });
   
-      // 업로드 완료 후 콜백 호출
       callback(presignedUrl.split('?')[0], 'Image');
     } catch (error) {
       console.error('Image upload failed:', error.response ? error.response.data : error.message);
       alert('이미지 업로드 실패: ' + (error.response ? error.response.data.message : error.message));
     }
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const content = editorRef.current.getInstance().getHTML();
 
     const noticeData = {
       title,
-      context: content,
+      context: content, 
       noticeFiles, // 업로드된 파일들의 정보 포함
     };
 
@@ -215,7 +222,18 @@ const NoticeCreate = () => {
               onChange={handleAddFile}
             />
 
-            <Label htmlFor="content">내용 *</Label>
+            {fileNames.length > 0 && (
+              <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', gap: '20px', alignItems: 'center'}}>
+                {fileNames.map((fileName, index) => (
+                  <li key={index}>
+                    {fileName}
+                    <button style={{color: '#ff0000', fontSize: '1.2rem', marginLeft: '2px'}} onClick={() => handleDeleteFile(index)}>X</button>
+                  </li>
+                ))}
+              </div>
+            )}
+
+            <Label style={{marginTop: '20px'}} htmlFor="content">내용 *</Label>
             <div>
               <Editor
                 ref={editorRef}

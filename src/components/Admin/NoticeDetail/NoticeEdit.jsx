@@ -20,6 +20,7 @@ const NoticeEdit = () => {
   const [noticeFiles, setNoticeFiles] = useState([]);
   const [originalNotice, setOriginalNotice] = useState(null);  
   const [error, setError] = useState('');
+  const [fileNames, setFileNames] = useState([]); 
 
   useEffect(() => {
     const fetchNoticeDetail = async () => {
@@ -31,18 +32,29 @@ const NoticeEdit = () => {
           setContent(notice.noticeContent);  
           setNoticeFiles(notice.noticeFiles);  
           setOriginalNotice(notice);
+  
+          if (editorRef.current) {
+            editorRef.current.getInstance().setHTML(notice.noticeContent || '');  
+          }
         }
       } catch (error) {
         console.error('Failed to fetch notice details:', error);
       }
     };
-
+  
     fetchNoticeDetail();
   }, [noticeId]);
 
+  const handleEditorChange = () => {
+    const editorInstance = editorRef.current.getInstance();
+    setContent(editorInstance.getHTML());
+  };
+
   const handleAddFile = async (event) => {
     const selectedFiles = Array.from(event.target.files);
-  
+    const fileNamesArray = selectedFiles.map(file => file.name);
+    
+    setFileNames(prev => [...prev, ...fileNamesArray]); 
     try {
       const uploadedFiles = await Promise.all(
         selectedFiles.map(async (file) => {
@@ -126,18 +138,13 @@ const NoticeEdit = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const contentValue = editorRef.current.getInstance().getHTML();
-
-    const noticeData = {};
-    if (title !== originalNotice.noticeTitle) {
-      noticeData.title = title;
-    }
-    if (contentValue !== originalNotice.noticeContent) {
-      noticeData.context = contentValue;
-    }
-    if (noticeFiles !== originalNotice.noticeFiles) {
-      noticeData.noticeFiles = noticeFiles;
-    }
-
+  
+    const noticeData = {
+      title: title, // 제목
+      context: contentValue, // 에디터에서 가져온 HTML 내용
+      noticeFiles: noticeFiles // 업로드된 파일들
+    };
+  
     try {
       const response = await axios.patch(`https://api.telegro.kr/api/notices/${noticeId}`, noticeData, {
         headers: {
@@ -145,7 +152,7 @@ const NoticeEdit = () => {
           'Content-Type': 'application/json',
         }
       });
-
+  
       if (response.status === 200) {
         navigate('/admin/adminnotice');
       }
@@ -157,6 +164,11 @@ const NoticeEdit = () => {
         setError('공지사항을 수정하는 동안 오류가 발생했습니다.');
       }
     }
+  };
+  
+  const handleDeleteFile = (indexToDelete) => {
+    setNoticeFiles(prevFiles => prevFiles.filter((_, index) => index !== indexToDelete));
+    setFileNames(prevNames => prevNames.filter((_, index) => index !== indexToDelete));
   };
 
   return (
@@ -183,6 +195,16 @@ const NoticeEdit = () => {
               multiple
               onChange={handleAddFile}
             />
+            {fileNames.length > 0 && (
+              <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', gap: '20px', alignItems: 'center'}}>
+                {fileNames.map((fileName, index) => (
+                  <li key={index}>
+                    {fileName}
+                    <button style={{color: '#ff0000', fontSize: '1.2rem', marginLeft: '2px'}} onClick={() => handleDeleteFile(index)}>X</button>
+                  </li>
+                ))}
+              </div>
+            )}
 
             <D.Label htmlFor="content">내용 *</D.Label>
             <div>
@@ -193,6 +215,7 @@ const NoticeEdit = () => {
                 height="500px"
                 initialEditType="wysiwyg"
                 useCommandShortcut={true}
+                onChange={handleEditorChange} 
                 hooks={{
                   addImageBlobHook: addImageBlobHook
                 }}
@@ -217,4 +240,3 @@ const NoticeEdit = () => {
 };
 
 export default NoticeEdit;
-

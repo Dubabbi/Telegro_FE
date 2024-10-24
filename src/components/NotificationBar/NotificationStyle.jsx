@@ -131,7 +131,7 @@ export const HorizontalRule = styled.hr`
   line-height: 1.7;
 `;
 
-export const CloseButton = styled(FaTimes)`
+export const PoPupCloseButton = styled(FaTimes)`
   cursor: pointer;
   font-size: 2.5rem;
   position: absolute;
@@ -140,7 +140,7 @@ export const CloseButton = styled(FaTimes)`
     color: #5351af;
   }
 `;
-export const PoPupCloseButton = styled(FaTimes)`
+export const CloseButton = styled(FaTimes)`
   cursor: pointer;
   margin-right: -3%;
   margin-left: 2%;
