@@ -38,7 +38,7 @@ const OrderProcess = () => {
   return (
     <>
       <O.Div></O.Div>
-      <C.Title style={{paddingLeft: '20px'}}><h1>결제하기</h1></C.Title>
+      <C.Title style={{width: '70%'}}><h1>결제하기</h1></C.Title>
       <O.OrderPageWrapper>
         {/* 좌측 섹션 */}
         <O.LeftSection>

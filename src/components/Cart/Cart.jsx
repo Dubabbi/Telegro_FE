@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import Delete from '/src/assets/icon/delete.svg';
 
 const Cart = () => {
-  const navigate = useNavigate('');
+  const navigate = useNavigate();
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
@@ -16,7 +16,10 @@ const Cart = () => {
           {
             headers: { Authorization: `Bearer ${accessToken}` },
           });
-        if (response.status === 200) {
+          
+        console.log(response.data);
+        
+        if (response.status === 200 && response.data.data) {
           setProducts(response.data.data.carts);
         } else {
           alert('장바구니 정보를 불러오는 데 실패했습니다.');
@@ -53,85 +56,104 @@ const Cart = () => {
       alert('장바구니 항목을 삭제하는 중 오류가 발생했습니다.');
     }
   };
-
-
-  const [updatedProduct, setUpdatedProduct] = useState(null);
-
-  useEffect(() => {
-    if (updatedProduct) {
-      updateCartItem(updatedProduct.id, updatedProduct.selectOption, updatedProduct.inputOption, updatedProduct.quantity);
-    }
-  }, [updatedProduct]);
-  
-  const handleIncreaseQuantity = (id) => {
+  const handleIncreaseQuantity = async (id) => {
     const newProducts = products.map(product =>
       product.id === id ? { ...product, quantity: product.quantity + 1 } : product
     );
     setProducts(newProducts);
-    const updated = newProducts.find(p => p.id === id);
-    setUpdatedProduct(updated);
-  };
-  
-  
-  const handleDecreaseQuantity = (id) => {
-    setProducts(products.map(product =>
-      product.id === id ? { ...product, quantity: Math.max(product.quantity - 1, 1) } : product
-    ));
-  };
-  
-  useEffect(() => {
-    products.forEach(product => {
-      updateCartItem(product.id, product.selectOption, product.inputOption, product.quantity);
-    });
-  }, [products]); 
-  
-  
-  const handleQuantityChange = (id, newQuantity) => {
-    newQuantity = parseInt(newQuantity, 10); 
-    if (isNaN(newQuantity) || newQuantity <= 0) {
-      newQuantity = 1; 
-    }
-    setProducts(products.map(product =>
-      product.id === id ? { ...product, quantity: newQuantity } : product
-    ));
-  };
-  
-  
-
-  const handleOptionChange = (id, selectedOption) => {
-    setProducts(products.map(product =>
-      product.id === id ? { ...product, selectOption: selectedOption } : product
-    ));
-  
-    const product = products.find(product => product.id === id);
-    if (product) {
-      updateCartItem(id, selectedOption, product.inputOption, product.quantity);
-    }
-  };
-  
-
-  const handleInputOptionChange = (id, inputOptionValue) => {
-    setProducts(products.map(product =>
-      product.id === id ? { ...product, inputOption: inputOptionValue } : product
-    ));
-  };
-
-  const updateCartItem = async (cartId, productOption, inputOption, quantity) => {
+    
+    const updatedProduct = newProducts.find(p => p.id === id);
+    
     try {
       const accessToken = localStorage.getItem('token');
-
-      const response = await axios.put(
-        `https://api.telegro.kr/api/carts/${cartId}`,
+      await axios.put(
+        `https://api.telegro.kr/api/carts/${id}`,
         {
-          productOption,
-          inputOption,
-          quantity: parseInt(quantity, 10)
+          quantity: updatedProduct.quantity // 증가된 수량을 서버로 전달
         },
         {
           headers: { Authorization: `Bearer ${accessToken}` }
         }
       );
+      console.log('수량이 성공적으로 업데이트되었습니다.');
+    } catch (error) {
+      console.error('수량 업데이트 중 오류가 발생했습니다:', error);
+    }
+  };
+  
+  const handleDecreaseQuantity = async (id) => {
+    const newProducts = products.map(product =>
+      product.id === id ? { ...product, quantity: Math.max(product.quantity - 1, 1) } : product
+    );
+    setProducts(newProducts);
+    
+    const updatedProduct = newProducts.find(p => p.id === id);
+    
+    try {
+      const accessToken = localStorage.getItem('token');
+      await axios.put(
+        `https://api.telegro.kr/api/carts/${id}`,
+        {
+          quantity: updatedProduct.quantity // 감소된 수량을 서버로 전달
+        },
+        {
+          headers: { Authorization: `Bearer ${accessToken}` }
+        }
+      );
+      console.log('수량이 성공적으로 업데이트되었습니다.');
+    } catch (error) {
+      console.error('수량 업데이트 중 오류가 발생했습니다:', error);
+    }
+  };
+  
+  
+  const handleOptionChange = (id, selectedOption) => {
+    setProducts(products.map(product =>
+      product.id === id ? { ...product, selectOption: selectedOption } : product
+    ));
 
+    const product = products.find(product => product.id === id);
+    if (product && product.selectOption !== selectedOption) {
+      updateCartItem(id, selectedOption, product.inputOption, product.quantity);
+    }
+  };
+  const handleInputOptionChange = async (id, inputOptionValue) => {
+    setProducts(products.map(product =>
+      product.id === id ? { ...product, inputOption: inputOptionValue } : product
+    ));
+  
+    try {
+      const accessToken = localStorage.getItem('token');
+      await axios.put(
+        `https://api.telegro.kr/api/carts/${id}`,
+        {
+          inputOption: inputOptionValue 
+        },
+        {
+          headers: { Authorization: `Bearer ${accessToken}` }
+        }
+      );
+      console.log('기재형 옵션이 성공적으로 업데이트되었습니다.');
+    } catch (error) {
+      console.error('기재형 옵션 업데이트 중 오류가 발생했습니다:', error);
+    }
+  };
+  const updateCartItem = async (cartId, selectOption, inputOption, quantity) => {
+    try {
+      const accessToken = localStorage.getItem('token');
+  
+      const response = await axios.put(
+        `https://api.telegro.kr/api/carts/${cartId}`,
+        {
+          selectOption, 
+          inputOption, 
+          quantity: parseInt(quantity, 10) 
+        },
+        {
+          headers: { Authorization: `Bearer ${accessToken}` }
+        }
+      );
+  
       if (response.status === 200) {
         console.log('장바구니가 성공적으로 업데이트되었습니다.');
       } else {
@@ -142,8 +164,6 @@ const Cart = () => {
       alert('장바구니 항목을 업데이트하는 중 오류가 발생했습니다.');
     }
   };
-
-
   const handleCheckboxChange = (id) => {
     setProducts(products.map(product =>
       product.id === id ? { ...product, selected: !product.selected } : product
@@ -164,37 +184,37 @@ const Cart = () => {
       <Div></Div>
       <Title><h1>장바구니</h1></Title>
       <OrderPageWrapper>
-        {/* 좌측 상품 리스트 영역 */}
         <LeftSection>
           {products.map(product => (
             <ProductItem key={product.id}>
-            <CheckboxContainer style={{ alignItems: 'center' }}>
-              <Checkbox
-                type="checkbox"
-                id={`checkbox-${product.id}`}
-                checked={product.selected}
-                onChange={() => handleCheckboxChange(product.id)}
-              />
-              <CheckboxLabel htmlFor={`checkbox-${product.id}`} />
-            </CheckboxContainer>
+              <CheckboxContainer style={{ alignItems: 'center' }}>
+                <Checkbox
+                  type="checkbox"
+                  id={`checkbox-${product.id}`}
+                  checked={product.selected}
+                  onChange={() => setProducts(products.map(p =>
+                    p.id === product.id ? { ...p, selected: !p.selected } : p
+                  ))}
+                />
+                <CheckboxLabel htmlFor={`checkbox-${product.id}`} />
+              </CheckboxContainer>
 
-            <ProductInfo>
-              <ProductImage src={product.coverImage} alt="상품 이미지" />
-              <ProductDetails>
-              <ProductName>{product.productName}</ProductName>
-              <ProductModel>{product.productModel}</ProductModel>
-              <select
-                value={product.selectOption || ''}
-                onChange={(e) => handleOptionChange(product.id, e.target.value)}
-              >
-                {product.productOptions.map((option, index) => (
-                  <option key={index} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
-
-              {(product.productCategory === 'HEADSET' || product.productCategory === 'LINE_CORD' || product.productCategory === 'RECORDER') && (
+              <ProductInfo>
+                <ProductImage src={product.coverImage} alt="상품 이미지" />
+                <ProductDetails>
+                  <ProductName>{product.productName}</ProductName>
+                  <ProductModel>{product.productModel}</ProductModel>
+                  <select
+                    value={product.selectOption || ''}
+                    onChange={(e) => handleOptionChange(product.id, e.target.value)}
+                  >
+                    {product.productOptions.map((option, index) => (
+                      <option key={index} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </select>
+                  {(product.productCategory === 'HEADSET' || product.productCategory === 'LINE_CORD' || product.productCategory === 'RECORDER') && (
               <>
                 <OptionInputWrapper>
                   <input
@@ -204,27 +224,14 @@ const Cart = () => {
                     onChange={(e) => handleInputOptionChange(product.id, e.target.value)}
                     placeholder="기타 옵션 기재"
                   />
-                  <button
-                    style={{
-                      backgroundColor: '#eee',
-                      borderRadius: '3px',
-                      padding: '2px 8px',
-                      whiteSpace: 'nowrap',
-                    }}
-                    onClick={() =>
-                      updateCartItem(product.id, product.selectOption, product.inputOption, product.quantity)
-                    }
-                  >
-                    확인
-                  </button>
                 </OptionInputWrapper>
                 </>
               )}
-            </ProductDetails>
-            </ProductInfo>
+                </ProductDetails>
+              </ProductInfo>
 
-            <ProductPrice>{product.productPrice}원</ProductPrice>
-
+              <ProductPrice>{product.productPrice}원</ProductPrice>
+              
           <QuantityWrapper>
             <QuantityButton onClick={() => handleDecreaseQuantity(product.id, product.selectOption, product.quantity)}>-</QuantityButton>
             <QuantityInput
@@ -234,13 +241,13 @@ const Cart = () => {
             />
             <QuantityButton onClick={() => handleIncreaseQuantity(product.id, product.selectOption, product.quantity)}>+</QuantityButton>
           </QuantityWrapper>
-            <DeleteButton onClick={() => handleDelete(product.id)}>
-              <DeleteIcon src={Delete} />
-            </DeleteButton>
-          </ProductItem>
+              <DeleteButton onClick={() => handleDelete(product.id)}>
+                <DeleteIcon src={Delete} />
+              </DeleteButton>
+            </ProductItem>
           ))}
-          </LeftSection>
-          <LeftSection>
+        </LeftSection>
+        <LeftSection>
           <OrderTitle>주문 금액</OrderTitle>
           <PriceDetail>
             <span>총 상품 금액</span>

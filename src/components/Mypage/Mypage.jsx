@@ -192,12 +192,14 @@ const Mypage = () => {
                 </M.UserInfo>
               </M.UserDetail>
             </M.UserInfoWrapper>
+                <M.UserInfo style={{fontSize: '1.2rem', textAlign: 'left', justifyContent: 'flex-end', marginRight: '3%', color: '#4D44B5', fontWeight: 'bold'}}>
+                  보유 적립금: 10,000원
+                </M.UserInfo>
             <div style={{ textAlign: 'left' }}>
               <M.OrderButton onClick={() => navigate('/ordermanager')}>주문 확인</M.OrderButton>
             </div>
           </M.BottomBackground>
         </M.ProfileWrapper>
-
         <M.AddressListWrapper>
           <M.AddressWrapper>
             <M.AddressTitle>배송지 목록</M.AddressTitle>
