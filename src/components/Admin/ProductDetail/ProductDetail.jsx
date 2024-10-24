@@ -47,11 +47,15 @@ const ProductInfoWrapper = styled.div`
   flex: 2;
 `;
 const ModalImage = styled.img`
-  width: 80%;
+  width: 50%;
   height: auto;
+  margin-left: 270px;
   max-height: 80vh;
-  object-fit: contain;
-  margin: auto;
+  object-fit: contain;  
+  @media(max-width: 780px){
+    width: 80%;
+    margin: auto;
+  }
 `;
 
 const ArrowButton = styled.button`
@@ -70,11 +74,17 @@ const ArrowButton = styled.button`
 `;
 
 const LeftArrow = styled(ArrowButton)`
-  left: 5%;
+  left: 270px;
+  @media(max-width: 780px){
+    left: 5%;
+  }
 `;
 
 const RightArrow = styled(ArrowButton)`
-  right: 5%;
+  right: 25px;
+  @media(max-width: 780px){
+    right: 5%;
+  }
 `;
 
 const ProductImage = styled.img`
@@ -369,7 +379,7 @@ const AdminProductDetail = () => {
                 alt={`Additional Image ${index + 1}`}
                 onClick={() => openModal(index)} />
             ))}
-            {/* 모달 */}
+            
             <Modal
               isOpen={isModalOpen}
               onRequestClose={closeModal}
@@ -382,7 +392,7 @@ const AdminProductDetail = () => {
                   border: 'none',
                   inset: 0,
                 },
-                overlay: { backgroundColor: 'rgba(0, 0, 0, 0.8)' },
+                overlay: { backgroundColor: 'rgba(0, 0, 0, 0.8)'},
               }}
             >
         <LeftArrow onClick={prevImage}>&lt;</LeftArrow>

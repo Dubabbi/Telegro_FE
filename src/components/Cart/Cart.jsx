@@ -367,19 +367,37 @@ export const ProductDetails = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  overflow: auto; 
-  
+  overflow: auto;
+
+  select {
+    padding: 10px 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    background-color: white;
+    margin-top: 10px;
+    outline: none;
+    transition: border-color 0.3s ease;
+    width: 80%;
+
+    &:focus {
+      border-color: #4d44b5;
+    }
+  }
+
   @media (max-width: 780px) {
-    flex-grow: 1; /
+    flex-grow: 1;
+    select {
+      width: 100%;
+    }
   }
 
   span {
-    white-space: nowrap; 
+    white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis; 
+    text-overflow: ellipsis;
   }
 `;
-
 
 export const ProductName = styled.span`
   font-weight: bold;
@@ -449,12 +467,19 @@ export const DeleteButton = styled.button`
   position: absolute; 
   top: 10px;
   right: 10px; 
+  transition: color 0.3s ease, transform 0.3s ease, background-color 0.3s ease;
+
+  &:hover {
+    color: #ff4d4d;
+    background-color: rgba(255, 77, 77, 0.1); 
+  }
 
   @media (max-width: 780px) {
-    top: 5px; 
+    top: 20px; 
     right: 5px;
   }
 `;
+
 
 export const CheckboxContainer = styled.div`
   display: flex;
@@ -578,9 +603,30 @@ export const Title = styled.div`
 
 export const OptionInputWrapper = styled.div`
   display: flex;
-  width: auto;
   align-items: center;
-  justify-content: space-between;
-  gap: 5px;
+  gap: 10px;
+  width: 80%;
   margin-top: 5px;
+
+  input {
+    width: 100%;
+    padding: 10px 5px;
+    border: 1px solid #ddd !important; 
+    border-radius: 5px;
+    font-size: 1rem;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.3s ease;
+
+    &:hover {
+      border-color: #4d44b5 !important;
+    }
+
+    &:focus {
+      border-color: #4d44b5 !important; 
+    }
+  }
+  @media(max-width: 780px){
+    width: 100%;
+  }
 `;

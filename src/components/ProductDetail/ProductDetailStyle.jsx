@@ -250,6 +250,7 @@ export const getCategoryBackground = (category) => {
     padding: 2px 8px;
     margin-top: 5px;
     margin-left: 12px;
+    white-space: nowrap;
     text-align: center;
     font-size: 1.5rem;
     font-weight: bold;

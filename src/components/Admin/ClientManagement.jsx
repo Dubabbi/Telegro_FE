@@ -36,9 +36,8 @@ const Dot = styled.span`
 `;
 const MainWrapper = styled.div`
   width: 95%;
-  margin: 0 auto;
-  margin-top: 3vh;
-  padding: 2%;
+  margin: 5% auto;
+  padding: 1%;
   @media(max-width: 780px) {
     margin-left: 0px;
     margin-top: 7vh;

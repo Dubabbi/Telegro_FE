@@ -172,12 +172,12 @@ const AdminNav = () => {
               <div style={{ fontSize: '0.8rem', color: '#FFD700' }}>Admin</div>
             </ProfileInfo>
           </ProfileWrapper>
-
+        {/*
           <SettingsWrapper>
             <FaCog />
             Settings
           </SettingsWrapper>
-
+        */}
           <LogoutButton onClick={handleLogout}>
             <FaSignOutAlt />
             Log out

@@ -7,12 +7,12 @@ import { FaSearch } from 'react-icons/fa';
 import Form from 'react-bootstrap/Form';
 
 const MainWrapper = styled.div`
-  width: 65%; 
+  width: 70%; 
   margin-left: 280px;
-  margin-top: 4%;
+  margin-top: 5%;
   @media(max-width: 780px){
     width: 100%; 
-    margin: 0 auto;
+    margin: 5% 1%;
   }
 `;
 

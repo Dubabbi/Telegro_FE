@@ -16,13 +16,14 @@ const StatsData = [
   { name: '1일', hit: 0, percentage: 0 },
 ];
 
-const averageHit = StatsData.reduce((sum, row) => sum + row.hit, 0) / StatsData.length;
-const totalHit = StatsData.reduce((sum, row) => sum + row.hit, 0);
 
 const Stat = () => {
   const [category, setCategory] = useState('일별');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+  const averageHit = StatsData.reduce((sum, row) => sum + row.hit, 0) / StatsData.length;
+  const totalHit = StatsData.reduce((sum, row) => sum + row.hit, 0);
 
-  // 카테고리 변경 핸들러
   const handleCategoryChange = (event) => {
     setCategory(event.target.value);
   };
@@ -40,7 +41,21 @@ const Stat = () => {
             <option value="업체별">업체별</option>
           </CategorySelect>
         </HeaderContainer>
-
+        <SearchSection style={{whiteSpace: 'nowrap'}}>
+          <div>
+            <label>기간: </label>
+            <DateInput 
+              type="date" 
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+            /> - 
+            <DateInput 
+              type="date" 
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+            />
+          </div>
+          </SearchSection>
         <StatsTable>
           <TableHead>
             <TableRow>
@@ -108,7 +123,7 @@ export default Stat;
 const DashboardWrapper = styled.div`
   display: flex;
   justify-content: center;
-  padding: 20px;
+  padding: 3% 10px;
   align-items: center;
   margin-left: 280px;
   @media(max-width: 780px){
@@ -118,9 +133,8 @@ const DashboardWrapper = styled.div`
 `;
 
 const TableContainer = styled.div`
-  width: 90%;
-  margin-top: 2%;
-  margin-bottom: 2%;
+  width: 95%;
+  margin: 2% 0;
   @media(max-width: 780px){
     width: 90%;
   }

@@ -15,7 +15,7 @@ export const MainWrapper = styled.div`
   @media(max-width: 780px){
     margin: 0 auto;
     max-width: 100%;
-    padding-top: 40px;
+    padding-top: 0px;
     padding-left: 0;
     width: 100%;
   }
@@ -63,7 +63,7 @@ export const Section2 = styled.section`
 
 
 export const PageTitle = styled.div`
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   font-size: 100px;
     h2 { 
     font-size: 2.3rem;
@@ -72,7 +72,7 @@ export const PageTitle = styled.div`
     font-weight: bold;
     @media(max-width: 780px){
       font-size: 1.9rem;
-      margin-top: 3%;
+      margin-top: 1%;
     }
   }
   

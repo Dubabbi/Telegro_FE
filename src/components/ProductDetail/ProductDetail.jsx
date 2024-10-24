@@ -40,7 +40,7 @@ const ProductDetail = () => {
           inputOption: inputOption
         },
         {
-          headers: { Authorization: `Bearer ${accessToken}` }, // 헤더
+          headers: { Authorization: `Bearer ${accessToken}` }, 
         }
       );
   
