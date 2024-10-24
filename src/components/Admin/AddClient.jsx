@@ -91,7 +91,7 @@ function AddClient() {
       console.error("Error while signing up:", error);
   
       if (error.response && error.response.status === 409) {
-        alert("이미 사용 중인 닉네임 또는 ID입니다.");
+        alert("이미 사용 중인 ID입니다.");
       } else {
         alert("회원가입 중 오류가 발생했습니다. 다시 시도해주세요.");
       }

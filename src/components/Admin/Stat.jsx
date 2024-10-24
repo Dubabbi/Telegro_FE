@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 const StatsData = [
@@ -120,6 +120,7 @@ const DashboardWrapper = styled.div`
 const TableContainer = styled.div`
   width: 90%;
   margin-top: 2%;
+  margin-bottom: 2%;
   @media(max-width: 780px){
     width: 90%;
   }
@@ -139,7 +140,17 @@ const Title = styled.h2`
     font-size: 1.9rem;
   }
 `;
+const SearchSection = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
 
+  @media(max-width: 780px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+`;
 const CategorySelect = styled.select`
   padding: 10px;
   border-radius: 5px;
@@ -201,6 +212,17 @@ const PercentageCell = styled.td`
   text-align: right;
   font-size: 1rem;
   align-items: center;
+`;
+const DateInput = styled.input`
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: auto;
+
+  @media(max-width: 780px) {
+    max-width: 700px;
+    width: 70%;
+  }
 `;
 
 const SummaryRow = styled.tr`

@@ -214,7 +214,7 @@ const DescriptionItem = styled.li`
   overflow: hidden;
   display: block;
   img {
-    max-width: 80%;
+    width: 100%;
     margin: 0 auto;
     height: auto;
     object-fit: contain; /* 이미지를 비율에 맞게 축소 */
@@ -244,7 +244,11 @@ const AdminProductDetail = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await axios.get(`https://api.telegro.kr/products/${productId}`);
+        const response = await axios.get(`https://api.telegro.kr/products/${productId}`,{
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        });
         if (response.status === 200) {
           setProduct(response.data.data);
         }

@@ -274,6 +274,8 @@ export const OrderPageWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  flex-direction: column;
+  justify-content: center;
   width: 80%;
   margin: 2% auto;
 
@@ -285,6 +287,8 @@ export const OrderPageWrapper = styled.div`
 
 export const LeftSection = styled.div`
   width: 60%;
+  padding: 5px;
+  margin: 0 auto;
   padding: 5px;
   margin: 0 auto;
   @media (max-width: 1024px) {
@@ -332,7 +336,7 @@ export const ProductItem = styled.div`
 
   @media (max-width: 780px) {
     flex-direction: column;
-    align-items: flex-start; /* 요소들을 왼쪽 정렬 */
+    align-items: flex-start;
   }
 `;
 export const ProductInfo = styled.div`
@@ -342,6 +346,7 @@ export const ProductInfo = styled.div`
 `;
 
 export const ProductImage = styled.img`
+  max-width: 100px;
   max-width: 100px;
   width: 100px;
   min-width: 100px;
