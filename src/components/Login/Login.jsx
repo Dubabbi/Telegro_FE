@@ -16,13 +16,12 @@ function Login() {
         password: password,
       });
       
-      console.log('Response:', response); // 응답 전체 확인
-      console.log('Response Data:', response.data); // 응답 데이터 확인
+      console.log('Response:', response); 
+      console.log('Response Data:', response.data); 
   
-      // 응답 데이터에서 accessToken 확인
       if (response.status === 200 && response.data.data.accessToken) {
         console.log('Login successful, accessToken:', response.data.data.accessToken);
-        localStorage.setItem('token', response.data.data.accessToken); // accessToken으로 변경
+        localStorage.setItem('token', response.data.data.accessToken);
         navigate('/main'); 
         alert("로그인에 성공했습니다.");
       } else if (response.status === 401) {
@@ -30,7 +29,7 @@ function Login() {
         alert("잘못된 인증입니다."); 
       } 
     } catch (error) {
-      console.error('Login error:', error); // 에러 로그 추가
+      console.error('Login error:', error);
       alert("로그인 실패: " + (error.response?.data?.message || "네트워크 오류")); 
     }
   };

@@ -32,7 +32,7 @@ const Recording = ({ category = 'RECORDER', page = 0, size = 12 }) => {
         }
       } catch (error) {
         console.error('Error fetching data:', error);
-        setError(`Failed to load products: ${error.message}`); // 에러 설정
+        setError(`Failed to load products: ${error.message}`); 
       }
     };
 

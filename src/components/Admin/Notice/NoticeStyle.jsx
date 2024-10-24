@@ -193,43 +193,6 @@ export const BoardTable = styled.table`
   border: 2px solid #111;
 `
 
-export const TableHead = styled.thead`
-  text-align: center;
-  font-weight: bold;
-`
-
-export const TableBody = styled.tbody`
-  text-align: center;
-`
-
-export const TableRow = styled.tr`
-  height: 60px;
-  font-size: 20px;
-  display: flex;
-  align-items: center;
-  border-bottom: 1px solid #ccc;
-  text-align: center;
-`
-
-export const ThNum = styled.th`
-  width: 150px;
-  text-align: center;
-`
-
-export const ThTitle = styled.th`
-  flex: 1;
-`
-
-export const ThDate = styled.th`
-  width: 150px;
-  text-align: center;
-`
-
-export const ThViews = styled.th`
-  width: 150px;
-  text-align: center;
-`
-
 export const BoardLink = styled.a`
   color: inherit;
   display: inline-block;
@@ -413,5 +376,59 @@ export const StyledButton = styled(Button)`
     height: 25px; 
     width: 25px; 
     font-size: 0.8rem;
+  }
+`;
+
+
+export const TableRow = styled.tr`
+  border-bottom: 1px solid #ccc;
+  &:nth-child(odd) {
+    background-color: #FCFCFD; 
+    &:hover {
+        background-color: #eceaea;
+        cursor: pointer;
+    }
+  }
+
+  &:nth-child(even) {
+    background-color: #FFFFFF; 
+        &:hover {
+        background-color: #eceaea;
+        cursor: pointer;
+    }
+  }
+
+  &:last-child {
+    border-bottom: none;
+  }
+`;
+
+export const TableColumn = styled.td`
+  padding: 1.7% 1.7%;
+  font-family: inter;
+  font-size: 1.3rem;
+  border-right: 1px solid #ccc;
+  &:last-child {
+    border-right: none;
+  }
+`;
+
+export const Table = styled.table`
+  width: 95%;
+  margin: 0 auto;
+  text-align: center;
+  border-spacing: 0;
+`;
+
+export const TableHeaderColumn = styled.th`
+  border-bottom: 1px solid #e8e8e8;
+  font-size: 1.3rem;
+  font-family: inter;
+  padding: 1% 1%;
+  font-weight: bold;
+  border-right: 1px solid #ccc;
+  width: ${props => props.width};  
+  &:last-child {
+    border-right: none;
   }
 `;

@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import * as L from './LandingStyle';
-import { FaSearch } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import Form from 'react-bootstrap/Form';
 import Img from '/src/assets/image/Landing/image1.png';
 import Img2 from '/src/assets/image/Landing/image2.png';
 import Img3 from '/src/assets/image/Landing/image3.png';
@@ -14,20 +12,18 @@ import Mail from '/src/assets/image/Landing/mail.svg';
 
 export default function Landing() {
   const navigate = useNavigate();
-    // 이미지 상태 관리
     const [currentImage, setCurrentImage] = useState(Img);
   
-    // 이미지 전환 효과
     useEffect(() => {
       const images = [Img, Img2, Img3, Img4];
       let currentIndex = 0;
   
       const intervalId = setInterval(() => {
-        currentIndex = (currentIndex + 1) % images.length; // 0과 1을 반복
+        currentIndex = (currentIndex + 1) % images.length; 
         setCurrentImage(images[currentIndex]);
-      }, 3000); // 3초마다 이미지 교체
+      }, 3000); 
   
-      return () => clearInterval(intervalId); // 컴포넌트 언마운트 시 인터벌 정리
+      return () => clearInterval(intervalId); 
     }, []);
   
   return (

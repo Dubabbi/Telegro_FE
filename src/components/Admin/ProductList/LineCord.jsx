@@ -24,7 +24,6 @@ const LineCord = ({ category = 'LINE_CORD', page = 0, size = 12 }) => {
 
         const productsData = response.data.data.products || []; 
         if (Array.isArray(productsData)) {
-          // ID 기준으로 역순 정렬
           const sortedProducts = productsData.sort((a, b) => b.id - a.id);
           setProducts(sortedProducts);
         } else {

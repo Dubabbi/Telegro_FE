@@ -16,8 +16,8 @@ const Notice = ({ size = 10 }) => {
   const [error, setError] = useState('');
   const [searchValue, setSearchValue] = useState('');
   const [filteredNotice, setFilteredNotice] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 상태
-  const [totalPages, setTotalPages] = useState(1); // 전체 페이지 수
+  const [currentPage, setCurrentPage] = useState(1); 
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     const fetchNotices = async () => {
@@ -33,8 +33,8 @@ const Notice = ({ size = 10 }) => {
             return new Date(b.noticeCreateDate) - new Date(a.noticeCreateDate);
           });
           setNotice(sortedNotices);
-          setFilteredNotice(sortedNotices); // 초기값 설정
-          setTotalPages(response.data.data.totalPage); // 전체 페이지 수 설정
+          setFilteredNotice(sortedNotices); 
+          setTotalPages(response.data.data.totalPage); 
         } else {
           throw new Error(response.data.message || 'Failed to fetch data');
         }
@@ -45,15 +45,15 @@ const Notice = ({ size = 10 }) => {
     };
   
     fetchNotices();
-  }, [currentPage, size]); // currentPage가 변경될 때마다 데이터를 다시 가져옴
+  }, [currentPage, size]); 
 
   if (error) {
-    return <div>{error}</div>;  // 에러 표시
+    return <div>{error}</div>;  
   }
 
   const getFileIcon = (filename) => {
     if (!filename) {
-      return <FaFile />; // 파일 이름이 없을 때 기본 파일 아이콘 반환
+      return <FaFile />; 
     }
     const extension = filename.split('.').pop().toLowerCase();
     switch (extension) {
@@ -69,25 +69,24 @@ const Notice = ({ size = 10 }) => {
       case 'xlsx':
         return <FaFileExcel />;
       default:
-        return <FaFile />; // 기본 파일 아이콘
+        return <FaFile />; 
     }
   };
 
-  // 검색 처리 함수
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchValue) {
       const filtered = notice.filter((item) => 
-        item.noticeTitle.toLowerCase().includes(searchValue.toLowerCase()) // 대소문자 구분 없이 필터링
+        item.noticeTitle.toLowerCase().includes(searchValue.toLowerCase())
       );
-      setFilteredNotice(filtered);  // 검색 결과로 상태 업데이트
+      setFilteredNotice(filtered);  
     } else {
-      setFilteredNotice(notice);  // 검색어가 없으면 전체 리스트로 설정
+      setFilteredNotice(notice); 
     }
   };
 
   const handlePageChange = (page) => {
-    setCurrentPage(page); // 페이지 변경 시 상태 업데이트
+    setCurrentPage(page); 
   };
 
   const items = filteredNotice.map((notice) => (

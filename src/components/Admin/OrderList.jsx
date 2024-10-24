@@ -144,7 +144,6 @@ const TotalAmount = styled.div`
   text-align: right;
 `;
 
-// 새로 추가한 SelectBar 스타일
 const SelectBar = styled.select`
   padding: 10px;
   border: 1px solid #ccc;
@@ -156,7 +155,7 @@ const OrderList = () => {
   const [orders, setOrders] = useState([
     {
       id: 1,
-      productImage: 'https://via.placeholder.com/100',  // 실제 이미지 URL로 변경
+      productImage: 'https://via.placeholder.com/100', 
       productName: '단방향 자브라 마이크 (KJ 337 QD)',
       option: '17mm 전용',
       quantity: 1,
@@ -169,7 +168,7 @@ const OrderList = () => {
     },
     {
       id: 2,
-      productImage: 'https://via.placeholder.com/100',  // 실제 이미지 URL로 변경
+      productImage: 'https://via.placeholder.com/100', 
       productName: '단방향 자브라 마이크 (KJ 337 QD)',
       option: '17mm 전용',
       quantity: 1,
@@ -185,7 +184,7 @@ const OrderList = () => {
   const [searchValue, setSearchValue] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
-  const [searchCategory, setSearchCategory] = useState('productName'); // 검색 카테고리
+  const [searchCategory, setSearchCategory] = useState('productName');
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -201,10 +200,9 @@ const OrderList = () => {
     );
   };
 
-  // 날짜 필터링 함수
   const filterOrdersByDate = () => {
     if (!startDate || !endDate) {
-      return orders; // 날짜가 선택되지 않으면 전체 주문 목록을 반환
+      return orders; 
     }
 
     return orders.filter(order => {
@@ -215,10 +213,9 @@ const OrderList = () => {
     });
   };
 
-  // 검색 필터링 함수 (선택된 카테고리에 따라 검색)
   const filterOrdersBySearch = (filteredOrders) => {
     if (!searchValue) {
-      return filteredOrders; // 검색어가 없으면 전체 목록 반환
+      return filteredOrders; 
     }
 
     return filteredOrders.filter(order => 
@@ -226,12 +223,10 @@ const OrderList = () => {
     );
   };
 
-  // 총 주문 금액 계산
   const calculateTotalAmount = (filteredOrders) => {
     return filteredOrders.reduce((acc, order) => acc + order.totalPrice, 0);
   };
 
-  // 날짜와 검색어 필터링을 함께 적용
   const filteredOrders = filterOrdersBySearch(filterOrdersByDate());
 
   return (

@@ -6,6 +6,216 @@ import LogoImage from '/src/assets/image/Landing/logo.svg';
 import Avvvatars from 'avvvatars-react';
 import axios from 'axios';
 
+export default function MobileNavbar() {
+  const [searchValue, setSearchValue] = useState('');
+  const [isSubMenuOpen, setIsSubMenuOpen] = useState(false);
+  const [isMobileSidebarVisible, setIsMobileSidebarVisible] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [products, setProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);   
+  const [userInfo, setUserInfo] = useState({
+    id: 'Justin Hope',
+    name: '홍길동',
+    avatarUrl: 'https://example.com/avatar.jpg', 
+  });
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const fetchProductsByCategory = async (category, page = 0) => {
+    try {
+      const response = await axios.get(`https://api.telegro.kr/products`, {
+        params: { category, page, size: 10 }
+      });
+      if (response.data.code === 20000) {
+        return response.data.data.products;s
+      } else {
+        console.error(`Error fetching products for ${category}:`, response.data.message);
+        return [];
+      }
+    } catch (error) {
+      console.error('Error fetching products:', error);
+      return [];
+    }
+  };
+
+  useEffect(() => {
+    const fetchAllProducts = async () => {
+      const categories = ['HEADSET', 'LINE_CORD', 'RECORDER', 'ACCESSORY'];
+      let allProducts = [];
+      
+      for (const category of categories) {
+        const productsArray = await fetchProductsByCategory(category);
+        allProducts = [...allProducts, ...productsArray];  
+      }
+  
+      setProducts(allProducts);
+      setIsLoading(false);  
+    };
+  
+    fetchAllProducts();
+  }, []);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  
+    let filtered = [];
+    if (searchValue.trim() !== '') {
+      filtered = products.filter(product =>
+        product.productName.toLowerCase().includes(searchValue.toLowerCase())  
+      );
+    }
+  
+    if (filtered.length > 0) {
+      filtered = filtered.sort((a, b) => b.id - a.id); 
+    }
+  
+    if (filtered.length === 0) {
+      alert('검색 결과가 없습니다.');
+    } else {
+      navigate('/search', { state: { filteredProducts: filtered } });
+    }
+  
+    setSearchValue(''); 
+  };
+
+  const checkLoginStatus = () => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+  };
+
+  useEffect(() => {
+    checkLoginStatus();
+  }, []);
+
+  const toggleSidebar = () => {
+    setIsMobileSidebarVisible(!isMobileSidebarVisible);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setIsLoggedIn(false);
+    navigate('/login'); 
+  };
+
+  const toggleSubMenu = () => {
+    setIsSubMenuOpen(!isSubMenuOpen);
+  };
+
+  useEffect(() => {
+    setIsMobileSidebarVisible(false);
+    setIsSubMenuOpen(false); 
+  }, [location.pathname]);
+
+  return (
+    <>
+      <TopBar>
+        <MenuButton onClick={toggleSidebar}>
+          {isMobileSidebarVisible ? <FaTimes /> : <FaBars />}
+        </MenuButton>
+        <LogoWrapper style={{cursor: 'pointer'}} onClick={() => navigate('/main')}>
+          <LogoImg src={LogoImage} alt="Telegro Logo" />
+          <LogoText>Telegro</LogoText>
+        </LogoWrapper>
+      </TopBar>
+
+      <Sidebar show={isMobileSidebarVisible}>
+        <LogoWrapper style={{opacity: '0'}}>
+          <LogoImg src={LogoImage} alt="Telegro Logo" />
+          <LogoText>Telegro</LogoText>
+        </LogoWrapper>
+
+        <SearchBar style={{ marginTop: '2%' }}>
+          <FaSearch />
+          <form onSubmit={handleSubmit}>
+            <SearchInput
+              type="text"
+              placeholder="Search"
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
+            />
+          </form>
+        </SearchBar>
+
+        <MenuWrapper>
+          <MenuItem style={{cursor: 'default'}} className="active">
+            <FaCog />
+            Dashboard
+          </MenuItem>
+          <MenuItem onClick={() => navigate('/cart')}>
+            <FaCog />
+            장바구니
+          </MenuItem>
+
+          <MenuItem onClick={() => navigate('/ordermanager')}>
+            <FaCog />
+            주문확인
+          </MenuItem>
+
+          <MenuItem onClick={() => navigate('/notice')}>
+            <FaCog />
+            자료실
+          </MenuItem>
+
+          <MenuItem>
+            <FaCog />
+            <a href="mailto:Telegro@telegro.com">Contact Us</a>
+          </MenuItem>
+
+          {/* 상품 관리 메뉴 및 하위 카테고리 */}
+          <SubMenuWrapper>
+            <MenuItem onClick={toggleSubMenu}>
+              <FaCog />
+              상품 목록
+              {isSubMenuOpen ? <FaChevronDown /> : <FaChevronRight />}
+            </MenuItem>
+            <SubMenu open={isSubMenuOpen}>
+              <MenuItem onClick={() => navigate('/headset')}>
+                헤드셋
+              </MenuItem>
+              <MenuItem onClick={() => navigate('/lineCord')}>
+                라인 코드
+              </MenuItem>
+              <MenuItem onClick={() => navigate('/recording')}>
+                녹음기기
+              </MenuItem>
+              <MenuItem onClick={() => navigate('/accessory')}>
+                악세서리
+              </MenuItem>
+            </SubMenu>
+          </SubMenuWrapper>
+        </MenuWrapper>
+
+        <FooterWrapper>
+          {isLoggedIn ? (
+            <ProfileWrapper onClick={() => navigate('/mypage')}>
+              <Avvvatars value={userInfo.id} size={40} />
+              <ProfileInfo style={{marginLeft: '10px'}}>
+                <div>{userInfo.name}</div>
+                <div style={{ fontSize: '0.8rem', color: '#FFD700' }}>일반회원</div>
+              </ProfileInfo>
+              <LogoutButton onClick={handleLogout}>
+                <FaSignOutAlt />
+                Log out
+              </LogoutButton>
+            </ProfileWrapper>
+          ) : (
+            <ProfileWrapper style={{cursor: 'pointer'}} onClick={() => navigate('/login')}>
+              <ProfileInfo>
+                <div>로그인해주세요</div>
+              </ProfileInfo>
+            </ProfileWrapper>
+          )}
+        </FooterWrapper>
+      </Sidebar>
+    </>
+  );
+}
+
+
 const TopBar = styled.div`
   display: flex;
   align-items: center;
@@ -174,219 +384,3 @@ const LogoutButton = styled.div`
     color: #ff5a5a;
   }
 `;
-
-export default function MobileNavbar() {
-  const [searchValue, setSearchValue] = useState('');
-  const [isSubMenuOpen, setIsSubMenuOpen] = useState(false);
-  const [isMobileSidebarVisible, setIsMobileSidebarVisible] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [products, setProducts] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);   
-  const [userInfo, setUserInfo] = useState({
-    id: 'Justin Hope',
-    name: '홍길동',
-    avatarUrl: 'https://example.com/avatar.jpg', 
-  });
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  const fetchProductsByCategory = async (category, page = 0) => {
-    try {
-      const response = await axios.get(`https://api.telegro.kr/products`, {
-        params: { category, page, size: 10 }
-      });
-      if (response.data.code === 20000) {
-        return response.data.data.products;  // 상품 목록 반환 (products 배열)
-      } else {
-        console.error(`Error fetching products for ${category}:`, response.data.message);
-        return [];
-      }
-    } catch (error) {
-      console.error('Error fetching products:', error);
-      return [];
-    }
-  };
-
-  useEffect(() => {
-    const fetchAllProducts = async () => {
-      const categories = ['HEADSET', 'LINE_CORD', 'RECORDER', 'ACCESSORY'];
-      let allProducts = [];
-      
-      for (const category of categories) {
-        const productsArray = await fetchProductsByCategory(category);
-        allProducts = [...allProducts, ...productsArray];  // products 배열을 병합
-      }
-  
-      setProducts(allProducts); // 병합된 제품 배열로 상태 업데이트
-      setIsLoading(false);  
-    };
-  
-    fetchAllProducts();
-  }, []);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-  
-    // 검색어로 상품 필터링
-    let filtered = [];
-    if (searchValue.trim() !== '') {
-      filtered = products.filter(product =>
-        product.productName.toLowerCase().includes(searchValue.toLowerCase())  // 검색어로 필터링
-      );
-    }
-  
-    // 검색 결과가 있으면 ID 기준으로 역순 정렬
-    if (filtered.length > 0) {
-      filtered = filtered.sort((a, b) => b.id - a.id);  // ID 기준으로 역순 정렬
-    }
-  
-    // 검색 결과가 없을 경우 alert를 띄우고 페이지 이동을 하지 않음
-    if (filtered.length === 0) {
-      alert('검색 결과가 없습니다.');
-    } else {
-      // 검색 결과 페이지로 이동하고, 필터링된 결과를 state로 전달
-      navigate('/search', { state: { filteredProducts: filtered } });
-    }
-  
-    setSearchValue('');  // 검색어 초기화
-  };
-
-  // 로그인 여부 확인하는 함수
-  const checkLoginStatus = () => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      setIsLoggedIn(true);
-    } else {
-      setIsLoggedIn(false);
-    }
-  };
-
-  // 컴포넌트 로드 시 로그인 여부 확인
-  useEffect(() => {
-    checkLoginStatus();
-  }, []);
-
-  const toggleSidebar = () => {
-    setIsMobileSidebarVisible(!isMobileSidebarVisible);
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    setIsLoggedIn(false);
-    navigate('/login'); 
-  };
-
-  const toggleSubMenu = () => {
-    setIsSubMenuOpen(!isSubMenuOpen);
-  };
-
-  useEffect(() => {
-    setIsMobileSidebarVisible(false);
-    setIsSubMenuOpen(false); 
-  }, [location.pathname]);
-
-  return (
-    <>
-      <TopBar>
-        <MenuButton onClick={toggleSidebar}>
-          {isMobileSidebarVisible ? <FaTimes /> : <FaBars />}
-        </MenuButton>
-        <LogoWrapper style={{cursor: 'pointer'}} onClick={() => navigate('/main')}>
-          <LogoImg src={LogoImage} alt="Telegro Logo" />
-          <LogoText>Telegro</LogoText>
-        </LogoWrapper>
-      </TopBar>
-
-      <Sidebar show={isMobileSidebarVisible}>
-        <LogoWrapper style={{opacity: '0'}}>
-          <LogoImg src={LogoImage} alt="Telegro Logo" />
-          <LogoText>Telegro</LogoText>
-        </LogoWrapper>
-
-        {/* 검색 바 추가 */}
-        <SearchBar style={{ marginTop: '2%' }}>
-          <FaSearch />
-          <form onSubmit={handleSubmit}>
-            <SearchInput
-              type="text"
-              placeholder="Search"
-              value={searchValue}
-              onChange={(e) => setSearchValue(e.target.value)}
-            />
-          </form>
-        </SearchBar>
-
-        <MenuWrapper>
-          <MenuItem style={{cursor: 'default'}} className="active">
-            <FaCog />
-            Dashboard
-          </MenuItem>
-          <MenuItem onClick={() => navigate('/cart')}>
-            <FaCog />
-            장바구니
-          </MenuItem>
-
-          <MenuItem onClick={() => navigate('/ordermanager')}>
-            <FaCog />
-            주문확인
-          </MenuItem>
-
-          <MenuItem onClick={() => navigate('/notice')}>
-            <FaCog />
-            자료실
-          </MenuItem>
-
-          <MenuItem>
-            <FaCog />
-            <a href="mailto:Telegro@telegro.com">Contact Us</a>
-          </MenuItem>
-
-          {/* 상품 관리 메뉴 및 하위 카테고리 */}
-          <SubMenuWrapper>
-            <MenuItem onClick={toggleSubMenu}>
-              <FaCog />
-              상품 목록
-              {isSubMenuOpen ? <FaChevronDown /> : <FaChevronRight />}
-            </MenuItem>
-            <SubMenu open={isSubMenuOpen}>
-              <MenuItem onClick={() => navigate('/headset')}>
-                헤드셋
-              </MenuItem>
-              <MenuItem onClick={() => navigate('/lineCord')}>
-                라인 코드
-              </MenuItem>
-              <MenuItem onClick={() => navigate('/recording')}>
-                녹음기기
-              </MenuItem>
-              <MenuItem onClick={() => navigate('/accessory')}>
-                악세서리
-              </MenuItem>
-            </SubMenu>
-          </SubMenuWrapper>
-        </MenuWrapper>
-
-        <FooterWrapper>
-          {isLoggedIn ? (
-            <ProfileWrapper onClick={() => navigate('/mypage')}>
-              <Avvvatars value={userInfo.id} size={40} />
-              <ProfileInfo style={{marginLeft: '10px'}}>
-                <div>{userInfo.name}</div>
-                <div style={{ fontSize: '0.8rem', color: '#FFD700' }}>일반회원</div>
-              </ProfileInfo>
-              <LogoutButton onClick={handleLogout}>
-                <FaSignOutAlt />
-                Log out
-              </LogoutButton>
-            </ProfileWrapper>
-          ) : (
-            <ProfileWrapper style={{cursor: 'pointer'}} onClick={() => navigate('/login')}>
-              <ProfileInfo>
-                <div>로그인해주세요</div>
-              </ProfileInfo>
-            </ProfileWrapper>
-          )}
-        </FooterWrapper>
-      </Sidebar>
-    </>
-  );
-}

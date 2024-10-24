@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { Postcode } from '../Postcode/Postcode'; // 우편번호 검색 컴포넌트
+import { Postcode } from '../Postcode/Postcode'; 
 import axios from 'axios';
 import * as D from './NoticeDetail/NoticeDetailStyle';
 
@@ -61,7 +61,7 @@ const FormWrapper = styled.div`
 
 const Form = styled.form`
   display: grid;
-  grid-template-columns: 1fr 1fr; /* 2열 레이아웃 */
+  grid-template-columns: 1fr 1fr;
   gap: 20px;
 `;
 
@@ -110,23 +110,23 @@ const Button = styled.button`
 
 const InlineFormWrapper = styled.div`
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 4열 그리드 레이아웃 */
+  grid-template-columns: repeat(4, 1fr); 
   gap: 20px;
-  grid-column: span 2; /* 2열을 차지하도록 설정 */
+  grid-column: span 2; 
 `;
 
 const ContactFormWrapper = styled.div`
   display: grid;
-  grid-template-columns: 0.97fr 0.97fr 2fr; /* 1:1:2 비율로 배치 */
+  grid-template-columns: 0.97fr 0.97fr 2fr; 
   gap: 2%;
   max-width: 100%;
-  grid-column: span 2; /* 전체 열을 차지 */
+  grid-column: span 2; 
 `;
 
 function ClientEdit() {
   const { clientId } = useParams(); 
   const navigate = useNavigate();
-  const [isDealer, setIsDealer] = useState(false); // 공급업체 여부
+  const [isDealer, setIsDealer] = useState(false); 
   const [form, setForm] = useState({
     username: '',
     userid: '',
@@ -172,7 +172,7 @@ function ClientEdit() {
             companyType: companyData.companyType || '', 
             companyItem: companyData.companyItem || '', 
           });
-          setIsDealer(companyData.role === 'DEALER');
+          setIsDealer(companyData.role !== 'MEMBER');
         } else {
           alert('회사 정보를 불러오는 데 실패했습니다.');
         }
@@ -206,14 +206,13 @@ function ClientEdit() {
       alert('로그인이 필요합니다.');
       return;
     }
-
-    // PATCH 요청에서 일반 회원과 공급업체를 구분
+  
     const payload = {
       user: {
         username: form.username,
         userId: form.userid,
         password: form.password,
-        role: isDealer ? 'DEALER' : 'MEMBER',
+        role: form.role,
         phone: form.phone,
         email: form.email,
         address: form.address,
@@ -221,8 +220,9 @@ function ClientEdit() {
         zipCode: form.zipCode,
       },
     };
-
-    if (isDealer) {
+  
+    // role이 'MEMBER'가 아닌 경우에만 회사 정보를 추가
+    if (payload.user.role !== 'MEMBER') {
       payload.company = {
         managerName: form.managerName,
         managerPhone: form.managerPhone,
@@ -232,7 +232,7 @@ function ClientEdit() {
         companyItem: form.companyItem,
       };
     }
-
+  
     try {
       const response = await axios.patch(
         `https://api.telegro.kr/api/users/${clientId}`,
@@ -244,7 +244,7 @@ function ClientEdit() {
           },
         }
       );
-
+  
       if (response.status === 200) {
         alert('회사 정보가 성공적으로 수정되었습니다.');
         navigate('/admin/clientmanagement');
@@ -254,7 +254,6 @@ function ClientEdit() {
       alert('회사 정보를 수정하는 데 실패했습니다.');
     }
   };
-
   const handleDelete = async () => {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -318,7 +317,6 @@ function ClientEdit() {
                 </div>
               </InlineFormWrapper>
 
-              {/* 공급업체일 경우 추가 필드 */}
               {isDealer && (
                 <>
                   <ContactFormWrapper>

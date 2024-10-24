@@ -11,7 +11,6 @@ export const MainWrapper = styled.div`
   padding-top: 3%;
 `;
 
-// 섹션 스타일
 export const Section = styled.section`
   text-align: left;
   h1 {
@@ -61,13 +60,12 @@ export const SearchWrap = styled.div`
   align-items: center;
 
   @media (max-width: 780px) {
-    justify-content: center; /* 작은 화면에서 가운데 정렬 */
+    justify-content: center; 
     margin-left: 0;
-    width: 90%; /* 더 작은 화면에서 검색창을 적절히 줄임 */
+    width: 90%;
   }
 `;
 
-// 검색 버튼
 export const StyledButton = styled(Button)`
   position: absolute;
   top: 50%;
@@ -173,8 +171,8 @@ export const TitleText = styled.h3`
 
 
 export const SearchButton = styled.button`
-  position: absolute; /* 수정된 부분 */
-  right: 10px; /* 수정된 부분 */
+  position: absolute;
+  right: 10px; 
   height: 40px;
   width: 100px;
   padding: 0;
@@ -234,63 +232,6 @@ export const BoardListArea = styled.div`
 `
 
 
-export const TableHead = styled.thead`
-  text-align: center;
-  font-weight: bold;
-`
-
-export const TableBody = styled.td`
-  padding: 1.7% 1.7%;
-  font-family: inter;
-  font-size: 1.3rem;
-  border-right: 1px solid #ccc;
-  &:last-child {
-    border-right: none;
-  }
-`;
-
-export const TableRow = styled.tr`
-  border-bottom: 1px solid #ccc;
-  &:nth-child(odd) {
-    background-color: #F8F9FA;  // 홀수 행
-    &:hover {
-        background-color: #eceaea;
-        cursor: pointer;
-    }
-  }
-
-  &:nth-child(even) {
-    background-color: #FFFFFF;  // 짝수 행
-        &:hover {
-        background-color: #eceaea;
-        cursor: pointer;
-    }
-  }
-
-  &:last-child {
-    border-bottom: none;
-  }
-`;
-
-export const ThNum = styled.th`
-  width: 150px;
-  text-align: center;
-`
-
-export const ThTitle = styled.th`
-  flex: 1;
-`
-
-export const ThDate = styled.th`
-  width: 150px;
-  text-align: center;
-`
-
-export const ThViews = styled.th`
-  width: 150px;
-  text-align: center;
-`
-
 export const BoardLink = styled.a`
   color: inherit;
   display: inline-block;
@@ -332,17 +273,14 @@ export const StyledForm = styled(Form)`
   }
 
   @media (max-width: 780px) {
-    width: 100%; /* 검색창의 너비를 100%로 */
+    width: 100%;
     .form-control {
-      font-size: 1rem; /* 폰트 크기를 줄여 화면에 맞춤 */
-      padding-right: 50px; /* 여백 조정 */
+      font-size: 1rem; 
+      padding-right: 50px; 
       padding-left: 10px;
     }
   }
 `;
-
-
-//
 
 export const CommentSection = styled.div`
   margin-top: 20px;
@@ -469,5 +407,58 @@ export const Div = styled.div`
   @media (max-width: 780px) {
     max-height: 2vh;
     min-height: 2vh;
+  }
+`;
+
+export const Table = styled.table`
+  width: 95%;
+  margin: 0 auto;
+  text-align: center;
+  border-spacing: 0;
+`;
+
+export const TableHeaderColumn = styled.th`
+  border-bottom: 1px solid #e8e8e8;
+  font-size: 1.3rem;
+  font-family: inter;
+  padding: 1% 1%;
+  font-weight: bold;
+  border-right: 1px solid #ccc;
+  width: ${props => props.width};  
+  &:last-child {
+    border-right: none;
+  }
+`;
+
+export const TableColumn = styled.td`
+  padding: 1.7% 1.7%;
+  font-family: inter;
+  font-size: 1.3rem;
+  border-right: 1px solid #ccc;
+  &:last-child {
+    border-right: none;
+  }
+`;
+
+export const TableRow = styled.tr`
+  border-bottom: 1px solid #ccc;
+  &:nth-child(odd) {
+    background-color: #FCFCFD; 
+    &:hover {
+        background-color: #eceaea;
+        cursor: pointer;
+    }
+  }
+
+  &:nth-child(even) {
+    background-color: #FFFFFF; 
+        &:hover {
+        background-color: #eceaea;
+        cursor: pointer;
+    }
+  }
+
+  &:last-child {
+    border-bottom: none;
   }
 `;

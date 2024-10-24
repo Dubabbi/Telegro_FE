@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Postcode } from '../Postcode/Postcode'; // 우편번호 검색 컴포넌트
+import { Postcode } from '../Postcode/Postcode';
 import * as D from './NoticeDetail/NoticeDetailStyle';
 import * as A from './AddClientStyle';
 import axios from 'axios';
@@ -12,7 +12,7 @@ function AddClient() {
     username: '',
     password: '',
     email: '',
-    role: '', // 역할 필드 추가
+    role: '', 
     contactName: '',
     contactPhone: '',
     businessName: '',
@@ -27,12 +27,11 @@ function AddClient() {
   const handleAddressComplete = ({ fullAddress, zonecode }) => {
     setForm((prevState) => ({
       ...prevState,
-      address: fullAddress,  // 도로명 주소 설정
-      zipCode: zonecode,     // 우편번호 설정
+      address: fullAddress, 
+      zipCode: zonecode,  
     }));
   };
 
-  // 역할 선택 옵션
   const roleOptions = {
     MEMBER: 'Member',
     DEALER: 'Dealer',
@@ -60,11 +59,11 @@ function AddClient() {
     try {
       const signUpUserInfoDto = {
         userid: form.id,
-        username: form.companyName,  // 사용자명 (닉네임)
+        username: form.companyName,  
         password: form.password,
         phone: form.phone,
         email: form.email,
-        role: form.role,  // 역할 필드 추가
+        role: form.role, 
         address: form.address,
         addressDetail: form.detailAddress,
         zipCode: form.zipCode,

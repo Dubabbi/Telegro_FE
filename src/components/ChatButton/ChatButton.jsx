@@ -4,14 +4,12 @@ export default function ChatButton() {
   const [buttonSize, setButtonSize] = useState({ width: '90vw', height: '90vw' });
 
   useEffect(() => {
-    // 카카오 SDK가 로드되었는지 확인
     const initializeKakao = () => {
       if (window.Kakao && !window.Kakao.isInitialized()) {
         window.Kakao.init('9d7e3bf3d02c6226c026fb519c6e9e7e'); 
       }
     };
 
-    // SDK가 로드되었는지 체크
     if (document.readyState === 'complete') {
       initializeKakao();
     } else {

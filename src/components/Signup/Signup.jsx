@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as L from '../Login/LoginStyle';
@@ -17,7 +18,7 @@ function Signup() {
   const [step, setStep] = useState(1);
 
   const [errors, setErrors] = useState({});
-  // Step 1 유효성 검사
+
   const validateStep1 = () => {
     let errors = {};
 
@@ -41,7 +42,6 @@ function Signup() {
     return errors;
   };
 
-  // Step 2 유효성 검사
   const validateStep2 = () => {
     let errors = {};
 
@@ -63,7 +63,6 @@ function Signup() {
     return errors;
   };
 
-  //https://thingproxy.freeboard.io/fetch/
 
   const handleSignupClick = async () => {
     try {
@@ -85,10 +84,11 @@ function Signup() {
       } 
     } catch (error) {
       console.error("Error while signing up:", error);
-    }
+      if (error.response && error.response.status === 409) {
+        alert("이미 사용 중인 ID입니다.");
+      }}
   };
 
-  // Submit 처리
   const handleSubmit = (event) => {
     event.preventDefault();
 
@@ -98,20 +98,18 @@ function Signup() {
         setErrors(step1Errors);
       } else {
         setErrors({});
-        setStep(2); // Step 1이 유효하면 Step 2로 이동
+        setStep(2); 
       }
     } 
   };
 
-  // 주소 검색 버튼 클릭 시 실행
   const handleAddressSearch = () => {
-    setErrors({ ...errors, roadAddress: '', zipCode: '' }); // 주소 관련 유효성 검사 메시지 제거
+    setErrors({ ...errors, roadAddress: '', zipCode: '' }); 
   };
 
-  // Postcode로부터 주소와 우편번호 가져오는 함수
   const handleAddressComplete = ({ fullAddress, zonecode }) => {
-    setRoadAddress(fullAddress); // 도로명 주소 설정
-    setZipcode(zonecode);        // 우편번호 설정
+    setRoadAddress(fullAddress); 
+    setZipcode(zonecode);     
   };
 
   return (

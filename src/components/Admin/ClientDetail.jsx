@@ -37,7 +37,7 @@ const ClientDetail = () => {
   }, [clientId]);
 
   if (!userInfo) {
-    return <div>Loading...</div>; // 데이터가 로드될 때까지 로딩 메시지
+    return <div>Loading...</div>; 
   }
 
   const isDealer = !!userInfo.companyName; // 공급업체 여부를 companyName 존재 여부로 판단
@@ -83,7 +83,6 @@ const ClientDetail = () => {
 
         <div style={{ height: '20px' }} />
 
-        {/* 회사 정보는 공급업체(DEALER)일 때만 보여줌 */}
         {isDealer && (
           <M.AdminProfileWrapper>
             <M.BottomBackground>
@@ -91,21 +90,21 @@ const ClientDetail = () => {
               <M.UserDetail>
               <M.UserLabel>Manager Phone</M.UserLabel>
               <M.UserInfo>
-                <FaPhone style={{ marginRight: '10px' }} /> {/* 전화 관련 정보이므로 FaPhone 아이콘 적합 */}
+                <FaPhone style={{ marginRight: '10px' }} /> 
                 {userInfo.managerPhone}
               </M.UserInfo>
             </M.UserDetail>
             <M.UserDetail>
               <M.UserLabel>Manager Name</M.UserLabel>
               <M.UserInfo>
-                <FaUser style={{ marginRight: '10px' }} /> {/* 사용자/관리자 이름이므로 FaUser 아이콘 적합 */}
+                <FaUser style={{ marginRight: '10px' }} /> 
                 {userInfo.managerName}
               </M.UserInfo>
             </M.UserDetail>
             <M.UserDetail>
               <M.UserLabel>Company Number</M.UserLabel>
               <M.UserInfo>
-                <FaBuilding style={{ marginRight: '10px' }} /> {/* 회사 번호 관련 정보이므로 FaBuilding 아이콘 적합 */}
+                <FaBuilding style={{ marginRight: '10px' }} />
                 {userInfo.companyNumber}
               </M.UserInfo>
             </M.UserDetail>
@@ -114,21 +113,21 @@ const ClientDetail = () => {
             <M.UserDetail>
               <M.UserLabel>Company Type</M.UserLabel>
               <M.UserInfo>
-                <FaBriefcase style={{ marginRight: '10px' }} /> {/* 회사 유형이므로 FaBriefcase 아이콘 적합 */}
+                <FaBriefcase style={{ marginRight: '10px' }} /> 
                 {userInfo.companyType}
               </M.UserInfo>
             </M.UserDetail>
             <M.UserDetail>
               <M.UserLabel>Company Item</M.UserLabel>
               <M.UserInfo>
-                <FaBox style={{ marginRight: '10px' }} /> {/* 회사가 제공하는 품목이므로 FaBox 아이콘 적합 */}
+                <FaBox style={{ marginRight: '10px' }} />
                 {userInfo.companyItem}
               </M.UserInfo>
             </M.UserDetail>
             <M.UserDetail>
               <M.UserLabel>Role</M.UserLabel>
               <M.UserInfo>
-                <FaUserTie style={{ marginRight: '10px' }} /> {/* 사용자의 역할이므로 FaUserTie 아이콘 적합 */}
+                <FaUserTie style={{ marginRight: '10px' }} />
                 {userInfo.role}
               </M.UserInfo>
             </M.UserDetail>

@@ -99,12 +99,12 @@ export const ClientInfoWrapper = styled.div`
   width: 90%;
   margin: 0 auto;
   grid-template-columns: 1.5fr 1.5fr 1fr;
-  gap: 20px; /* 열 간격 */
+  gap: 20px; 
   padding: 0 20px;
   margin: 20px 0;
-  align-items: start; /* 열 안의 내용이 상단에 정렬되도록 설정 */
+  align-items: start; 
   @media(max-width: 780px){
-    grid-template-columns: 1fr; /* 화면이 좁아질 때 단일 열로 변경 */
+    grid-template-columns: 1fr; 
   }
 `;
 
@@ -181,7 +181,7 @@ export const AddressWrapper = styled.div`
 `;
 
 export const AddressBar = styled.div`
-  background-color: ${({ isDefault }) => (isDefault ? '#4D44B5' : '#697077')}; /* 기본 배송지 여부에 따라 색상 변경 */
+  background-color: ${({ isDefault }) => (isDefault ? '#4D44B5' : '#697077')}; 
   width: 10px;
   height: 100%;
   border-radius: 8px 0 0 8px;
@@ -222,7 +222,7 @@ export const ViewMoreButton = styled.button`
   border-radius: 10px;
   cursor: pointer;
   &:hover {
-    background-color: rgba(77, 68, 181, 0.6);  /* 호버 시 배경을 진한 보라색으로 */
+    background-color: rgba(77, 68, 181, 0.6);  
     color: #fff;    
   }
 `;
@@ -239,7 +239,7 @@ export const OrderButton = styled.button`
   border-radius: 10px;
   cursor: pointer;
   &:hover {
-    background-color: rgba(77, 68, 181, 0.6);  /* 호버 시 배경을 진한 보라색으로 */
+    background-color: rgba(77, 68, 181, 0.6);  
     color: #fff;    
   }
   @media(max-width: 780px){

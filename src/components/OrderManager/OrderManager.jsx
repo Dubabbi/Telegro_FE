@@ -1,112 +1,10 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
 import Pagination from '../Pagination/Pagination';
 import * as N from '../Notice/NoticeStyle';
+import * as R from './OrderManagerStyle'
+import * as O from '../OrderProcess/OrderProcessStyle';
 import { FaSearch } from 'react-icons/fa';
 import Form from 'react-bootstrap/Form';
-
-export const Div = styled.div`
-  width: 100%;
-  min-height: 160px;
-  border: none;
-  @media (max-width: 780px) {
-    max-height: 4vh;
-    min-height: 6vh;
-  }
-`;
-
-const MainWrapper = styled.div`
-  width: 80%;
-  margin-left: 10%;
-  padding: 20px;
-  @media (max-width: 780px) {
-    width: 90%;
-    margin-left: 5%;
-  }
-`;
-
-const Title = styled.h2`
-  font-size: 2.3rem;
-  font-weight: bold;
-  margin-bottom: 20px;
-  @media(max-width: 780px){
-    font-size: 1.9rem;
-  }
-`;
-
-const SearchSection = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-`;
-
-const DateInput = styled.input`
-  padding: 5px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-`;
-
-const OrderTable = styled.table`
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-  font-size: 1rem;
-
-  th, td {
-    padding: 10px;
-    border: 1px solid #ccc;
-    text-align: center;
-    vertical-align: middle;
-  }
-
-  th {
-    background-color: #f0f0f0;
-    font-weight: bold;
-  }
-
-  tr:nth-child(even) {
-    background-color: #f9f9f9;
-  }
-
-  @media (max-width: 780px) {
-    th, td {
-      padding: 8px;
-    }
-  }
-`;
-
-const TableHead = styled.thead`
-  font-weight: bold;
-`;
-
-const TableCell = styled.td`
-  border: 1px solid #ccc;
-  padding: 10px;
-  text-align: center;
-  vertical-align: middle;
-`;
-
-const TableRow = styled.tr`
-  &:nth-child(even) {
-    background-color: #FCFCFD;
-    &:hover {
-      background-color: #eceaea;
-      cursor: pointer;
-    }
-  }
-  &:hover {
-    background-color: #eceaea;
-    cursor: pointer;
-  }
-`;
-
-const TotalAmount = styled.div`
-  margin-top: 20px;
-  font-size: 1.2rem;
-  font-weight: bold;
-  text-align: right;
-`;
 
 const OrderManager = () => {
   const [orders, setOrders] = useState([
@@ -155,10 +53,9 @@ const OrderManager = () => {
     setSearchValue('');
   };
 
-  // 날짜 필터링 함수
   const filterOrdersByDate = () => {
     if (!startDate || !endDate) {
-      return orders; // 날짜가 선택되지 않으면 전체 주문 목록을 반환
+      return orders; 
     }
 
     return orders.filter(order => {
@@ -168,11 +65,9 @@ const OrderManager = () => {
       return orderDate >= start && orderDate <= end;
     });
   };
-
-  // 주문명(상품명)으로 필터링하는 함수
   const filterOrdersByName = (filteredOrders) => {
     if (!searchValue) {
-      return filteredOrders; // 검색어가 없으면 필터링된 전체 목록 반환
+      return filteredOrders;
     }
 
     return filteredOrders.filter(order =>
@@ -180,27 +75,25 @@ const OrderManager = () => {
     );
   };
 
-  // 필터링된 주문의 총 주문 금액 계산
   const calculateTotalAmount = (filteredOrders) => {
     return filteredOrders.reduce((acc, order) => acc + order.totalPrice, 0);
   };
 
-  // 필터링된 주문 목록 (날짜와 주문명에 따라)
   const filteredOrders = filterOrdersByName(filterOrdersByDate());
 
   return (
-    <MainWrapper>
-      <Div />
-      <Title>주문확인</Title>
-      <SearchSection>
+    <R.MainWrapper>
+      <O.Div />
+      <R.Title>주문확인</R.Title>
+      <R.SearchSection>
         <div>
           <label>기간: </label>
-          <DateInput 
+          <R.DateInput 
             type="date" 
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
           /> - 
-          <DateInput 
+          <R.DateInput 
             type="date" 
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
@@ -219,43 +112,42 @@ const OrderManager = () => {
             </N.StyledButton>
           </N.StyledForm>
         </N.SearchWrap>
-      </SearchSection>
+      </R.SearchSection>
 
-      <OrderTable>
-        <TableHead>
+      <R.OrderTable>
+        <R.TableHead>
           <tr>
-            <TableCell>No</TableCell>
-            <TableCell>제목</TableCell>
-            <TableCell>옵션 선택</TableCell>
-            <TableCell>수량</TableCell>
-            <TableCell>단가</TableCell>
-            <TableCell>총 금액(적립금)</TableCell>
-            <TableCell>주문정보</TableCell>
+            <R.TableCell>No</R.TableCell>
+            <R.TableCell>제목</R.TableCell>
+            <R.TableCell>옵션 선택</R.TableCell>
+            <R.TableCell>수량</R.TableCell>
+            <R.TableCell>단가</R.TableCell>
+            <R.TableCell>총 금액(적립금)</R.TableCell>
+            <R.TableCell>주문정보</R.TableCell>
           </tr>
-        </TableHead>
+        </R.TableHead>
         <tbody>
           {filteredOrders.map((order, index) => (
-            <TableRow key={order.id}>
-              <TableCell>{index + 1}</TableCell>
-              <TableCell>
+            <R.TableRow key={order.id}>
+              <R.TableCell>{index + 1}</R.TableCell>
+              <R.TableCell>
                 <img src={order.productImage} alt="product" width="100" />
                 <p>{order.productName}</p>
-              </TableCell>
-              <TableCell>{order.option}</TableCell>
-              <TableCell>{order.quantity}</TableCell>
-              <TableCell>{order.unitPrice}원</TableCell>
-              <TableCell>{order.totalPrice}원<br />({order.point}원)</TableCell>
-              <TableCell>{order.orderDate}</TableCell>
-            </TableRow>
+              </R.TableCell>
+              <R.TableCell>{order.option}</R.TableCell>
+              <R.TableCell>{order.quantity}</R.TableCell>
+              <R.TableCell>{order.unitPrice}원</R.TableCell>
+              <R.TableCell>{order.totalPrice}원<br />({order.point}원)</R.TableCell>
+              <R.TableCell>{order.orderDate}</R.TableCell>
+            </R.TableRow>
           ))}
         </tbody>
-      </OrderTable>
+      </R.OrderTable>
       
-      {/* 총 주문 금액 */}
-      <TotalAmount>총 주문 금액: ₩{calculateTotalAmount(filteredOrders).toLocaleString()}</TotalAmount>
+      <R.TotalAmount>총 주문 금액: ₩{calculateTotalAmount(filteredOrders).toLocaleString()}</R.TotalAmount>
       
       <Pagination />
-    </MainWrapper>
+    </R.MainWrapper>
   );
 };
 

@@ -93,7 +93,7 @@ export const Select = styled.select`
 `;
 
 export const Button = styled.button`
-  grid-column: span 2; /* 버튼을 2열 차지하도록 설정 */
+  grid-column: span 2; 
   padding: 10px;
   background-color: #4D44B5;
   color: white;
@@ -110,15 +110,15 @@ export const Button = styled.button`
 
 export const InlineFormWrapper = styled.div`
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 4열 그리드 레이아웃 */
+  grid-template-columns: repeat(4, 1fr); 
   gap: 20px;
-  grid-column: span 2; /* 2열을 차지하도록 설정 */
+  grid-column: span 2;
 `;
 
 export const ContactFormWrapper = styled.div`
   display: grid;
-  grid-template-columns: 0.97fr 0.97fr 2fr; /* 1:1:2 비율로 배치 */
+  grid-template-columns: 0.97fr 0.97fr 2fr;
   gap: 2%;
   max-width: 100%;
-  grid-column: span 2; /* 전체 열을 차지 */
+  grid-column: span 2; 
 `;

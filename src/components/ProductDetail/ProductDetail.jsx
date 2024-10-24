@@ -1,306 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
+import * as P from './ProductDetailStyle'; 
+import '@toast-ui/editor/dist/toastui-editor.css';
+import '@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css';
 import img from './example.svg'; 
-import * as N from '../Notice/NoticeStyle';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import Modal from 'react-modal';
-
-const getCategoryBackground = (category) => {
-  switch (category) {
-    case 'electronics':
-      return '#EAEDF7';
-    case 'clothing':
-      return '#F0F8E2';
-    case 'furniture':
-      return '#E6F0F8';
-    default:
-      return '#F3F3F3';
-  }
-};
-const ProductPageWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  width: 65%;
-  padding: 2%;
-  margin-bottom: 2%;
-  background-color: #fff;
-  border: 1px solid #d3d3d3;
-  border-radius: 15px;
-  @media (max-width: 780px) {
-    width: 90%;
-    margin: 0 auto;
-  }
-`;
-
-const StickyBarWrapper = styled.div`
-  position: sticky;
-  top: 180px; 
-  max-width: 250px;
-  justify-content: center;
-  width: 250px;
-  margin-left: 20px;
-  padding: 2%;
-  background-color: #fff;
-  border: 1px solid #d3d3d3;
-  overflow: auto;
-  border-radius: 15px;
-  @media (max-width: 780px) {
-    max-width: 90%;
-    width: 90%;
-    margin: 0 auto;
-    position: static;  /* 모바일 화면에서는 고정되지 않도록 */
-  }
-`;
-
-const ProductDetails = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  padding: 2%;
-  border-radius: 10px;
-  margin-bottom: 40px;
-  @media (max-width: 780px) {
-    flex-direction: column;
-  }
-`;
-
-const ProductInfoWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  flex: 2;
-`;
-
-const ModalImage = styled.img`
-  width: 80%;
-  height: auto;
-  max-height: 80vh;
-  cursor: pointer;
-  object-fit: contain;
-  margin: auto;
-`;
-
-const ArrowButton = styled.button`
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(0, 0, 0, 0.5);
-  color: white;
-  border: none;
-  padding: 10px;
-  cursor: pointer;
-  font-size: 2rem;
-  &:hover {
-    background: rgba(0, 0, 0, 0.7);
-  }
-`;
-
-const LeftArrow = styled(ArrowButton)`
-  left: 5%;
-`;
-
-const RightArrow = styled(ArrowButton)`
-  right: 5%;
-`;
-
-const ProductImage = styled.img`
-  width: 250px;
-  height: auto;
-  margin-right: 30px;
-  @media (max-width: 780px) {
-    width: 100px;
-  }
-`;
-
-const ProductTitle = styled.h2`
-  font-weight: bold;
-  font-size: 2rem;
-  color: #303972;
-  margin-bottom: 10px;
-`;
-
-const ProductSubtitle = styled.h3`
-  font-weight: bold;
-  font-size: 1.6rem;
-  color: #6B6B6B;
-  margin-bottom: 35%;
-`;
-
-const OptionSelectWrapper = styled.div`
-  margin-top: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-`;
-
-const Select = styled.select`
-  padding: 10px;
-  width: 200px;
-  font-size: 1.2rem;
-  border-radius: 5px;
-  border: 1px solid #d3d3d3;
-`;
-
-const QuantityInput = styled.input`
-  padding: 10px;
-  font-size: 1.2rem;
-  border-radius: 5px;
-  width: 200px;
-  text-align: left;
-  border: 1px solid #d3d3d3;
-`;
-
-const ButtonWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  gap: 2%;
-  align-items: center;
-  margin-top: 20px;
-  width: 100%;
-`;
-
-const BuyButton = styled.button`
-  padding: 7px 17px;
-  background-color: rgba(77, 68, 181, 0.3);
-  color: #4D44B5;
-  white-space: nowrap;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 1.3rem;
-  font-weight: bold;
-  width: 100px;
-  margin-bottom: 10px;
-  &:hover {
-    background-color: rgba(77, 68, 181, 0.6);
-    color: #fff;
-  }
-`;
-
-const AdditionalImagesWrapper = styled.div`
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  row-gap: 5px;
-  column-gap: 10px;
-  padding-left: 20px;
-  align-items: center;
-  justify-items: center;
-  height: 29.5vh;
-  margin: 5% 0;
-  @media (max-width: 780px) {
-    grid-template-columns: repeat(4, 1fr);
-  }
-`;
-
-const AdditionalImage = styled.img`
-  width: 80px;
-  height: 80px;
-  border-radius: 5px;
-  cursor: pointer;
-  border: 1px solid #d3d3d3;
-  object-fit: cover; 
-`;
-
-const ContentWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  width: 90%;
-  margin: 0 auto;
-  padding-bottom: 5%;
-  padding-top: 5%;
-`;
-
-const DescriptionTitle = styled.h4`
-  font-size: 1.6rem;
-  color: #303972;
-  font-weight: bold;
-  margin-bottom: 10px;
-  white-space: nowrap;
-`;
-
-const DescriptionList = styled.ul`
-  list-style-type: none;
-  margin-top: 2%;
-  padding: 0;
-  font-size: 1.4rem;
-  line-height: 1.7;
-  color: #444;
-  position: relative;
-`;
-
-const DescriptionItem = styled.li`
-  margin-bottom: 5px;
-  white-space: pre-wrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  display: block;
-  img {
-    max-width: 80%;
-    margin: 0 auto;
-    height: auto;
-    object-fit: contain;
-  }
-`;
-
-const CategoryTag = styled.div`
-  background-color: ${(props) => getCategoryBackground(props.category)};
-  max-width: 170px;
-  border-radius: 5px;
-  padding: 2px 8px;
-  margin-top: 5px;
-  margin-left: 12px;
-  text-align: center;
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #303972;
-`;
-
-const Div = styled.div`
-  height: 10px;
-  @media(max-width: 780px){
-    height: 100px;
-  }
-`;
-
-const MainWrapper = styled.div`
-  display: flex;
-  padding-top: 160px;
-  justify-content: space-around;
-  align-items: flex-start;
-  width: 90%;
-  margin-left: 10%;
-  @media (max-width: 780px) {
-    flex-direction: column;
-    margin: 0 auto;
-    gap: 15px;
-    padding-top: 10%;
-  }
-`;
-
-const PriceWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 90%;
-  margin-left: 5%;
-  margin-bottom: 20px;
-  h1{
-    font-size: 1.4rem;
-  }
-`;
-
-const PriceTag = styled.span`
-  padding: 5px 15px;
-  background: rgba(77, 68, 181, 0.2);
-  border-radius: 1rem;
-  color: #444;
-  font-weight: semibold;
-  font-size: 1.3rem;
-`;
 
 const ProductDetail = () => {
   const navigate = useNavigate();
@@ -311,8 +16,6 @@ const ProductDetail = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const { productId } = useParams();
-
-
 
   const handleInputOptionChange = (e) => {
     setInputOption(e.target.value);
@@ -355,7 +58,12 @@ const ProductDetail = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await axios.get(`https://api.telegro.kr/products/${productId}`);
+        const response = await axios.get(`https://api.telegro.kr/products/${productId}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+
         if (response.status === 200) {
           setProduct(response.data.data);
         }
@@ -405,24 +113,24 @@ const ProductDetail = () => {
 
   return (
     <>
-      <MainWrapper>
-        <ProductPageWrapper>
-          <CategoryTag category={product.category}>
+      <P.MainWrapper>
+        <P.ProductPageWrapper>
+          <P.CategoryTag category={product.category}>
             <p>category: {product.category}</p>
-          </CategoryTag>
-          <ProductDetails>
-            <ProductInfoWrapper>
-              <ProductImage src={product.pictures[0] || img} alt="Main Product" />
+          </P.CategoryTag>
+          <P.ProductDetails>
+            <P.ProductInfoWrapper>
+              <P.ProductImage src={product.pictures[0] || img} alt="Main Product" />
               <div>
-                <ProductTitle>{product.productName}</ProductTitle>
-                <ProductSubtitle>{product.productModel}</ProductSubtitle>
-                <PriceTag>₩{product.priceCustomer}</PriceTag>
+                <P.ProductTitle>{product.productName}</P.ProductTitle>
+                <P.ProductSubtitle>{product.productModel}</P.ProductSubtitle>
+                <P.PriceTag>₩{product.price}</P.PriceTag>
               </div>
-            </ProductInfoWrapper>
+            </P.ProductInfoWrapper>
 
-            <AdditionalImagesWrapper>
+            <P.AdditionalImagesWrapper>
               {product.pictures.slice(1).map((picture, index) => (
-                <AdditionalImage
+                <P.AdditionalImage
                   style={{ cursor: 'pointer' }}
                   key={index}
                   src={picture}
@@ -446,33 +154,33 @@ const ProductDetail = () => {
                   overlay: { backgroundColor: 'rgba(0, 0, 0, 0.8)' },
                 }}
               >
-                <LeftArrow onClick={prevImage}>&lt;</LeftArrow>
-                <ModalImage src={product.pictures[currentImageIndex]} onClick={closeModal} alt="Modal" />
-                <RightArrow onClick={nextImage}>&gt;</RightArrow>
+                <P.LeftArrow onClick={prevImage}>&lt;</P.LeftArrow>
+                <P.ModalImage src={product.pictures[currentImageIndex]} onClick={closeModal} alt="Modal" />
+                <P.RightArrow onClick={nextImage}>&gt;</P.RightArrow>
               </Modal>
-            </AdditionalImagesWrapper>
-          </ProductDetails>
-          <ContentWrapper>
-            <DescriptionTitle>상품 설명</DescriptionTitle>
-            <DescriptionList>
-              <DescriptionItem className="toastui-editor-contents" dangerouslySetInnerHTML={{ __html: product.content }} />
-            </DescriptionList>
-          </ContentWrapper>
-        </ProductPageWrapper>
+            </P.AdditionalImagesWrapper>
+          </P.ProductDetails>
+          <P.ContentWrapper>
+            <P.DescriptionTitle>상품 설명</P.DescriptionTitle>
+            <P.DescriptionList>
+              <P.DescriptionItem className="toastui-editor-contents" dangerouslySetInnerHTML={{ __html: product.content }} />
+            </P.DescriptionList>
+          </P.ContentWrapper>
+        </P.ProductPageWrapper>
 
-        <StickyBarWrapper>
-          <OptionSelectWrapper>
-            <DescriptionTitle style={{fontSize: '1.2rem'}} htmlFor="optionSelect">옵션 선택</DescriptionTitle>
-            <Select id="optionSelect" value={selectedOption} onChange={handleOptionChange}>
+        <P.StickyBarWrapper>
+          <P.OptionSelectWrapper>
+            <P.DescriptionTitle style={{fontSize: '1.2rem'}} htmlFor="optionSelect">옵션 선택</P.DescriptionTitle>
+            <P.Select id="optionSelect" value={selectedOption} onChange={handleOptionChange}>
               <option value="">옵션을 선택하세요</option>
               {product.options.map((option, index) => (
                 <option key={index} value={option}>{option}</option>
               ))}
-            </Select>
+            </P.Select>
             {(product.category === 'HEADSET' || product.category === 'LINE_CORD' || product.category === 'RECORDER') && (
               <>
-                <DescriptionTitle style={{fontSize: '1.2rem', paddingTop: '3%'}} htmlFor="inputoption">사용 전화기명 기재(전화기뒷면)</DescriptionTitle>
-                <QuantityInput
+                <P.DescriptionTitle style={{fontSize: '1.2rem', paddingTop: '3%'}} htmlFor="inputoption">사용 전화기명 기재(전화기뒷면)</P.DescriptionTitle>
+                <P.QuantityInput
                   type="text" 
                   id="inputoption" 
                   value={inputOption}
@@ -481,8 +189,8 @@ const ProductDetail = () => {
                 />
               </>
             )}
-            <DescriptionTitle style={{fontSize: '1.2rem', paddingTop: '3%'}} htmlFor="quantity">수량</DescriptionTitle>
-            <QuantityInput
+            <P.DescriptionTitle style={{fontSize: '1.2rem', paddingTop: '3%'}} htmlFor="quantity">수량</P.DescriptionTitle>
+            <P.QuantityInput
               type="number"
               id="quantity"
               value={quantity}
@@ -491,15 +199,15 @@ const ProductDetail = () => {
               max="99"
             />
 
-          </OptionSelectWrapper>
+          </P.OptionSelectWrapper>
 
-          <ButtonWrapper>
-            <BuyButton onClick={() => handlePurchase()}>구매하기</BuyButton>
-            <BuyButton onClick={handlePurchase}>장바구니</BuyButton>
-          </ButtonWrapper>
-        </StickyBarWrapper>
-        <Div></Div>
-      </MainWrapper>
+          <P.ButtonWrapper>
+            <P.BuyButton onClick={() => navigate('/orderprocess')}>구매하기</P.BuyButton>
+            <P.BuyButton onClick={handlePurchase}>장바구니</P.BuyButton>
+          </P.ButtonWrapper>
+        </P.StickyBarWrapper>
+        <P.Div></P.Div>
+      </P.MainWrapper>
     </>
   );
 };

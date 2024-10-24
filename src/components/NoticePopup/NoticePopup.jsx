@@ -1,169 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import { FaTimes } from 'react-icons/fa';
+import * as B from '../NotificationBar/NotificationStyle';
 import axios from 'axios';
-import Img from '/src/assets/image/Landing/logo.svg'; // 로고 이미지
+import Img from '/src/assets/image/Landing/logo.svg'; 
 import '@toast-ui/editor/dist/toastui-editor.css';
 import '@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css';
-const Overlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.45); /* 45% 불투명도 */
-  z-index: 999;
-`;
-
-const PopupWrapper = styled.div`
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  max-width: 500px;
-  height: 600px;
-  max-height: 90%;
-  width: 500px;
-  height: 600px;
-  background-color: white;
-  border-radius: 10px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
-  display: flex;
-  flex-direction: column;
-
-  @media (max-width: 700px) {
-    max-width: 90%;
-    max-height: 520px;
-  }
-
-`;
-
-const Header = styled.div`
-  background-color: #F6F8FA;
-  color: #092139;
-  padding: 15px;
-  text-align: center;
-  font-weight: bold;
-  display: flex;
-  justify-content: center; /* 가운데 정렬 */
-  align-items: center;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-  position: relative; /* Close 버튼을 별도로 배치하기 위해 필요 */
-`;
-
-const Logo = styled.img`
-  width: 37px;
-  height: auto;
-  align-items: center;
-  margin-right: 10px;
-`;
-
-const HeaderTitle = styled.div`
-  display: flex;
-  align-items: center;
-  font-size: 2rem;
-  @media(max-width: 800px){
-    font-size: 1.7rem;
-  }
-`;
-
-const Content = styled.div`
-  flex: 1;
-  padding: 15px 30px;
-  color: #30313D;
-  text-align: left;
-  line-height: 1.8;
-  overflow-y: auto; /* 내용이 넘칠 때 스크롤 가능하게 설정 */
-  max-height: calc(100% - 100px); /* 헤더와 푸터를 제외한 최대 높이 설정 */
-  
-  h2 {
-    font-size: 1.6rem;
-    font-weight: bold;
-    margin-left: 1%;
-    @media(max-width: 800px) {
-      font-size: 1.6rem;
-      margin-left: 2%;
-    }
-  }
-
-  p {
-    font-size: 1.3rem;
-    margin-left: 1%;
-    @media(max-width: 800px) {
-      font-size: 1.2rem;
-      margin-left: 2%;
-    }
-  }
-  
-  img{
-    max-width: 300px;
-  }
-`;
-
-const HorizontalRule = styled.hr`
-  border: none;
-  border-top: 2px solid #D5DBE1;
-  margin: 20px 0;
-  line-height: 1.7;
-`;
-
-const CloseButton = styled(FaTimes)`
-  cursor: pointer;
-  font-size: 2.5rem;
-  position: absolute;
-  right: 6%;
-  &:hover{
-    color: #5351af;
-  }
-`;
-
-const Footer = styled.div`
-  padding: 15px;
-  display: flex;
-  flex-direction: row;
-  gap: 2%;
-  justify-content: center;
-  border-top: 1px solid #D5DBE1;
-`;
-
-const ConfirmButton = styled.button`
-  padding: 10px 20px;
-  background-color: #F6F8FA;
-  color: #30313D;
-  width: 90%;
-  font-size: 1.5rem;
-  font-weight: bold;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  &:hover{
-    background-color: #E9EEF3;
-    color: #5351af;
-  }
-  @media(max-width: 780px){
-    font-size: 1.3rem;
-  }
-`;
 
 const NoticePopup = () => {
   const [visible, setVisible] = useState(true);
-  const [notice, setNotice] = useState(null);  // 공지사항 데이터 상태 관리
+  const [notice, setNotice] = useState(null);  
   const [error, setError] = useState('');
 
-  // 팝업 설정된 공지사항 ID 가져오기 및 공지사항 세부 정보 가져오기
   const fetchPopupNotice = async () => {
     try {
-      // 팝업 설정된 공지사항 ID 가져오기
       const popupResponse = await axios.get('https://api.telegro.kr/notices/popup');
       if (popupResponse.status === 200) {
-        const noticeId = popupResponse.data.data.id; // 팝업 설정된 공지사항 ID
+        const noticeId = popupResponse.data.data.id;
 
-        // 해당 공지사항의 세부 정보 가져오기
         const noticeResponse = await axios.get(`https://api.telegro.kr/notices/${noticeId}`);
         if (noticeResponse.status === 200) {
-          setNotice(noticeResponse.data.data);  // 서버에서 받은 데이터로 상태 업데이트
+          setNotice(noticeResponse.data.data);
         }
       }
     } catch (error) {
@@ -175,7 +30,6 @@ const NoticePopup = () => {
   useEffect(() => {
     fetchPopupNotice();
 
-    // 팝업 표시 여부를 로컬 스토리지에서 확인
     const hidePopupDate = localStorage.getItem('hidePopupDate');
     const todayDate = new Date().toISOString().split('T')[0];
     if (hidePopupDate === todayDate) {
@@ -196,27 +50,27 @@ const NoticePopup = () => {
   }
 
   return (
-    <>
-      <Overlay onClick={() => handleClose(false)} />
-      <PopupWrapper>
-        <Header>
-          <HeaderTitle>
-            <Logo src={Img} alt="Telegro Logo" />
-            Telegro
-          </HeaderTitle>
-          <CloseButton onClick={() => handleClose(false)} />
-        </Header>
-        <Content>
-          <h2>{notice.noticeTitle}</h2>
-          <HorizontalRule />
-          <p className="toastui-editor-contents" dangerouslySetInnerHTML={{ __html: notice.noticeContent }} /> {/* 공지사항 내용 */}
-        </Content>
-        <Footer>
-          <ConfirmButton onClick={() => handleClose(true)}>오늘 하루 보지 않기</ConfirmButton>
-          <ConfirmButton onClick={() => handleClose(false)}>닫기</ConfirmButton>
-        </Footer>
-      </PopupWrapper>
-    </>
+      <>
+        <B.Overlay onClick={() => handleClose(false)} />
+        <B.PopupWrapper>
+          <B.Header>
+            <B.HeaderTitle>
+              <B.Logo src={Img} alt="Telegro Logo" />
+              Telegro
+            </B.HeaderTitle>
+            <B.PoPupCloseButton onClick={() => handleClose(false)} />
+          </B.Header>
+          <B.Content>
+            <h2>{notice.noticeTitle}</h2>
+            <B.HorizontalRule />
+            <p className="toastui-editor-contents" dangerouslySetInnerHTML={{ __html: notice.noticeContent }} />
+          </B.Content>
+          <B.Footer>
+            <B.ConfirmButton onClick={() => handleClose(true)}>오늘 하루 보지 않기</B.ConfirmButton>
+            <B.ConfirmButton onClick={() => handleClose(false)}>닫기</B.ConfirmButton>
+          </B.Footer>
+        </B.PopupWrapper>
+      </>
   );
 };
 

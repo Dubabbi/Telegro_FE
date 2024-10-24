@@ -7,9 +7,9 @@ import axios from 'axios';
 import '@toast-ui/editor/dist/toastui-editor.css';
 import '@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css';
 const NoticeDetail = () => {
-  const { noticeId } = useParams();  // URL에서 공지사항 ID 추출
-  const [notice, setNotice] = useState(null);  // 공지사항 데이터 상태 관리
-  const [isPopup, setIsPopup] = useState(false); // 팝업 설정 여부 상태 관리
+  const { noticeId } = useParams(); 
+  const [notice, setNotice] = useState(null);  
+  const [isPopup, setIsPopup] = useState(false);
   const navigate = useNavigate();
   const [error, setError] = useState('');
 
@@ -18,7 +18,7 @@ const NoticeDetail = () => {
       try {
         const response = await axios.get(`https://api.telegro.kr/notices/${noticeId}`);
         if (response.status === 200) {
-          setNotice(response.data.data);  // 서버에서 받은 데이터로 상태 업데이트
+          setNotice(response.data.data);  
         }
       } catch (error) {
         console.error('Failed to fetch notice details:', error);
@@ -27,7 +27,7 @@ const NoticeDetail = () => {
 
     const fetchPopupSetting = async () => {
       try {
-        const response = await axios.get('https://api.telegro.kr/notices/popup'); // 팝업 설정된 게시글 ID 가져오기
+        const response = await axios.get('https://api.telegro.kr/notices/popup');
         if (response.status === 200 && response.data.data.id === parseInt(noticeId)) {
           setIsPopup(true); 
         } else {
@@ -68,7 +68,7 @@ const NoticeDetail = () => {
 
   const handleCheckboxChange = () => {
     setIsPopup(!isPopup); 
-    handlePopup();  // 팝업 설정 상태 전송
+    handlePopup();
   };
 
   const handleDelete = async () => {
@@ -77,13 +77,13 @@ const NoticeDetail = () => {
       try {
         const response = await axios.delete(`https://api.telegro.kr/api/notices/${noticeId}`, {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`  // 토큰 필요
+            Authorization: `Bearer ${localStorage.getItem('token')}` 
           }
         });
 
         if (response.status === 200 && response.data.code === 20000) {
           alert('공지사항이 성공적으로 삭제되었습니다.');
-          navigate('/admin/adminnotice');  // 목록 페이지로 이동
+          navigate('/admin/adminnotice'); 
         }
       } catch (error) {
         if (error.response && error.response.status === 403) {
@@ -96,7 +96,7 @@ const NoticeDetail = () => {
   };
 
   if (!notice) {
-    return <div>Loading...</div>;  // 공지사항 데이터가 아직 로드되지 않았을 경우 로딩 표시
+    return <div>Loading...</div>;  
   }
 
   return (

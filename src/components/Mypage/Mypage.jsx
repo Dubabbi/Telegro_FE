@@ -26,7 +26,7 @@ const Mypage = () => {
   const [currentVisible, setCurrentVisible] = useState(4);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [selectedAddress, setSelectedAddress] = useState(null); // 수정할 주소 정보
+  const [selectedAddress, setSelectedAddress] = useState(null); 
 
   const boxRefs = useRef([]);
   const [inView, setInView] = useState([]);
@@ -131,15 +131,14 @@ const Mypage = () => {
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
     if (!isModalOpen) {
-      resetModalFields(); // 모달 종료 시 입력값 초기화
+      resetModalFields();
     }
   };
   const toggleEditModal = (address) => {
-    setSelectedAddress(address); // 수정하려는 주소 정보 저장
+    setSelectedAddress(address); 
     setIsEditModalOpen(!isEditModalOpen);
   };
 
-    // 새 주소 추가 함수
     const handleAddAddress = (newAddress) => {
       setAddressList((prevAddressList) => [...prevAddressList, newAddress]);
     };
@@ -229,11 +228,11 @@ const Mypage = () => {
               <M.AddressActions>
                 <FaEdit
                   style={{ cursor: 'pointer', marginRight: '10px' }}
-                  onClick={() => toggleEditModal(address)} // 수정할 주소를 전달
+                  onClick={() => toggleEditModal(address)}
                 />
                   <FaTrash
                     style={{ cursor: 'pointer' }}
-                    onClick={() => handleDeleteAddress(address.id)} // 삭제할 주소 ID 전달
+                    onClick={() => handleDeleteAddress(address.id)} 
                   />
               </M.AddressActions>
             </M.AddressCard>
@@ -248,7 +247,7 @@ const Mypage = () => {
         <EditAddressModal
           isOpen={isEditModalOpen}
           toggleEditModal={toggleEditModal}
-          address={selectedAddress} // 수정할 주소 정보 전달
+          address={selectedAddress} 
           onUpdateAddress={handleUpdateAddress}
         />
       )}

@@ -175,7 +175,7 @@ export const ItemImg = styled.a`
     padding: 1%;
 
     &:hover {
-      animation: ${bounceTwice} 1s ease-in-out; // 애니메이션 적용
+      animation: ${bounceTwice} 1s ease-in-out; 
     }
   }
 `;

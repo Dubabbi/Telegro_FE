@@ -1,20 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import image from './image.svg';
 import Pagination from '../Pagination/Pagination';
 import * as P from './ProductStyle';
 import axios from 'axios';
 
-export const Div = styled.div`
-  width: 100%;
-  min-height: 160px;
-  border: none;
-  @media (max-width: 780px) {
-    max-height: 10vh;
-    min-height: 10vh;
-  }
-`;
 
 const LineCord = ({ category = 'LINE_CORD', page = 0, size = 12 }) => {
   const navigate = useNavigate();
@@ -30,11 +20,9 @@ const LineCord = ({ category = 'LINE_CORD', page = 0, size = 12 }) => {
 
         console.log('API Response:', response);
 
-        // 응답 데이터가 객체인 경우, 그 안에서 배열을 찾음
-        const productsData = response.data.data.products || []; // products 필드에 배열이 있을 경우 접근
+        const productsData = response.data.data.products || []; 
 
         if (Array.isArray(productsData)) {
-          // ID 기준으로 역순 정렬
           const sortedProducts = productsData.sort((a, b) => b.id - a.id);
           setProducts(sortedProducts);
         } else {
@@ -42,7 +30,7 @@ const LineCord = ({ category = 'LINE_CORD', page = 0, size = 12 }) => {
         }
       } catch (error) {
         console.error('Error fetching data:', error);
-        setError(`Failed to load products: ${error.message}`); // 에러 설정
+        setError(`Failed to load products: ${error.message}`); 
       }
     };
 
@@ -50,13 +38,13 @@ const LineCord = ({ category = 'LINE_CORD', page = 0, size = 12 }) => {
   }, [category, page, size]);
 
   if (error) {
-    return <div>{error}</div>;  // 에러 표시
+    return <div>{error}</div>;  
   }
 
 
   return (
     <>
-      <Div />
+      <P.Div />
       <P.Inline>
         <h1>라인코드</h1>
         {/*<p>sorted</p>*/}

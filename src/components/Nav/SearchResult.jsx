@@ -5,7 +5,7 @@ import * as N from './NavbarStyle';
 const SearchResult = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { filteredProducts } = location.state || { filteredProducts: [] }; // 검색 결과 가져오기
+  const { filteredProducts } = location.state || { filteredProducts: [] }; 
 
   return (
     <N.SearchResultContainer>

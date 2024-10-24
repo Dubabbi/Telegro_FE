@@ -4,85 +4,33 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import * as N from '../Notice/NoticeStyle';
 import * as C from '../Product/ProductCreateStyle';
 import * as D from '../NoticeDetail/NoticeDetailStyle';
-import styled from 'styled-components';
 import { Editor } from '@toast-ui/react-editor'; 
 import '@toast-ui/editor/dist/toastui-editor.css'; 
 import color from '@toast-ui/editor-plugin-color-syntax';
 import 'tui-color-picker/dist/tui-color-picker.css';
 import '@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css';
 
-export const FormWrapper = styled.div`
-  width: 100%;
-  border: 1px solid #e5e5e5;
-  border-radius: 8px;
-`;
-
-const SectionTitleWrapper = styled.div`
-  background-color: #f2f2f2;
-  padding: 1%;
-  @media(max-width: 780px){
-    padding: 2%;
-  }
-`;
-
-
-const SectionTitle = styled.h3`
-  font-size: 1.8rem;
-  font-weight: bold;
-  @media(max-width: 780px){
-    font-size: 1.5rem;
-  }
-`;
-
-const Label = styled.label`
-  font-size: 1rem;
-  font-weight: bold;
-  display: block;
-  margin-bottom: 10px;
-`;
-
-const Input = styled.input`
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 20px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  font-size: 1rem;
-  box-sizing: border-box;
-`;
-
-const FileInput = styled.input`
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 20px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  font-size: 1rem;
-  box-sizing: border-box;
-`;
-
 const NoticeEdit = () => {
   const { noticeId } = useParams();
   const editorRef = useRef();
   const navigate = useNavigate();
   const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');  // 공지사항 내용 저장
+  const [content, setContent] = useState('');  
   const [files, setFiles] = useState([]);
   const [noticeFiles, setNoticeFiles] = useState([]);
-  const [originalNotice, setOriginalNotice] = useState(null);  // 기존 공지사항 상태 저장
+  const [originalNotice, setOriginalNotice] = useState(null);  
   const [error, setError] = useState('');
 
-  // 기존 공지사항 불러오기
   useEffect(() => {
     const fetchNoticeDetail = async () => {
       try {
         const response = await axios.get(`https://api.telegro.kr/notices/${noticeId}`);
         if (response.status === 200) {
           const notice = response.data.data;
-          setTitle(notice.noticeTitle);  // 기존 제목 불러오기
-          setContent(notice.noticeContent);  // 기존 내용을 Editor에 반영
-          setNoticeFiles(notice.noticeFiles);  // 기존 파일 불러오기
-          setOriginalNotice(notice);  // 원본 데이터를 저장
+          setTitle(notice.noticeTitle);  
+          setContent(notice.noticeContent);  
+          setNoticeFiles(notice.noticeFiles);  
+          setOriginalNotice(notice);
         }
       } catch (error) {
         console.error('Failed to fetch notice details:', error);
@@ -101,7 +49,6 @@ const NoticeEdit = () => {
           const formData = new FormData();
           formData.append('file', file);
 
-          // presigned URL 가져오기
           const presignedUrlResponse = await axios.post(
             'https://api.telegro.kr/api/file?prefix=notice',
             {
@@ -120,16 +67,14 @@ const NoticeEdit = () => {
   
           const presignedUrl = presignedUrlResponse.data.data.url;
 
-          // presigned URL로 파일 업로드
           await axios.put(presignedUrl, file, {
             headers: {
               'Content-Type': file.type,
             },
           });
   
-          const fileUrl = presignedUrl.split('?')[0]; // 쿼리 파라미터 제거
+          const fileUrl = presignedUrl.split('?')[0]; 
 
-          // 파일의 이름과 URL 저장
           return {
             fileName: file.name,
             fileUrl: fileUrl
@@ -151,7 +96,6 @@ const NoticeEdit = () => {
     }
   
     try {
-      // 백엔드에서 프리사인 URL 가져오기
       const response = await axios.post(`https://api.telegro.kr/api/file?prefix=notice`, {
         metadata: {
           description: "새로운 이미지 설명",
@@ -166,14 +110,12 @@ const NoticeEdit = () => {
   
       const presignedUrl = response.data.data.url;
   
-      // 이미지 업로드
       await axios.put(presignedUrl, blob, {
         headers: {
           'Content-Type': blob.type,
         }
       });
   
-      // 업로드 완료 후 콜백 호출
       callback(presignedUrl.split('?')[0], 'Image');
     } catch (error) {
       console.error('Image upload failed:', error.response ? error.response.data : error.message);
@@ -185,7 +127,6 @@ const NoticeEdit = () => {
     e.preventDefault();
     const contentValue = editorRef.current.getInstance().getHTML();
 
-    // 변경된 필드만 전송하기 위해 원본과 비교
     const noticeData = {};
     if (title !== originalNotice.noticeTitle) {
       noticeData.title = title;
@@ -222,13 +163,13 @@ const NoticeEdit = () => {
     <>
       <N.MainWrapper>
         <C.SectionTitle>공지사항 수정</C.SectionTitle>
-        <FormWrapper>
-          <SectionTitleWrapper>
-            <SectionTitle>게시글 수정</SectionTitle>
-          </SectionTitleWrapper>
+        <D.FormWrapper>
+          <D.SectionTitleWrapper>
+            <D.SectionTitle>게시글 수정</D.SectionTitle>
+          </D.SectionTitleWrapper>
           <div style={{ padding: '2%' }}>
-            <Label htmlFor="title">제목 *</Label>
-            <Input
+            <D.Label htmlFor="title">제목 *</D.Label>
+            <D.Input
               type="text"
               id="title"
               placeholder="제목을 입력해 주세요."
@@ -236,18 +177,18 @@ const NoticeEdit = () => {
               onChange={(e) => setTitle(e.target.value)}
             />
 
-            <Label htmlFor="attachment">첨부</Label>
-            <FileInput
+            <D.Label htmlFor="attachment">첨부</D.Label>
+            <D.FileInput
               type="file"
               multiple
               onChange={handleAddFile}
             />
 
-            <Label htmlFor="content">내용 *</Label>
+            <D.Label htmlFor="content">내용 *</D.Label>
             <div>
               <Editor
                 ref={editorRef}
-                initialValue={content}  // 기존 내용을 Editor에 반영
+                initialValue={content} 
                 previewStyle="vertical"
                 height="500px"
                 initialEditType="wysiwyg"
@@ -265,7 +206,7 @@ const NoticeEdit = () => {
               />
             </div>
           </div>
-        </FormWrapper>
+        </D.FormWrapper>
       </N.MainWrapper>
       <D.BtWrap>
         <D.BtLink as={Link} to="/admin/adminnotice">취소</D.BtLink>
@@ -276,3 +217,4 @@ const NoticeEdit = () => {
 };
 
 export default NoticeEdit;
+

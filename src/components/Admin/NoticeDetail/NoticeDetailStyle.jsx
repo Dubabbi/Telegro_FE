@@ -87,6 +87,12 @@ export const Cont = styled.div`
   line-height: 2;
   font-size: 1.3rem;
   text-align: left;
+  img {
+    width: 100%;
+    margin: 0 auto;
+    height: auto;
+    object-fit: contain; /* 이미지를 비율에 맞게 축소 */
+  }
 `;
 
 export const BtWrap = styled.div`
@@ -191,4 +197,55 @@ export const Checkbox = styled.input`
     height: 20px;
     border-radius: 5px;
   }
+`;
+
+
+export const FormWrapper = styled.div`
+  width: 100%;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+`;
+
+export const SectionTitleWrapper = styled.div`
+  background-color: #f2f2f2;
+  padding: 1%;
+  @media(max-width: 780px){
+    padding: 2%;
+  }
+`;
+
+
+export const SectionTitle = styled.h3`
+  font-size: 1.8rem;
+  font-weight: bold;
+  @media(max-width: 780px){
+    font-size: 1.5rem;
+  }
+`;
+
+export const Label = styled.label`
+  font-size: 1rem;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 10px;
+`;
+
+export const Input = styled.input`
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  box-sizing: border-box;
+`;
+
+export const FileInput = styled.input`
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  box-sizing: border-box;
 `;

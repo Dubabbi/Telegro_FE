@@ -8,8 +8,6 @@ import image3 from '/src/assets/image/Main/image3.svg';
 import image4 from '/src/assets/image/Main/image4.svg';
 import image5 from '/src/assets/image/Main/image5.svg';
 import image6 from '/src/assets/image/Main/image6.svg';
-import arrowleft from '/src/assets/image/Main/arrowleft.svg';
-import arrowright from '/src/assets/image/Main/arrowright.svg';
 
 export default function Main() {
     const images = [image1, image2, image3, image4, image5, image6];
@@ -29,10 +27,9 @@ export default function Main() {
     };
 
     useEffect(() => {
-        // 자동 슬라이드 설정
         const interval = setInterval(() => {
             goToNext();
-        }, 3000); // 3초마다 슬라이드 이동
+        }, 3000); 
 
         return () => {
             clearInterval(interval);

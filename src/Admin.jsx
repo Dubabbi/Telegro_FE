@@ -24,11 +24,9 @@ import AdminSearchResult from './components/AdminNav/AdminSearchResult';
 export default function Admin() {
   return (
     <div>
-      {/* 관리자 전용 네비게이션 바 */}
       <AdminNav /> 
       <ScrollToTop />
       <Routes>
-        {/* 각 관리자 페이지로의 서브 라우트 설정 */}
         <Route path="clientmanagement" element={<ClientManagementPage />} />
         <Route path="clientdetail/:clientId" element={<ClientDetail />} />
         <Route path="adminnotice" element={<AdminNoticePage />} />

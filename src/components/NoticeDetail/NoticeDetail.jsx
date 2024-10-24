@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
-import * as D from './NoticeDetailStyle'; // 스타일 파일을 가져옵니다.
-import * as N from '../Notice/NoticeStyle'; // 스타일 파일을 가져옵니다.
+import * as D from './NoticeDetailStyle'; 
+import * as N from '../Notice/NoticeStyle'; 
 import '@toast-ui/editor/dist/toastui-editor.css';
 import '@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css';
 const NoticeDetail = () => {
-  const { noticeId } = useParams();  // URL에서 noticeId 추출
+  const { noticeId } = useParams();  
   const [notice, setNotice] = useState(null);
 
   useEffect(() => {
@@ -25,7 +25,6 @@ const NoticeDetail = () => {
   }, [noticeId]);
 
   if (!notice) {
-    // 공지사항 데이터가 로드되지 않았을 때 로딩 상태 표시
     return <div>Loading...</div>;
   }
 
@@ -84,7 +83,7 @@ const NoticeDetail = () => {
       </D.Section2>
     </N.MainWrapper>
       <D.BtWrap>
-        <D.BtLink as={Link} to="/admin/adminnotice">
+        <D.BtLink as={Link} to="/notice">
           목록
         </D.BtLink>
       </D.BtWrap>

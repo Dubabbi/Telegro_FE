@@ -25,7 +25,6 @@ const Accessory = ({ category = 'ACCESSORY', page = 0, size = 12 }) => {
         const productsData = response.data.data.products || []; 
 
         if (Array.isArray(productsData)) {
-          // ID 기준으로 역순 정렬
           const sortedProducts = productsData.sort((a, b) => b.id - a.id);
           setProducts(sortedProducts);
         } else {
@@ -33,7 +32,7 @@ const Accessory = ({ category = 'ACCESSORY', page = 0, size = 12 }) => {
         }
       } catch (error) {
         console.error('Error fetching data:', error);
-        setError(`Failed to load products: ${error.message}`); // 에러 설정
+        setError(`Failed to load products: ${error.message}`);
       }
     };
 

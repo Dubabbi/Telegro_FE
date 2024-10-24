@@ -8,11 +8,11 @@ import * as N from './Notice/NoticeStyle';
 import Pagination from '../Pagination/Pagination';
 import * as P from './ProductList/ProductStyle';
 const roleColors = {
-  MEMBER: { background: '#D8EBFF', color: '#007BFF' }, // 파란색 배경, 파란 텍스트
-  DEALER: { background: '#E8F5E9', color: '#4CAF50' }, // 초록색 배경, 초록 텍스트
-  BEST: { background: '#FFF3E0', color: '#FB8C00' }, // 주황색 배경, 주황 텍스트
-  BUSINESS: { background: '#FFEBEE', color: '#D32F2F' }, // 빨간색 배경, 빨간 텍스트
-  ADMIN: { background: '#EDE7F6', color: '#7E57C2' } // 보라색 배경, 보라 텍스트
+  MEMBER: { background: '#D8EBFF', color: '#007BFF' }, 
+  DEALER: { background: '#E8F5E9', color: '#4CAF50' }, 
+  BEST: { background: '#FFF3E0', color: '#FB8C00' },
+  BUSINESS: { background: '#FFEBEE', color: '#D32F2F' },
+  ADMIN: { background: '#EDE7F6', color: '#7E57C2' } 
 };
 const RoleTag = styled.div`
   display: flex;
@@ -26,7 +26,6 @@ const RoleTag = styled.div`
   white-space: nowrap;
 `;
 
-// 작은 원 아이콘
 const Dot = styled.span`
   display: inline-block;
   width: 8px;
@@ -126,13 +125,13 @@ const Add = styled.img`
 
 const ClientManagement = () => {
   const navigate = useNavigate();
-  const [clients, setClients] = useState([]); // 사용자 데이터
-  const [roleFilter, setRoleFilter] = useState(''); // role 필터링용 상태
-  const [filteredClients, setFilteredClients] = useState([]); // 필터링된 사용자 데이터
+  const [clients, setClients] = useState([]); 
+  const [roleFilter, setRoleFilter] = useState(''); 
+  const [filteredClients, setFilteredClients] = useState([]);
   const pageSize = 20; // 페이지 크기
-  const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 상태
+  const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1); 
-  // 사용자 데이터 불러오기
+
   useEffect(() => {
     const fetchClients = async () => {
       try {
@@ -164,19 +163,17 @@ const ClientManagement = () => {
     fetchClients();
   }, [currentPage]);
 
-  // role 필터링 처리
+
   useEffect(() => {
     if (roleFilter) {
-      // roleFilter 값이 있을 경우 필터링
       const filtered = clients.filter(client => client.role === roleFilter);
       setFilteredClients(filtered);
     } else {
-      // roleFilter 값이 없을 경우 전체 사용자 데이터 표시
       setFilteredClients(clients);
     }
   }, [roleFilter, clients]);
   const handlePageChange = (page) => {
-    setCurrentPage(page); // 페이지 변경 시 상태 업데이트
+    setCurrentPage(page);
   };
   const handleRoleChange = (e) => {
     setRoleFilter(e.target.value);
@@ -205,7 +202,6 @@ const ClientManagement = () => {
   
       if (response.status === 200) {
         alert('회원이 성공적으로 삭제되었습니다.');
-        // 삭제 후 목록에서 제거
         setClients(clients.filter(client => client.id !== clientId));
       }
     } catch (error) {
@@ -233,7 +229,6 @@ const ClientManagement = () => {
               <h2>고객 관리</h2>
             </N.PageTitle>
             <div>
-              {/* Role 필터링을 위한 Select Box */}
               <select value={roleFilter} onChange={handleRoleChange}>
                 <option value="">전체</option>
                 <option value="MEMBER">MEMBER</option>

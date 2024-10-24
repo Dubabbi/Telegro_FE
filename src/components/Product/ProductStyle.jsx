@@ -1,5 +1,13 @@
 import styled from 'styled-components';
-
+export const Div = styled.div`
+  width: 100%;
+  min-height: 160px;
+  border: none;
+  @media (max-width: 780px) {
+    max-height: 10vh;
+    min-height: 10vh;
+  }
+`;
 export const GalleryGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 1fr);  

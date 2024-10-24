@@ -16,8 +16,8 @@ export const NavWrapper = styled.div`
 
 export const SearchResultContainer = styled.div`
   display: flex;
-  flex-direction: column;  // 상품들이 세로로 나열되도록 설정
-  align-items: center;  // 중앙 정렬
+  flex-direction: column;
+  align-items: center; 
   padding-top: 200px;
   min-height: 100vh;
 
@@ -63,9 +63,9 @@ export const ProductItem = styled.div`
   border-radius: 8px;
   overflow: hidden;
   background-color: #fff;
-  text-align: left;  // 텍스트를 왼쪽 정렬
+  text-align: left;
   padding: 10px;
-  margin-bottom: 20px;  // 각 상품 간의 간격 설정
+  margin-bottom: 20px; 
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 
@@ -75,26 +75,26 @@ export const ProductItem = styled.div`
   }
 
   img {
-    width: 120px;  // 이미지의 고정 너비
-    height: 120px;  // 이미지의 고정 높이
+    width: 120px;
+    height: 120px;
     object-fit: cover;
-    border-radius: 8px;  // 이미지의 둥근 모서리
-    margin-right: 20px;  // 이미지와 텍스트 간의 간격
+    border-radius: 8px; 
+    margin-right: 20px; 
   }
 
   p {
     font-size: 1.1rem;
     font-weight: 600;
-    margin: 0;  // 텍스트의 여백 제거
+    margin: 0;  
     color: #333;
-    flex-grow: 1;  // 제목이 공간을 넓게 차지하도록 설정
+    flex-grow: 1; 
   }
 
   span {
     font-size: 1rem;
     font-weight: bold;
     color: #000;
-    margin-left: 20px;  // 가격과 텍스트 간의 간격 설정
+    margin-left: 20px; 
   }
 `;
 export const NavContainer = styled.div`
@@ -134,7 +134,7 @@ export const MainNav = styled.ul`
   }
 
   @media (max-width: 780px) {
-    display: none; /* 780px 이하에서 메인 네비게이션을 숨김 */
+    display: none; 
   }
 `;
 
@@ -243,3 +243,4 @@ export const MenuButton = styled.button`
     display: block;
   }
 `;
+

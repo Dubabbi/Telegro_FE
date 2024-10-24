@@ -1,7 +1,110 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
-// 기존 스타일 정의
+const StatsData = [
+  { name: '1일', hit: 12, percentage: 5 },
+  { name: '1일', hit: 30, percentage: 20 },
+  { name: '1일', hit: 20, percentage: 40 },
+  { name: '1일', hit: 20, percentage: 17 },
+  { name: '1일', hit: 20, percentage: 10 },
+  { name: '1일', hit: 0, percentage: 5 },
+  { name: '1일', hit: 0, percentage: 0 },
+  { name: '1일', hit: 0, percentage: 0 },
+  { name: '1일', hit: 0, percentage: 0 },
+  { name: '1일', hit: 0, percentage: 0 },
+  { name: '1일', hit: 0, percentage: 0 },
+  { name: '1일', hit: 0, percentage: 0 },
+];
+
+const averageHit = StatsData.reduce((sum, row) => sum + row.hit, 0) / StatsData.length;
+const totalHit = StatsData.reduce((sum, row) => sum + row.hit, 0);
+
+const Stat = () => {
+  const [category, setCategory] = useState('일별');
+
+  // 카테고리 변경 핸들러
+  const handleCategoryChange = (event) => {
+    setCategory(event.target.value);
+  };
+
+  return (
+    <DashboardWrapper>
+      <TableContainer>
+        <HeaderContainer>
+          <Title>상점 접속 현황</Title>
+          <CategorySelect value={category} onChange={handleCategoryChange}>
+            <option value="일별">일별</option>
+            <option value="월별">월별</option>
+            <option value="요일별">요일별</option>
+            <option value="시간별">시간별</option>
+            <option value="업체별">업체별</option>
+          </CategorySelect>
+        </HeaderContainer>
+
+        <StatsTable>
+          <TableHead>
+            <TableRow>
+              <TableHeader>{category}</TableHeader>
+              <TableHeader>HIT</TableHeader>
+              <TableHeader>접속 통계 그래프</TableHeader>
+              <TableHeader></TableHeader>
+            </TableRow>
+          </TableHead>
+          <tbody>
+            {StatsData.map((row, index) => (
+              <TableRow key={index}>
+                <TableCell>{row.name}</TableCell>
+                <HitCell>{row.hit}</HitCell>
+                <GraphCell>
+                  <ProgressBar>
+                    <ProgressFill width={row.percentage} />
+                  </ProgressBar>
+                </GraphCell>
+                <PercentageCell>{row.percentage}%</PercentageCell>
+              </TableRow>
+            ))}
+            {/* 평균, 총계, 누적 총계 섹션 */}
+            <SummaryRow>
+              <TableCell>평균</TableCell>
+              <HitCell>{averageHit.toFixed(1)}</HitCell>
+              <GraphCell>
+                <ProgressBar>
+                  <ProgressFill width={averageHit / 30 * 100} />
+                </ProgressBar>
+              </GraphCell>
+              <PercentageCell>{((averageHit / 30) * 100).toFixed(0)}%</PercentageCell>
+            </SummaryRow>
+            <SummaryRow>
+              <TableCell>총계</TableCell>
+              <HitCell>{totalHit}</HitCell>
+              <GraphCell>
+                <ProgressBar>
+                  <ProgressFill width={totalHit / 30 * 100} />
+                </ProgressBar>
+              </GraphCell>
+              <PercentageCell>{((totalHit / 30) * 100).toFixed(0)}%</PercentageCell>
+            </SummaryRow>
+            <SummaryRow>
+              <TableCell>누적 총계</TableCell>
+              <HitCell>0</HitCell>
+              <GraphCell>
+                <ProgressBar>
+                  <ProgressFill width={0} />
+                </ProgressBar>
+              </GraphCell>
+              <PercentageCell>0%</PercentageCell>
+            </SummaryRow>
+          </tbody>
+        </StatsTable>
+      </TableContainer>
+    </DashboardWrapper>
+  );
+};
+
+export default Stat;
+
+
+
 const DashboardWrapper = styled.div`
   display: flex;
   justify-content: center;
@@ -24,8 +127,8 @@ const TableContainer = styled.div`
 
 const HeaderContainer = styled.div`
   display: flex;
-  justify-content: space-between; /* 요소들을 좌우로 정렬 */
-  align-items: center; /* 세로 가운데 정렬 */
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 20px;
 `;
 
@@ -105,106 +208,3 @@ const SummaryRow = styled.tr`
   border-bottom: 1px solid #e0e0e0;
   white-space: nowrap;
 `;
-
-const StatsData = [
-  { day: '1일', hit: 12, percentage: 5 },
-  { day: '1일', hit: 30, percentage: 20 },
-  { day: '1일', hit: 20, percentage: 40 },
-  { day: '1일', hit: 20, percentage: 17 },
-  { day: '1일', hit: 20, percentage: 10 },
-  { day: '1일', hit: 0, percentage: 5 },
-  { day: '1일', hit: 0, percentage: 0 },
-  { day: '1일', hit: 0, percentage: 0 },
-  { day: '1일', hit: 0, percentage: 0 },
-  { day: '1일', hit: 0, percentage: 0 },
-  { day: '1일', hit: 0, percentage: 0 },
-  { day: '1일', hit: 0, percentage: 0 },
-];
-
-const averageHit = StatsData.reduce((sum, row) => sum + row.hit, 0) / StatsData.length;
-const totalHit = StatsData.reduce((sum, row) => sum + row.hit, 0);
-
-const Stat = () => {
-  const [category, setCategory] = useState('일별');
-
-  // 카테고리 변경 핸들러
-  const handleCategoryChange = (event) => {
-    setCategory(event.target.value);
-  };
-
-  return (
-    <DashboardWrapper>
-      <TableContainer>
-        {/* HeaderContainer로 카테고리 선택과 제목을 한 줄로 정렬 */}
-        <HeaderContainer>
-          <Title>상점 접속 현황</Title>
-          <CategorySelect value={category} onChange={handleCategoryChange}>
-            <option value="일별">일별</option>
-            <option value="월별">월별</option>
-            <option value="요일별">요일별</option>
-            <option value="시간별">시간별</option>
-            <option value="업체별">업체별</option>
-          </CategorySelect>
-        </HeaderContainer>
-
-        <StatsTable>
-          <TableHead>
-            <TableRow>
-              <TableHeader>{category}</TableHeader>
-              <TableHeader>HIT</TableHeader>
-              <TableHeader>접속 통계 그래프</TableHeader>
-              <TableHeader></TableHeader>
-            </TableRow>
-          </TableHead>
-          <tbody>
-            {StatsData.map((row, index) => (
-              <TableRow key={index}>
-                <TableCell>{row.day}</TableCell>
-                <HitCell>{row.hit}</HitCell>
-                <GraphCell>
-                  <ProgressBar>
-                    <ProgressFill width={row.percentage} />
-                  </ProgressBar>
-                </GraphCell>
-                <PercentageCell>{row.percentage}%</PercentageCell>
-              </TableRow>
-            ))}
-            {/* 평균, 총계, 누적 총계 섹션 */}
-            <SummaryRow>
-              <TableCell>평균</TableCell>
-              <HitCell>{averageHit.toFixed(1)}</HitCell>
-              <GraphCell>
-                <ProgressBar>
-                  <ProgressFill width={averageHit / 30 * 100} />
-                </ProgressBar>
-              </GraphCell>
-              <PercentageCell>{((averageHit / 30) * 100).toFixed(0)}%</PercentageCell>
-            </SummaryRow>
-            <SummaryRow>
-              <TableCell>총계</TableCell>
-              <HitCell>{totalHit}</HitCell>
-              <GraphCell>
-                <ProgressBar>
-                  <ProgressFill width={totalHit / 30 * 100} />
-                </ProgressBar>
-              </GraphCell>
-              <PercentageCell>{((totalHit / 30) * 100).toFixed(0)}%</PercentageCell>
-            </SummaryRow>
-            <SummaryRow>
-              <TableCell>누적 총계</TableCell>
-              <HitCell>0</HitCell>
-              <GraphCell>
-                <ProgressBar>
-                  <ProgressFill width={0} />
-                </ProgressBar>
-              </GraphCell>
-              <PercentageCell>0%</PercentageCell>
-            </SummaryRow>
-          </tbody>
-        </StatsTable>
-      </TableContainer>
-    </DashboardWrapper>
-  );
-};
-
-export default Stat;

@@ -151,6 +151,7 @@ const ProductCreate = () => {
       setProduct((prev) => ({
         ...prev,
         pictures: [...prev.pictures, ...newImages],
+        coverImage: prev.coverImage || newImages[0] // 대표 이미지가 없으면 새로 추가된 이미지 중 첫 번째를 대표 이미지로 설정
       }));
   
       console.log('이미지 업로드에 성공했습니다.');
@@ -159,6 +160,7 @@ const ProductCreate = () => {
       alert(`이미지 업로드 중 오류가 발생했습니다: ${error.message}`);
     }
   };
+  
   
   
 
@@ -473,4 +475,3 @@ const ProductCreate = () => {
 };
 
 export default ProductCreate;
-
