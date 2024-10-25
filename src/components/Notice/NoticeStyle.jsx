@@ -5,10 +5,14 @@ import Form from 'react-bootstrap/Form';
 
 export const MainWrapper = styled.div`
   color: black;
-  max-width: 1000px;
+  max-width: 90%;
   margin: 0px auto;
   min-height: 100vh;
   padding-top: 3%;
+  @media(max-width: 780px){
+     max-width: 95%;
+     padding-top: 6%;
+  }
 `;
 
 export const Section = styled.section`

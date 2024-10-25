@@ -102,7 +102,7 @@ const NoticeDetail = () => {
   return (
     <>
     <N.MainWrapper>
-      <N.Section2 style={{ width: '90%', minHeight: '2.6vh', border: 'none' }}>
+      <N.Section2 style={{ width: '90%', border: 'none' }}>
         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
           <N.PageTitle>
             <N.TitleText>공지사항</N.TitleText>
