@@ -120,7 +120,8 @@ export const Content = styled.div`
   }
   
   img {
-    max-width: 300px;
+    max-width: 90%;
+    margin: 0 auto;
   }
 `;
 
