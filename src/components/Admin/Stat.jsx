@@ -11,15 +11,18 @@ const Stat = () => {
   useEffect(() => {
     const fetchData = async () => {
       const token = localStorage.getItem('token');
-      const config = { headers: { Authorization: `Bearer ${token}` } };
+      const config = {
+        headers: { Authorization: `Bearer ${token}` },
+        withCredentials: true
+      };
       const year = selectedMonth.split('-')[0];
       const month = selectedMonth.split('-')[1];
-
+  
       let url = `https://api.telegro.kr/api/hits?filteredBy=${category}&year=${year}`;
       if (category === 'daily' || category === 'weekly') {
         url += `&month=${month}`;
       }
-
+  
       try {
         const response = await axios.get(url, config);
         setStatsData(response.data.data.hits);
@@ -32,6 +35,7 @@ const Stat = () => {
         console.error('Failed to fetch data:', error);
       }
     };
+  
 
     fetchData();
   }, [category, selectedMonth]);
