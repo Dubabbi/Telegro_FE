@@ -95,7 +95,7 @@ export const Content = styled.div`
   flex: 1;
   padding: 15px 30px;
   color: #30313D;
-  text-align: left;
+  text-align: center;
   line-height: 1.8;
   overflow-y: auto;
   max-height: calc(100% - 100px);
@@ -120,7 +120,7 @@ export const Content = styled.div`
   }
   
   img {
-    max-width: 90%;
+    max-width: 100%;
     margin: 0 auto;
   }
 `;
