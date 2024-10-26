@@ -19,7 +19,7 @@ const Stat = () => {
       const month = selectedMonth.split('-')[1];
   
       let url = `https://api.telegro.kr/api/hits?filteredBy=${category}&year=${year}`;
-      if (category === 'daily' || category === 'weekly') {
+      if (category === 'daily' || category === 'weekly' ||  category === 'company') {
         url += `&month=${month}`;
       }
   
