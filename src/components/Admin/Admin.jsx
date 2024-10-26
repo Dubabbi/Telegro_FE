@@ -15,7 +15,7 @@ function Admin() {
       const response = await axios.post("https://api.telegro.kr/auth/login", {
         id: id,
         password: password,
-      });
+      }, {withCredentials: true});
   
       console.log('Response:', response);
       console.log('Response Data:', response.data); 
