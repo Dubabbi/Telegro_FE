@@ -7,7 +7,7 @@ import CommonTable from './CommonTable';
 import CommonTableColumn from './CommonTableColumn';
 import CommonTableRow from './CommonTableRow';
 import * as N from './NoticeStyle';
-import editpost from '/src/assets/icon/Admin/editpost.svg';
+import newpost from '/src/assets/icon/Admin/newpost.svg';
 import Pagination from '../../Pagination/Pagination';
 import * as P from '../ProductList/ProductStyle';
 import { FaFilePdf, FaFileImage, FaFileWord, FaFileExcel, FaFile } from 'react-icons/fa';
@@ -113,8 +113,9 @@ const AdminNotice = ({ page = 0, size = 20 }) => {
     <>
     <N.MainWrapper>
       <N.Section2 style={{marginTop: '3%'}}>
-        <N.PageTitle>
+        <N.PageTitle style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', gap: '7px'}}>
           <N.TitleText>공지사항</N.TitleText>
+          <N.Add onClick={() => navigate('/admin/noticecreate')} src={newpost} />
         </N.PageTitle>
         <div style={{textAlign: 'right'}}> 총 게시물 수 : {filteredNotice.length}  현재 페이지 : {currentPage} / {totalPages}</div>
         <N.BoardSearchArea>
@@ -136,7 +137,6 @@ const AdminNotice = ({ page = 0, size = 20 }) => {
           <CommonTable headersName={['No', '제목', '첨부', '작성자', '등록일', '조회수']}>{items}</CommonTable>
         </div>      
       </N.Section2>
-      <N.Add onClick={() => navigate('/admin/noticecreate')} src={editpost} />
     </N.MainWrapper>
     <P.Pagediv>
       <Pagination 

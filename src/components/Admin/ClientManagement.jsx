@@ -129,15 +129,13 @@ const IconButton = styled.button`
 `;
 
 const Add = styled.img`
-  width: 5rem;
-  height: 5rem;
+  width: 3.5rem;
+  height: 3rem;
   cursor: pointer;
-  position: fixed;
-  right: 35px;
-  bottom: 20px;
+  align-items: center;
   @media(max-width: 780px){
-    max-width: 4.5rem;
-    max-height: 4.5rem;
+    max-width: 2.7rem;
+    max-height: 2.3rem;
   }
 `;
 
@@ -243,8 +241,9 @@ const ClientManagement = () => {
       <Div>
         <MainWrapper>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <N.PageTitle>
+            <N.PageTitle style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', gap: '7px'}}>
               <h2>고객 관리</h2>
+              <Add onClick={() => navigate('/admin/addclient')} src={AddClient} />
             </N.PageTitle>
             <div>
               <select value={roleFilter} onChange={handleRoleChange}>
@@ -256,7 +255,6 @@ const ClientManagement = () => {
               </select>
             </div>
           </div>
-          <Add onClick={() => navigate('/admin/addclient')} src={AddClient} />
           <Table>
             <TableHead>
               <TableRow>

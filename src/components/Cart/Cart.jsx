@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
+import check from '/src/assets/icon/Admin/check.svg';
+import checked from '/src/assets/icon/Admin/checked.svg';
 import { useNavigate } from 'react-router-dom';
 import Delete from '/src/assets/icon/delete.svg';
 
@@ -169,6 +171,7 @@ const Cart = () => {
       product.id === id ? { ...product, selected: !product.selected } : product
     ));
   };
+  
   const handlePurchase = () => {
     const selectedProducts = products.filter(product => product.selected);
     if (selectedProducts.length === 0) {
@@ -188,17 +191,13 @@ const Cart = () => {
           {products.map(product => (
             <ProductItem key={product.id}>
               <CheckboxContainer style={{ alignItems: 'center' }}>
-                <Checkbox
-                  type="checkbox"
-                  id={`checkbox-${product.id}`}
-                  checked={product.selected}
-                  onChange={() => setProducts(products.map(p =>
-                    p.id === product.id ? { ...p, selected: !p.selected } : p
-                  ))}
+                <img
+                  src={product.selected ? checked : check}
+                  alt="체크박스 이미지"
+                  onClick={() => handleCheckboxChange(product.id)}
+                  style={{ cursor: 'pointer', width: '20px', height: '20px' }}
                 />
-                <CheckboxLabel htmlFor={`checkbox-${product.id}`} />
               </CheckboxContainer>
-
               <ProductInfo>
                 <ProductImage src={product.coverImage} alt="상품 이미지" />
                 <ProductDetails>

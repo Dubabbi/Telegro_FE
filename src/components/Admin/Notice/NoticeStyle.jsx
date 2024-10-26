@@ -79,7 +79,6 @@ export const PageTitle = styled.div`
 `
 
 export const TitleText = styled.h3`
-  margin-top: 15px;  
   margin-left: 10px;
   font-size: 2.3rem;
   color: #333333;
@@ -313,14 +312,15 @@ export const DeleteButton = styled(ListButton)`
 
 
 export const Add = styled.img`
-  width: 4.5rem;
-  height: 4.5rem;
+  width: 3.5rem;
+  height: 3rem;
   cursor: pointer;
-  position: fixed;
-  right: 35px;
-  bottom: 20px;
-
-`;        
+  align-items: center;
+  @media(max-width: 780px){
+    max-width: 2.7rem;
+    max-height: 2.3rem;
+  }
+`;      
 
 
 

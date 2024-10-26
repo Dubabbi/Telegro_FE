@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import * as D from './NoticeDetailStyle'; 
 import * as N from '../Notice/NoticeStyle'; 
 import edit from '/src/assets/icon/Admin/editpost.svg';
+import pin from '/src/assets/icon/Admin/pin.svg';
+import pinx from '/src/assets/icon/Admin/pinx.svg';
 import { Link, useNavigate, useParams } from 'react-router-dom'; 
 import axios from 'axios'; 
 import '@toast-ui/editor/dist/toastui-editor.css';
@@ -151,12 +153,11 @@ const NoticeDetail = () => {
             </ul>
           </div>
             <div style={{ display: 'flex', alignItems: 'center', marginTop: '10px' }}>
-              <D.Checkbox
-                type="checkbox"
-                id="popupCheckbox"
-                checked={isPopup}
-                onChange={handleCheckboxChange}
-              />
+              {isPopup ? (
+                <D.PopupImg src={pin} onClick={handleCheckboxChange} />
+              ) : (
+                <D.PopupImg src={pinx} onClick={handleCheckboxChange} />
+              )}
               <label htmlFor="popupCheckbox" style={{ marginLeft: '8px', fontSize: '1.2rem' }}>
                 팝업으로 설정
               </label>

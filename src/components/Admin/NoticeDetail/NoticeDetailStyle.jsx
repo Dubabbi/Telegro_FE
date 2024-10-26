@@ -184,6 +184,19 @@ export const EditImg = styled.img`
   }
 `;
 
+export const PopupImg = styled.img`
+  padding: 1%;
+  text-align: center;
+  align-items: center;
+  height: 46px;
+  cursor: pointer;
+
+  @media(max-width: 780px){
+    height: 44px;
+  }
+`;
+
+
 
 export const Checkbox = styled.input`
   margin-right: 6px;
