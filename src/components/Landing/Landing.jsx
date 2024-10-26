@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import * as L from './LandingStyle';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios'; 
 import Img from '/src/assets/image/Landing/image1.png';
 import Img2 from '/src/assets/image/Landing/image2.png';
 import Img3 from '/src/assets/image/Landing/image3.png';
@@ -17,13 +18,22 @@ export default function Landing() {
     useEffect(() => {
       const images = [Img, Img2, Img3, Img4];
       let currentIndex = 0;
-  
       const intervalId = setInterval(() => {
         currentIndex = (currentIndex + 1) % images.length; 
         setCurrentImage(images[currentIndex]);
       }, 3000); 
   
-      return () => clearInterval(intervalId); 
+      axios.post('https://api.telegro.kr/hits')
+        .then(response => {
+          console.log('Server status:', response.data.message);
+        })
+        .catch(error => {
+          console.error('Error posting hits:', error);
+        });
+  
+      return () => {
+        clearInterval(intervalId); 
+      };
     }, []);
   
   return (

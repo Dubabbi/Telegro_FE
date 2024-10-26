@@ -1,113 +1,129 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
 
-const StatsData = [
-  { name: '1일', hit: 12, percentage: 5 },
-  { name: '1일', hit: 30, percentage: 20 },
-  { name: '1일', hit: 20, percentage: 40 },
-  { name: '1일', hit: 20, percentage: 17 },
-  { name: '1일', hit: 20, percentage: 10 },
-  { name: '1일', hit: 0, percentage: 5 },
-  { name: '1일', hit: 0, percentage: 0 },
-  { name: '1일', hit: 0, percentage: 0 },
-  { name: '1일', hit: 0, percentage: 0 },
-  { name: '1일', hit: 0, percentage: 0 },
-  { name: '1일', hit: 0, percentage: 0 },
-  { name: '1일', hit: 0, percentage: 0 },
-];
-
-
 const Stat = () => {
-  const [category, setCategory] = useState('일별');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
-  const averageHit = StatsData.reduce((sum, row) => sum + row.hit, 0) / StatsData.length;
-  const totalHit = StatsData.reduce((sum, row) => sum + row.hit, 0);
+  const [category, setCategory] = useState('daily'); // 초기 카테고리 'daily'
+  const [selectedMonth, setSelectedMonth] = useState(`${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}`);
+  const [statsData, setStatsData] = useState([]);
+  const [summary, setSummary] = useState({ averageHit: 0, totalHit: 0, overAllTotalHit: 0 });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const token = localStorage.getItem('token');
+      const config = { headers: { Authorization: `Bearer ${token}` } };
+      const year = selectedMonth.split('-')[0];
+      const month = selectedMonth.split('-')[1];
+
+      let url = `https://api.telegro.kr/api/hits?filteredBy=${category}&year=${year}`;
+      if (category === 'daily' || category === 'weekly') {
+        url += `&month=${month}`;
+      }
+
+      try {
+        const response = await axios.get(url, config);
+        setStatsData(response.data.data.hits);
+        setSummary({
+          averageHit: response.data.data.averageHit,
+          totalHit: response.data.data.totalHit,
+          overAllTotalHit: response.data.data.overAllTotalHit
+        });
+      } catch (error) {
+        console.error('Failed to fetch data:', error);
+      }
+    };
+
+    fetchData();
+  }, [category, selectedMonth]);
 
   const handleCategoryChange = (event) => {
     setCategory(event.target.value);
   };
 
+  const maxHitValue = Math.max(summary.totalHit, summary.overAllTotalHit, summary.averageHit);
+  const translateDay = (day) => {
+    const dayTranslations = {
+      "Monday": "월요일",
+      "Tuesday": "화요일",
+      "Wednesday": "수요일",
+      "Thursday": "목요일",
+      "Friday": "금요일",
+      "Saturday": "토요일",
+      "Sunday": "일요일"
+    };
+    return dayTranslations[day] || day;
+  };
+  
   return (
     <DashboardWrapper>
       <TableContainer>
         <HeaderContainer>
           <Title>상점 접속 현황</Title>
+          <SearchSection style={{whiteSpace: 'nowrap'}}>
+            <input type="month" value={selectedMonth} onChange={e => setSelectedMonth(e.target.value)} style={{ marginLeft: '10px' }} />
+            
           <CategorySelect value={category} onChange={handleCategoryChange}>
-            <option value="일별">일별</option>
-            <option value="월별">월별</option>
-            <option value="요일별">요일별</option>
-            <option value="시간별">시간별</option>
-            <option value="업체별">업체별</option>
+            <option value="daily">일별</option>
+            <option value="monthly">월별</option>
+            <option value="weekly">요일별</option>
+            <option value="company">업체별</option>
           </CategorySelect>
-        </HeaderContainer>
-        <SearchSection style={{whiteSpace: 'nowrap'}}>
-          <div>
-            <label>기간: </label>
-            <DateInput 
-              type="date" 
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-            /> - 
-            <DateInput 
-              type="date" 
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
-            />
-          </div>
+
           </SearchSection>
+        </HeaderContainer>
         <StatsTable>
           <TableHead>
             <TableRow>
-              <TableHeader>{category}</TableHeader>
+              <TableHeader>날짜</TableHeader>
               <TableHeader>HIT</TableHeader>
-              <TableHeader>접속 통계 그래프</TableHeader>
+              <TableHeader>접속 비율</TableHeader>
               <TableHeader></TableHeader>
             </TableRow>
           </TableHead>
           <tbody>
-            {StatsData.map((row, index) => (
-              <TableRow key={index}>
-                <TableCell>{row.name}</TableCell>
-                <HitCell>{row.hit}</HitCell>
-                <GraphCell>
-                  <ProgressBar>
-                    <ProgressFill width={row.percentage} />
-                  </ProgressBar>
-                </GraphCell>
-                <PercentageCell>{row.percentage}%</PercentageCell>
-              </TableRow>
-            ))}
-            {/* 평균, 총계, 누적 총계 섹션 */}
-            <SummaryRow>
-              <TableCell>평균</TableCell>
-              <HitCell>{averageHit.toFixed(1)}</HitCell>
+          {statsData.map((item, index) => (
+            <TableRow key={index}>
+              <TableCell>
+                {category === 'daily' ? `${item.name}일` : translateDay(item.name)}
+              </TableCell>
+              <HitCell>{item.hit}</HitCell>
               <GraphCell>
                 <ProgressBar>
-                  <ProgressFill width={averageHit / 30 * 100} />
+                  <ProgressFill width={item.percentage} />
                 </ProgressBar>
               </GraphCell>
-              <PercentageCell>{((averageHit / 30) * 100).toFixed(0)}%</PercentageCell>
+              <PercentageCell>{item.percentage}%</PercentageCell>
+            </TableRow>
+          ))}
+            <SummaryRow>
+              <TableCell>평균 접속 수</TableCell>
+              <HitCell>{summary.averageHit.toFixed(1)}</HitCell>
+              <GraphCell>
+                <ProgressBar>
+                  <ProgressFill width={(summary.averageHit / maxHitValue) * 100} />
+                </ProgressBar>
+              </GraphCell>
+              <PercentageCell>{((summary.averageHit / maxHitValue) * 100).toFixed(2)}%</PercentageCell>
             </SummaryRow>
             <SummaryRow>
               <TableCell>총계</TableCell>
-              <HitCell>{totalHit}</HitCell>
+              <HitCell>{summary.totalHit}</HitCell>
               <GraphCell>
                 <ProgressBar>
-                  <ProgressFill width={totalHit / 30 * 100} />
+                  <ProgressFill width={(summary.totalHit / maxHitValue) * 100} />
                 </ProgressBar>
               </GraphCell>
-              <PercentageCell>{((totalHit / 30) * 100).toFixed(0)}%</PercentageCell>
+              <PercentageCell>{((summary.totalHit / maxHitValue) * 100).toFixed(2)}%</PercentageCell>
             </SummaryRow>
             <SummaryRow>
               <TableCell>누적 총계</TableCell>
-              <HitCell>0</HitCell>
+              <HitCell>{summary.overAllTotalHit}</HitCell>
               <GraphCell>
                 <ProgressBar>
-                  <ProgressFill width={0} />
+                  <ProgressFill width={(summary.overAllTotalHit / maxHitValue) * 100} />
                 </ProgressBar>
               </GraphCell>
-              <PercentageCell>0%</PercentageCell>
+              <PercentageCell>{((summary.overAllTotalHit / maxHitValue) * 100).toFixed(2)}%</PercentageCell>
             </SummaryRow>
           </tbody>
         </StatsTable>
