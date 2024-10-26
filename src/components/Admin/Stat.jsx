@@ -3,7 +3,7 @@ import axios from 'axios';
 import styled from 'styled-components';
 
 const Stat = () => {
-  const [category, setCategory] = useState('daily'); // 초기 카테고리 'daily'
+  const [category, setCategory] = useState('daily');
   const [selectedMonth, setSelectedMonth] = useState(`${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}`);
   const [statsData, setStatsData] = useState([]);
   const [summary, setSummary] = useState({ averageHit: 0, totalHit: 0, overAllTotalHit: 0 });
@@ -38,8 +38,14 @@ const Stat = () => {
 
   const handleCategoryChange = (event) => {
     setCategory(event.target.value);
+    if (event.target.value === 'monthly') {
+      setSelectedMonth(`${new Date().getFullYear()}`);
+    } else {
+      setSelectedMonth(`${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}`);
+    }
   };
 
+  const inputType = category === 'monthly' ? 'year' : 'month';
   const maxHitValue = Math.max(summary.totalHit, summary.overAllTotalHit, summary.averageHit);
   const translateDay = (day) => {
     const dayTranslations = {
@@ -53,22 +59,19 @@ const Stat = () => {
     };
     return dayTranslations[day] || day;
   };
-  
   return (
     <DashboardWrapper>
       <TableContainer>
         <HeaderContainer>
           <Title>상점 접속 현황</Title>
-          <SearchSection style={{whiteSpace: 'nowrap'}}>
-            <input type="month" value={selectedMonth} onChange={e => setSelectedMonth(e.target.value)} style={{ marginLeft: '10px' }} />
-            
-          <CategorySelect value={category} onChange={handleCategoryChange}>
-            <option value="daily">일별</option>
-            <option value="monthly">월별</option>
-            <option value="weekly">요일별</option>
-            <option value="company">업체별</option>
-          </CategorySelect>
-
+          <SearchSection>
+            <input type={inputType} value={selectedMonth} onChange={e => setSelectedMonth(e.target.value)} style={{ marginLeft: '10px' }} />
+            <CategorySelect value={category} onChange={handleCategoryChange}>
+              <option value="daily">일별</option>
+              <option value="monthly">월별</option>
+              <option value="weekly">요일별</option>
+              <option value="company">업체별</option>
+            </CategorySelect>
           </SearchSection>
         </HeaderContainer>
         <StatsTable>
@@ -81,20 +84,20 @@ const Stat = () => {
             </TableRow>
           </TableHead>
           <tbody>
-          {statsData.map((item, index) => (
-            <TableRow key={index}>
+            {statsData.map((item, index) => (
+              <TableRow key={index}>
               <TableCell>
                 {category === 'daily' ? `${item.name}일` : translateDay(item.name)}
               </TableCell>
-              <HitCell>{item.hit}</HitCell>
-              <GraphCell>
-                <ProgressBar>
-                  <ProgressFill width={item.percentage} />
-                </ProgressBar>
-              </GraphCell>
-              <PercentageCell>{item.percentage}%</PercentageCell>
-            </TableRow>
-          ))}
+                <HitCell>{item.hit}</HitCell>
+                <GraphCell>
+                  <ProgressBar>
+                    <ProgressFill width={item.percentage} />
+                  </ProgressBar>
+                </GraphCell>
+                <PercentageCell>{item.percentage}%</PercentageCell>
+              </TableRow>
+            ))}
             <SummaryRow>
               <TableCell>평균 접속 수</TableCell>
               <HitCell>{summary.averageHit.toFixed(1)}</HitCell>
@@ -133,6 +136,7 @@ const Stat = () => {
 };
 
 export default Stat;
+
 
 
 
@@ -175,7 +179,14 @@ const SearchSection = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
-
+  input{
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 1.2rem;
+    max-width: 120px;
+    margin-right: 10px;
+  }
   @media(max-width: 780px) {
     flex-direction: column;
     align-items: flex-start;
