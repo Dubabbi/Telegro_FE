@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import img from '../Check/image.svg'; 
 import { Postcode } from '../Postcode/Postcode'; 
 import * as C from '../Cart/Cart';
+import check from '/src/assets/icon/Admin/check.svg';
+import checked from '/src/assets/icon/Admin/checked.svg';
 import * as O from './OrderProcessStyle'
 import { useNavigate } from 'react-router-dom';
 
@@ -34,7 +36,42 @@ const OrderProcess = () => {
       postalCode: zonecode  
     });
   };
-
+  const addressData = {
+    A: { name: '홍길동', phone: '01012345678', address: '서울시 강남구', postalCode: '12345', detailedAddress: '강남대로 396' },
+    B: { name: '이순신', phone: '01087654321', address: '부산시 해운대구', postalCode: '54321', detailedAddress: '해운대해변로 123' },
+    C: { name: '김유신', phone: '01013572468', address: '대구시 중구', postalCode: '13579', detailedAddress: '중앙대로 456' }
+  };
+  
+  const updateAddressFormData = (key) => {
+    const selectedAddressData = addressData[key];
+    if (selectedAddressData) {
+      setFormData({
+        name: selectedAddressData.name,
+        phone: selectedAddressData.phone,
+        address: selectedAddressData.address,
+        postalCode: selectedAddressData.postalCode,
+        detailedAddress: selectedAddressData.detailedAddress,
+        request: formData.request
+      });
+    }
+  };
+  
+  const handleAgreementChange = () => {
+    setIsAgreementChecked(!isAgreementChecked);
+    if (!isAgreementChecked) { 
+      updateAddressFormData(selectedAddress);
+    } else { 
+      setFormData({
+        name: '',
+        phone: '',
+        address: '',
+        postalCode: '',
+        detailedAddress: '',
+        request: ''
+      });
+    }
+  };
+  
   return (
     <>
       <O.Div></O.Div>
@@ -64,11 +101,12 @@ const OrderProcess = () => {
             <O.SectionTitle>배송 정보</O.SectionTitle>
             <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
               <O.CheckboxWrapper>
-                <O.Checkbox
-                  type="checkbox"
-                  checked={false}
-                  onChange={() => {}}
-                />
+              <img
+                src={isAgreementChecked ? checked : check}
+                alt="기본 배송지 불러오기"
+                onClick={handleAgreementChange}
+                style={{ cursor: 'pointer', width: '20px', height: '20px' }}
+              />
                 <O.CheckboxLabel>기본 배송지 불러오기</O.CheckboxLabel>
               </O.CheckboxWrapper>
               <O.Select
@@ -150,7 +188,7 @@ const OrderProcess = () => {
               <span style={{ color: 'red' }}>-₩1,000원</span>
             </O.PriceDetail>
             <O.PriceDetailsWrapper>
-            <input type="text" placeholder="사용할 적립금 입력" />
+            <input type="text" placeholder="사용할 적립금 입력 (0 / 3,000)" />
             <button><p>모두 사용</p></button>
           </O.PriceDetailsWrapper>
             <O.PriceDetail  style={{marginTop: '10px'}}>
@@ -166,37 +204,42 @@ const OrderProcess = () => {
             <O.PaymentMethodWrapper>
               <O.PaymentTitle>결제 방법</O.PaymentTitle>
               <O.PaymentOption>
-                <O.Checkbox
-                  type="checkbox"
-                  checked={isCreditCardChecked}
-                  onChange={() => setIsCreditCardChecked(!isCreditCardChecked)}
+                <img
+                  src={isCreditCardChecked ? checked : check}
+                  alt="신용카드 결제"
+                  onClick={() => setIsCreditCardChecked(!isCreditCardChecked)}
+                  style={{ cursor: 'pointer', width: '20px', height: '20px' }}
                 />
                 <O.CheckboxLabel>신용카드</O.CheckboxLabel>
               </O.PaymentOption>
               <O.PaymentOption>
-                <O.Checkbox
-                  type="checkbox"
-                  checked={isBankTransferChecked}
-                  onChange={() => setIsBankTransferChecked(!isBankTransferChecked)}
+                <img
+                  src={isBankTransferChecked ? checked : check}
+                  alt="무통장 입금"
+                  onClick={() => setIsBankTransferChecked(!isBankTransferChecked)}
+                  style={{ cursor: 'pointer', width: '20px', height: '20px' }}
                 />
                 <O.CheckboxLabel>무통장 입금</O.CheckboxLabel>
               </O.PaymentOption>
               <O.PaymentOption>
-                <O.Checkbox
-                  type="checkbox"
-                  checked={isKakaoPayChecked}
-                  onChange={() => setIsKakaoPayChecked(!isKakaoPayChecked)}
+                <img
+                  src={isKakaoPayChecked ? checked : check}
+                  alt="카카오페이"
+                  onClick={() => setIsKakaoPayChecked(!isKakaoPayChecked)}
+                  style={{ cursor: 'pointer', width: '20px', height: '20px' }}
                 />
                 <O.CheckboxLabel>카카오페이</O.CheckboxLabel>
               </O.PaymentOption>
+
             </O.PaymentMethodWrapper>
             <hr />
             <O.CheckboxWrapper>
-            <O.Checkbox
-                type="checkbox"
-                checked={isAgreementChecked}
-                onChange={() => setIsAgreementChecked(!isAgreementChecked)}
-              />
+              <img
+                  src={isAgreementChecked ? checked : check}
+                  checked={isAgreementChecked}
+                  onClick={() => setIsAgreementChecked(!isAgreementChecked)}
+                  style={{ cursor: 'pointer', width: '20px', height: '20px' }}
+                />
                 <O.CheckboxLabel>구매조건 확인 및 결제진행에 동의</O.CheckboxLabel>
             </O.CheckboxWrapper>
             <C.ConfirmButton onClick={()=>navigate('/completeorder')}>결제하기</C.ConfirmButton>

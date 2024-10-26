@@ -13,15 +13,6 @@ export default defineConfig({
   ],
   server: {
     port: 5173,
-    proxy: {
-      '/proxy': {
-        target: 'https://api.telegro.kr',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/proxy/, ''),
-        secure: false,
-        ws: true,
-      }
-    },
     cors: {
       origin: '*', 
       methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'], 

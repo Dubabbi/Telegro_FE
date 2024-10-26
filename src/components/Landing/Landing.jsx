@@ -23,13 +23,15 @@ export default function Landing() {
         setCurrentImage(images[currentIndex]);
       }, 3000); 
   
-      axios.post('https://api.telegro.kr/hits')
-        .then(response => {
-          console.log('Server status:', response.data.message);
-        })
-        .catch(error => {
-          console.error('Error posting hits:', error);
-        });
+      axios.post('https://api.telegro.kr/hits', {}, {
+        withCredentials: true
+      })
+      .then(response => {
+        console.log('Server status:', response.data.message);
+      })
+      .catch(error => {
+        console.error('Error posting hits:', error);
+      });
   
       return () => {
         clearInterval(intervalId); 
