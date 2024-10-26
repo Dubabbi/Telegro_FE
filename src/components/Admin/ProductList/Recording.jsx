@@ -47,9 +47,9 @@ const Recording = ({ category = 'RECORDER', initialPage = 1, size = 12 }) => {
   return (
     <>
     <P.PageContainer>
-    <P.Inline style={{marginLeft: '4%', width: '88%', marginBottom: '2%', border: 'none'}}>
+    <P.Inline style={{marginLeft: '4%', width: '88%', marginBottom: '2%', border: 'none', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start'}}>
       <h1>녹음기기</h1>
-      {/*<p>Sort by: Most Popular</p>*/}
+      <N.Add  onClick={() => navigate('/admin/productcreate')} src={editpost} />
       </P.Inline>
       <P.GalleryGrid>
         {products.map((product) => (
@@ -63,7 +63,6 @@ const Recording = ({ category = 'RECORDER', initialPage = 1, size = 12 }) => {
           </P.GalleryItem>
         ))}
       </P.GalleryGrid>
-      <N.Add  onClick={() => navigate('/admin/productcreate')} src={editpost} />
     </P.PageContainer>
     <P.Pagediv>
       <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
