@@ -8,37 +8,37 @@ import * as P from './ProductStyle';
 import axios from 'axios';
 
 
-const LineCord = ({ category = 'LINE_CORD', page = 0, size = 12 }) => {
+const LineCord = ({ category = 'LINE_CORD', initialPage = 1, size = 12 }) => {
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
+  const [currentPage, setCurrentPage] = useState(initialPage);
+  const [totalPages, setTotalPages] = useState(0);
   const [error, setError] = useState('');
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const response = await axios.get('https://api.telegro.kr/products', {
-          params: { category, page, size },
+          params: { category, page: currentPage - 1, size },
         });
 
         console.log('API Response:', response);
 
-        const productsData = response.data.data.products || []; 
-        if (Array.isArray(productsData)) {
-          const sortedProducts = productsData.sort((a, b) => b.id - a.id);
-          setProducts(sortedProducts);
-        } else {
-          throw new Error('Invalid data format: expected an array inside products');
-        }
+        setProducts(response.data.data.products || []);
+        setTotalPages(response.data.data.totalPage); 
       } catch (error) {
         console.error('Error fetching data:', error);
-        setError(`Failed to load products: ${error.message}`); // 에러 설정
+        setError(`Failed to load products: ${error.message}`);
       }
     };
 
     fetchProducts();
-  }, [category, page, size]);
+  }, [category, currentPage, size]);
   
-
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+  
   if (error) {
     return <div>{error}</div>;
   }
@@ -47,8 +47,8 @@ const LineCord = ({ category = 'LINE_CORD', page = 0, size = 12 }) => {
     <>
     <P.PageContainer>
     <P.Inline style={{marginLeft: '4%', width: '88%', marginBottom: '2%', border: 'none'}}>
-      <h1>헤드셋</h1>
-      <p>Sort by: Most Popular</p>
+      <h1>라인코드</h1>
+      {/*<p>Sort by: Most Popular</p>*/}
       </P.Inline>
       <P.GalleryGrid>
         {products.map((product) => (
@@ -65,7 +65,7 @@ const LineCord = ({ category = 'LINE_CORD', page = 0, size = 12 }) => {
       <N.Add  onClick={() => navigate('/admin/productcreate')} src={editpost} />
     </P.PageContainer>
     <P.Pagediv>
-      <Pagination currentPage={page} />
+    <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
       </P.Pagediv>
     </>
   );
