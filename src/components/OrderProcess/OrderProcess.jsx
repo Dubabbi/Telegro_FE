@@ -219,7 +219,7 @@ const OrderProcess = () => {
                   onClick={() => setIsBankTransferChecked(!isBankTransferChecked)}
                   style={{ cursor: 'pointer', width: '20px', height: '20px' }}
                 />
-                <O.CheckboxLabel>무통장 입금</O.CheckboxLabel>
+                <O.CheckboxLabel>무통장 입금(세금계산서 발행 - 업체)</O.CheckboxLabel>
               </O.PaymentOption>
               <O.PaymentOption>
                 <img

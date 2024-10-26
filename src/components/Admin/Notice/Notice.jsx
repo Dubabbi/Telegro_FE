@@ -94,11 +94,11 @@ const AdminNotice = ({ page = 0, size = 20 }) => {
     setCurrentPage(page); 
   };
 
-  const items = filteredNotice.map((notice) => (
+  const items = filteredNotice.map((notice, index) => (
     <CommonTableRow key={notice.id}>
-      <CommonTableColumn>{notice.id}</CommonTableColumn>
+      <CommonTableColumn>{filteredNotice.length - index}</CommonTableColumn> 
       <CommonTableColumn>
-        <Link to={`/admin/adminnoticedetail/${notice.id}`}>{notice.noticeTitle}</Link>
+        <Link to={`/noticedetail/${notice.id}`}>{notice.noticeTitle}</Link>
       </CommonTableColumn>
       <CommonTableColumn>
         {getFileIcon(notice.noticeFileName)}
@@ -108,6 +108,7 @@ const AdminNotice = ({ page = 0, size = 20 }) => {
       <CommonTableColumn>{notice.viewCount}</CommonTableColumn>
     </CommonTableRow>
   ));
+  
   
   return (
     <>

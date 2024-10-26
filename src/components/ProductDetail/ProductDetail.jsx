@@ -110,7 +110,9 @@ const ProductDetail = () => {
   if (!product) {
     return <div>로딩 중...</div>;
   }
-
+  function formatPrice(price) {
+    return new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(price);
+}
   return (
     <>
       <P.MainWrapper>
@@ -124,7 +126,7 @@ const ProductDetail = () => {
               <div>
                 <P.ProductTitle>{product.productName}</P.ProductTitle>
                 <P.ProductSubtitle>{product.productModel}</P.ProductSubtitle>
-                <P.PriceTag>₩{product.price}</P.PriceTag>
+                <P.PriceTag>{formatPrice(product.price)}</P.PriceTag>
               </div>
             </P.ProductInfoWrapper>
 

@@ -89,9 +89,9 @@ const Notice = ({ size = 10 }) => {
     setCurrentPage(page); 
   };
 
-  const items = filteredNotice.map((notice) => (
+  const items = filteredNotice.map((notice, index) => (
     <CommonTableRow key={notice.id}>
-      <CommonTableColumn>{notice.id}</CommonTableColumn>
+      <CommonTableColumn>{filteredNotice.length - index}</CommonTableColumn> 
       <CommonTableColumn>
         <Link to={`/noticedetail/${notice.id}`}>{notice.noticeTitle}</Link>
       </CommonTableColumn>
@@ -103,6 +103,7 @@ const Notice = ({ size = 10 }) => {
       <CommonTableColumn>{notice.viewCount}</CommonTableColumn>
     </CommonTableRow>
   ));
+  
   
   return (
     <>

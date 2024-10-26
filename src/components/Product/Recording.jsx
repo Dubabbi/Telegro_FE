@@ -39,6 +39,9 @@ const Recording = ({ category = 'RECORDER', initialPage = 1, size = 12 }) => {
     return <div>{error}</div>;  
   }
 
+  function formatPrice(price) {
+    return new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(price);
+}
 
   return (
     <>
@@ -53,7 +56,7 @@ const Recording = ({ category = 'RECORDER', initialPage = 1, size = 12 }) => {
             <img src={product.coverImage || image} alt={product.name} />
             <h3>{product.productName}</h3>
             <p>{product.productModel}</p>
-            <strong>{product.price}</strong>
+            <strong>{formatPrice(product.price)}</strong>
           </P.GalleryItem>
         ))}
       </P.GalleryGrid>

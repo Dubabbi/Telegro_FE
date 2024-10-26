@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Postcode } from '../Postcode/Postcode';
 import * as D from './NoticeDetail/NoticeDetailStyle';
 import * as A from './AddClientStyle';
 import axios from 'axios';
 
 function AddClient() {
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     companyName: '',
     phone: '',
@@ -83,21 +84,15 @@ function AddClient() {
       const response = await axios.post('https://api.telegro.kr/api/companies', DTO, { headers });
   
       if (response.status === 200) {
-        console.log('사용자 정보가 성공적으로 등록되었습니다.');
-      } else if (response.status === 409) {
-        alert("이미 사용 중인 닉네임 또는 ID입니다.");
-      }
+        navigate('/admin/clientmanagement');
+        alert('사용자 정보가 성공적으로 등록되었습니다.');
+      } 
     } catch (error) {
       console.error("Error while signing up:", error);
-  
       if (error.response && error.response.status === 409) {
-        alert("이미 사용 중인 ID입니다.");
-      } else {
-        alert("회원가입 중 오류가 발생했습니다. 다시 시도해주세요.");
-      }
-    }
+        alert("이미 사용 중인 상호명 혹은 ID입니다.");
+      }}
   };
-
   return (
     <>
       <A.Container>

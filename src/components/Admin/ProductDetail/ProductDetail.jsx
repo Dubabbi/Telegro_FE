@@ -292,7 +292,9 @@ const AdminProductDetail = () => {
     );
   };
 
-
+  function formatPrice(price) {
+    return new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(price);
+}
 
   const handleDelete = async () => {
     const confirmDelete = window.confirm("정말로 이 상품을 삭제하시겠습니까?");
@@ -406,10 +408,10 @@ const AdminProductDetail = () => {
           </div>
         <PriceWrapper>
           <PriceListWrapper>
-            <PriceTag>Biz: ₩{product.priceBussiness}</PriceTag>
-            <PriceTag>B: ₩{product.priceBest}</PriceTag>
-            <PriceTag>D: ₩{product.priceDealer}</PriceTag>
-            <PriceTag>C: ₩{product.priceCustomer}</PriceTag>
+            <PriceTag>Biz: {formatPrice(product.priceBussiness)}</PriceTag>
+            <PriceTag>B: {formatPrice(product.priceBest)}</PriceTag>
+            <PriceTag>D: {formatPrice(product.priceDealer)}</PriceTag>
+            <PriceTag>C: {formatPrice(product.priceCustomer)}</PriceTag>
           </PriceListWrapper>
         </PriceWrapper>
         <ContentWrapper>

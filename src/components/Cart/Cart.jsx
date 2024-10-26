@@ -71,7 +71,7 @@ const Cart = () => {
       await axios.put(
         `https://api.telegro.kr/api/carts/${id}`,
         {
-          quantity: updatedProduct.quantity // 증가된 수량을 서버로 전달
+          quantity: updatedProduct.quantity 
         },
         {
           headers: { Authorization: `Bearer ${accessToken}` }
@@ -96,7 +96,7 @@ const Cart = () => {
       await axios.put(
         `https://api.telegro.kr/api/carts/${id}`,
         {
-          quantity: updatedProduct.quantity // 감소된 수량을 서버로 전달
+          quantity: updatedProduct.quantity
         },
         {
           headers: { Authorization: `Bearer ${accessToken}` }

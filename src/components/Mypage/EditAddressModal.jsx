@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import CloseIcon from '/src/assets/icon/mypage/close.svg';
-import { Postcode } from '../Postcode/Postcode';
 import axios from 'axios';
 import * as M from './ModalStyle';
+import CloseIcon from '/src/assets/icon/mypage/close.svg';
+import { Postcode } from '../Postcode/Postcode';
+import check from '/src/assets/icon/Admin/check.svg';
+import checked from '/src/assets/icon/Admin/checked.svg';
 
 export default function EditAddressModal({ isOpen, toggleEditModal, address, onUpdateAddress }) {
   const [nickname, setNickname] = useState('');
@@ -10,6 +12,7 @@ export default function EditAddressModal({ isOpen, toggleEditModal, address, onU
   const [zipCode, setZipCode] = useState('');
   const [detailAddress, setDetailAddress] = useState('');
   const [isDefault, setIsDefault] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
 
   useEffect(() => {
     if (address) {
@@ -99,9 +102,11 @@ export default function EditAddressModal({ isOpen, toggleEditModal, address, onU
     setZipCode(data.zonecode);
     setIsSearching(false);
   };
+
   const handleCheckboxChange = () => {
     setIsDefault(!isDefault);
   };
+
   return isOpen ? (
     <M.ModalOverlay>
       <M.ModalContent>
@@ -142,15 +147,13 @@ export default function EditAddressModal({ isOpen, toggleEditModal, address, onU
         />
         <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
           <M.CheckboxContainer style={{alignItems: 'center'}}>
-            <M.Checkbox
-              type="checkbox" 
-              id="defaultAddressCheckbox" 
-              checked={isDefault} 
-              onChange={() => setIsDefault(!isDefault)} 
-            />
-            <M.CheckboxLabel htmlFor="defaultAddressCheckbox">기본 배송지로 설정</M.CheckboxLabel>
+            <img
+             style={{width: '20px', cursor: 'pointer', marginRight: '5px', alignItems: 'center'}}
+             src={isDefault ? checked : check} onChange={() => setIsDefault(!isDefault)} alt="Check" onClick={handleCheckboxChange} />
+            <M.CheckboxLabel htmlFor="defaultAddressCheckbox" onClick={handleCheckboxChange}>기본 배송지로 설정</M.CheckboxLabel>
           </M.CheckboxContainer>
         </div>
+
         <div>
           <M.Button onClick={toggleEditModal}>취소</M.Button>
           <M.Button onClick={handleSubmit}>확인</M.Button>

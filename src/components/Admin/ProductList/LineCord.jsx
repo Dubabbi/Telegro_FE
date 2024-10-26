@@ -43,6 +43,10 @@ const LineCord = ({ category = 'LINE_CORD', initialPage = 1, size = 12 }) => {
     return <div>{error}</div>;
   }
 
+  function formatPrice(price) {
+    return new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(price);
+}
+
   return (
     <>
     <P.PageContainer>
@@ -57,7 +61,7 @@ const LineCord = ({ category = 'LINE_CORD', initialPage = 1, size = 12 }) => {
             <P.ProductInfo>
             <h3>{product.productName}</h3>
             <p>{product.productModel}</p>
-            <strong>{product.price}</strong>
+            <strong>{formatPrice(product.price)}</strong>
             </P.ProductInfo>
           </P.GalleryItem>
         ))}

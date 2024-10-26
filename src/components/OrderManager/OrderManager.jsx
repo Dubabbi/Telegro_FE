@@ -17,7 +17,8 @@ const OrderManager = () => {
       unitPrice: 280000,
       totalPrice: 280000,
       orderDate: '2024-09-06',
-      point: 0
+      point: 0,
+      status: '배송중'
     },
     {
       id: 2,
@@ -28,7 +29,8 @@ const OrderManager = () => {
       unitPrice: 280000,
       totalPrice: 280000,
       orderDate: '2024-09-10',
-      point: 0
+      point: 0,
+      status: '배송중'
     },
     {
       id: 3,
@@ -39,7 +41,8 @@ const OrderManager = () => {
       unitPrice: 280000,
       totalPrice: 280000,
       orderDate: '2024-09-15',
-      point: 0
+      point: 0,
+      status: '배송완료'
     }
   ]);
 
@@ -124,6 +127,7 @@ const OrderManager = () => {
             <R.TableCell>단가</R.TableCell>
             <R.TableCell>총 금액(적립금)</R.TableCell>
             <R.TableCell>주문정보</R.TableCell>
+            <R.TableCell>주문상태</R.TableCell>
           </tr>
         </R.TableHead>
         <tbody>
@@ -139,6 +143,7 @@ const OrderManager = () => {
               <R.TableCell>{order.unitPrice}원</R.TableCell>
               <R.TableCell>{order.totalPrice}원<br />({order.point}원)</R.TableCell>
               <R.TableCell>{order.orderDate}</R.TableCell>
+              <R.TableCell>{order.status}</R.TableCell>
             </R.TableRow>
           ))}
         </tbody>
