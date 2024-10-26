@@ -17,7 +17,7 @@ export default defineConfig({
       origin: '*', 
       methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'], 
       allowedHeaders: ['Authorization', 'Content-Type'], 
-      credentials: true, 
+      withCredentials: true, 
       maxAge: 3600 
     },
   },
