@@ -24,6 +24,9 @@ export default function MobileNavbar() {
   const fetchProductsByCategory = async (category, page = 0) => {
     try {
       const response = await axios.get(`https://api.telegro.kr/products`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        },
         params: { category, page, size: 10 }
       });
       if (response.data.code === 20000) {

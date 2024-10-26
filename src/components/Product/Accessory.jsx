@@ -16,6 +16,9 @@ const Accessory = ({ category = 'ACCESSORY', initialPage = 1, size = 12 }) => {
     const fetchProducts = async () => {
       try {
         const response = await axios.get('https://api.telegro.kr/products', {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          },
           params: { category, page: currentPage - 1, size },
         });
 

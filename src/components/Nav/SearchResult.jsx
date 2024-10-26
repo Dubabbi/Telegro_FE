@@ -6,7 +6,9 @@ const SearchResult = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { filteredProducts } = location.state || { filteredProducts: [] }; 
-
+  function formatPrice(price) {
+    return new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(price);
+}
   return (
     <N.SearchResultContainer>
       {filteredProducts.length > 0 ? (
@@ -14,7 +16,7 @@ const SearchResult = () => {
           <N.ProductItem key={product.id} onClick={() => navigate(`/productdetail/${product.id}`)}>
             <img src={product.coverImage} alt={product.productName} />
             <p>{product.productName}</p>
-            <span>₩{product.price}</span>
+            <span>{formatPrice(product.price)}</span>
           </N.ProductItem>
         ))
       ) : (
