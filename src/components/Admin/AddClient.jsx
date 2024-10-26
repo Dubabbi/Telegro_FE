@@ -252,6 +252,12 @@ function AddClient() {
                   onChange={handleChange}
                 />
               </div>
+              <div>
+                <A.Label>기타 메모 </A.Label>
+                <A.Input
+                  name="category"
+                />
+              </div>
             </A.Form>
           </div>
         </A.FormWrapper>
