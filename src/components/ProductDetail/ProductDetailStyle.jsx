@@ -72,12 +72,16 @@ export const getCategoryBackground = (category) => {
   export const ModalImage = styled.img`
     width: 80%;
     height: auto;
-    max-height: 80vh;
+    max-height: 70vh;
+    height: 70vh;
     cursor: pointer;
     object-fit: contain;
-    margin: auto;
-  `;
-  
+    margin-top: 125px;
+    @media(max-width: 780px){
+      margin: auto;
+    }
+`;
+
   export const ArrowButton = styled.button`
     position: absolute;
     top: 50%;

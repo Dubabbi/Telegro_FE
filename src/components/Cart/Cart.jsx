@@ -33,7 +33,9 @@ const Cart = () => {
 
     fetchCartItems();
   }, []);
-
+  function formatPrice(price) {
+    return new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(price);
+}
   const handleDelete = async (id) => {
     const confirmDelete = window.confirm('정말로 이 상품을 장바구니에서 삭제하시겠습니까?');
 
@@ -227,9 +229,9 @@ const Cart = () => {
                 </>
               )}
                 </ProductDetails>
-              </ProductInfo>
+              </ProductInfo> 
 
-              <ProductPrice>{product.productPrice}원</ProductPrice>
+              <ProductPrice>{formatPrice(product.productPrice)}</ProductPrice>
               
           <QuantityWrapper>
             <QuantityButton onClick={() => handleDecreaseQuantity(product.id, product.selectOption, product.quantity)}>-</QuantityButton>

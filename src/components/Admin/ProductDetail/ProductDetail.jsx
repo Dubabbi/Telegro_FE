@@ -9,6 +9,191 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import Modal from 'react-modal';
 
+const AdminProductDetail = () => {
+  const navigate = useNavigate();
+  const [product, setProduct] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const { productId } = useParams(); 
+  
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const response = await axios.get(`https://api.telegro.kr/products/${productId}`,{
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+        if (response.status === 200) {
+          setProduct(response.data.data);
+        }
+      } catch (error) {
+        console.error('Error fetching product:', error);
+        alert('상품 정보를 가져오는 데 실패했습니다.');
+      }
+    };
+
+    fetchProduct();
+  }, [productId]); 
+
+  const openModal = (index) => {
+    setCurrentImageIndex(index);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const nextImage = () => {
+    setCurrentImageIndex((prevIndex) =>
+      prevIndex === product.pictures.length - 1 ? 0 : prevIndex + 1
+    );
+  };
+
+  const prevImage = () => {
+    setCurrentImageIndex((prevIndex) =>
+      prevIndex === 0 ? product.pictures.length - 1 : prevIndex - 1
+    );
+  };
+
+  function formatPrice(price) {
+    return new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(price);
+}
+
+  const handleDelete = async () => {
+    const confirmDelete = window.confirm("정말로 이 상품을 삭제하시겠습니까?");
+    
+    if (confirmDelete) {
+      try {
+        const response = await axios.delete(`https://api.telegro.kr/api/products/${productId}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+  
+        if (response.status === 200 && response.data.code === 20000) {
+          alert('상품이 성공적으로 삭제되었습니다.');
+  
+          // 카테고리에 따라 페이지 이동
+          switch (product.category) {
+            case 'HEADSET':
+              navigate('/admin/headset');
+              break;
+            case 'LINE_CORD':
+              navigate('/admin/linecord');
+              break;
+            case 'ACCESSORY':
+              navigate('/admin/accessory');
+              break;
+            case 'RECORDER':
+              navigate('/admin/recording');
+              break;
+            default:
+              navigate('/admin/headset');  
+              break;
+          }
+        }
+      } catch (error) {
+        if (error.response && error.response.status === 403) {
+          setError('관리자 계정으로 로그인되지 않았습니다.');
+        } else {
+          setError('상품을 삭제하는 동안 오류가 발생했습니다.');
+        }
+      }
+    }
+  };
+  
+  if (!product) {
+    return <div>로딩 중...</div>; 
+  }
+
+  return (
+    <>
+      <MainWrapper>
+
+          <N.PageTitle style={{ margin: '0', padding: '0' }}>
+            <h2>제품 상세</h2>
+          </N.PageTitle>
+
+          <div>
+            <FaEdit
+              onClick={() => navigate(`/admin/adminproductedit/${productId}`)}
+              style={{ cursor: 'pointer', marginRight: '10px', fontSize: '24px', color: '#4D44B5' }}
+            />
+            <FaTrash
+              onClick={handleDelete}
+              style={{ cursor: 'pointer', fontSize: '24px', color: '#E53E3E' }}
+            />
+          </div>
+
+      </MainWrapper>
+      <ProductPageWrapper>
+        <ProductDetails>
+          <ProductInfoWrapper>
+            <ProductImage src={product.pictures[0] || img} alt="Main Product" /> {/* 메인 이미지 표시 */}
+            <ProductInfo>
+              <ProductTitle>{product.productName}</ProductTitle> {/* 상품명 */}
+              <ProductSubtitle>{product.productModel}</ProductSubtitle> {/* 모델명 */}
+            </ProductInfo>
+          </ProductInfoWrapper>
+          <AdditionalImagesWrapper>
+            {product.pictures.slice(1).map((picture, index) => (
+              <AdditionalImage
+                style={{cursor: 'pointer'}}
+                key={index}
+                src={picture}
+                alt={`Additional Image ${index + 1}`}
+                onClick={() => openModal(index)} />
+            ))}
+            
+            <Modal
+              isOpen={isModalOpen}
+              onRequestClose={closeModal}
+              style={{
+                content: {
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                  border: 'none',
+                  inset: 0,
+                },
+                overlay: { backgroundColor: 'rgba(0, 0, 0, 0.8)'},
+              }}
+            >
+        <LeftArrow onClick={prevImage}>&lt;</LeftArrow>
+        <ModalImage src={product.pictures[currentImageIndex]} style={{cursor: 'pointer'}} onClick={closeModal} alt="Modal" />
+        <RightArrow onClick={nextImage}>&gt;</RightArrow>
+      </Modal>
+          </AdditionalImagesWrapper>
+        </ProductDetails>
+        <div style={{display: 'flex', justifyContent: 'flex-start', margin: '0 auto', width: '90%'}}>
+          <DescriptionTitle style={{ textAlign: 'left', marginBottom: '20px', alignItems: 'center' }}>가격</DescriptionTitle>
+          </div>
+        <PriceWrapper>
+          <PriceListWrapper>
+            <PriceTag>Biz: {formatPrice(product.priceBussiness)}</PriceTag>
+            <PriceTag>B: {formatPrice(product.priceBest)}</PriceTag>
+            <PriceTag>D: {formatPrice(product.priceDealer)}</PriceTag>
+            <PriceTag>C: {formatPrice(product.priceCustomer)}</PriceTag>
+          </PriceListWrapper>
+        </PriceWrapper>
+        <ContentWrapper>
+            <DescriptionTitle>상품 설명</DescriptionTitle>
+            <DescriptionList> 
+              <DescriptionItem className="toastui-editor-contents" dangerouslySetInnerHTML={{ __html: product.content }} /> {/* 상품 설명 */}
+            </DescriptionList>
+
+        </ContentWrapper>
+      </ProductPageWrapper>
+    </>
+  );
+};
+
+export default AdminProductDetail;
+
+
 const ProductPageWrapper = styled.div`
   display: flex;
   justify-content: center;
@@ -243,187 +428,3 @@ const MainWrapper = styled.div`
     margin: 0 auto;
   }
 `;
-
-const AdminProductDetail = () => {
-  const navigate = useNavigate();
-  const [product, setProduct] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const { productId } = useParams(); 
-  
-  useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        const response = await axios.get(`https://api.telegro.kr/products/${productId}`,{
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-          }
-        });
-        if (response.status === 200) {
-          setProduct(response.data.data);
-        }
-      } catch (error) {
-        console.error('Error fetching product:', error);
-        alert('상품 정보를 가져오는 데 실패했습니다.');
-      }
-    };
-
-    fetchProduct();
-  }, [productId]); 
-
-  const openModal = (index) => {
-    setCurrentImageIndex(index);
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
-
-  const nextImage = () => {
-    setCurrentImageIndex((prevIndex) =>
-      prevIndex === product.pictures.length - 1 ? 0 : prevIndex + 1
-    );
-  };
-
-  const prevImage = () => {
-    setCurrentImageIndex((prevIndex) =>
-      prevIndex === 0 ? product.pictures.length - 1 : prevIndex - 1
-    );
-  };
-
-  function formatPrice(price) {
-    return new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(price);
-}
-
-  const handleDelete = async () => {
-    const confirmDelete = window.confirm("정말로 이 상품을 삭제하시겠습니까?");
-    
-    if (confirmDelete) {
-      try {
-        const response = await axios.delete(`https://api.telegro.kr/api/products/${productId}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-          }
-        });
-  
-        if (response.status === 200 && response.data.code === 20000) {
-          alert('상품이 성공적으로 삭제되었습니다.');
-  
-          // 카테고리에 따라 페이지 이동
-          switch (product.category) {
-            case 'HEADSET':
-              navigate('/admin/headset');
-              break;
-            case 'LINE_CORD':
-              navigate('/admin/linecord');
-              break;
-            case 'ACCESSORY':
-              navigate('/admin/accessory');
-              break;
-            case 'RECORDER':
-              navigate('/admin/recording');
-              break;
-            default:
-              navigate('/admin/headset');  
-              break;
-          }
-        }
-      } catch (error) {
-        if (error.response && error.response.status === 403) {
-          setError('관리자 계정으로 로그인되지 않았습니다.');
-        } else {
-          setError('상품을 삭제하는 동안 오류가 발생했습니다.');
-        }
-      }
-    }
-  };
-  
-  if (!product) {
-    return <div>로딩 중...</div>; 
-  }
-
-  return (
-    <>
-      <MainWrapper>
-
-          <N.PageTitle style={{ margin: '0', padding: '0' }}>
-            <h2>제품 상세</h2>
-          </N.PageTitle>
-
-          <div>
-            <FaEdit
-              onClick={() => navigate(`/admin/adminproductedit/${productId}`)}
-              style={{ cursor: 'pointer', marginRight: '10px', fontSize: '24px', color: '#4D44B5' }}
-            />
-            <FaTrash
-              onClick={handleDelete}
-              style={{ cursor: 'pointer', fontSize: '24px', color: '#E53E3E' }}
-            />
-          </div>
-
-      </MainWrapper>
-      <ProductPageWrapper>
-        <ProductDetails>
-          <ProductInfoWrapper>
-            <ProductImage src={product.pictures[0] || img} alt="Main Product" /> {/* 메인 이미지 표시 */}
-            <ProductInfo>
-              <ProductTitle>{product.productName}</ProductTitle> {/* 상품명 */}
-              <ProductSubtitle>{product.productModel}</ProductSubtitle> {/* 모델명 */}
-            </ProductInfo>
-          </ProductInfoWrapper>
-          <AdditionalImagesWrapper>
-            {product.pictures.slice(1).map((picture, index) => (
-              <AdditionalImage
-                style={{cursor: 'pointer'}}
-                key={index}
-                src={picture}
-                alt={`Additional Image ${index + 1}`}
-                onClick={() => openModal(index)} />
-            ))}
-            
-            <Modal
-              isOpen={isModalOpen}
-              onRequestClose={closeModal}
-              style={{
-                content: {
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                  border: 'none',
-                  inset: 0,
-                },
-                overlay: { backgroundColor: 'rgba(0, 0, 0, 0.8)'},
-              }}
-            >
-        <LeftArrow onClick={prevImage}>&lt;</LeftArrow>
-        <ModalImage src={product.pictures[currentImageIndex]} style={{cursor: 'pointer'}} onClick={closeModal} alt="Modal" />
-        <RightArrow onClick={nextImage}>&gt;</RightArrow>
-      </Modal>
-          </AdditionalImagesWrapper>
-        </ProductDetails>
-        <div style={{display: 'flex', justifyContent: 'flex-start', margin: '0 auto', width: '90%'}}>
-          <DescriptionTitle style={{ textAlign: 'left', marginBottom: '20px', alignItems: 'center' }}>가격</DescriptionTitle>
-          </div>
-        <PriceWrapper>
-          <PriceListWrapper>
-            <PriceTag>Biz: {formatPrice(product.priceBussiness)}</PriceTag>
-            <PriceTag>B: {formatPrice(product.priceBest)}</PriceTag>
-            <PriceTag>D: {formatPrice(product.priceDealer)}</PriceTag>
-            <PriceTag>C: {formatPrice(product.priceCustomer)}</PriceTag>
-          </PriceListWrapper>
-        </PriceWrapper>
-        <ContentWrapper>
-            <DescriptionTitle>상품 설명</DescriptionTitle>
-            <DescriptionList> 
-              <DescriptionItem className="toastui-editor-contents" dangerouslySetInnerHTML={{ __html: product.content }} /> {/* 상품 설명 */}
-            </DescriptionList>
-
-        </ContentWrapper>
-      </ProductPageWrapper>
-    </>
-  );
-};
-
-export default AdminProductDetail;

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import img from '../Check/image.svg'; 
 import { Postcode } from '../Postcode/Postcode'; 
 import * as C from '../Cart/Cart';
@@ -6,6 +6,7 @@ import check from '/src/assets/icon/Admin/check.svg';
 import checked from '/src/assets/icon/Admin/checked.svg';
 import * as O from './OrderProcessStyle'
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const OrderProcess = () => {
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ const OrderProcess = () => {
   const [isKakaoPayChecked, setIsKakaoPayChecked] = useState(false);
   const [isAgreementChecked, setIsAgreementChecked] = useState(false);
   const [selectedAddress, setSelectedAddress] = useState(''); 
+  const [addressList, setAddressList] = useState([]);
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -23,11 +25,35 @@ const OrderProcess = () => {
     request: ''
   });
 
-  const AddressList = {
-    A: '배송지1',
-    B: '배송지2',
-    C: '배송지3'
-  };
+  // 배송지 목록 불러오기
+  useEffect(() => {
+    const fetchAddressList = async () => {
+      try {
+        const response = await axios.get('https://api.telegro.kr/api/users/my', {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+        
+        if (response.data.code === 20000) {
+          const userPhone = response.data.data.phone;
+          const addresses = response.data.data.addressList;
+          setAddressList(addresses);
+
+          const defaultAddress = addresses.find((addr) => addr.isDefault);
+          if (defaultAddress) {
+            updateAddressFormData(defaultAddress, userPhone); // 기본 배송지 초기 설정
+          } else {
+            setFormData((prev) => ({ ...prev, phone: userPhone })); // 사용자 전화번호 초기 설정
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching address list:", error);
+      }
+    };
+    
+    fetchAddressList();
+  }, []);
 
   const handleAddressComplete = ({ fullAddress, zonecode }) => {
     setFormData({
@@ -36,31 +62,34 @@ const OrderProcess = () => {
       postalCode: zonecode  
     });
   };
-  const addressData = {
-    A: { name: '홍길동', phone: '01012345678', address: '서울시 강남구', postalCode: '12345', detailedAddress: '강남대로 396' },
-    B: { name: '이순신', phone: '01087654321', address: '부산시 해운대구', postalCode: '54321', detailedAddress: '해운대해변로 123' },
-    C: { name: '김유신', phone: '01013572468', address: '대구시 중구', postalCode: '13579', detailedAddress: '중앙대로 456' }
+
+  const updateAddressFormData = (addressData, phone = formData.phone) => {
+    setFormData((prev) => ({
+      ...prev,
+      name: addressData.name,
+      phone: phone,
+      address: addressData.address,
+      postalCode: addressData.zipcode,
+      detailedAddress: addressData.addressDetail,
+      request: prev.request
+    }));
   };
-  
-  const updateAddressFormData = (key) => {
-    const selectedAddressData = addressData[key];
+
+  const handleAddressChange = (e) => {
+    const selectedId = e.target.value;
+    const selectedAddressData = addressList.find((addr) => addr.id.toString() === selectedId);
     if (selectedAddressData) {
-      setFormData({
-        name: selectedAddressData.name,
-        phone: selectedAddressData.phone,
-        address: selectedAddressData.address,
-        postalCode: selectedAddressData.postalCode,
-        detailedAddress: selectedAddressData.detailedAddress,
-        request: formData.request
-      });
+      updateAddressFormData(selectedAddressData);
+      setSelectedAddress(selectedId);
     }
   };
-  
+
   const handleAgreementChange = () => {
     setIsAgreementChecked(!isAgreementChecked);
-    if (!isAgreementChecked) { 
-      updateAddressFormData(selectedAddress);
-    } else { 
+    if (!isAgreementChecked) {
+      const defaultAddress = addressList.find((addr) => addr.isDefault);
+      if (defaultAddress) updateAddressFormData(defaultAddress);
+    } else {
       setFormData({
         name: '',
         phone: '',
@@ -71,7 +100,7 @@ const OrderProcess = () => {
       });
     }
   };
-  
+
   return (
     <>
       <O.Div></O.Div>
@@ -85,6 +114,7 @@ const OrderProcess = () => {
               <img src={img} alt="상품 이미지" />
               <div>
                 <h4>Daily Facial Soap</h4>
+                <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', gap: '5%'}}><p>옵션</p><p>수량</p></div>
                 <p>₩18,000원</p>
               </div>
             </O.ProductInfo>
@@ -93,7 +123,7 @@ const OrderProcess = () => {
             <O.SectionTitle>주문자 정보</O.SectionTitle>
             <div>
               <p>홍길동</p>
-              <p>01012345678</p>
+              <p>{formData.phone}</p>
               <p>user@imweb.me</p>
             </div>
           </O.BoxSection>
@@ -101,28 +131,29 @@ const OrderProcess = () => {
             <O.SectionTitle>배송 정보</O.SectionTitle>
             <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
               <O.CheckboxWrapper>
-              <img
-                src={isAgreementChecked ? checked : check}
-                alt="기본 배송지 불러오기"
-                onClick={handleAgreementChange}
-                style={{ cursor: 'pointer', width: '20px', height: '20px' }}
-              />
+                <img
+                  src={isAgreementChecked ? checked : check}
+                  alt="기본 배송지 불러오기"
+                  onClick={handleAgreementChange}
+                  style={{ cursor: 'pointer', width: '20px', height: '20px' }}
+                />
                 <O.CheckboxLabel>기본 배송지 불러오기</O.CheckboxLabel>
               </O.CheckboxWrapper>
               <O.Select
                 name="AddressList"
-                value={selectedAddress} // 선택된 값 상태 반영
-                onChange={(e) => setSelectedAddress(e.target.value)}
+                value={selectedAddress}
+                onChange={handleAddressChange}
               >
                 <option value="">배송지 선택</option>
-                {Object.entries(AddressList).map(([key, value]) => (
-                  <option key={key} value={key}>
-                    {value}
+                {addressList.map((address) => (
+                  <option key={address.id} value={address.id}>
+                    {address.name}
                   </option>
                 ))}
               </O.Select>
             </div>
             <O.DeliveryInfoForm>
+              {/* 배송 정보 입력 필드 */}
               <O.FormRow>
                 <O.FormInput
                   type="text"
@@ -171,7 +202,7 @@ const OrderProcess = () => {
           </O.BoxSection>
         </O.LeftSection>
 
-        {/* 우측 섹션 */}
+        {/* 우측 결제 및 총 결제금액 */}
         <O.RightSection>
           <O.BoxSection>
             <O.SectionTitle>최종 결제금액</O.SectionTitle>
@@ -188,10 +219,10 @@ const OrderProcess = () => {
               <span style={{ color: 'red' }}>-₩1,000원</span>
             </O.PriceDetail>
             <O.PriceDetailsWrapper>
-            <input type="text" placeholder="사용할 적립금 입력 (0 / 3,000)" />
-            <button><p>모두 사용</p></button>
-          </O.PriceDetailsWrapper>
-            <O.PriceDetail  style={{marginTop: '10px'}}>
+              <input type="text" placeholder="사용할 적립금 입력 (0 / 3,000)" />
+              <button><p>모두 사용</p></button>
+            </O.PriceDetailsWrapper>
+            <O.PriceDetail style={{marginTop: '10px'}}>
               <O.TotalPrice>총 결제금액</O.TotalPrice>
               <O.TotalPrice>₩19,500원</O.TotalPrice>
             </O.PriceDetail>
@@ -230,21 +261,19 @@ const OrderProcess = () => {
                 />
                 <O.CheckboxLabel>카카오페이</O.CheckboxLabel>
               </O.PaymentOption>
-
             </O.PaymentMethodWrapper>
             <hr />
             <O.CheckboxWrapper>
               <img
-                  src={isAgreementChecked ? checked : check}
-                  checked={isAgreementChecked}
-                  onClick={() => setIsAgreementChecked(!isAgreementChecked)}
-                  style={{ cursor: 'pointer', width: '20px', height: '20px' }}
-                />
-                <O.CheckboxLabel>구매조건 확인 및 결제진행에 동의</O.CheckboxLabel>
+                src={isAgreementChecked ? checked : check}
+                checked={isAgreementChecked}
+                onClick={() => setIsAgreementChecked(!isAgreementChecked)}
+                style={{ cursor: 'pointer', width: '20px', height: '20px' }}
+              />
+              <O.CheckboxLabel>구매조건 확인 및 결제진행에 동의</O.CheckboxLabel>
             </O.CheckboxWrapper>
-            <C.ConfirmButton onClick={()=>navigate('/completeorder')}>결제하기</C.ConfirmButton>
+            <C.ConfirmButton onClick={() => navigate('/completeorder')}>결제하기</C.ConfirmButton>
           </O.BoxSection>
-
         </O.RightSection>
       </O.OrderPageWrapper>
     </>
@@ -252,10 +281,3 @@ const OrderProcess = () => {
 };
 
 export default OrderProcess;
-
-
-
-{/*
-
-
-  */}

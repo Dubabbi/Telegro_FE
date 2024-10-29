@@ -129,11 +129,12 @@ export const PriceDetailsWrapper = styled.div`
   padding-bottom: 10px;
   display: flex;
   width: 100%;
+  gpa: 10px;
   flex-direction: row;
   justify-content: space-between;
   border-bottom: 1px solid #dcdcdc;
   input{
-    width: 74%;
+    width: 72%;
     padding: 9px;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -142,7 +143,7 @@ export const PriceDetailsWrapper = styled.div`
     padding: 9px 20px;
     background-color: #000;
     color: #fff;
-    width: 24%;
+    width: 100px;
     border-radius: 5px;
     text-align: center;
   }
