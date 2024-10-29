@@ -98,7 +98,7 @@ const AdminNotice = ({ page = 0, size = 20 }) => {
     <CommonTableRow key={notice.id}>
       <CommonTableColumn>{filteredNotice.length - index}</CommonTableColumn> 
       <CommonTableColumn>
-        <Link to={`/noticedetail/${notice.id}`}>{notice.noticeTitle}</Link>
+        <Link to={`/admin/adminnoticedetail/${notice.id}`}>{notice.noticeTitle}</Link>
       </CommonTableColumn>
       <CommonTableColumn>
         {getFileIcon(notice.noticeFileName)}
