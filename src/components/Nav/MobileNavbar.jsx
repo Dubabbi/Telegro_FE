@@ -101,7 +101,7 @@ export default function MobileNavbar() {
   const handleLogout = () => {
     localStorage.removeItem('token');
     setIsLoggedIn(false);
-    navigate('/login'); 
+    navigate('/'); 
   };
 
   const toggleSubMenu = () => {
@@ -168,7 +168,6 @@ export default function MobileNavbar() {
             <a href="mailto:Telegro@telegro.com">Contact Us</a>
           </MenuItem>
 
-          {/* 상품 관리 메뉴 및 하위 카테고리 */}
           <SubMenuWrapper>
             <MenuItem onClick={toggleSubMenu}>
               <FaCog />
@@ -193,25 +192,28 @@ export default function MobileNavbar() {
         </MenuWrapper>
 
         <FooterWrapper>
-          {isLoggedIn ? (
-            <ProfileWrapper onClick={() => navigate('/mypage')}>
-              <Avvvatars value={userInfo.id} size={40} />
-              <ProfileInfo style={{marginLeft: '10px'}}>
-                <div>{userInfo.name}</div>
-                <div style={{ fontSize: '0.8rem', color: '#FFD700' }}>일반회원</div>
-              </ProfileInfo>
-              <LogoutButton onClick={handleLogout}>
-                <FaSignOutAlt />
-                Log out
-              </LogoutButton>
-            </ProfileWrapper>
-          ) : (
-            <ProfileWrapper style={{cursor: 'pointer'}} onClick={() => navigate('/login')}>
-              <ProfileInfo>
-                <div>로그인해주세요</div>
-              </ProfileInfo>
-            </ProfileWrapper>
-          )}
+        {isLoggedIn ? (
+        <ProfileWrapper onClick={() => navigate('/mypage')} style={{ cursor: 'pointer' }}>
+          <Avvvatars value={userInfo.id} size={40} />
+          <ProfileInfo style={{ marginLeft: '10px' }}>
+            <div>{userInfo.name}</div>
+            <div style={{ fontSize: '0.8rem', color: '#FFD700' }}>일반회원</div>
+          </ProfileInfo>
+          <LogoutButton onClick={(e) => { 
+            e.stopPropagation();
+            handleLogout();
+          }}>
+            <FaSignOutAlt />
+            Log out
+          </LogoutButton>
+        </ProfileWrapper>
+      ) : (
+        <ProfileWrapper style={{ cursor: 'pointer' }} onClick={() => navigate('/login')}>
+          <ProfileInfo>
+            <div>로그인해주세요</div>
+          </ProfileInfo>
+        </ProfileWrapper>
+      )}
         </FooterWrapper>
       </Sidebar>
     </>

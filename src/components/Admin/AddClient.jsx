@@ -10,7 +10,7 @@ function AddClient() {
   const [form, setForm] = useState({
     companyName: '',
     phone: '',
-    username: '',
+    id: '', 
     password: '',
     email: '',
     role: '', 
@@ -52,8 +52,20 @@ function AddClient() {
     console.log('Form Data:', form);
   };
 
-
   const handleSignupClick = async () => {
+    // 필수 입력 필드 확인
+    const requiredFields = [
+      'companyName', 'phone', 'id', 'password', 'email', 'role',
+      'contactName', 'contactPhone', 'businessName', 'businessNumber', 
+      'address', 'zipCode', 'detailAddress', 'industry', 'category'
+    ];
+    const emptyFields = requiredFields.filter(field => !form[field]);
+
+    if (emptyFields.length > 0) {
+      alert('모든 필수 항목을 입력해 주세요.');
+      return;
+    }
+
     const accessToken = localStorage.getItem('token');
     const headers = { Authorization: `Bearer ${accessToken}` };
   
@@ -91,8 +103,10 @@ function AddClient() {
       console.error("Error while signing up:", error);
       if (error.response && error.response.status === 409) {
         alert("이미 사용 중인 상호명 혹은 ID입니다.");
-      }}
+      }
+    }
   };
+
   return (
     <>
       <A.Container>

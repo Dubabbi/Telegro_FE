@@ -72,6 +72,7 @@ export default function Navbar() {
   const handleLogout = () => {
     localStorage.removeItem('token');
     setIsLoggedIn(false);
+    navigate('/');
   };
 
   const handleSubmit = (e) => {
