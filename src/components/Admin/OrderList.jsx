@@ -161,10 +161,36 @@ const OrderList = () => {
       quantity: 1,
       unitPrice: 280000,
       totalPrice: 280000,
-      orderDate: '2024-09-06',
+      orderDate: '2024-09-20',
       point: 0,
       customer: '홍길동',
-      status: '주문 완료'
+      status: '배송 완료'
+    },
+    {
+      id: 2,
+      productImage: 'https://via.placeholder.com/100', 
+      productName: '단방향 자브라 마이크 (KJ 337 QD)',
+      option: '17mm 전용',
+      quantity: 1,
+      unitPrice: 280000,
+      totalPrice: 280000,
+      orderDate: '2024-09-16',
+      point: 0,
+      customer: '김철수',
+      status: '주문 취소'
+    },
+    {
+      id: 2,
+      productImage: 'https://via.placeholder.com/100', 
+      productName: '단방향 자브라 마이크 (KJ 337 QD)',
+      option: '17mm 전용',
+      quantity: 1,
+      unitPrice: 280000,
+      totalPrice: 280000,
+      orderDate: '2024-09-10',
+      point: 0,
+      customer: '김철수',
+      status: '배송 중'
     },
     {
       id: 2,
@@ -176,9 +202,9 @@ const OrderList = () => {
       totalPrice: 280000,
       orderDate: '2024-09-06',
       point: 0,
-      customer: '김철수',
-      status: '배송 중'
-    }
+      customer: '김미미',
+      status: '주문 완료'
+    },
   ]);
 
   const [searchValue, setSearchValue] = useState('');
@@ -302,6 +328,7 @@ const OrderList = () => {
                     onChange={(e) => handleStatusChange(order.id, e.target.value)}
                   >
                     <option value="주문 완료">주문 완료</option>
+                    <option value="주문 취소">주문 취소</option>
                     <option value="배송 중">배송 중</option>
                     <option value="배송 완료">배송 완료</option>
                   </StatusSelect>

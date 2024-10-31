@@ -21,17 +21,28 @@ const Recording = ({ category = 'RECORDER', initialPage = 1, size = 12 }) => {
         const response = await axios.get('https://api.telegro.kr/products', {
           params: { category, page: currentPage - 1, size },
         });
-
+  
         console.log('API Response:', response);
-
-        setProducts(response.data.data.products || []);
+  
+        const productsData = response.data.data.products;
+        const productsArray = Array.isArray(productsData) ? productsData : Object.values(productsData);
+        const sortedProducts = productsArray.sort((a, b) => b.id - a.id);
+  
+        console.log('Sorted Products before setting state:', sortedProducts);
+  
+        setProducts(sortedProducts);
+  
+        setTimeout(() => {
+          console.log('Products after state update:', products);
+        }, 0);
+  
         setTotalPages(response.data.data.totalPage); 
       } catch (error) {
         console.error('Error fetching data:', error);
         setError(`Failed to load products: ${error.message}`);
       }
     };
-
+  
     fetchProducts();
   }, [category, currentPage, size]);
 
