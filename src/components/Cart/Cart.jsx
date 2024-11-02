@@ -9,33 +9,42 @@ import Delete from '/src/assets/icon/delete.svg';
 const Cart = () => {
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
-
+  const [selectedTotalPrice, setSelectedTotalPrice] = useState(0);
+  const [totalPrice, setTotalPrice] = useState(0);
   useEffect(() => {
     const fetchCartItems = async () => {
       try {
         const accessToken = localStorage.getItem('token');
-        const response = await axios.get('https://api.telegro.kr/api/carts?page=0&size=10',
-          {
-            headers: { Authorization: `Bearer ${accessToken}` },
-          });
-          
-        console.log(response.data);
+        const response = await axios.get('https://api.telegro.kr/api/carts?page=0&size=10', {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        });
         
         if (response.status === 200 && response.data.data) {
           setProducts(response.data.data.carts);
+          console.log('Loaded products:', response.data.data.carts);
         } else {
+          console.log('Failed to load cart items:', response);
           alert('장바구니 정보를 불러오는 데 실패했습니다.');
         }
       } catch (error) {
         console.error('Error fetching cart items:', error);
       }
     };
-
+  
     fetchCartItems();
   }, []);
-  function formatPrice(price) {
-    return new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(price);
-}
+  
+  useEffect(() => {
+    const total = products.reduce((acc, product) => acc + (product.productPrice * product.quantity), 0);
+    const selectedTotal = products.reduce((acc, product) => product.selected ? acc + (product.productPrice * product.quantity) : acc, 0);
+  
+    setTotalPrice(total);
+    setSelectedTotalPrice(selectedTotal);
+  
+    console.log('Total price:', total);
+    console.log('Selected total price:', selectedTotal);
+  }, [products]);
+
   const handleDelete = async (id) => {
     const confirmDelete = window.confirm('정말로 이 상품을 장바구니에서 삭제하시겠습니까?');
 
@@ -84,7 +93,26 @@ const Cart = () => {
       console.error('수량 업데이트 중 오류가 발생했습니다:', error);
     }
   };
+  useEffect(() => {
+    const totalPrice = products.reduce((acc, product) => {
+      return product.selected ? acc + product.productPrice * product.quantity : acc;
+    }, 0);
+    setSelectedTotalPrice(totalPrice);
+  }, [products]);
   
+  function formatPrice(price) {
+    return new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(price);
+  }
+
+  useEffect(() => {
+    // 모든 상품의 총 금액 계산
+    const total = products.reduce((acc, product) => acc + product.productPrice * product.quantity, 0);
+    setTotalPrice(total);
+    // 선택한 상품의 총 금액 계산
+    const selectedTotal = products.reduce((acc, product) => product.selected ? acc + product.productPrice * product.quantity : acc, 0);
+    setSelectedTotalPrice(selectedTotal);
+  }, [products]);  // 의존성 배열에 products 추가
+
   const handleDecreaseQuantity = async (id) => {
     const newProducts = products.map(product =>
       product.id === id ? { ...product, quantity: Math.max(product.quantity - 1, 1) } : product
@@ -142,6 +170,7 @@ const Cart = () => {
       console.error('기재형 옵션 업데이트 중 오류가 발생했습니다:', error);
     }
   };
+
   const updateCartItem = async (cartId, selectOption, inputOption, quantity) => {
     try {
       const accessToken = localStorage.getItem('token');
@@ -252,11 +281,11 @@ const Cart = () => {
           <OrderTitle>주문 금액</OrderTitle>
           <PriceDetail>
             <span>총 상품 금액</span>
-            <span>880,000원</span>
+            <span>{formatPrice(totalPrice)}</span>
           </PriceDetail>
           <PriceDetail>
             <span>선택한 상품 금액</span>
-            <span style={{ color: 'red' }}>80,000원</span>
+            <span style={{ color: 'red' }}>{formatPrice(selectedTotalPrice)}</span>
           </PriceDetail>
           <ConfirmButton onClick={handlePurchase}>구매하기</ConfirmButton>
         </LeftSection>
