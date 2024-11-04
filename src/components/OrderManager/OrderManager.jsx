@@ -1,88 +1,70 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import Pagination from '../Pagination/Pagination';
 import * as N from '../Notice/NoticeStyle';
-import * as R from './OrderManagerStyle'
+import * as R from './OrderManagerStyle';
 import * as O from '../OrderProcess/OrderProcessStyle';
 import { FaSearch } from 'react-icons/fa';
 import Form from 'react-bootstrap/Form';
 
 const OrderManager = () => {
-  const [orders, setOrders] = useState([
-    {
-      id: 1,
-      productImage: 'https://via.placeholder.com/100',
-      productName: '단방향 자브라 마이크 (KJ 337 QD)',
-      option: '17mm 전용',
-      quantity: 1,
-      unitPrice: 280000,
-      totalPrice: 280000,
-      orderDate: '2024-09-06',
-      point: 0,
-      status: '배송중'
-    },
-    {
-      id: 2,
-      productImage: 'https://via.placeholder.com/100',
-      productName: '단방향 자브라 마이크 (KJ 337 QD)',
-      option: '17mm 전용',
-      quantity: 1,
-      unitPrice: 280000,
-      totalPrice: 280000,
-      orderDate: '2024-09-10',
-      point: 0,
-      status: '배송중'
-    },
-    {
-      id: 3,
-      productImage: 'https://via.placeholder.com/100',
-      productName: '단방향 자브라 마이크 (KJ 337 QD)',
-      option: '17mm 전용',
-      quantity: 1,
-      unitPrice: 280000,
-      totalPrice: 280000,
-      orderDate: '2024-09-15',
-      point: 0,
-      status: '배송완료'
-    }
-  ]);
-
+  const [orders, setOrders] = useState([]);
   const [searchValue, setSearchValue] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
+  const [page, setPage] = useState(0);
+  const [size, setSize] = useState(10);
+
+  useEffect(() => {
+    fetchOrders();
+  }, [startDate, endDate, page, size]);
+
+  const fetchOrders = async () => {
+    try {
+      const response = await axios.get('https://api.telegro.kr/api/orders', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        },
+        params: {
+          startDate: startDate || undefined,
+          endDate: endDate || undefined,
+          page,
+          size,
+        },
+      });
+      const { data } = response.data;
+      if (data) {
+        setOrders(data.orders);
+      }
+    } catch (error) {
+      console.error('Error fetching orders:', error);
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('검색어:', searchValue);
+    fetchOrders();
     setSearchValue('');
   };
 
-  const filterOrdersByDate = () => {
-    if (!startDate || !endDate) {
-      return orders; 
-    }
-
-    return orders.filter(order => {
-      const orderDate = new Date(order.orderDate);
-      const start = new Date(startDate);
-      const end = new Date(endDate);
-      return orderDate >= start && orderDate <= end;
-    });
-  };
   const filterOrdersByName = (filteredOrders) => {
     if (!searchValue) {
       return filteredOrders;
     }
-
     return filteredOrders.filter(order =>
-      order.productName.toLowerCase().includes(searchValue.toLowerCase())
+      order.products.some(product =>
+        product.productName.toLowerCase().includes(searchValue.toLowerCase())
+      )
     );
   };
 
   const calculateTotalAmount = (filteredOrders) => {
-    return filteredOrders.reduce((acc, order) => acc + order.totalPrice, 0);
+    return filteredOrders.reduce((acc, order) => {
+      return acc + order.products.reduce((sum, product) => sum + product.totalPrice, 0);
+    }, 0);
   };
 
-  const filteredOrders = filterOrdersByName(filterOrdersByDate());
+  const filteredOrders = filterOrdersByName(orders);
 
   return (
     <R.MainWrapper>
@@ -91,13 +73,14 @@ const OrderManager = () => {
       <R.SearchSection>
         <div>
           <label>기간: </label>
-          <R.DateInput 
-            type="date" 
+          <R.DateInput
+            type="date"
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
-          /> - 
-          <R.DateInput 
-            type="date" 
+          />
+          -
+          <R.DateInput
+            type="date"
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
           />
@@ -135,22 +118,26 @@ const OrderManager = () => {
             <R.TableRow key={order.id}>
               <R.TableCell>{index + 1}</R.TableCell>
               <R.TableCell>
-                <img src={order.productImage} alt="product" width="100" />
-                <p>{order.productName}</p>
+                {order.products.map((product) => (
+                  <div key={product.id}>
+                    <img src={product.coverImage || 'https://via.placeholder.com/100'} alt="product" width="100" />
+                    <p>{product.productName}</p>
+                  </div>
+                ))}
               </R.TableCell>
-              <R.TableCell>{order.option}</R.TableCell>
-              <R.TableCell>{order.quantity}</R.TableCell>
-              <R.TableCell>{order.unitPrice}원</R.TableCell>
-              <R.TableCell>{order.totalPrice}원<br />({order.point}원)</R.TableCell>
-              <R.TableCell>{order.orderDate}</R.TableCell>
-              <R.TableCell>{order.status}</R.TableCell>
+              <R.TableCell>{order.products[0].selectOption}</R.TableCell>
+              <R.TableCell>{order.products[0].quantity}</R.TableCell>
+              <R.TableCell>{order.products[0].productPrice}원</R.TableCell>
+              <R.TableCell>{order.products[0].totalPrice}원<br />({order.point}원)</R.TableCell>
+              <R.TableCell>{order.createdAt.split('T')[0]}</R.TableCell>
+              <R.TableCell>{order.orderStatus}</R.TableCell>
             </R.TableRow>
           ))}
         </tbody>
       </R.OrderTable>
-      
+
       <R.TotalAmount>총 주문 금액: ₩{calculateTotalAmount(filteredOrders).toLocaleString()}</R.TotalAmount>
-      
+
       <Pagination />
     </R.MainWrapper>
   );
