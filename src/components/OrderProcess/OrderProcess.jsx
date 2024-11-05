@@ -16,6 +16,10 @@ const OrderProcess = () => {
   const [isAgreementChecked, setIsAgreementChecked] = useState(false);
   const [selectedAddress, setSelectedAddress] = useState(''); 
   const [addressList, setAddressList] = useState([]);
+  const [isDefaultAddressChecked, setIsDefaultAddressChecked] = useState(false);
+  const [orderData, setOrderData] = useState(null);
+  const [point, setPoint] = useState(0); 
+  const [pointsToUse, setPointsToUse] = useState(0);
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -24,8 +28,16 @@ const OrderProcess = () => {
     detailedAddress: '',
     request: ''
   });
-
-  // 배송지 목록 불러오기
+  useEffect(() => {
+    const tempOrder = JSON.parse(sessionStorage.getItem('tempOrder'));
+    if (tempOrder) {
+      setOrderData(tempOrder);
+    } else {
+      alert("주문 생성 중 문제가 발생했습니다. 다시 시도해주세요.");
+      navigate("/cart");
+    }
+  }, []);
+  
   useEffect(() => {
     const fetchAddressList = async () => {
       try {
@@ -38,13 +50,14 @@ const OrderProcess = () => {
         if (response.data.code === 20000) {
           const userPhone = response.data.data.phone;
           const addresses = response.data.data.addressList;
+          const userPoints = response.data.data.point;
           setAddressList(addresses);
-
+          setPoint(userPoints);
           const defaultAddress = addresses.find((addr) => addr.isDefault);
           if (defaultAddress) {
-            updateAddressFormData(defaultAddress, userPhone); // 기본 배송지 초기 설정
+            updateAddressFormData(defaultAddress, userPhone);
           } else {
-            setFormData((prev) => ({ ...prev, phone: userPhone })); // 사용자 전화번호 초기 설정
+            setFormData((prev) => ({ ...prev, phone: userPhone })); 
           }
         }
       } catch (error) {
@@ -84,11 +97,15 @@ const OrderProcess = () => {
     }
   };
 
-  const handleAgreementChange = () => {
-    setIsAgreementChecked(!isAgreementChecked);
-    if (!isAgreementChecked) {
+  const handleLoadDefaultAddress = () => {
+    setIsDefaultAddressChecked((prev) => !prev);
+    if (!isDefaultAddressChecked) { 
       const defaultAddress = addressList.find((addr) => addr.isDefault);
-      if (defaultAddress) updateAddressFormData(defaultAddress);
+      if (defaultAddress) {
+        updateAddressFormData(defaultAddress);
+      } else {
+        alert("기본 배송지가 없습니다.");
+      }
     } else {
       setFormData({
         name: '',
@@ -100,6 +117,71 @@ const OrderProcess = () => {
       });
     }
   };
+  function formatPrice(price) {
+    return new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(price);
+  }
+  const handlePointsToUseChange = (e) => {
+    const inputPoints = Math.min(parseInt(e.target.value || '0', 10), point);
+    setPointsToUse(inputPoints);
+  };
+  
+  const handleAgreementChange = () => {
+    setIsAgreementChecked(!isAgreementChecked);
+  };
+  const confirmOrder = async () => {
+    const tempOrder = JSON.parse(sessionStorage.getItem('tempOrder'));
+    if (!tempOrder) {
+      alert("주문 생성 중 문제가 발생했습니다. 다시 시도해주세요.");
+      return;
+    }
+    if (!isAgreementChecked) {
+      alert("구매 조건에 동의하셔야 합니다.");
+      return;
+    }
+    try {
+      const response = await axios.post(
+        'https://api.telegro.kr/api/orders/done',
+        {
+          deliveryAddress: {
+            address: formData.address,
+            addressDetail: formData.detailedAddress,
+            zipcode: formData.postalCode,
+          },
+          request: formData.request,
+          shoppingCost: 3000,
+          pointsToUse: 0,
+          pointsToEarn: 100,
+          paymentMethod: isCreditCardChecked
+            ? 'CREDIT_CARD'
+            : isBankTransferChecked
+            ? 'BANK_TRANSFER'
+            : 'EASY_PAYMENT',
+          cartProductDTOS: tempOrder.cartProductDTOS,
+          userName: tempOrder.userName,
+          userEmail: tempOrder.userEmail,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+  
+      if (response.data.code === 20000) {
+        alert('주문이 완료되었습니다.');
+        navigate('/completeorder');
+      } else {
+        alert('주문 확정에 실패했습니다.');
+      }
+    } catch (error) {
+      console.error('Order confirmation error:', error);
+      alert('주문 확정 중 오류가 발생했습니다.');
+    }
+  };
+  
+
+  
 
   return (
     <>
@@ -130,15 +212,15 @@ const OrderProcess = () => {
           <O.BoxSection>
             <O.SectionTitle>배송 정보</O.SectionTitle>
             <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-              <O.CheckboxWrapper>
-                <img
-                  src={isAgreementChecked ? checked : check}
-                  alt="기본 배송지 불러오기"
-                  onClick={handleAgreementChange}
-                  style={{ cursor: 'pointer', width: '20px', height: '20px' }}
-                />
-                <O.CheckboxLabel>기본 배송지 불러오기</O.CheckboxLabel>
-              </O.CheckboxWrapper>
+            <O.CheckboxWrapper>
+              <img
+                src={isDefaultAddressChecked ? checked : check} 
+                alt="기본 배송지 불러오기"
+                onClick={handleLoadDefaultAddress}
+                style={{ cursor: 'pointer', width: '20px', height: '20px' }}
+              />
+              <O.CheckboxLabel>기본 배송지 불러오기</O.CheckboxLabel>
+            </O.CheckboxWrapper>
               <O.Select
                 name="AddressList"
                 value={selectedAddress}
@@ -216,15 +298,20 @@ const OrderProcess = () => {
             </O.PriceDetail>
             <O.PriceDetail>
               <span>적립금 할인</span>
-              <span style={{ color: 'red' }}>-₩1,000원</span>
+              <span style={{ color: 'red' }}>-₩{pointsToUse.toLocaleString()}원</span>
             </O.PriceDetail>
             <O.PriceDetailsWrapper>
-              <input type="text" placeholder="사용할 적립금 입력 (0 / 3,000)" />
-              <button><p>모두 사용</p></button>
-            </O.PriceDetailsWrapper>
+            <input
+              type="number"
+              placeholder={`사용할 적립금 입력 (0 / ${point})`}
+              value={pointsToUse === 0 ? '' : pointsToUse}
+              onChange={handlePointsToUseChange}
+            />
+            <button onClick={() => setPointsToUse(point)}>모두 사용</button>
+          </O.PriceDetailsWrapper>
             <O.PriceDetail style={{marginTop: '10px'}}>
               <O.TotalPrice>총 결제금액</O.TotalPrice>
-              <O.TotalPrice>₩19,500원</O.TotalPrice>
+              <O.TotalPrice>{formatPrice(19500 - pointsToUse)}원</O.TotalPrice>
             </O.PriceDetail>
             <O.PriceDetail>
               <span>포인트 적립 예정</span>
@@ -232,47 +319,59 @@ const OrderProcess = () => {
             </O.PriceDetail>
           </O.BoxSection>
           <O.BoxSection>
-            <O.PaymentMethodWrapper>
-              <O.PaymentTitle>결제 방법</O.PaymentTitle>
-              <O.PaymentOption>
-                <img
-                  src={isCreditCardChecked ? checked : check}
-                  alt="신용카드 결제"
-                  onClick={() => setIsCreditCardChecked(!isCreditCardChecked)}
-                  style={{ cursor: 'pointer', width: '20px', height: '20px' }}
-                />
-                <O.CheckboxLabel>신용카드</O.CheckboxLabel>
-              </O.PaymentOption>
-              <O.PaymentOption>
-                <img
-                  src={isBankTransferChecked ? checked : check}
-                  alt="무통장 입금"
-                  onClick={() => setIsBankTransferChecked(!isBankTransferChecked)}
-                  style={{ cursor: 'pointer', width: '20px', height: '20px' }}
-                />
-                <O.CheckboxLabel>무통장 입금(세금계산서 발행 - 업체)</O.CheckboxLabel>
-              </O.PaymentOption>
-              <O.PaymentOption>
-                <img
-                  src={isKakaoPayChecked ? checked : check}
-                  alt="카카오페이"
-                  onClick={() => setIsKakaoPayChecked(!isKakaoPayChecked)}
-                  style={{ cursor: 'pointer', width: '20px', height: '20px' }}
-                />
-                <O.CheckboxLabel>카카오페이</O.CheckboxLabel>
-              </O.PaymentOption>
-            </O.PaymentMethodWrapper>
+          <O.PaymentMethodWrapper>
+          <O.PaymentTitle>결제 방법</O.PaymentTitle>
+          <O.PaymentOption>
+            <img
+              src={isCreditCardChecked ? checked : check}
+              alt="신용카드 결제"
+              onClick={() => {
+                setIsCreditCardChecked(true);
+                setIsBankTransferChecked(false);
+                setIsKakaoPayChecked(false);
+              }}
+              style={{ cursor: 'pointer', width: '20px', height: '20px' }}
+            />
+            <O.CheckboxLabel>신용카드</O.CheckboxLabel>
+          </O.PaymentOption>
+          <O.PaymentOption>
+            <img
+              src={isBankTransferChecked ? checked : check}
+              alt="무통장 입금"
+              onClick={() => {
+                setIsBankTransferChecked(true);
+                setIsCreditCardChecked(false);
+                setIsKakaoPayChecked(false);
+              }}
+              style={{ cursor: 'pointer', width: '20px', height: '20px' }}
+            />
+            <O.CheckboxLabel>무통장 입금(세금계산서 발행 - 업체)</O.CheckboxLabel>
+          </O.PaymentOption>
+          <O.PaymentOption>
+            <img
+              src={isKakaoPayChecked ? checked : check}
+              alt="카카오페이"
+              onClick={() => {
+                setIsKakaoPayChecked(true);
+                setIsCreditCardChecked(false);
+                setIsBankTransferChecked(false);
+              }}
+              style={{ cursor: 'pointer', width: '20px', height: '20px' }}
+            />
+            <O.CheckboxLabel>카카오페이</O.CheckboxLabel>
+          </O.PaymentOption>
+        </O.PaymentMethodWrapper>
             <hr />
             <O.CheckboxWrapper>
               <img
-                src={isAgreementChecked ? checked : check}
-                checked={isAgreementChecked}
-                onClick={() => setIsAgreementChecked(!isAgreementChecked)}
+                src={isAgreementChecked ? checked : check} 
+                alt="구매 조건 동의"
+                onClick={handleAgreementChange}
                 style={{ cursor: 'pointer', width: '20px', height: '20px' }}
               />
               <O.CheckboxLabel>구매조건 확인 및 결제진행에 동의</O.CheckboxLabel>
             </O.CheckboxWrapper>
-            <C.ConfirmButton onClick={() => navigate('/completeorder')}>결제하기</C.ConfirmButton>
+            <C.ConfirmButton onClick={confirmOrder}>결제하기</C.ConfirmButton>
           </O.BoxSection>
         </O.RightSection>
       </O.OrderPageWrapper>

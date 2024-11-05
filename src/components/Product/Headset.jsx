@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import image from './image.svg';
 import Pagination from '../Pagination/Pagination';
 import * as P from './ProductStyle';
 import axios from 'axios';
@@ -58,7 +57,7 @@ const Headset = ({ category = 'HEADSET', initialPage = 1, size = 12 }) => {
 
   return (
     <>
-          <P.Div />
+      <P.Div />
       <P.Inline>
         <h1>헤드셋</h1>
         {/*<p>sorted</p>*/}

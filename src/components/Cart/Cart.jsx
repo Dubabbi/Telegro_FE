@@ -11,28 +11,36 @@ const Cart = () => {
   const [products, setProducts] = useState([]);
   const [selectedTotalPrice, setSelectedTotalPrice] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
+  
   useEffect(() => {
     const fetchCartItems = async () => {
-      try {
-        const accessToken = localStorage.getItem('token');
-        const response = await axios.get('https://api.telegro.kr/api/carts?page=0&size=10', {
-          headers: { Authorization: `Bearer ${accessToken}` },
-        });
-        
-        if (response.status === 200 && response.data.data) {
-          setProducts(response.data.data.carts);
-          console.log('Loaded products:', response.data.data.carts);
-        } else {
-          console.log('Failed to load cart items:', response);
-          alert('장바구니 정보를 불러오는 데 실패했습니다.');
+        try {
+            const accessToken = localStorage.getItem('token');
+            const response = await axios.get('https://api.telegro.kr/api/carts?page=0&size=10', {
+                headers: { Authorization: `Bearer ${accessToken}` },
+            });
+
+            if (response.status === 200 && response.data.data) {
+                const cartItems = await Promise.all(response.data.data.carts.map(async (product) => {
+                    if (product.productOptions.length === 1 && !product.selectOption) {
+                        product.selectOption = product.productOptions[0];
+                        await updateCartItem(product.id, product.selectOption, product.inputOption, product.quantity);
+                    }
+                    return product;
+                }));
+                setProducts(cartItems);
+                console.log('Loaded products with selectOption set:', cartItems);
+            } else {
+                console.log('Failed to load cart items:', response);
+                alert('장바구니 정보를 불러오는 데 실패했습니다.');
+            }
+        } catch (error) {
+            console.error('Error fetching cart items:', error);
         }
-      } catch (error) {
-        console.error('Error fetching cart items:', error);
-      }
     };
-  
+
     fetchCartItems();
-  }, []);
+}, []);
   
   useEffect(() => {
     const total = products.reduce((acc, product) => acc + (product.productPrice * product.quantity), 0);
@@ -105,13 +113,11 @@ const Cart = () => {
   }
 
   useEffect(() => {
-    // 모든 상품의 총 금액 계산
     const total = products.reduce((acc, product) => acc + product.productPrice * product.quantity, 0);
     setTotalPrice(total);
-    // 선택한 상품의 총 금액 계산
     const selectedTotal = products.reduce((acc, product) => product.selected ? acc + product.productPrice * product.quantity : acc, 0);
     setSelectedTotalPrice(selectedTotal);
-  }, [products]);  // 의존성 배열에 products 추가
+  }, [products]);  
 
   const handleDecreaseQuantity = async (id) => {
     const newProducts = products.map(product =>
@@ -202,16 +208,42 @@ const Cart = () => {
       product.id === id ? { ...product, selected: !product.selected } : product
     ));
   };
-  
-  const handlePurchase = () => {
-    const selectedProducts = products.filter(product => product.selected);
-    if (selectedProducts.length === 0) {
-      alert('구매할 상품을 선택해주세요.');
-      return;
+
+
+const handlePurchase = async () => {
+  const selectedCartIDs = products.filter(product => product.selected).map(product => product.id);
+
+  if (selectedCartIDs.length === 0) {
+    alert('구매할 상품을 선택해주세요.');
+    return;
+  }
+
+  try {
+    const accessToken = localStorage.getItem('token');
+    const response = await axios.post(
+      'https://api.telegro.kr/api/orders/create',
+      selectedCartIDs,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+
+    if (response.data.code === 20000) {
+      console.log('Order created:', response.data.data);
+      sessionStorage.setItem('tempOrder', JSON.stringify(response.data.data));
+      navigate('/orderprocess', { state: { orderData: response.data.data } });
+    } else {
+      alert('주문 생성에 실패했습니다.');
     }
-    console.log("구매할 상품들:", selectedProducts);
-    navigate('/orderprocess', { state: { products: selectedProducts } });
-  };
+  } catch (error) {
+    console.error('Error creating order:', error);
+    alert('주문 생성 중 오류가 발생했습니다.');
+  }
+};
+
 
   return (
     <>

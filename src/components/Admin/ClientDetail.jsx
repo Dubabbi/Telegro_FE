@@ -40,7 +40,7 @@ const ClientDetail = () => {
     return <div>Loading...</div>; 
   }
 
-  const isDealer = !!userInfo.companyName; // 공급업체 여부를 companyName 존재 여부로 판단
+  const isDealer = !!userInfo.companyName; 
 
   return (
     <div style={{ backgroundColor: '#eee' }}>
@@ -131,7 +131,14 @@ const ClientDetail = () => {
                 {userInfo.role}
               </M.UserInfo>
             </M.UserDetail>
+            <M.UserDetail>
+              <M.UserLabel>기타사항</M.UserLabel>
+              <M.UserInfo style={{fontSize: '1.5rem'}}>
+                *{userInfo.companyDescription || '기타사항이 없습니다.'} 
+              </M.UserInfo>
+            </M.UserDetail>
             </M.ClientInfoWrapper>
+            
             </M.BottomBackground>
             </M.AdminProfileWrapper>
         )}
