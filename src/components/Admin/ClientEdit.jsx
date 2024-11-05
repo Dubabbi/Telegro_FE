@@ -374,6 +374,12 @@ function ClientEdit() {
                     <Label>종목 *</Label>
                     <Input name="companyItem" value={form.companyItem} onChange={handleChange} required />
                   </div>
+                  <div>
+                <Label>기타 메모 </Label>
+                <Input
+                  name="category"
+                />
+              </div>
                 </>
               )}
             </Form>

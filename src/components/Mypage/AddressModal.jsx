@@ -30,7 +30,7 @@ export default function AddressModal({ isOpen, toggleModal, onAddAddress }) {
   
   const setAsDefault = async (addressId) => {
     const token = localStorage.getItem('token');
-
+  
     try {
       const response = await axios.post(
         `https://api.telegro.kr/api/users/address/${addressId}/set-default`,
@@ -42,10 +42,10 @@ export default function AddressModal({ isOpen, toggleModal, onAddAddress }) {
           },
         }
       );
-
+  
       if (response.data.code === 20000) {
         console.log('기본 배송지 설정 완료');
-        window.location.reload();
+        setIsDefault(true); // 기본 배송지 설정 상태를 업데이트합니다.
       } else {
         alert('기본 배송지 설정에 실패했습니다.');
       }
@@ -54,7 +54,7 @@ export default function AddressModal({ isOpen, toggleModal, onAddAddress }) {
       alert('기본 배송지 설정 중 오류가 발생했습니다.');
     }
   };
-
+  
   const handleSubmit = async () => {
     const token = localStorage.getItem('token');
     const newAddress = {
@@ -64,7 +64,7 @@ export default function AddressModal({ isOpen, toggleModal, onAddAddress }) {
       zipcode: zipCode,
       isDefault,
     };
-
+  
     try {
       const response = await axios.post('https://api.telegro.kr/api/users/address', newAddress, {
         headers: {
@@ -72,7 +72,7 @@ export default function AddressModal({ isOpen, toggleModal, onAddAddress }) {
           'Content-Type': 'application/json',
         },
       });
-
+  
       if (response.data.code === 20000) {
         const addedAddress = {
           ...newAddress,
@@ -80,11 +80,11 @@ export default function AddressModal({ isOpen, toggleModal, onAddAddress }) {
         };
         
         if (isDefault) {
-          await setAsDefault(addedAddress.id); 
+          await setAsDefault(addedAddress.id);
         }
-
-        onAddAddress(addedAddress);
-        toggleModal();
+  
+        onAddAddress(addedAddress); // 새로 추가된 주소를 부모 컴포넌트에 전달
+        toggleModal(); // 모달 닫기
       } else {
         alert('주소 추가에 실패했습니다.');
       }
@@ -93,6 +93,7 @@ export default function AddressModal({ isOpen, toggleModal, onAddAddress }) {
       alert('주소 추가 중 오류가 발생했습니다.');
     }
   };
+  
 
   return isOpen ? (
     <M.ModalOverlay>

@@ -1,10 +1,210 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 import Pagination from '../Pagination/Pagination';
 import * as P from './ProductList/ProductStyle';
 import * as N from './Notice/NoticeStyle';
 import { FaSearch } from 'react-icons/fa';
 import Form from 'react-bootstrap/Form';
+
+
+const OrderList = () => {
+  const [orders, setOrders] = useState([]);
+  const [searchValue, setSearchValue] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+  const [searchCategory, setSearchCategory] = useState('productName');
+  const [page, setPage] = useState(0);
+  const [size, setSize] = useState(10);
+
+  // 주문 목록 조회 API 호출
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const accessToken = localStorage.getItem('token');
+        const response = await axios.get(`https://api.telegro.kr/api/orders`, {
+          params: { startDate, endDate, page, size },
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          }
+        });
+
+        if (response.data.code === 20000) {
+          setOrders(response.data.data.orders);
+        } else {
+          alert('주문 목록을 불러오는 데 실패했습니다.');
+        }
+      } catch (error) {
+        console.error("Error fetching order list:", error);
+        alert('주문 목록을 불러오는 중 오류가 발생했습니다.');
+      }
+    };
+
+    fetchOrders();
+  }, [startDate, endDate, page, size]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("검색어:", searchValue);
+    setSearchValue('');
+  };
+ 
+
+  const filterOrdersByDate = () => {
+    if (!startDate || !endDate) {
+      return orders; 
+    }
+
+    return orders.filter(order => {
+      const orderDate = new Date(order.orderDate);
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+      return orderDate >= start && orderDate <= end;
+    });
+  };
+
+  const filterOrdersBySearch = (filteredOrders) => {
+    if (!searchValue) {
+      return filteredOrders; 
+    }
+
+    return filteredOrders.filter(order => 
+      order[searchCategory].includes(searchValue)
+    );
+  };
+
+  const calculateTotalAmount = (filteredOrders) => {
+    return filteredOrders.reduce((acc, order) => acc + order.totalPrice, 0);
+  };
+
+  const filteredOrders = filterOrdersBySearch(filterOrdersByDate());
+
+  const handleStatusChange = async (orderId, newStatus) => {
+    const token = localStorage.getItem('token');
+  
+    try {
+      const response = await axios.patch(
+        `https://api.telegro.kr/api/orders/${orderId}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          params: {
+            status: newStatus,
+          },
+        }
+      );
+  
+      if (response.data.code === 20000) {
+        setOrders((prevOrders) =>
+          prevOrders.map((order) =>
+            order.id === orderId ? { ...order, orderStatus: newStatus } : order
+          )
+        );
+        alert('주문 상태가 변경되었습니다.');
+      } else {
+        alert('주문 상태 변경에 실패했습니다.');
+      }
+    } catch (error) {
+      console.error("Error updating order status:", error);
+      alert('주문 상태 변경 중 오류가 발생했습니다.');
+    }
+  };
+  
+  return (
+    <>
+      <MainWrapper>
+        <Title>주문확인</Title>
+        <SearchSection style={{whiteSpace: 'nowrap'}}>
+          <div>
+            <label>기간: </label>
+            <DateInput
+              type="date"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+            /> - 
+            <DateInput
+              type="date"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+            />
+          </div>
+          <SearchWrap>
+            <SelectBar
+              value={searchCategory}
+              onChange={(e) => setSearchCategory(e.target.value)}
+            >
+              <option value="productName">상품명</option>
+              <option value="customer">주문자 정보</option>
+            </SelectBar>
+            <N.StyledForm onSubmit={handleSubmit}>
+              <Form.Control
+                type="text"
+                placeholder="검색어 입력"
+                value={searchValue}
+                onChange={(e) => setSearchValue(e.target.value)}
+              />
+              <N.StyledButton type="submit"><FaSearch size={15} /></N.StyledButton>
+            </N.StyledForm>
+          </SearchWrap>
+        </SearchSection>
+
+        <OrderTable>
+          <TableHead>
+            <tr>
+              <TableCell>No</TableCell>
+              <TableCell>상품명</TableCell>
+              <TableCell>옵션 선택</TableCell>
+              <TableCell>수량</TableCell>
+              <TableCell>단가</TableCell>
+              <TableCell>총 금액(적립금)</TableCell>
+              <TableCell>주문정보</TableCell>
+              <TableCell>주문자 정보</TableCell>
+              <TableCell>주문 상태</TableCell>
+            </tr>
+          </TableHead>
+          <tbody>
+            {orders.map((order, index) => (
+              <TableRow key={order.id}>
+                <TableCell>{index + 1}</TableCell>
+                <TableCell>
+                  <img src={order.products[0].coverImage || 'https://via.placeholder.com/100'} alt="product" width="100" />
+                  <p>{order.products[0].productName}</p>
+                </TableCell>
+                <TableCell>{order.products[0].selectOption}</TableCell>
+                <TableCell>{order.products[0].quantity}</TableCell>
+                <TableCell>{order.products[0].productPrice}원</TableCell>
+                <TableCell>{order.products[0].totalPrice}원<br />({order.products[0].point || 0}원)</TableCell>
+                <TableCell>{order.createdAt}</TableCell>
+                <TableCell>{order.customer || 'N/A'}</TableCell>
+                <TableCell>
+                  <StatusSelect
+                    value={order.orderStatus}
+                    onChange={(e) => handleStatusChange(order.id, e.target.value)}
+                  >
+                    <option value="ORDER_COMPLETED">주문 완료</option>
+                    <option value="ORDER_CANCELED">주문 취소</option>
+                    <option value="SHIPPING">배송 중</option>
+                    <option value="DELIVERED">배송 완료</option>
+                  </StatusSelect>
+                </TableCell>
+              </TableRow>
+            ))}
+          </tbody>
+        </OrderTable>
+        <TotalAmount>총 주문 금액: ₩{calculateTotalAmount(filteredOrders).toLocaleString()}</TotalAmount>
+      </MainWrapper>
+      <P.Pagediv>
+        <Pagination />
+      </P.Pagediv>
+    </>
+  );
+};
+
+export default OrderList;
+
 
 const MainWrapper = styled.div`
   width: 70%; 
@@ -150,200 +350,3 @@ const SelectBar = styled.select`
   border-radius: 4px;
   margin-right: 10px;
 `;
-
-const OrderList = () => {
-  const [orders, setOrders] = useState([
-    {
-      id: 1,
-      productImage: 'https://via.placeholder.com/100', 
-      productName: '단방향 자브라 마이크 (KJ 337 QD)',
-      option: '17mm 전용',
-      quantity: 1,
-      unitPrice: 280000,
-      totalPrice: 280000,
-      orderDate: '2024-09-20',
-      point: 0,
-      customer: '홍길동',
-      status: '배송 완료'
-    },
-    {
-      id: 2,
-      productImage: 'https://via.placeholder.com/100', 
-      productName: '단방향 자브라 마이크 (KJ 337 QD)',
-      option: '17mm 전용',
-      quantity: 1,
-      unitPrice: 280000,
-      totalPrice: 280000,
-      orderDate: '2024-09-16',
-      point: 0,
-      customer: '김철수',
-      status: '주문 취소'
-    },
-    {
-      id: 2,
-      productImage: 'https://via.placeholder.com/100', 
-      productName: '단방향 자브라 마이크 (KJ 337 QD)',
-      option: '17mm 전용',
-      quantity: 1,
-      unitPrice: 280000,
-      totalPrice: 280000,
-      orderDate: '2024-09-10',
-      point: 0,
-      customer: '김철수',
-      status: '배송 중'
-    },
-    {
-      id: 2,
-      productImage: 'https://via.placeholder.com/100', 
-      productName: '단방향 자브라 마이크 (KJ 337 QD)',
-      option: '17mm 전용',
-      quantity: 1,
-      unitPrice: 280000,
-      totalPrice: 280000,
-      orderDate: '2024-09-06',
-      point: 0,
-      customer: '김미미',
-      status: '주문 완료'
-    },
-  ]);
-
-  const [searchValue, setSearchValue] = useState('');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
-  const [searchCategory, setSearchCategory] = useState('productName');
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("검색어:", searchValue);
-    setSearchValue('');
-  };
-
-  const handleStatusChange = (id, newStatus) => {
-    setOrders(prevOrders => 
-      prevOrders.map(order => 
-        order.id === id ? { ...order, status: newStatus } : order
-      )
-    );
-  };
-
-  const filterOrdersByDate = () => {
-    if (!startDate || !endDate) {
-      return orders; 
-    }
-
-    return orders.filter(order => {
-      const orderDate = new Date(order.orderDate);
-      const start = new Date(startDate);
-      const end = new Date(endDate);
-      return orderDate >= start && orderDate <= end;
-    });
-  };
-
-  const filterOrdersBySearch = (filteredOrders) => {
-    if (!searchValue) {
-      return filteredOrders; 
-    }
-
-    return filteredOrders.filter(order => 
-      order[searchCategory].includes(searchValue)
-    );
-  };
-
-  const calculateTotalAmount = (filteredOrders) => {
-    return filteredOrders.reduce((acc, order) => acc + order.totalPrice, 0);
-  };
-
-  const filteredOrders = filterOrdersBySearch(filterOrdersByDate());
-
-  return (
-    <>
-      <MainWrapper>
-        <Title>주문확인</Title>
-        <SearchSection style={{whiteSpace: 'nowrap'}}>
-          <div>
-            <label>기간: </label>
-            <DateInput 
-              type="date" 
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-            /> - 
-            <DateInput 
-              type="date" 
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
-            />
-          </div>
-          <SearchWrap>
-          <SelectBar 
-                value={searchCategory}
-                onChange={(e) => setSearchCategory(e.target.value)}
-              >
-                <option value="productName">상품명</option>
-                <option value="customer">주문자 정보</option>
-              </SelectBar>
-            <N.StyledForm onSubmit={handleSubmit}>
-              {/* Select Bar 추가 */}
-              <Form.Control
-                type="text"
-                placeholder="검색어 입력"
-                value={searchValue}
-                onChange={(e) => setSearchValue(e.target.value)}
-              />
-              <N.StyledButton type="submit" variant="none"><FaSearch size={15} /></N.StyledButton>
-            </N.StyledForm>
-          </SearchWrap>
-        </SearchSection>
-
-        <OrderTable>
-          <TableHead>
-            <tr>
-              <TableCell>No</TableCell>
-              <TableCell>상품명</TableCell>
-              <TableCell>옵션 선택</TableCell>
-              <TableCell>수량</TableCell>
-              <TableCell>단가</TableCell>
-              <TableCell>총 금액(적립금)</TableCell>
-              <TableCell>주문정보</TableCell>
-              <TableCell>주문자 정보</TableCell>
-              <TableCell>주문 상태</TableCell>
-            </tr>
-          </TableHead>
-          <tbody>
-            {filteredOrders.map((order, index) => (
-              <TableRow key={order.id}>
-                <TableCell>{index + 1}</TableCell>
-                <TableCell>
-                  <img src={order.productImage} alt="product" width="100" />
-                  <p>{order.productName}</p>
-                </TableCell>
-                <TableCell>{order.option}</TableCell>
-                <TableCell>{order.quantity}</TableCell>
-                <TableCell>{order.unitPrice}원</TableCell>
-                <TableCell>{order.totalPrice}원<br />({order.point}원)</TableCell>
-                <TableCell>{order.orderDate}</TableCell>
-                <TableCell>{order.customer}</TableCell>
-                <TableCell>
-                  <StatusSelect
-                    value={order.status}
-                    onChange={(e) => handleStatusChange(order.id, e.target.value)}
-                  >
-                    <option value="주문 완료">주문 완료</option>
-                    <option value="주문 취소">주문 취소</option>
-                    <option value="배송 중">배송 중</option>
-                    <option value="배송 완료">배송 완료</option>
-                  </StatusSelect>
-                </TableCell>
-              </TableRow>
-            ))}
-          </tbody>
-        </OrderTable>
-        <TotalAmount>총 주문 금액: ₩{calculateTotalAmount(filteredOrders).toLocaleString()}</TotalAmount>
-      </MainWrapper>
-      <P.Pagediv>
-        <Pagination />
-      </P.Pagediv>
-    </>
-  );
-};
-
-export default OrderList;
