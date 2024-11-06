@@ -98,7 +98,7 @@ export const ClientInfoWrapper = styled.div`
   display: grid;
   width: 90%;
   margin: 0 auto;
-  grid-template-columns: 1.5fr 1.5fr 1fr;
+  grid-template-columns: 1.5fr 1.5fr 2fr;
   gap: 20px; 
   padding: 0 20px;
   margin: 20px 0;

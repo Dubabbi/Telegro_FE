@@ -312,7 +312,7 @@ function ClientEdit() {
                   <Input name="userid" value={form.userid} onChange={handleChange} required />
                 </div>
                 <div>
-                  <Label>이메일 *</Label>
+                  <Label>이메일(세금계산서용) *</Label>
                   <Input name="email" type="email" value={form.email} onChange={handleChange} required />
                 </div>
               </InlineFormWrapper>

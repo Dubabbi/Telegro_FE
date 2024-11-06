@@ -153,7 +153,7 @@ function AddClient() {
                   />
                 </div>
                 <div>
-                  <A.Label>이메일 *</A.Label>
+                  <A.Label>이메일(세금계산서용) *</A.Label>
                   <A.Input
                     name="email"
                     type="email"

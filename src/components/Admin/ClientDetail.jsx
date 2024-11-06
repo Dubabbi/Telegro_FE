@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { FaPhone, FaEnvelope, FaUser, FaBuilding, FaBriefcase ,FaUserTie, FaBox  } from 'react-icons/fa';
+import { FaPhone, FaEnvelope, FaUser, FaBuilding, FaBriefcase ,FaUserTie, FaBox, FaMapMarkerAlt  } from 'react-icons/fa';
 import * as M from '../Mypage/MypageStyle';
 import Avvvatars from 'avvvatars-react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -88,24 +88,27 @@ const ClientDetail = () => {
             <M.BottomBackground>
               <M.ClientInfoWrapper>
               <M.UserDetail>
-              <M.UserLabel>Manager Phone</M.UserLabel>
-              <M.UserInfo>
-                <FaPhone style={{ marginRight: '10px' }} /> 
-                {userInfo.managerPhone}
-              </M.UserInfo>
-            </M.UserDetail>
-            <M.UserDetail>
-              <M.UserLabel>Manager Name</M.UserLabel>
+              <M.UserLabel>회원명(대표자)</M.UserLabel>
               <M.UserInfo>
                 <FaUser style={{ marginRight: '10px' }} /> 
                 {userInfo.managerName}
               </M.UserInfo>
             </M.UserDetail>
             <M.UserDetail>
-              <M.UserLabel>Company Number</M.UserLabel>
+            <M.UserLabel>사업자 등록번호</M.UserLabel>
               <M.UserInfo>
                 <FaBuilding style={{ marginRight: '10px' }} />
                 {userInfo.companyNumber}
+              </M.UserInfo>
+            </M.UserDetail>
+            <M.UserDetail>
+              <M.UserLabel>영업소재지(주소)</M.UserLabel>
+              <M.UserInfo>
+                <FaMapMarkerAlt style={{ marginRight: '10px' }} />
+                {userInfo.address}
+              </M.UserInfo>
+              <M.UserInfo style={{marginLeft: '9%'}}>
+              ({userInfo.addressDetail}, {userInfo.zipCode})
               </M.UserInfo>
             </M.UserDetail>
             </M.ClientInfoWrapper>
