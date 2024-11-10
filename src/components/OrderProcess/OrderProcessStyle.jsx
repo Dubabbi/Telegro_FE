@@ -168,9 +168,7 @@ export const TotalPrice = styled.div`
   font-weight: bold;
 `;
 
-export const PaymentMethodWrapper = styled.div`
-  margin-top: 20px;
-`;
+
 
 export const PaymentTitle = styled.h3`
   font-size: 1.3rem;

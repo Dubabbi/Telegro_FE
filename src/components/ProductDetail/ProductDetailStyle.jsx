@@ -292,3 +292,112 @@ export const getCategoryBackground = (category) => {
     font-size: 1.3rem;
   `;
   
+  export const Tabs = styled.div`
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+  border-bottom: 1px solid #ddd;
+`;
+
+export const Tab = styled.button`
+  padding: 10px 20px;
+  cursor: pointer;
+  background: ${({ isActive }) => (isActive ? '#4D44B5' : 'transparent')};
+  color: ${({ isActive }) => (isActive ? '#fff' : '#4D44B5')};
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-bottom: ${({ isActive }) => (isActive ? '3px solid #4D44B5' : 'none')};
+  &:hover {
+    color: #4D44B5;
+    background: ${({ isActive }) => (isActive ? '#4D44B5' : '#f0f0f0')};
+  }
+`;
+
+export const ShippingTable = styled.div`
+  display: table;
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+`;
+
+export const ShippingRow = styled.div`
+  display: table-row;
+`;
+
+export const ShippingCell = styled.div`
+  display: table-cell;
+  padding: 15px;
+  border: 1px solid #ddd;
+  font-size: 1rem;
+  text-align: left;
+  vertical-align: top;
+  &:first-child {
+    background-color: #f9f9f9;
+    font-weight: bold;
+    width: 40%;
+  }
+`;
+
+export const OrderPageWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin: 0 auto;
+  @media (max-width: 780px) {
+    flex-direction: column;
+    width: 90%;
+  }
+`;
+
+export const NoticeBox = styled.div`
+  background-color: #f7f7f7;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  margin: 0px 0;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #333;
+  width: 100%;
+
+  & h3 {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  & p {
+    margin: 5px 0;
+  }
+
+  & span.highlight {
+    font-weight: bold;
+    color: #333;
+  }
+
+  & div.highlight-box {
+    background-color: #eee;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+  }
+`;
+
+export const LeftSection = styled.div`
+  width: 40%;
+  padding: 20px;
+  @media (max-width: 780px) {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+`;
+
+
+export const RightSection = styled.div`
+  width: 60%;
+  padding: 20px;
+  @media (max-width: 780px) {
+    width: 100%;
+  }
+`;

@@ -187,9 +187,9 @@ const OrderProcess = () => {
           <O.BoxSection>
             <O.SectionTitle>주문자 정보</O.SectionTitle>
             <div>
-              <p>홍길동</p>
-              <p>{formData.phone}</p>
-              <p>user@imweb.me</p>
+              <p style={{margin: '1%', fontSize: '1.2rem'}}>홍길동</p>
+              <p style={{margin: '1%', fontSize: '1.2rem'}}>{formData.phone}</p>
+              <p style={{margin: '1%', fontSize: '1.2rem'}}>user@imweb.me</p>
             </div>
           </O.BoxSection>
           <O.BoxSection>
@@ -302,7 +302,6 @@ const OrderProcess = () => {
             </O.PriceDetail>
           </O.BoxSection>
           <O.BoxSection>
-          <O.PaymentMethodWrapper>
           <O.PaymentTitle>결제 방법</O.PaymentTitle>
           <O.PaymentOption>
             <img
@@ -343,7 +342,6 @@ const OrderProcess = () => {
             />
             <O.CheckboxLabel>카카오페이</O.CheckboxLabel>
           </O.PaymentOption>
-        </O.PaymentMethodWrapper>
             <hr />
             <O.CheckboxWrapper>
               <img
