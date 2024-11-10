@@ -50,6 +50,7 @@ const ProductDetail = () => {
       alert('장바구니에 물건을 담는 중 오류가 발생했습니다.');
     }
   };
+  
   const handlePurchase = async () => {
     if (!selectedOption) {
       alert('옵션을 선택해주세요.');
@@ -63,9 +64,9 @@ const ProductDetail = () => {
       const cartResponse = await axios.post(
         `https://api.telegro.kr/api/carts/${productId}`,
         {
-          selectOption: selectedOption,
-          quantity: quantity,
-          inputOption: inputOption
+            selectOption: selectedOption,
+            quantity: quantity,
+            inputOption: inputOption
         },
         {
           headers: { Authorization: `Bearer ${accessToken}` },
@@ -74,19 +75,17 @@ const ProductDetail = () => {
 
       if (cartResponse.status === 200) {
         // 2. 장바구니 추가 후 주문 임시 생성
-        const cartId = cartResponse.data.data.id; // 장바구니 ID 추출
+        const cartId = cartResponse.data.data.id;
         const orderResponse = await axios.post(
           `https://api.telegro.kr/api/orders/create`,
           [cartId],
           {
-            headers: { Authorization: `Bearer ${accessToken}` },
-          }
+            headers: { Authorization: `Bearer ${accessToken}` },withCredentials: true
+          }, 
         );
 
         if (orderResponse.data.code === 20000) {
-          // 세션에 주문 데이터 저장 및 페이지 이동
-          sessionStorage.setItem('orderData', JSON.stringify(orderResponse.data.data));
-          navigate('/orderprocess');
+          navigate('/orderprocess', { state: { orderData: orderResponse.data.data } });
         } else {
           alert('주문 생성에 실패했습니다.');
         }
@@ -248,7 +247,7 @@ const ProductDetail = () => {
           </P.OptionSelectWrapper>
 
           <P.ButtonWrapper>
-            <P.BuyButton onClick={() => navigate('/orderprocess')}>구매하기</P.BuyButton>
+            <P.BuyButton onClick={handlePurchase}>구매하기</P.BuyButton>
             <P.BuyButton onClick={handleAddCart}>장바구니</P.BuyButton>
           </P.ButtonWrapper>
         </P.StickyBarWrapper>

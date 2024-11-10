@@ -65,19 +65,23 @@ const OrderList = () => {
 
   const filterOrdersBySearch = (filteredOrders) => {
     if (!searchValue) {
-      return filteredOrders; 
+      return filteredOrders;
     }
-
-    return filteredOrders.filter(order => 
-      order[searchCategory].includes(searchValue)
+    return filteredOrders.filter(order =>
+      order.products.some(product =>
+        product.productName.toLowerCase().includes(searchValue.toLowerCase())
+      )
     );
   };
 
   const calculateTotalAmount = (filteredOrders) => {
-    return filteredOrders.reduce((acc, order) => acc + order.totalPrice, 0);
+    return filteredOrders.reduce((acc, order) => {
+      return acc + order.products.reduce((sum, product) => sum + product.totalPrice, 0);
+    }, 0);
   };
 
-  const filteredOrders = filterOrdersBySearch(filterOrdersByDate());
+  const filteredOrders = filterOrdersBySearch(orders);
+
 
   const handleStatusChange = async (orderId, newStatus) => {
     const token = localStorage.getItem('token');
@@ -166,33 +170,35 @@ const OrderList = () => {
             </tr>
           </TableHead>
           <tbody>
-            {orders.map((order, index) => (
-              <TableRow key={order.id}>
-                <TableCell>{index + 1}</TableCell>
-                <TableCell>
-                  <img src={order.products[0].coverImage || 'https://via.placeholder.com/100'} alt="product" width="100" />
-                  <p>{order.products[0].productName}</p>
-                </TableCell>
-                <TableCell>{order.products[0].selectOption}</TableCell>
-                <TableCell>{order.products[0].quantity}</TableCell>
-                <TableCell>{order.products[0].productPrice}원</TableCell>
-                <TableCell>{order.products[0].totalPrice}원<br />({order.products[0].point || 0}원)</TableCell>
-                <TableCell>{order.createdAt}</TableCell>
-                <TableCell>{order.customer || 'N/A'}</TableCell>
-                <TableCell>
-                  <StatusSelect
-                    value={order.orderStatus}
-                    onChange={(e) => handleStatusChange(order.id, e.target.value)}
-                  >
-                    <option value="ORDER_COMPLETED">주문 완료</option>
-                    <option value="ORDER_CANCELED">주문 취소</option>
-                    <option value="SHIPPING">배송 중</option>
-                    <option value="DELIVERED">배송 완료</option>
-                  </StatusSelect>
-                </TableCell>
-              </TableRow>
-            ))}
-          </tbody>
+  {orders.map((order, orderIndex) => (
+    order.products.map((product, productIndex) => (
+      <TableRow key={`${order.id}-${product.id}`}>
+        <TableCell>{orderIndex + 1}</TableCell>
+        <TableCell>
+          <img src={product.coverImage || 'https://via.placeholder.com/100'} alt="product" width="100" />
+          <p>{product.productName}</p>
+        </TableCell>
+        <TableCell>{product.selectOption || 'N/A'}</TableCell>
+        <TableCell>{product.quantity}</TableCell>
+        <TableCell>{product.productPrice}원</TableCell>
+        <TableCell>{product.totalPrice}원<br />({product.point || 0}원)</TableCell>
+        <TableCell>{order.createdAt}</TableCell>
+        <TableCell>{order.userInfo.username || 'N/A'}</TableCell>
+        <TableCell>
+          <StatusSelect
+            value={order.orderStatus}
+            onChange={(e) => handleStatusChange(order.id, e.target.value)}
+          >
+            <option value="ORDER_COMPLETED">주문 완료</option>
+            <option value="ORDER_CANCELED">주문 취소</option>
+            <option value="SHIPPING">배송 중</option>
+            <option value="DELIVERED">배송 완료</option>
+          </StatusSelect>
+        </TableCell>
+      </TableRow>
+    ))
+  ))}
+</tbody>
         </OrderTable>
         <TotalAmount>총 주문 금액: ₩{calculateTotalAmount(filteredOrders).toLocaleString()}</TotalAmount>
       </MainWrapper>

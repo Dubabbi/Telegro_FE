@@ -21,17 +21,31 @@ const OrderManager = () => {
 
   const fetchOrders = async () => {
     try {
+      const formatDate = (date) => {
+        const d = new Date(date);
+        const year = d.getFullYear();
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+      };
+  
+      const params = {
+        startDate: startDate ? formatDate(startDate) : undefined,
+        endDate: endDate ? formatDate(endDate) : undefined,
+        search: searchValue || undefined,
+        page,
+        size,
+      };
+  
+      console.log("Request parameters:", params); // 파라미터 확인용 로그
+  
       const response = await axios.get('https://api.telegro.kr/api/orders', {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         },
-        params: {
-          startDate: startDate || undefined,
-          endDate: endDate || undefined,
-          page,
-          size,
-        },
+        params,
       });
+  
       const { data } = response.data;
       if (data) {
         setOrders(data.orders);
@@ -40,11 +54,11 @@ const OrderManager = () => {
       console.error('Error fetching orders:', error);
     }
   };
+  
 
   const handleSubmit = (e) => {
     e.preventDefault();
     fetchOrders();
-    setSearchValue('');
   };
 
   const filterOrdersByName = (filteredOrders) => {
@@ -114,25 +128,25 @@ const OrderManager = () => {
           </tr>
         </R.TableHead>
         <tbody>
-          {filteredOrders.map((order, index) => (
-            <R.TableRow key={order.id}>
-              <R.TableCell>{index + 1}</R.TableCell>
-              <R.TableCell>
-                {order.products.map((product) => (
-                  <div key={product.id}>
+          {filteredOrders.map((order, orderIndex) =>
+            order.products.map((product, productIndex) => (
+              <R.TableRow key={`${order.id}-${product.id}`}>
+                <R.TableCell>{productIndex === 0 ? orderIndex + 1 : ''}</R.TableCell>
+                <R.TableCell>
+                  <div>
                     <img src={product.coverImage || 'https://via.placeholder.com/100'} alt="product" width="100" />
                     <p>{product.productName}</p>
                   </div>
-                ))}
-              </R.TableCell>
-              <R.TableCell>{order.products[0].selectOption}</R.TableCell>
-              <R.TableCell>{order.products[0].quantity}</R.TableCell>
-              <R.TableCell>{order.products[0].productPrice}원</R.TableCell>
-              <R.TableCell>{order.products[0].totalPrice}원<br />({order.point}원)</R.TableCell>
-              <R.TableCell>{order.createdAt.split('T')[0]}</R.TableCell>
-              <R.TableCell>{order.orderStatus}</R.TableCell>
-            </R.TableRow>
-          ))}
+                </R.TableCell>
+                <R.TableCell>{product.selectOption || 'N/A'}</R.TableCell>
+                <R.TableCell>{product.quantity}</R.TableCell>
+                <R.TableCell>{product.productPrice}원</R.TableCell>
+                <R.TableCell>{product.totalPrice}원<br />({product.point || 0}원)</R.TableCell>
+                <R.TableCell>{order.createdAt.split('T')[0]}</R.TableCell>
+                <R.TableCell>{order.orderStatus}</R.TableCell>
+              </R.TableRow>
+            ))
+          )}
         </tbody>
       </R.OrderTable>
 
