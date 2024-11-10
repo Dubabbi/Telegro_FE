@@ -28,15 +28,7 @@ const OrderProcess = () => {
     detailedAddress: '',
     request: ''
   });
-  useEffect(() => {
-    const tempOrder = JSON.parse(sessionStorage.getItem('tempOrder'));
-    if (tempOrder) {
-      setOrderData(tempOrder);
-    } else {
-      alert("주문 생성 중 문제가 발생했습니다. 다시 시도해주세요.");
-      navigate("/cart");
-    }
-  }, []);
+
   
   useEffect(() => {
     const fetchAddressList = async () => {
@@ -129,18 +121,13 @@ const OrderProcess = () => {
     setIsAgreementChecked(!isAgreementChecked);
   };
   const confirmOrder = async () => {
-    const tempOrder = JSON.parse(sessionStorage.getItem('tempOrder'));
-    if (!tempOrder) {
-      alert("주문 생성 중 문제가 발생했습니다. 다시 시도해주세요.");
-      return;
-    }
     if (!isAgreementChecked) {
       alert("구매 조건에 동의하셔야 합니다.");
       return;
     }
     try {
       const response = await axios.post(
-        'https://api.telegro.kr/api/orders/done',
+        'https://api.telegro.kr/api/orders/done', 
         {
           deliveryAddress: {
             address: formData.address,
@@ -155,25 +142,21 @@ const OrderProcess = () => {
             ? 'CREDIT_CARD'
             : isBankTransferChecked
             ? 'BANK_TRANSFER'
-            : 'EASY_PAYMENT',
-          cartProductDTOS: tempOrder.cartProductDTOS,
-          userName: tempOrder.userName,
-          userEmail: tempOrder.userEmail,
+            : 'EASY_PAYMENT'
         },
-        {
+        { 
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json',
           },
+          withCredentials: true
         }
       );
   
-      if (response.data.code === 20000) {
+      if (response.status === 200) {
         alert('주문이 완료되었습니다.');
         navigate('/completeorder');
-      } else {
-        alert('주문 확정에 실패했습니다.');
-      }
+      } 
     } catch (error) {
       console.error('Order confirmation error:', error);
       alert('주문 확정 중 오류가 발생했습니다.');

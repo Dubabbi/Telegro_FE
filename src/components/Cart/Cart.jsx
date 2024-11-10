@@ -210,39 +210,43 @@ const Cart = () => {
   };
 
 
-const handlePurchase = async () => {
-  const selectedCartIDs = products.filter(product => product.selected).map(product => product.id);
-
-  if (selectedCartIDs.length === 0) {
-    alert('구매할 상품을 선택해주세요.');
-    return;
-  }
-
-  try {
-    const accessToken = localStorage.getItem('token');
-    const response = await axios.post(
-      'https://api.telegro.kr/api/orders/create',
-      selectedCartIDs,
-      {
+  const handlePurchase = async () => {
+    // 선택된 상품의 ID를 필터링
+    const selectedCartIDs = products.filter(product => product.selected).map(product => product.id);
+  
+    if (selectedCartIDs.length === 0) {
+      alert('구매할 상품을 선택해주세요.');
+      return;
+    }
+  
+    try {
+      const accessToken = localStorage.getItem('token');
+      
+      const config = {
+        method: 'post',
+        url: 'https://api.telegro.kr/api/orders/create',
+        data: selectedCartIDs,
         headers: {
           Authorization: `Bearer ${accessToken}`,
           'Content-Type': 'application/json'
-        }
+        },
+        withCredentials: true
+      };
+  
+      const response = await axios(config);
+  
+      if (response.data.code === 20000) {
+        console.log('Order created:', response.data.data);
+        navigate('/orderprocess', { state: { orderData: response.data.data } });
+      } else {
+        alert('주문 생성에 실패했습니다.');
       }
-    );
-
-    if (response.data.code === 20000) {
-      console.log('Order created:', response.data.data);
-      sessionStorage.setItem('tempOrder', JSON.stringify(response.data.data));
-      navigate('/orderprocess', { state: { orderData: response.data.data } });
-    } else {
-      alert('주문 생성에 실패했습니다.');
+    } catch (error) {
+      console.error('Error creating order:', error);
+      alert('주문 생성 중 오류가 발생했습니다.');
     }
-  } catch (error) {
-    console.error('Error creating order:', error);
-    alert('주문 생성 중 오류가 발생했습니다.');
-  }
-};
+  };
+  
 
 
   return (

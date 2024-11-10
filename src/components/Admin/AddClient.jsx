@@ -23,6 +23,7 @@ function AddClient() {
     detailAddress: '',
     industry: '',
     category: '',
+    companyDescription: ''
   });
 
   const handleAddressComplete = ({ fullAddress, zonecode }) => {
@@ -89,6 +90,7 @@ function AddClient() {
         companyNumber: form.businessNumber,
         companyType: form.industry,
         companyItem: form.category,
+        companyDescription: form.companyDescription
       };
   
       const DTO = { signUpUserInfoDto, company };
@@ -264,7 +266,9 @@ function AddClient() {
               <div>
                 <A.Label>기타 메모 </A.Label>
                 <A.Input
-                  name="category"
+                  name="companyDescription"
+                  value={form.companyDescription}
+                  onChange={handleChange}
                 />
               </div>
             </A.Form>
