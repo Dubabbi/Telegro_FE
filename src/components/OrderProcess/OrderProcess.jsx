@@ -7,6 +7,7 @@ import checked from '/src/assets/icon/Admin/checked.svg';
 import * as O from './OrderProcessStyle'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import * as PortOne from "@portone/browser-sdk/v2";
 
 const OrderProcess = () => {
   const navigate = useNavigate();
@@ -163,7 +164,52 @@ const OrderProcess = () => {
     }
   };
   
+// 결제 버튼 클릭 이벤트 핸들러
+const handlePayment = () => {
+  if (!isAgreementChecked) {
+    alert("구매 조건에 동의하셔야 합니다.");
+    return;
+  }
 
+  // IMP 객체 초기화
+  const { IMP } = window; 
+  IMP.init('imp06338577'); 
+
+  const paymentData = {
+    pg: 'nice_v2.iamport00m', 
+    pay_method: 'card',
+    merchant_uid: `mid_${new Date().getTime()}`,
+    amount: 19500 - pointsToUse, 
+    name: '주문명: Daily Facial Soap',
+    buyer_name: formData.name,
+    buyer_tel: formData.phone,
+    buyer_email: 'user@example.com',
+    buyer_addr: formData.address,
+    buyer_postcode: formData.postalCode,
+    m_redirect_url: '/completeorder'
+  };
+
+  // 결제창 호출
+  IMP.request_pay(paymentData, function (response) {
+    if (response.success) {
+      // 결제 성공 시 로직
+      axios.post('https://api.yoursite.com/payments/verify', {
+        imp_uid: response.imp_uid,
+        merchant_uid: response.merchant_uid
+      }).then(res => {
+        if (res.data.status === 'success') {
+          alert('결제가 완료되었습니다.');
+          navigate('/completeorder');
+        } else {
+          alert('결제 검증 실패');
+        }
+      });
+    } else {
+      // 결제 실패 시 로직
+      alert(`결제 실패: ${response.error_msg}`);
+    }
+  });
+};
   
 
   return (
@@ -352,7 +398,8 @@ const OrderProcess = () => {
               />
               <O.CheckboxLabel>구매조건 확인 및 결제진행에 동의</O.CheckboxLabel>
             </O.CheckboxWrapper>
-            <C.ConfirmButton onClick={confirmOrder}>결제하기</C.ConfirmButton>
+            {/*<C.ConfirmButton onClick={confirmOrder}>결제하기</C.ConfirmButton>*/}
+            <C.ConfirmButton onClick={handlePayment}>결제하기</C.ConfirmButton>
           </O.BoxSection>
         </O.RightSection>
       </O.OrderPageWrapper>
