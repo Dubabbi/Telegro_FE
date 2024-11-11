@@ -220,22 +220,20 @@ const ProductDetail = () => {
                 <O.SectionTitle>교환 반품 안내</O.SectionTitle>
                 <P.NoticeBox>
                 <p>판매자에게 입금으로 배송비를 지불하실 경우, 교환/반품 택배비는 계좌입금 부탁드립니다. (상품동봉 불가)</p>
-                <p>- 입금 시에는 주문자명으로 입금해주세요.</p>
-                <p>(다를 경우엔 문의주세요.)</p>
+                <li>입금 시에는 주문자명으로 입금해주세요. (다를 경우엔 문의주세요.)</li>
                 <div className="highlight-box">
-                <p>- 신한은행 110-473-682842 (예금주 : 지큐파트너 조은경) </p>
-                <p>네이버 자동수거 대신 직접 반품 하실 경우에는 카카오 채널로 문의주세요.</p>
+                <li>입금계좌: 우리은행 540-263910-02-001(예금주: 연경진) </li>
+                <li>반품 및 교환 배송지: 기존 AS 물류배송지</li>
                 </div>
               </P.NoticeBox>
                 </P.LeftSection>
                 <P.RightSection>
                 <O.SectionTitle>배송 안내</O.SectionTitle>
                 <P.NoticeBox>
-                <p>- 택배비는 기본 <span className="highlight">3,000원(선불)</span>이며 반품 시 왕복 택배비 <span className="highlight">6,000원</span> 부담</p>
-                <p>- 고객 부주의(주문 착오, 주소, 전화번호 오기재, 연락두절 등)로 인해 반품되는 경우에 왕복 택배비는 고객 부담입니다.</p>
-                <p>- 제품 배송은 택배사 사정에 따라 제품 발송 후 평균 2-3일 정도 소요됩니다.</p>
-                <p>(주말, 공휴일 제외, 일부 지역에 따라 배송 기간이 달라질 수 있음)</p>
-                <p>- 배송 준비 상태의 주문은 택배사 인계 중이므로 주문 취소는 되지 않습니다.</p>
+                <li>택배비: 기본 <span className="highlight">3,000원(선불)</span>, 반품 시 왕복 <span className="highlight">6,000원</span> 부담</li>
+                <li>고객 부주의(주문 착오, 주소, 전화번호 오기재, 연락두절 등)로 인해 반품되는 경우에 왕복 택배비는 고객 부담입니다.</li>
+                <li>제품 배송은 택배사 사정에 따라 제품 발송 후 평균 2-3일 정도 소요됩니다.(주말, 공휴일 제외, 일부 지역에 따라 배송 기간이 달라질 수 있음)</li>
+                <li>배송 준비 상태의 주문은 택배사 인계 중이므로 주문 취소는 되지 않습니다.</li>
                 <div className="highlight-box">
                   <p>- 평일 오후 2시 이전 주문 건은 당일, 이후 주문 건은 익일 발송</p>
                   <p>- 주말 및 법정 공휴일은 휴무</p>
@@ -244,18 +242,23 @@ const ProductDetail = () => {
               </P.NoticeBox>
                 </P.RightSection>
                 </P.OrderPageWrapper>
-                <div style={{marginLeft: '2.3%'}}><h1>A/S 정책 안내</h1></div>
+                <div style={{marginLeft: '2.3%', fontWeight: 'bold'}}><h1>A/S 정책 안내</h1></div>
                 <P.OrderPageWrapper>
                 <P.LeftSection>
                 <P.NoticeBox>
                 <O.SectionTitle>교환/환불이 <span style={{ color: '#0000ff'}}>가능</span>한 경우</O.SectionTitle>
-                <p></p>
+                <p>배송된 상품이 주문내용과 다르거나, 상세페이지 내용과 상이할 경우</p>
+                <p>상품이 파손, 손상되어 배송된 경우</p>
+                <p>그외, 판매자 귀책 사유로 인한 교환/환불인 경우</p>
               </P.NoticeBox>
                 </P.LeftSection>
                 <P.RightSection>
                 <P.NoticeBox>
                 <O.SectionTitle>교환/환불이 <span style={{ color: '#ff0000'}}>불가능</span>한 경우</O.SectionTitle>
-                <p></p>
+                <p>제품 개봉 후 단순변심인 경우(상품확인을 위한 택배박스 개봉은 가능)</p>
+                <p>배송완료 후 7일이 경과한 경우</p>
+                <p>소비자의 부주의로 제품이 파손, 손상된 경우</p>
+                <p>구매자의 오주문인 경우, 택배비는 구매자께서 부담하셔야 합니다.</p>
               </P.NoticeBox>
                 </P.RightSection>
                 </P.OrderPageWrapper>

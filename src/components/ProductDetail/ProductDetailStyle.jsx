@@ -354,13 +354,18 @@ export const NoticeBox = styled.div`
   background-color: #f7f7f7;
   border: 1px solid #ddd;
   border-radius: 8px;
-  padding: 15px;
+  padding: 13px;
   margin: 0px 0;
   font-size: 1rem;
   line-height: 1.6;
   color: #333;
   width: 100%;
-
+  & li {
+    margin: 5px 7px;
+    display: list-item;
+    list-style-type: disc;
+    padding-left: 3px; 
+  }
   & h3 {
     font-size: 1.2rem;
     font-weight: bold;

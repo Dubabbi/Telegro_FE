@@ -371,9 +371,14 @@ export const Copyright = styled.div`
     margin-top: 2%;
     margin-bottom: 2%;
     color: #fff;
-    margin-left: 5%;
     font-size: 1.3rem;
     @media(max-width: 780px){
         font-size: 1.1rem;
+    }
+    a{
+        &:hover{
+            color: #94A3D8;
+            font-weight: bold;
+        }
     }
 `

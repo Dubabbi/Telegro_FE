@@ -100,7 +100,7 @@ export default function Landing() {
           </div>
         </L.TextWrapper>
         <hr style={{margin: '2%', width: '90%', marginLeft: '5%', color: '#C1C7CD'}}/>
-        <L.Copyright>Telegro @ 2024. All rights reserved.</L.Copyright>
+        <L.Copyright style={{marginLeft: '5%'}}>Telegro @ 2024. All rights reserved.</L.Copyright>
       </L.FooterWrapper>
     </L.LandingWrapper>
 

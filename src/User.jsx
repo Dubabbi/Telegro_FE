@@ -22,6 +22,7 @@ import ScrollToTop from './ScrollToTop';
 import MypagePage from './pages/Mypage';
 import SearchResult from './components/Nav/SearchResult';
 import CompleteOrder from './components/OrderProcess/CompleteOrder';
+import Privacy from './components/Privacy/Privacy';
 
 export default function User() {
   return (
@@ -45,6 +46,7 @@ export default function User() {
         <Route path="/cart" element={<CartPage />} />
         <Route path="/mypage" element={<MypagePage />} />
         <Route path = "/completeorder" element={<CompleteOrder/>} />
+        <Route path = "/privacy" element={<Privacy/>} />
       </Routes>
       <NotificationBar />
       <NoticePopup />
