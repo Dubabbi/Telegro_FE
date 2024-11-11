@@ -82,7 +82,16 @@ const ProductDetail = () => {
           }
         );
         if (orderResponse.data.code === 20000) {
-          navigate('/orderprocess', { state: { orderData: orderResponse.data.data } });
+          navigate('/orderprocess', 
+          { state: { orderData: orderResponse.data.data,
+            userDetails: {
+              userName: orderResponse.data.data.userName,
+              userEmail: orderResponse.data.data.userEmail,
+              totalPrice: orderResponse.data.data.totalPrice,
+              totalPoint: orderResponse.data.data.totalPoint,
+              pointToEarn: orderResponse.data.data.pointToEarn
+            }
+           } });
         } else {
           alert('주문 생성에 실패했습니다.');
         }

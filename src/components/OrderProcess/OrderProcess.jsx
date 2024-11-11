@@ -5,12 +5,13 @@ import * as C from '../Cart/Cart';
 import check from '/src/assets/icon/Admin/check.svg';
 import checked from '/src/assets/icon/Admin/checked.svg';
 import * as O from './OrderProcessStyle'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import * as PortOne from "@portone/browser-sdk/v2";
 
 const OrderProcess = () => {
   const navigate = useNavigate();
+  const { state } = useLocation();
   const [isCreditCardChecked, setIsCreditCardChecked] = useState(false);
   const [isBankTransferChecked, setIsBankTransferChecked] = useState(false);
   const [isKakaoPayChecked, setIsKakaoPayChecked] = useState(false);
@@ -18,7 +19,8 @@ const OrderProcess = () => {
   const [selectedAddress, setSelectedAddress] = useState(''); 
   const [addressList, setAddressList] = useState([]);
   const [isDefaultAddressChecked, setIsDefaultAddressChecked] = useState(false);
-  const [orderData, setOrderData] = useState(null);
+  const [orderData, setOrderData] = useState(state.orderData);
+  const [userDetails, setUserDetails] = useState(state.userDetails);
   const [point, setPoint] = useState(0); 
   const [pointsToUse, setPointsToUse] = useState(0);
   const [formData, setFormData] = useState({
@@ -29,7 +31,12 @@ const OrderProcess = () => {
     detailedAddress: '',
     request: ''
   });
-
+  useEffect(() => {
+    if (!orderData) {
+      alert("주문 정보가 존재하지 않습니다.");
+      navigate(-1); 
+    }
+  }, [orderData, navigate]);
   
   useEffect(() => {
     const fetchAddressList = async () => {
@@ -164,53 +171,85 @@ const OrderProcess = () => {
     }
   };
   
-// 결제 버튼 클릭 이벤트 핸들러
-const handlePayment = () => {
-  if (!isAgreementChecked) {
-    alert("구매 조건에 동의하셔야 합니다.");
-    return;
-  }
 
-  // IMP 객체 초기화
-  const { IMP } = window; 
-  IMP.init('imp06338577'); 
-
-  const paymentData = {
-    pg: 'nice_v2.iamport00m', 
-    pay_method: 'card',
-    merchant_uid: `mid_${new Date().getTime()}`,
-    amount: 19500 - pointsToUse, 
-    name: '주문명: Daily Facial Soap',
-    buyer_name: formData.name,
-    buyer_tel: formData.phone,
-    buyer_email: 'user@example.com',
-    buyer_addr: formData.address,
-    buyer_postcode: formData.postalCode,
-    m_redirect_url: '/completeorder'
+  const handlePayment = () => {
+    if (!isAgreementChecked) {
+      alert("구매 조건에 동의하셔야 합니다.");
+      return;
+    }
+  
+    // 주문 상품 정보를 집계하여 이름과 총 금액을 계산합니다.
+    const productInfo = orderData.cartProductDTOS.reduce((acc, product) => {
+      acc.name += `${product.productName} `;
+      acc.total += product.totalPrice;
+      return acc;
+    }, { name: '', total: 0 });
+  
+    const { IMP } = window; 
+    IMP.init('imp06338577'); 
+  
+    const paymentData = {
+      pg: 'nice_v2.iamport00m', 
+      pay_method: 'card',
+      merchant_uid: `mid_${new Date().getTime()}`,
+      amount: productInfo.total - pointsToUse, // 총 금액에서 사용할 포인트를 빼줍니다.
+      name: productInfo.name.trim(), // 주문명을 총 상품명으로 설정합니다.
+      buyer_name: formData.name,
+      buyer_tel: formData.phone,
+      buyer_email: 'user@example.com',
+      buyer_addr: formData.address,
+      buyer_postcode: formData.postalCode,
+      m_redirect_url: '/completeorder'
+    };
+  
+    // 결제창 호출
+    IMP.request_pay(paymentData, function (response) {
+      if (response.success) {
+        axios.post('https://api.yoursite.com/payments/verify', {
+          imp_uid: response.imp_uid,
+          merchant_uid: response.merchant_uid
+        }).then(res => {
+          if (res.data.status === 'success') {
+            alert('결제가 완료되었습니다.');
+            navigate('/completeorder', { 
+              state: { 
+                orderDetails: productInfo,
+                userDetails: {
+                  name: formData.name,
+                  email: userDetails.userEmail,
+                  phone: formData.phone
+                },
+                shippingInfo: {
+                  address: formData.address,
+                  postalCode: formData.postalCode,
+                  detailedAddress: formData.detailedAddress,
+                  request: formData.request
+                },
+                pointsToUse: pointsToUse,
+                pointsToEarn: 100,  
+                shippingCost: 3000  
+              }
+            });
+          } else {
+            alert('결제 검증 실패');
+          }
+        });
+      } else {
+        alert(`결제 실패: ${response.error_msg}`);
+      }
+    });
   };
 
-  // 결제창 호출
-  IMP.request_pay(paymentData, function (response) {
-    if (response.success) {
-      // 결제 성공 시 로직
-      axios.post('https://api.yoursite.com/payments/verify', {
-        imp_uid: response.imp_uid,
-        merchant_uid: response.merchant_uid
-      }).then(res => {
-        if (res.data.status === 'success') {
-          alert('결제가 완료되었습니다.');
-          navigate('/completeorder');
-        } else {
-          alert('결제 검증 실패');
-        }
-      });
-    } else {
-      // 결제 실패 시 로직
-      alert(`결제 실패: ${response.error_msg}`);
-    }
-  });
-};
-  
+  const orderCustomerInfo = userDetails ? (
+    <>
+      <p style={{ margin: '1%', fontSize: '1.2rem' }}>{userDetails.userName}</p>
+      <p style={{ margin: '1%', fontSize: '1.2rem' }}>{userDetails.userEmail}</p>
+    </>
+  ) : (
+    <>
+      <p style={{ margin: '1%', fontSize: '1.2rem' }}>로딩 중...</p>
+    </>
+  );
 
   return (
     <>
@@ -221,22 +260,21 @@ const handlePayment = () => {
         <O.LeftSection>
           <O.BoxSection>
             <O.SectionTitle>주문 상품 정보</O.SectionTitle>
-            <O.ProductInfo>
-              <img src={img} alt="상품 이미지" />
-              <div>
-                <h4>Daily Facial Soap</h4>
-                <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', gap: '5%'}}><p>옵션</p><p>수량</p></div>
-                <p>₩18,000원</p>
-              </div>
-            </O.ProductInfo>
+            {orderData.cartProductDTOS.map((product, index) => (
+              <O.ProductInfo key={index}>
+                <img src={product.coverImage} alt="상품 이미지" />
+                <div>
+                  <h4>{product.productName}</h4>
+                  <p>옵션: {product.selectOption}</p>
+                  <p>수량: {product.quantity}</p>
+                  <p>{formatPrice(product.totalPrice)}원</p>
+                </div>
+              </O.ProductInfo>
+            ))}
           </O.BoxSection>
           <O.BoxSection>
             <O.SectionTitle>주문자 정보</O.SectionTitle>
-            <div>
-              <p style={{margin: '1%', fontSize: '1.2rem'}}>홍길동</p>
-              <p style={{margin: '1%', fontSize: '1.2rem'}}>{formData.phone}</p>
-              <p style={{margin: '1%', fontSize: '1.2rem'}}>user@imweb.me</p>
-            </div>
+              <div>{orderCustomerInfo}</div>
           </O.BoxSection>
           <O.BoxSection>
             <O.SectionTitle>배송 정보</O.SectionTitle>
@@ -316,14 +354,16 @@ const handlePayment = () => {
         {/* 우측 결제 및 총 결제금액 */}
         <O.RightSection>
           <O.BoxSection>
+          {orderData && orderData.cartProductDTOS.map((product, index) => (
+            <>
             <O.SectionTitle>최종 결제금액</O.SectionTitle>
-            <O.PriceDetail>
-              <span>상품 가격</span>
-              <span>₩18,000원</span>
-            </O.PriceDetail>
+              <O.PriceDetail key={index}>
+                <span>상품 가격</span>
+                <span>{formatPrice(product.totalPrice)}</span>
+              </O.PriceDetail>
             <O.PriceDetail>
               <span>배송비</span>
-              <span>₩2,500원</span>
+              <span>₩3,00원</span>
             </O.PriceDetail>
             <O.PriceDetail>
               <span>적립금 할인</span>
@@ -340,12 +380,14 @@ const handlePayment = () => {
           </O.PriceDetailsWrapper>
             <O.PriceDetail style={{marginTop: '10px'}}>
               <O.TotalPrice>총 결제금액</O.TotalPrice>
-              <O.TotalPrice>{formatPrice(19500 - pointsToUse)}원</O.TotalPrice>
+              <O.TotalPrice>{formatPrice(product.totalPrice - pointsToUse)}원</O.TotalPrice>
             </O.PriceDetail>
             <O.PriceDetail>
               <span>포인트 적립 예정</span>
               <span>700P</span>
             </O.PriceDetail>
+            </>
+            ))}
           </O.BoxSection>
           <O.BoxSection>
           <O.PaymentTitle>결제 방법</O.PaymentTitle>
