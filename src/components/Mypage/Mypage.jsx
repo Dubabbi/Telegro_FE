@@ -7,6 +7,7 @@ import axios from 'axios';
 import add from '/src/assets/icon/mypage/addaddress.svg';
 import AddressModal from './AddressModal'; 
 import EditAddressModal from './EditAddressModal';
+import profile from '/src/assets/icon/mypage/profile.svg';
 
 const Mypage = () => {
   const navigate = useNavigate();
@@ -168,7 +169,7 @@ const Mypage = () => {
           <M.TopBackground />
           <M.BottomBackground>
             <M.ProfileImage>
-              <Avvvatars value={userInfo.name} style="Shapes" size="150" round={true} />
+              <img src={profile} style={{width: '150px', marginRight: '70%'}} />
             </M.ProfileImage>
             <M.Name>{userInfo.name}</M.Name>
             <M.UserInfoWrapper>

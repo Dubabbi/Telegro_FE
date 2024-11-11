@@ -3,6 +3,7 @@ import * as N from './NavbarStyle';
 import { FaSearch } from 'react-icons/fa';
 import { useNavigate, Link } from 'react-router-dom';
 import Avvvatars from 'avvvatars-react';
+import profile from '/src/assets/icon/mypage/profile.svg';
 import axios from 'axios';
 
 export default function Navbar() {
@@ -112,7 +113,7 @@ export default function Navbar() {
           <li><a href="/cart">장바구니</a></li>
           <li><a href="mailto:Telegro@telegro.com">Contact Us</a></li>
         </N.MainNav>
-        {isLoggedIn && <Link to="/mypage"><Avvvatars value={userInfo.username} style="Shapes" size={40} /></Link>}
+        {isLoggedIn && <Link to="/mypage"><img src={profile} style={{width: '40px'}} /></Link>}
       </N.NavContainer>
 
       <N.SecondaryNavContainer>

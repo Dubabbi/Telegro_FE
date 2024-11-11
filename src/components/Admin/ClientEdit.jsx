@@ -142,6 +142,7 @@ function ClientEdit() {
     companyNumber: '',
     companyType: '',
     companyItem: '',
+    companyDescription: '',
   });
 
   useEffect(() => {
@@ -171,6 +172,7 @@ function ClientEdit() {
             companyNumber: companyData.companyNumber || '', 
             companyType: companyData.companyType || '', 
             companyItem: companyData.companyItem || '', 
+            companyDescription: companyData.companyDescription || '',
           });
           setIsDealer(companyData.role !== 'MEMBER');
         } else {
@@ -230,6 +232,7 @@ function ClientEdit() {
         companyNumber: form.companyNumber,
         companyType: form.companyType,
         companyItem: form.companyItem,
+        companyDescription: form.companyDescription,
       };
     }
   
@@ -377,7 +380,9 @@ function ClientEdit() {
                   <div>
                 <Label>기타 메모 </Label>
                 <Input
-                  name="category"
+                  name="companyDescription"
+                  value={form.companyDescription}
+                  onChange={handleChange}
                 />
               </div>
                 </>
