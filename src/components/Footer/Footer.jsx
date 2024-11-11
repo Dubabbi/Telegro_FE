@@ -1,4 +1,5 @@
-import React from "react";
+import React, {useState} from "react";
+import { useNavigate } from "react-router-dom";
 import styled from 'styled-components';
 import * as L from '../Landing/LandingStyle';
 import Logo from '/src/assets/image/Landing/logo.svg';
@@ -6,6 +7,12 @@ import Mail from '/src/assets/image/Landing/mail.svg';
 
 
 export default function Footer() {
+  const navigate = useNavigate(); // useNavigate 훅 사용
+
+  // 페이지 이동 함수
+  const handleTabChange = (tabName) => {
+      navigate(`/${tabName}`); // 경로 변경
+  };
     return (
         <L.FooterWrapper>
         <L.Footerline style={{width: '90%'}}>
@@ -37,10 +44,11 @@ export default function Footer() {
           </div>
         </L.TextWrapper>
         <hr style={{margin: '2%', width: '90%', marginLeft: '5%', color: '#C1C7CD'}}/>
-        <div style={{margin: '2% auto',display: 'flex', flexDirection: 'row', justifyContent: 'space-between', maxWidth: '90%'}}>
+        <div style={{marginLeft: '5%',display: 'flex', flexDirection: 'row', justifyContent: 'space-between', maxWidth: '85%'}}>
         <L.Copyright>Telegro @ 2024. All rights reserved.</L.Copyright>
-        <L.Copyright><a href="/privacy">개인정보처리방침</a> | <a href="/privacy">이용약관</a></L.Copyright>
+        <L.Copyright><a href="#" onClick={() => handleTabChange('privacy')}>개인정보처리방침</a> | <a href="#" onClick={() => handleTabChange('terms')}>이용약관</a></L.Copyright>
         </div>
+
       </L.FooterWrapper>
     );
 }

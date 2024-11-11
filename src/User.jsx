@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import ResponseNav from './components/Nav/ResponseNav';
 import Footer from './components/Footer/Footer';
 import NotificationBar from './components/NotificationBar/NotificationBar';
@@ -27,31 +27,32 @@ import Privacy from './components/Privacy/Privacy';
 export default function User() {
   return (
     <div>
-      <ResponseNav />
-      <ScrollToTop />
-      <Routes>
-      <Route path="/search" element={<SearchResult />} />
-      <Route path="/" element={<LoginPage />} />
-        <Route path="/main" element={<MainPage />} />
-        <Route path="/notice" element={<NoticePage />} />
-        <Route path="/noticedetail/:noticeId" element={<NoticeDetailPage />} />
-        <Route path="/productdetail/:productId" element={<ProductDetailPage />} />
-        <Route path="/order" element={<OrderPage />} />
-        <Route path="/headset" element={<Headset />} />
-        <Route path="/lineCord" element={<LineCord />} />
-        <Route path="/recording" element={<Recording />} />
-        <Route path="/accessory" element={<Accessory />} />
-        <Route path="/ordermanager" element={<OrderManagerPage />} />
-        <Route path="/orderprocess" element={<OrderProcessPage />} />
-        <Route path="/cart" element={<CartPage />} />
-        <Route path="/mypage" element={<MypagePage />} />
-        <Route path = "/completeorder" element={<CompleteOrder/>} />
-        <Route path = "/privacy" element={<Privacy/>} />
-      </Routes>
-      <NotificationBar />
-      <NoticePopup />
-      <ChatButton />
-      <Footer />
+        <ResponseNav />
+        <ScrollToTop />
+        <Routes>
+          <Route path="/search" element={<SearchResult />} />
+          <Route path="/" element={<LoginPage />} />
+          <Route path="/main" element={<MainPage />} />
+          <Route path="/notice" element={<NoticePage />} />
+          <Route path="/noticedetail/:noticeId" element={<NoticeDetailPage />} />
+          <Route path="/productdetail/:productId" element={<ProductDetailPage />} />
+          <Route path="/order" element={<OrderPage />} />
+          <Route path="/headset" element={<Headset />} />
+          <Route path="/lineCord" element={<LineCord />} />
+          <Route path="/recording" element={<Recording />} />
+          <Route path="/accessory" element={<Accessory />} />
+          <Route path="/ordermanager" element={<OrderManagerPage />} />
+          <Route path="/orderprocess" element={<OrderProcessPage />} />
+          <Route path="/cart" element={<CartPage />} />
+          <Route path="/mypage" element={<MypagePage />} />
+          <Route path="/completeorder" element={<CompleteOrder />} />
+          <Route path="/privacy" element={<Privacy activeTab="privacy" />} />
+          <Route path="/terms" element={<Privacy activeTab="terms" />} />
+        </Routes>
+        <NotificationBar />
+        <NoticePopup />
+        <ChatButton />
+        <Footer />
     </div>
   );
 }
