@@ -31,6 +31,9 @@ const OrderProcess = () => {
     detailedAddress: '',
     request: ''
   });
+  const totalProductPrice = orderData.cartProductDTOS.reduce((acc, product) => acc + product.totalPrice, 0);
+  const shippingCost = 3000; // 배송비는 고정 값
+  const totalPayable = totalProductPrice + shippingCost - pointsToUse; // 최종 결제금액 계산
   useEffect(() => {
     if (!orderData) {
       alert("주문 정보가 존재하지 않습니다.");
@@ -163,6 +166,7 @@ const OrderProcess = () => {
   
       if (response.status === 200) {
         alert('주문이 완료되었습니다.');
+        confirmOrder();
         navigate('/completeorder');
       } 
     } catch (error) {
@@ -353,23 +357,21 @@ const OrderProcess = () => {
 
         {/* 우측 결제 및 총 결제금액 */}
         <O.RightSection>
-          <O.BoxSection>
-          {orderData && orderData.cartProductDTOS.map((product, index) => (
-            <>
-            <O.SectionTitle>최종 결제금액</O.SectionTitle>
-              <O.PriceDetail key={index}>
-                <span>상품 가격</span>
-                <span>{formatPrice(product.totalPrice)}</span>
-              </O.PriceDetail>
-            <O.PriceDetail>
-              <span>배송비</span>
-              <span>₩3,00원</span>
-            </O.PriceDetail>
-            <O.PriceDetail>
-              <span>적립금 할인</span>
-              <span style={{ color: 'red' }}>-₩{pointsToUse.toLocaleString()}원</span>
-            </O.PriceDetail>
-            <O.PriceDetailsWrapper>
+        <O.BoxSection>
+          <O.SectionTitle>최종 결제금액</O.SectionTitle>
+          <O.PriceDetail>
+            <span>상품 가격</span>
+            <span>{formatPrice(totalProductPrice)}</span>
+          </O.PriceDetail>
+          <O.PriceDetail>
+            <span>배송비</span>
+            <span>{formatPrice(shippingCost)}</span>
+          </O.PriceDetail>
+          <O.PriceDetail>
+            <span>적립금 할인</span>
+            <span style={{ color: 'red' }}>-{formatPrice(pointsToUse)}</span>
+          </O.PriceDetail>
+          <O.PriceDetailsWrapper>
             <input
               type="number"
               placeholder={`사용할 적립금 입력 (0 / ${point})`}
@@ -378,17 +380,15 @@ const OrderProcess = () => {
             />
             <button onClick={() => setPointsToUse(point)}>모두 사용</button>
           </O.PriceDetailsWrapper>
-            <O.PriceDetail style={{marginTop: '10px'}}>
-              <O.TotalPrice>총 결제금액</O.TotalPrice>
-              <O.TotalPrice>{formatPrice(product.totalPrice - pointsToUse)}원</O.TotalPrice>
+          <O.PriceDetail style={{ marginTop: '10px' }}>
+            <O.TotalPrice>총 결제금액</O.TotalPrice>
+            <O.TotalPrice>{formatPrice(totalPayable)}</O.TotalPrice>
             </O.PriceDetail>
             <O.PriceDetail>
               <span>포인트 적립 예정</span>
               <span>700P</span>
             </O.PriceDetail>
-            </>
-            ))}
-          </O.BoxSection>
+        </O.BoxSection>
           <O.BoxSection>
           <O.PaymentTitle>결제 방법</O.PaymentTitle>
           <O.PaymentOption>
