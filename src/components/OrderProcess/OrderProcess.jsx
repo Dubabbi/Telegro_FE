@@ -166,8 +166,25 @@ const OrderProcess = () => {
   
       if (response.status === 200) {
         alert('주문이 완료되었습니다.');
-        confirmOrder();
-        navigate('/completeorder');
+        navigate('/completeorder', { 
+          state: { 
+            orderDetails: productInfo,
+            userDetails: {
+              name: formData.name,
+              email: userDetails.userEmail,
+              phone: formData.phone
+            },
+            shippingInfo: {
+              address: formData.address,
+              postalCode: formData.postalCode,
+              detailedAddress: formData.detailedAddress,
+              request: formData.request
+            },
+            pointsToUse: pointsToUse,
+            pointsToEarn: 100,  
+            shippingCost: 3000  
+          }
+        });
       } 
     } catch (error) {
       console.error('Order confirmation error:', error);
@@ -215,25 +232,7 @@ const OrderProcess = () => {
         }).then(res => {
           if (res.data.status === 'success') {
             alert('결제가 완료되었습니다.');
-            navigate('/completeorder', { 
-              state: { 
-                orderDetails: productInfo,
-                userDetails: {
-                  name: formData.name,
-                  email: userDetails.userEmail,
-                  phone: formData.phone
-                },
-                shippingInfo: {
-                  address: formData.address,
-                  postalCode: formData.postalCode,
-                  detailedAddress: formData.detailedAddress,
-                  request: formData.request
-                },
-                pointsToUse: pointsToUse,
-                pointsToEarn: 100,  
-                shippingCost: 3000  
-              }
-            });
+            confirmOrder();
           } else {
             alert('결제 검증 실패');
           }
