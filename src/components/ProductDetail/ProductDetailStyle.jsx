@@ -179,7 +179,7 @@ export const getCategoryBackground = (category) => {
       color: #fff;
     }
   `;
-  
+
   export const AdditionalImagesWrapper = styled.div`
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -301,7 +301,9 @@ export const getCategoryBackground = (category) => {
 
 export const Tab = styled.button`
   padding: 10px 20px;
+  width: 100%;
   cursor: pointer;
+  border-radius: 5px 5px 0 0;
   background: ${({ isActive }) => (isActive ? '#4D44B5' : 'transparent')};
   color: ${({ isActive }) => (isActive ? '#fff' : '#4D44B5')};
   font-size: 1rem;
@@ -310,7 +312,7 @@ export const Tab = styled.button`
   border-bottom: ${({ isActive }) => (isActive ? '3px solid #4D44B5' : 'none')};
   &:hover {
     color: #4D44B5;
-    background: ${({ isActive }) => (isActive ? '#4D44B5' : '#f0f0f0')};
+    background: ${({ isActive }) => (isActive ? 'rgba(77, 68, 181, 0.6);' : '#f0f0f0')};
   }
 `;
 
