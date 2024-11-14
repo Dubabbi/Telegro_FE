@@ -112,7 +112,7 @@ const AdminNav = () => {
           <form onSubmit={handleSubmit}>
             <SearchInput
               type="text"
-              placeholder="Search"
+              placeholder="상품 검색"
               value={searchValue}
               onChange={(e) => setSearchValue(e.target.value)}
             />

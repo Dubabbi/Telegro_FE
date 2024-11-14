@@ -231,7 +231,6 @@ const OrderProcess = () => {
           merchant_uid: response.merchant_uid
         }).then(res => {
           if (res.data.status === 'success') {
-            alert('결제가 완료되었습니다.');
             confirmOrder();
           } else {
             alert('결제 검증 실패');

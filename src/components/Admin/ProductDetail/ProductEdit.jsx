@@ -54,15 +54,20 @@ const ProductEdit = () => {
   }, [productId]);
 
   const handleChange = (e) => {
-    const { name, value, files } = e.target;
-
+    const { name, value, files, type } = e.target;
+  
+    if (type === 'number' && !Number.isInteger(+value)) {
+      // 숫자 입력 필드에서 소수점 입력을 강제로 제거
+      e.target.value = Math.floor(+value);
+    }
+  
     if (name === 'options') {
-      const optionsArray = value.split(',').map((item) => item.trim());
-      setProduct((prev) => ({ ...prev, options: optionsArray }));
+      const optionsArray = value.split(',').map(item => item.trim());
+      setProduct(prev => ({ ...prev, options: optionsArray }));
     } else if (name === 'photo' && files.length > 0) {
       handleAddImage(e);
     } else {
-      setProduct((prev) => ({ ...prev, [name]: value }));
+      setProduct(prev => ({ ...prev, [name]: value }));
     }
   };
 
@@ -152,15 +157,28 @@ const ProductEdit = () => {
     }));
     setSelectedImageIndex(null); 
   };
+  
 
   const handleUpdateProduct = async () => {
-    // 수정된 필드만 포함된 객체를 생성
     const updatedProduct = {};
+    
+    // 가격 정보 업데이트 시 숫자로 변환하여 비교
+    const updateIfChanged = (key, newValue, oldValue) => {
+      const newNum = parseFloat(newValue);
+      const oldNum = parseFloat(oldValue);
+      if (newNum !== oldNum) {
+        updatedProduct[key] = newNum;
+      }
+    };
+  
+    updateIfChanged('priceBussiness', product.priceBussiness, originalProduct.priceBussiness);
+    updateIfChanged('priceBest', product.priceBest, originalProduct.priceBest);
+    updateIfChanged('priceDealer', product.priceDealer, originalProduct.priceDealer);
+    updateIfChanged('priceCustomer', product.priceCustomer, originalProduct.priceCustomer);
+  
+    // 다른 필드에 대해서도 동일한 로직을 적용
     if (product.productName !== originalProduct.productName) {
       updatedProduct.productName = product.productName;
-    }
-    if (product.priceCustomer !== originalProduct.priceCustomer) {
-      updatedProduct.priceCustomer = product.priceCustomer;
     }
     if (product.category !== originalProduct.category) {
       updatedProduct.category = product.category;
@@ -177,11 +195,13 @@ const ProductEdit = () => {
     if (product.coverImage !== originalProduct.coverImage) {
       updatedProduct.coverImage = product.coverImage; // 대표 이미지 업데이트
     }
-    // 만약 수정된 부분이 없다면 업데이트하지 않음
+  
+    // 수정된 부분이 없으면 업데이트하지 않음
     if (Object.keys(updatedProduct).length === 0) {
       alert('수정된 내용이 없습니다.');
       return;
     }
+  
     try {
       const response = await axios.patch(
         `https://api.telegro.kr/api/products/${productId}`,
@@ -190,7 +210,7 @@ const ProductEdit = () => {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
         }
       );
-
+  
       if (response.status === 200) {
         alert('상품이 성공적으로 수정되었습니다.');
         navigate(`/admin/headset`);
@@ -369,6 +389,7 @@ const ProductEdit = () => {
               placeholder="숫자만 입력해 주세요."
               value={product.priceBussiness}
               onChange={handleChange}
+              onInput={(e) => e.target.value = e.target.value.replace(/[^0-9]/g, '')} 
             />
           </div>
 
@@ -381,6 +402,7 @@ const ProductEdit = () => {
               placeholder="숫자만 입력해 주세요."
               value={product.priceBest}
               onChange={handleChange}
+              onInput={(e) => e.target.value = e.target.value.replace(/[^0-9]/g, '')} 
             />
           </div>
 
@@ -393,6 +415,7 @@ const ProductEdit = () => {
               placeholder="숫자만 입력해 주세요."
               value={product.priceDealer}
               onChange={handleChange}
+              onInput={(e) => e.target.value = e.target.value.replace(/[^0-9]/g, '')} 
             />
           </div>
 
@@ -405,6 +428,7 @@ const ProductEdit = () => {
               placeholder="숫자만 입력해 주세요."
               value={product.priceCustomer}
               onChange={handleChange}
+              onInput={(e) => e.target.value = e.target.value.replace(/[^0-9]/g, '')} 
             />
           </div>
         </C.RightColumn>
