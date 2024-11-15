@@ -15,22 +15,25 @@ const OrderList = () => {
   const [endDate, setEndDate] = useState('');
   const [searchCategory, setSearchCategory] = useState('productName');
   const [page, setPage] = useState(0);
-  const [size, setSize] = useState(10);
-
+  const [totalPages, setTotalPages] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [size, setSize] = useState(3);
   // 주문 목록 조회 API 호출
   useEffect(() => {
     const fetchOrders = async () => {
       try {
         const accessToken = localStorage.getItem('token');
         const response = await axios.get(`https://api.telegro.kr/api/orders`, {
-          params: { startDate, endDate, page, size },
+          params: { startDate, endDate, page: currentPage - 1, size },
           headers: {
             Authorization: `Bearer ${accessToken}`
           }
         });
-
+  
         if (response.data.code === 20000) {
-          setOrders(response.data.data.orders);
+          const sortedOrders = response.data.data.orders.sort((a, b) => b.id - a.id);
+          setOrders(sortedOrders);
+          setTotalPages(response.data.data.totalPage);
         } else {
           alert('주문 목록을 불러오는 데 실패했습니다.');
         }
@@ -39,9 +42,13 @@ const OrderList = () => {
         alert('주문 목록을 불러오는 중 오류가 발생했습니다.');
       }
     };
-
+  
     fetchOrders();
-  }, [startDate, endDate, page, size]);
+  }, [startDate, endDate, currentPage, size]);
+
+  const handlePageChange = newPage => {
+    setCurrentPage(newPage);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -170,40 +177,60 @@ const OrderList = () => {
             </tr>
           </TableHead>
           <tbody>
-  {orders.map((order, orderIndex) => (
-    order.products.map((product, productIndex) => (
-      <TableRow key={`${order.id}-${product.id}`}>
-        <TableCell>{orderIndex + 1}</TableCell>
-        <TableCell>
-          <img src={product.coverImage || 'https://via.placeholder.com/100'} alt="product" width="100" />
-          <p>{product.productName}</p>
-        </TableCell>
-        <TableCell>{product.selectOption || 'N/A'}</TableCell>
-        <TableCell>{product.quantity}</TableCell>
-        <TableCell>{product.productPrice}원</TableCell>
-        <TableCell>{product.totalPrice}원<br />({product.point || 0}원)</TableCell>
-        <TableCell>{order.createdAt}</TableCell>
-        <TableCell>{order.userInfo.username || 'N/A'}</TableCell>
-        <TableCell>
-          <StatusSelect
-            value={order.orderStatus}
-            onChange={(e) => handleStatusChange(order.id, e.target.value)}
-          >
-            <option value="ORDER_COMPLETED">주문 완료</option>
-            <option value="ORDER_CANCELED">주문 취소</option>
-            <option value="SHIPPING">배송 중</option>
-            <option value="DELIVERED">배송 완료</option>
-          </StatusSelect>
-        </TableCell>
-      </TableRow>
-    ))
-  ))}
-</tbody>
+          {orders.map((order, index) => (
+            <React.Fragment key={order.id}>
+              {order.products.map((product, productIndex) => (
+                <TableRow className={`order-${order.id} ${productIndex === 0 ? 'highlight-row' : ''}`} key={product.id}>
+                  {productIndex === 0 && (
+                    <TableCell rowSpan={order.products.length}>
+                      {index + 1 + (currentPage - 1) * size}
+                    </TableCell>
+                  )}
+                  <TableCell>
+                    <img src={product.coverImage || 'https://via.placeholder.com/100'} alt="product" width="100" />
+                    <p>{product.productName}</p>
+                  </TableCell>
+                  <TableCell>{product.selectOption || 'N/A'}</TableCell>
+                  <TableCell>{product.quantity}</TableCell>
+                  <TableCell>{`${product.productPrice}원`}</TableCell>
+                  <TableCell>{`${product.totalPrice}원 (${product.point || 0}원)`}</TableCell>
+                  {productIndex === 0 && (
+                    <>
+                      <TableCell rowSpan={order.products.length}>{order.createdAt}</TableCell>
+                      <TableCell rowSpan={order.products.length}>
+                        {order.userInfo.username}
+                        <br/><br/>
+                        <small>{order.deliveryAddress.address}</small>
+                        <br/>
+                        <small>{order.deliveryAddress.addressDetail}({order.deliveryAddress.zipcode})</small>
+                      </TableCell>
+                      <TableCell rowSpan={order.products.length}>
+                        <StatusSelect
+                          value={order.orderStatus}
+                          onChange={(e) => handleStatusChange(order.id, e.target.value)}
+                        >
+                          <option value="ORDER_COMPLETED">주문 완료</option>
+                          <option value="ORDER_CANCELED">주문 취소</option>
+                          <option value="SHIPPING">배송 중</option>
+                          <option value="DELIVERED">배송 완료</option>
+                        </StatusSelect>
+                      </TableCell>
+                    </>
+                  )}
+                </TableRow>
+              ))}
+            </React.Fragment>
+          ))}
+          </tbody>
         </OrderTable>
         <TotalAmount>총 주문 금액: ₩{calculateTotalAmount(filteredOrders).toLocaleString()}</TotalAmount>
       </MainWrapper>
       <P.Pagediv>
-        <Pagination />
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
       </P.Pagediv>
     </>
   );
@@ -299,10 +326,6 @@ const OrderTable = styled.table`
     font-weight: bold;
   }
 
-  tr:nth-child(even) {
-    background-color: #f9f9f9;
-  }
-
   @media (max-width: 780px) {
     th, td {
       padding: 8px;
@@ -316,26 +339,6 @@ const TableHead = styled.thead`
   text-align: left;
 `;
 
-const TableCell = styled.td`
-  border: 1px solid #ccc;
-  padding: 10px;
-  text-align: center;
-  vertical-align: middle;
-`;
-
-const TableRow = styled.tr`
-  &:nth-child(even) {
-    background-color: #FCFCFD;
-    &:hover {
-      background-color: #eceaea;
-      cursor: pointer;
-    }
-  }
-  &:hover {
-    background-color: #eceaea;
-    cursor: pointer;
-  }
-`;
 
 const StatusSelect = styled.select`
   padding: 4px;
@@ -355,4 +358,14 @@ const SelectBar = styled.select`
   border: 1px solid #ccc;
   border-radius: 4px;
   margin-right: 10px;
+`;
+const TableRow = styled.tr`
+
+`;
+
+const TableCell = styled.td`
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: center;
+  vertical-align: middle;
 `;
