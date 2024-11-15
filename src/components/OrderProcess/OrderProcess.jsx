@@ -220,13 +220,13 @@ const OrderProcess = () => {
       buyer_email: 'user@example.com',
       buyer_addr: formData.address,
       buyer_postcode: formData.postalCode,
-      m_redirect_url: '/completeorder'
+      returnUrl: 'https://api.telegro.kr/api/orders/done'
     };
   
     // 결제창 호출
     IMP.request_pay(paymentData, function (response) {
       if (response.success) {
-        axios.post('https://api.yoursite.com/payments/verify', {
+        axios.post('https://api.telegro.kr/payments/verify', {
           imp_uid: response.imp_uid,
           merchant_uid: response.merchant_uid
         }).then(res => {
