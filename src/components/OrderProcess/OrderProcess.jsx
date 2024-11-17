@@ -213,8 +213,8 @@ const OrderProcess = () => {
       pg: 'nice_v2.iamport00m', 
       pay_method: 'card',
       merchant_uid: `mid_${new Date().getTime()}`,
-      amount: productInfo.total - pointsToUse, // 총 금액에서 사용할 포인트를 빼줍니다.
-      name: productInfo.name.trim(), // 주문명을 총 상품명으로 설정합니다.
+      amount: productInfo.total - pointsToUse, 
+      name: productInfo.name.trim(), 
       buyer_name: formData.name,
       buyer_tel: formData.phone,
       buyer_email: 'user@example.com',
