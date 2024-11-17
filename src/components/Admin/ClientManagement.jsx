@@ -286,7 +286,7 @@ const ClientManagement = () => {
                     <TableData>{client.email}</TableData>
                     <TableData>{client.userId}</TableData>
                     <TableData>{new Date(client.createdDate).toLocaleDateString()}</TableData>
-                    <TableData>{`\₩${client.totalPrice.toLocaleString()} (\₩${Math.floor(client.totalPrice * 0.1).toLocaleString()})`}</TableData>
+                    <TableData>{`\₩${client.totalPrice.toLocaleString()} (\₩${Math.floor(client.point).toLocaleString()})`}</TableData>
                     <TableData>
                       <IconButton onClick={() => navigate(`/admin/ClientEdit/${client.id}`)}><FaPencilAlt /></IconButton>
                     </TableData>
