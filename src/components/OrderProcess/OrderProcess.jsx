@@ -11,6 +11,8 @@ import * as PortOne from "@portone/browser-sdk/v2";
 const OrderProcess = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
+  const [isVirtualAccountChecked, setIsVirtualAccountChecked] = useState(false);
+const [isRealTimeAccountChecked, setIsRealTimeAccountChecked] = useState(false);
   const [isCreditCardChecked, setIsCreditCardChecked] = useState(false);
   const [isBankTransferChecked, setIsBankTransferChecked] = useState(false);
   const [isKakaoPayChecked, setIsKakaoPayChecked] = useState(false);
@@ -21,7 +23,6 @@ const OrderProcess = () => {
   const [orderData, setOrderData] = useState(state.orderData);
   const [userDetails, setUserDetails] = useState(state.userDetails);
   const [point, setPoint] = useState(0); 
-  const [isPhoneChecked, setIsPhoneChecked] = useState(false);
   const [isKakaopayChecked, setIsKakaopayChecked] = useState(false);
   const [pointsToUse, setPointsToUse] = useState(0);
   const [formData, setFormData] = useState({
@@ -38,9 +39,9 @@ const OrderProcess = () => {
   const getTodayDate = () => {
     const today = new Date();
     const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, "0"); // 월은 0부터 시작하므로 +1
+    const month = String(today.getMonth() + 1).padStart(2, "0"); 
     const date = String(today.getDate()).padStart(2, "0");
-    return `${year}-${month}-${date}`; // "YYYY-MM-DD" 형식 반환
+    return `${year}-${month}-${date}`; 
   };
   
   useEffect(() => {
@@ -155,10 +156,14 @@ const OrderProcess = () => {
           pointsToUse: 0,
           pointsToEarn: 100,
           paymentMethod: isCreditCardChecked
-            ? 'CREDIT_CARD'
-            : isBankTransferChecked
-            ? 'BANK_TRANSFER'
-            : 'EASY_PAYMENT'
+          ? "CREDIT_CARD"
+          : isVirtualAccountChecked
+          ? "V_BANK"
+          : isRealTimeAccountChecked
+          ? "BANK_TRANSFER"
+          : isKakaoPayChecked
+          ? "EASY_PAYMENT"
+          : null,
         },
         { 
           headers: {
@@ -196,6 +201,7 @@ const OrderProcess = () => {
       m_redirect_url: "https://www.telegro.kr/completeorder",
       vbank_due: today,
       digital: "false",
+      escrow: "true",
       custom_data: {
         orderId,
         items: orderData.cartProductDTOS.map((p) => p.id),
@@ -212,23 +218,7 @@ const OrderProcess = () => {
       baseOptions.virtualAccount = {
         vbank_due: today,
       };
-    } else if (payMethod === "phone") {
-      baseOptions.phone = {
-        tel: formData.phone,
-        productType: "digital",
-      };
-    } else if (payMethod === "kakaopay") {
-      baseOptions.kakaopay = {
-        appScheme: "your_app_scheme", 
-      };
-    } else if (payMethod === "EASY_PAY") {
-      baseOptions.easyPay = {
-        easyPayProvider: "SSGPAY",
-        availablePayMethods: "TRANSFER",
-        cashReceiptType: "PERSONAL",
-        customerIdentifier: "01000000000",
-      };
-    }
+    } 
   
     return baseOptions;
   };
@@ -266,11 +256,9 @@ const OrderProcess = () => {
     ? "card"
     : isBankTransferChecked
     ? "vbank"
-    : isKakaoPayChecked
+    : isKakaopayChecked
     ? "kakaopay"
-    : isPhoneChecked
-    ? "phone"
-    : "EASY_PAY"; 
+    : "trans";
   
   
     const paymentId = `payment-${new Date().getTime()}`;
@@ -487,18 +475,36 @@ const OrderProcess = () => {
             <O.CheckboxLabel>신용카드</O.CheckboxLabel>
           </O.PaymentOption>
           <O.PaymentOption>
-            <img
-              src={isBankTransferChecked ? checked : check}
-              alt="가상 계좌"
-              onClick={() => {
-                setIsBankTransferChecked(true);
-                setIsCreditCardChecked(false);
-                setIsKakaoPayChecked(false);
-              }}
-              style={{ cursor: 'pointer', width: '20px', height: '20px' }}
-            />
-            <O.CheckboxLabel>가상 계좌(세금계산서 발행 - 업체)</O.CheckboxLabel>
-          </O.PaymentOption>
+  <img
+    src={isVirtualAccountChecked ? checked : check}
+    alt="가상 계좌"
+    onClick={() => {
+      setIsVirtualAccountChecked(true);
+      setIsRealTimeAccountChecked(false);
+      setIsCreditCardChecked(false);
+      setIsKakaoPayChecked(false);
+    }}
+    style={{ cursor: 'pointer', width: '20px', height: '20px' }}
+  />
+  <O.CheckboxLabel>가상 계좌(세금계산서 발행 - 업체)</O.CheckboxLabel>
+</O.PaymentOption>
+
+<O.PaymentOption>
+  <img
+    src={isRealTimeAccountChecked ? checked : check}
+    alt="실시간 계좌이체"
+    onClick={() => {
+      setIsRealTimeAccountChecked(true);
+      setIsVirtualAccountChecked(false);
+      setIsCreditCardChecked(false);
+      setIsKakaoPayChecked(false);
+    }}
+    style={{ cursor: 'pointer', width: '20px', height: '20px' }}
+  />
+  <O.CheckboxLabel>실시간 계좌이체</O.CheckboxLabel>
+</O.PaymentOption>
+
+
           <O.PaymentOption>
             <img
               src={isKakaoPayChecked ? checked : check}
@@ -513,34 +519,18 @@ const OrderProcess = () => {
             <O.CheckboxLabel>간편결제</O.CheckboxLabel>
           </O.PaymentOption>
           <O.PaymentOption>
-  <img
-    src={isPhoneChecked ? checked : check}
-    alt="휴대폰 소액결제"
-    onClick={() => {
-      setIsPhoneChecked(true);
-      setIsCreditCardChecked(false);
-      setIsBankTransferChecked(false);
-      setIsKakaoPayChecked(false);
-    }}
-    style={{ cursor: "pointer", width: "20px", height: "20px" }}
-  />
-  <O.CheckboxLabel>휴대폰 소액결제</O.CheckboxLabel>
-</O.PaymentOption>
-
-<O.PaymentOption>
-  <img
-    src={isKakaopayChecked ? checked : check}
-    alt="카카오페이"
-    onClick={() => {
-      setIsKakaopayChecked(true);
-      setIsCreditCardChecked(false);
-      setIsBankTransferChecked(false);
-      setIsPhoneChecked(false);
-    }}
-    style={{ cursor: "pointer", width: "20px", height: "20px" }}
-  />
-  <O.CheckboxLabel>카카오페이</O.CheckboxLabel>
-</O.PaymentOption>
+            <img
+              src={isKakaopayChecked ? checked : check}
+              alt="카카오페이"
+              onClick={() => {
+                setIsKakaopayChecked(true);
+                setIsCreditCardChecked(false);
+                setIsBankTransferChecked(false);
+              }}
+              style={{ cursor: "pointer", width: "20px", height: "20px" }}
+            />
+            <O.CheckboxLabel>카카오페이</O.CheckboxLabel>
+          </O.PaymentOption>
 
             <hr />
             <O.CheckboxWrapper>
