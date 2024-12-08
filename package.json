@@ -11,7 +11,7 @@
     "proxy": "http://ec2-52-78-189-146.ap-northeast-2.compute.amazonaws.com"
   },
   "dependencies": {
-    "@portone/browser-sdk": "^0.0.10",
+    "@portone/browser-sdk": "^0.0.11",
     "@toast-ui/editor-plugin-color-syntax": "^3.1.0",
     "@toast-ui/react-editor": "^3.2.3",
     "avvvatars-react": "^0.4.2",

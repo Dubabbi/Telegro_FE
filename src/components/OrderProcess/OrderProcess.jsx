@@ -31,8 +31,8 @@ const OrderProcess = () => {
     detailedAddress: '',
     request: ''
   });
-  const totalProductPrice = orderData.cartProductDTOS.reduce((acc, product) => acc + product.totalPrice, 0);
-  const shippingCost = 3000; // 배송비는 고정 값
+  const shippingCost = 3000; 
+  const totalProductPrice = orderData.cartProductDTOS.reduce((acc, product, shippingCost) => shippingCost + acc + product.totalPrice, 0);
   const totalPayable = totalProductPrice + shippingCost - pointsToUse; // 최종 결제금액 계산
   useEffect(() => {
     if (!orderData) {
@@ -132,10 +132,6 @@ const OrderProcess = () => {
     setIsAgreementChecked(!isAgreementChecked);
   };
   const confirmOrder = async () => {
-    if (!isAgreementChecked) {
-      alert("구매 조건에 동의하셔야 합니다.");
-      return;
-    }
     try {
       const response = await axios.post(
         'https://api.telegro.kr/api/orders/done', 
@@ -165,26 +161,8 @@ const OrderProcess = () => {
       );
   
       if (response.status === 200) {
-        alert('주문이 완료되었습니다.');
-        navigate('/completeorder', { 
-          state: { 
-            orderDetails: productInfo,
-            userDetails: {
-              name: formData.name,
-              email: userDetails.userEmail,
-              phone: formData.phone
-            },
-            shippingInfo: {
-              address: formData.address,
-              postalCode: formData.postalCode,
-              detailedAddress: formData.detailedAddress,
-              request: formData.request
-            },
-            pointsToUse: pointsToUse,
-            pointsToEarn: 100,  
-            shippingCost: 3000  
-          }
-        });
+        console.log('주문이 생성되었습니다.');
+        return response.data.data.id;
       } 
     } catch (error) {
       console.error('Order confirmation error:', error);
@@ -193,80 +171,109 @@ const OrderProcess = () => {
   };
   
 
-  const handlePayment = () => { 
+  const handlePayment = async () => {
     if (!isAgreementChecked) {
       alert("구매 조건에 동의하셔야 합니다.");
       return;
     }
   
-    const productInfo = orderData.cartProductDTOS.reduce((acc, product) => {
-      acc.name += `${product.productName} `;
-      acc.total += product.totalPrice;
-      return acc;
-    }, { name: '', total: 0 });
+    // orderData와 cartProductDTOS가 없는 경우 기본값 설정
+    if (!orderData || !orderData.cartProductDTOS || orderData.cartProductDTOS.length === 0) {
+      alert("주문 데이터가 올바르지 않습니다.");
+      return;
+    }
   
-    const { IMP } = window; 
-    IMP.init('imp06338577'); // 아임포트 식별 코드
+    // productInfo 계산
+    const productInfo = orderData.cartProductDTOS.reduce(
+      (acc, product) => {
+        acc.name += `${product.productName} `;
+        acc.total += product.totalPrice;
+        return acc;
+      },
+      { name: "", total: 0 }
+    );
   
-    const paymentData = {
-      pg: 'nice_v2.iamport00m', // PG사 설정
-      pay_method: 'card',
-      merchant_uid: `mid_${new Date().getTime()}`, // 주문 고유번호
-      amount: productInfo.total - pointsToUse, 
-      name: productInfo.name.trim(), 
-      buyer_name: formData.name, 
-      buyer_tel: formData.phone, 
-      buyer_email: formData.email || 'user@example.com', 
-      buyer_addr: formData.address,
-      buyer_postcode: formData.postalCode,
-      notice_url: 'https://api.telegro.kr/api/v1/order/payment/iamport00m', 
-      returnUrl: 'https://api.telegro.kr/api/orders/done' 
-    };
+    const orderId = await confirmOrder();
+    if (!orderId) {
+      alert("주문 생성에 실패했습니다. 결제를 진행할 수 없습니다.");
+      return;
+    }
   
-    IMP.request_pay(paymentData, async function (response) {
-      if (response.success) {
-        try {
-          const verifyResponse = await axios.post(
-            `https://api.telegro.kr/api/v1/order/payment/${response.imp_uid}`,
-            {
-              orderId: orderData.id,
-              price: productInfo.total - pointsToUse,
-              cartIds: orderData.cartProductDTOS.map((product) => product.id),
-              imp_uid: response.imp_uid, 
-              merchant_uid: response.merchant_uid 
-            },
-            {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
-                "Content-Type": "application/json"
-              }
-            }
-          );
-          const { code, response: serverResponse } = verifyResponse.data;
-          if (code === 0 && serverResponse.status === "paid") {
-            alert("결제가 완료되었습니다.");
-            navigate("/completeorder", {
-              state: {
-                orderDetails: orderData,
-                userDetails: formData,
-                pointsToUse: 0,
-                pointsToEarn: 100,
+    const { IMP } = window;
+    IMP.init("imp06338577"); // 아임포트 식별 코드
+    const paymentId = `payment-${new Date().getTime()}`;
+  
+    IMP.request_pay(
+      {
+        pg: "nice_v2.iamport00m",
+        pay_method: "card",
+        merchant_uid: paymentId,
+        amount: productInfo.total - pointsToUse,
+        name: productInfo.name.trim(),
+        buyer_name: formData.name,
+        buyer_tel: formData.phone,
+        buyer_email: formData.email || "user@example.com",
+        buyer_addr: formData.address,
+        buyer_postcode: formData.postalCode,
+        storeId: "store-a85691d3-8516-48fe-985b-03d01942b7d7",
+        channelKey: "channel-key-0c462650-5c1a-4f74-86d5-80a67cb512c2",
+        custom_data: {
+          orderId, // 주문 ID 전달
+          items: orderData.cartProductDTOS.map((p) => p.id),
+        },
+      },
+      async (rsp) => {
+        if (rsp.imp_uid) {
+          try {
+            const verifyResponse = await axios.post(
+              `https://api.telegro.kr/api/v1/order/payment/${rsp.imp_uid}`,
+              {
+                orderId, // 주문 ID 포함
+                price: productInfo.total - pointsToUse,
+                cartIds: orderData.cartProductDTOS.map((p) => p.id),
               },
-            });
-          } else {
-            alert("결제 검증 실패");
+              {
+                headers: {
+                  Authorization: `Bearer ${localStorage.getItem("token")}`,
+                  "Content-Type": "application/json",
+                },
+                withCredentials: true,
+              }
+            );
+  
+            const { code, response } = verifyResponse.data;
+  
+            if (code === 0 && response.status === "paid") {
+              alert("결제가 완료되었습니다.");
+              navigate("/completeorder", {
+                state: {
+                  orderDetails: orderData,
+                  userDetails: formData,
+                  pointsToUse: pointsToUse,
+                  pointsToEarn: 100,
+                },
+              });
+            } else {
+              alert("결제 검증에 실패했습니다.");
+            }
+          } catch (error) {
+            console.error("결제 검증 중 오류:", error);
+            alert("결제 검증 중 오류가 발생했습니다.");
           }
-        } catch (error) {
-          console.error("결제 검증 오류:", error);
-          alert("결제 검증 중 오류가 발생했습니다.");
+        } else {
+          console.error("결제 실패:", rsp);
+          alert(`결제 실패: ${rsp.error_msg || "알 수 없는 오류"}`);
         }
-      } else {
-        console.error("결제 실패:", response);
-        alert(`결제 실패: ${response.error_msg || "알 수 없는 오류"}`);
       }
-    });
-    
+    );
   };
+  
+  
+  
+  
+  
+  
+  
   
 
   const orderCustomerInfo = userDetails ? (
