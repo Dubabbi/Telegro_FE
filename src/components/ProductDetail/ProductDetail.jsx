@@ -82,6 +82,7 @@ const ProductDetail = () => {
           }
         );
         if (orderResponse.data.code === 20000) {
+          sessionStorage.setItem('tempOrder', JSON.stringify(response.data.data));
           navigate('/orderprocess', 
           { state: { orderData: orderResponse.data.data,
             userDetails: {

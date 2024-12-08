@@ -6,21 +6,38 @@ import img from '../Check/image.svg';
 const CompleteOrder = () => {
   const navigate = useNavigate();
   const { state } = useLocation(); 
-  const { orderDetails, userDetails, shippingInfo, pointsToUse, pointsToEarn, shippingCost } = state;
+  const {
+    orderDetails = { products: [], total: 0 },
+    userDetails = { name: '', phone: '' },
+    shippingInfo = { postalCode: '', address: '', detailedAddress: '' },
+    pointsToUse = 0,
+    pointsToEarn = 0,
+    shippingCost = 0,
+  } = state || {}; // 안전한 초기화
 
   const formatPrice = (price) => {
     return new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(price);
   };
+
+  if (!state) {
+    // 상태가 없으면 오류 메시지와 함께 홈으로 이동
+    return (
+      <O.CompleteOrderWrapper>
+        <p>주문 정보를 불러올 수 없습니다. 다시 시도해주세요.</p>
+        <O.Button onClick={() => navigate('/main')}>홈으로 이동</O.Button>
+      </O.CompleteOrderWrapper>
+    );
+  }
 
   return (
     <O.CompleteOrderWrapper>
       <img src={img} alt="Order Complete" />
       <O.Title>주문이 완료되었습니다</O.Title>
       <O.OrderInfo>
-      2023.11.28에 주문하신 상품의 주문번호는 <span>12524</span>입니다. 
+        2023.11.28에 주문하신 상품의 주문번호는 <span>12524</span>입니다.
       </O.OrderInfo>
 
-      <O.SectionTitle style={{textAlign: 'left'}}>주문 상품</O.SectionTitle>
+      <O.SectionTitle style={{ textAlign: 'left' }}>주문 상품</O.SectionTitle>
       <O.Table>
         <thead>
           <tr>
@@ -42,7 +59,7 @@ const CompleteOrder = () => {
         </tbody>
       </O.Table>
 
-      <O.SectionTitle style={{marginTop: '30px'}}>배송지 정보</O.SectionTitle>
+      <O.SectionTitle style={{ marginTop: '30px' }}>배송지 정보</O.SectionTitle>
       <O.InfoBox>
         <div>
           <h4>이름</h4>

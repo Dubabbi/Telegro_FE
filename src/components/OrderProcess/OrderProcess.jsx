@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import img from '../Check/image.svg'; 
 import { Postcode } from '../Postcode/Postcode'; 
 import * as C from '../Cart/Cart';
 import check from '/src/assets/icon/Admin/check.svg';
@@ -33,7 +32,15 @@ const OrderProcess = () => {
   });
   const shippingCost = 3000; 
   const totalProductPrice = orderData.cartProductDTOS.reduce((acc, product, shippingCost) => shippingCost + acc + product.totalPrice, 0);
-  const totalPayable = totalProductPrice + shippingCost - pointsToUse; // 최종 결제금액 계산
+  const totalPayable = totalProductPrice + shippingCost - pointsToUse; 
+  const getTodayDate = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0"); // 월은 0부터 시작하므로 +1
+    const date = String(today.getDate()).padStart(2, "0");
+    return `${year}-${month}-${date}`; // "YYYY-MM-DD" 형식 반환
+  };
+  
   useEffect(() => {
     if (!orderData) {
       alert("주문 정보가 존재하지 않습니다.");
@@ -170,6 +177,50 @@ const OrderProcess = () => {
     }
   };
   
+  const getPaymentOptions = (payMethod, productInfo, paymentId, orderId) => {
+    const today = getTodayDate();
+    let baseOptions = {
+      channelKey: "channel-key-0c462650-5c1a-4f74-86d5-80a67cb512c2",
+      storeId: "store-a85691d3-8516-48fe-985b-03d01942b7d7",
+      pay_method: payMethod,
+      merchant_uid: paymentId,
+      amount: productInfo.total - pointsToUse,
+      name: productInfo.name.trim(),
+      buyer_name: formData.name,
+      buyer_tel: formData.phone,
+      buyer_email: formData.email || "user@example.com",
+      buyer_addr: formData.address,
+      buyer_postcode: formData.postalCode,
+      vbank_due: today,
+      custom_data: {
+        orderId,
+        items: orderData.cartProductDTOS.map((p) => p.id),
+      },
+    };
+  
+    if (payMethod === "CARD") {
+      baseOptions.card = {
+        installmentMonth: productInfo.total >= 50000 ? 3 : 0,
+        useCardPoint: false,
+        useFreeInterestFromMerchant: true,
+      };
+    } else if (payMethod === "vbank") {
+      baseOptions.virtualAccount = {
+        vbank_due: today,
+      };
+    } else if (payMethod === "EASY_PAY") {
+      baseOptions.easyPay = {
+        easyPayProvider: "SSGPAY", 
+        availablePayMethods: "TRANSFER", 
+        cashReceiptType: "PERSONAL", 
+        customerIdentifier: "01000000000", 
+      };
+    }
+  
+    return baseOptions;
+  };
+  
+  
 
   const handlePayment = async () => {
     if (!isAgreementChecked) {
@@ -177,13 +228,11 @@ const OrderProcess = () => {
       return;
     }
   
-    // orderData와 cartProductDTOS가 없는 경우 기본값 설정
     if (!orderData || !orderData.cartProductDTOS || orderData.cartProductDTOS.length === 0) {
       alert("주문 데이터가 올바르지 않습니다.");
       return;
     }
   
-    // productInfo 계산
     const productInfo = orderData.cartProductDTOS.reduce(
       (acc, product) => {
         acc.name += `${product.productName} `;
@@ -192,81 +241,73 @@ const OrderProcess = () => {
       },
       { name: "", total: 0 }
     );
-  
     const orderId = await confirmOrder();
+  
     if (!orderId) {
       alert("주문 생성에 실패했습니다. 결제를 진행할 수 없습니다.");
       return;
     }
   
-    const { IMP } = window;
-    IMP.init("imp06338577"); // 아임포트 식별 코드
+    const payMethod = isCreditCardChecked
+      ? "CARD"
+      : isBankTransferChecked
+      ? "vbank"
+      : "EASY_PAY";
+  
     const paymentId = `payment-${new Date().getTime()}`;
   
-    IMP.request_pay(
-      {
-        pg: "nice_v2.iamport00m",
-        pay_method: "card",
-        merchant_uid: paymentId,
-        amount: productInfo.total - pointsToUse,
-        name: productInfo.name.trim(),
-        buyer_name: formData.name,
-        buyer_tel: formData.phone,
-        buyer_email: formData.email || "user@example.com",
-        buyer_addr: formData.address,
-        buyer_postcode: formData.postalCode,
-        storeId: "store-a85691d3-8516-48fe-985b-03d01942b7d7",
-        channelKey: "channel-key-0c462650-5c1a-4f74-86d5-80a67cb512c2",
-        custom_data: {
-          orderId, // 주문 ID 전달
-          items: orderData.cartProductDTOS.map((p) => p.id),
-        },
-      },
-      async (rsp) => {
-        if (rsp.imp_uid) {
-          try {
-            const verifyResponse = await axios.post(
-              `https://api.telegro.kr/api/v1/order/payment/${rsp.imp_uid}`,
-              {
-                orderId, // 주문 ID 포함
-                price: productInfo.total - pointsToUse,
-                cartIds: orderData.cartProductDTOS.map((p) => p.id),
+    const paymentOptions = getPaymentOptions(payMethod, productInfo, paymentId, orderId);
+  
+    const { IMP } = window;
+    IMP.init("imp06338577");
+  
+    IMP.request_pay(paymentOptions, async (rsp) => {
+      if (rsp.imp_uid) {
+        try {
+          const verifyResponse = await axios.post(
+            `https://api.telegro.kr/api/v1/order/payment/${rsp.imp_uid}`,
+            {
+              orderId,
+              price: productInfo.total - pointsToUse,
+              cartIds: orderData.cartProductDTOS.map((p) => p.id),
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+                "Content-Type": "application/json",
               },
-              {
-                headers: {
-                  Authorization: `Bearer ${localStorage.getItem("token")}`,
-                  "Content-Type": "application/json",
-                },
-                withCredentials: true,
-              }
-            );
-  
-            const { code, response } = verifyResponse.data;
-  
-            if (code === 0 && response.status === "paid") {
-              alert("결제가 완료되었습니다.");
-              navigate("/completeorder", {
-                state: {
-                  orderDetails: orderData,
-                  userDetails: formData,
-                  pointsToUse: pointsToUse,
-                  pointsToEarn: 100,
-                },
-              });
-            } else {
-              alert("결제 검증에 실패했습니다.");
+              withCredentials: true,
             }
-          } catch (error) {
-            console.error("결제 검증 중 오류:", error);
-            alert("결제 검증 중 오류가 발생했습니다.");
+          );
+  
+          const { code, response } = verifyResponse.data;
+  
+          if (code === 0 && response.status === "paid") {
+            alert("결제가 완료되었습니다.");
+            navigate("/completeorder", {
+              state: {
+                orderDetails: orderData,
+                userDetails: formData,
+                pointsToUse: pointsToUse,
+                pointsToEarn: 100,
+              },
+            });
+          } else {
+            alert("결제 검증에 실패했습니다.");
           }
-        } else {
-          console.error("결제 실패:", rsp);
-          alert(`결제 실패: ${rsp.error_msg || "알 수 없는 오류"}`);
+        } catch (error) {
+          console.error("결제 검증 중 오류:", error);
+          alert("결제 검증 중 오류가 발생했습니다.");
         }
+      } else {
+        console.error("결제 실패:", rsp);
+        alert(`결제 실패: ${rsp.error_msg || "알 수 없는 오류"}`);
       }
-    );
+    });
   };
+  
+  
+  
   
   
   
@@ -439,7 +480,7 @@ const OrderProcess = () => {
           <O.PaymentOption>
             <img
               src={isBankTransferChecked ? checked : check}
-              alt="무통장 입금"
+              alt="가상 계좌"
               onClick={() => {
                 setIsBankTransferChecked(true);
                 setIsCreditCardChecked(false);
@@ -447,12 +488,12 @@ const OrderProcess = () => {
               }}
               style={{ cursor: 'pointer', width: '20px', height: '20px' }}
             />
-            <O.CheckboxLabel>무통장 입금(세금계산서 발행 - 업체)</O.CheckboxLabel>
+            <O.CheckboxLabel>가상 계좌(세금계산서 발행 - 업체)</O.CheckboxLabel>
           </O.PaymentOption>
           <O.PaymentOption>
             <img
               src={isKakaoPayChecked ? checked : check}
-              alt="카카오페이"
+              alt="간편결제"
               onClick={() => {
                 setIsKakaoPayChecked(true);
                 setIsCreditCardChecked(false);
@@ -460,7 +501,7 @@ const OrderProcess = () => {
               }}
               style={{ cursor: 'pointer', width: '20px', height: '20px' }}
             />
-            <O.CheckboxLabel>카카오페이</O.CheckboxLabel>
+            <O.CheckboxLabel>간편결제</O.CheckboxLabel>
           </O.PaymentOption>
             <hr />
             <O.CheckboxWrapper>
@@ -472,7 +513,6 @@ const OrderProcess = () => {
               />
               <O.CheckboxLabel>구매조건 확인 및 결제진행에 동의</O.CheckboxLabel>
             </O.CheckboxWrapper>
-            {/*<C.ConfirmButton onClick={confirmOrder}>결제하기</C.ConfirmButton>*/}
             <C.ConfirmButton onClick={handlePayment}>결제하기</C.ConfirmButton>
           </O.BoxSection>
         </O.RightSection>
