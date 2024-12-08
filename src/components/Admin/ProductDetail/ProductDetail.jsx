@@ -173,10 +173,10 @@ const AdminProductDetail = () => {
           </div>
         <PriceWrapper>
           <PriceListWrapper>
-            <PriceTag>Biz: {formatPrice(product.priceBussiness)}</PriceTag>
-            <PriceTag>B: {formatPrice(product.priceBest)}</PriceTag>
-            <PriceTag>D: {formatPrice(product.priceDealer)}</PriceTag>
-            <PriceTag>C: {formatPrice(product.priceCustomer)}</PriceTag>
+            <PriceTag>business: {formatPrice(product.priceBussiness)}</PriceTag>
+            <PriceTag>best: {formatPrice(product.priceBest)}</PriceTag>
+            <PriceTag>dealer: {formatPrice(product.priceDealer)}</PriceTag>
+            <PriceTag>customer: {formatPrice(product.priceCustomer)}</PriceTag>
           </PriceListWrapper>
         </PriceWrapper>
         <ContentWrapper>

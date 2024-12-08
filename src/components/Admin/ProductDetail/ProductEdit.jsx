@@ -368,8 +368,8 @@ const ProductEdit = () => {
                       cursor: 'pointer',
                     }}
                     onClick={(e) => {
-                      e.stopPropagation(); // 이벤트 버블링 방지
-                      handleRemoveImage(index); // 이미지 삭제
+                      e.stopPropagation();
+                      handleRemoveImage(index);
                     }}
                   >
                     X
