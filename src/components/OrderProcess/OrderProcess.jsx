@@ -21,6 +21,8 @@ const OrderProcess = () => {
   const [orderData, setOrderData] = useState(state.orderData);
   const [userDetails, setUserDetails] = useState(state.userDetails);
   const [point, setPoint] = useState(0); 
+  const [isPhoneChecked, setIsPhoneChecked] = useState(false);
+  const [isKakaopayChecked, setIsKakaopayChecked] = useState(false);
   const [pointsToUse, setPointsToUse] = useState(0);
   const [formData, setFormData] = useState({
     name: '',
@@ -191,14 +193,16 @@ const OrderProcess = () => {
       buyer_email: formData.email || "user@example.com",
       buyer_addr: formData.address,
       buyer_postcode: formData.postalCode,
+      m_redirect_url: "https://www.telegro.kr/completeorder",
       vbank_due: today,
+      digital: "false",
       custom_data: {
         orderId,
         items: orderData.cartProductDTOS.map((p) => p.id),
       },
     };
   
-    if (payMethod === "CARD") {
+    if (payMethod === "card") {
       baseOptions.card = {
         installmentMonth: productInfo.total >= 50000 ? 3 : 0,
         useCardPoint: false,
@@ -208,17 +212,27 @@ const OrderProcess = () => {
       baseOptions.virtualAccount = {
         vbank_due: today,
       };
+    } else if (payMethod === "phone") {
+      baseOptions.phone = {
+        tel: formData.phone,
+        productType: "digital",
+      };
+    } else if (payMethod === "kakaopay") {
+      baseOptions.kakaopay = {
+        appScheme: "your_app_scheme", 
+      };
     } else if (payMethod === "EASY_PAY") {
       baseOptions.easyPay = {
-        easyPayProvider: "SSGPAY", 
-        availablePayMethods: "TRANSFER", 
-        cashReceiptType: "PERSONAL", 
-        customerIdentifier: "01000000000", 
+        easyPayProvider: "SSGPAY",
+        availablePayMethods: "TRANSFER",
+        cashReceiptType: "PERSONAL",
+        customerIdentifier: "01000000000",
       };
     }
   
     return baseOptions;
   };
+  
   
   
 
@@ -249,10 +263,15 @@ const OrderProcess = () => {
     }
   
     const payMethod = isCreditCardChecked
-      ? "CARD"
-      : isBankTransferChecked
-      ? "vbank"
-      : "EASY_PAY";
+    ? "card"
+    : isBankTransferChecked
+    ? "vbank"
+    : isKakaoPayChecked
+    ? "kakaopay"
+    : isPhoneChecked
+    ? "phone"
+    : "EASY_PAY"; 
+  
   
     const paymentId = `payment-${new Date().getTime()}`;
   
@@ -304,17 +323,7 @@ const OrderProcess = () => {
         alert(`결제 실패: ${rsp.error_msg || "알 수 없는 오류"}`);
       }
     });
-  };
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+  };  
   
 
   const orderCustomerInfo = userDetails ? (
@@ -503,6 +512,36 @@ const OrderProcess = () => {
             />
             <O.CheckboxLabel>간편결제</O.CheckboxLabel>
           </O.PaymentOption>
+          <O.PaymentOption>
+  <img
+    src={isPhoneChecked ? checked : check}
+    alt="휴대폰 소액결제"
+    onClick={() => {
+      setIsPhoneChecked(true);
+      setIsCreditCardChecked(false);
+      setIsBankTransferChecked(false);
+      setIsKakaoPayChecked(false);
+    }}
+    style={{ cursor: "pointer", width: "20px", height: "20px" }}
+  />
+  <O.CheckboxLabel>휴대폰 소액결제</O.CheckboxLabel>
+</O.PaymentOption>
+
+<O.PaymentOption>
+  <img
+    src={isKakaopayChecked ? checked : check}
+    alt="카카오페이"
+    onClick={() => {
+      setIsKakaopayChecked(true);
+      setIsCreditCardChecked(false);
+      setIsBankTransferChecked(false);
+      setIsPhoneChecked(false);
+    }}
+    style={{ cursor: "pointer", width: "20px", height: "20px" }}
+  />
+  <O.CheckboxLabel>카카오페이</O.CheckboxLabel>
+</O.PaymentOption>
+
             <hr />
             <O.CheckboxWrapper>
               <img
