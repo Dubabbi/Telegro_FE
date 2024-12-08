@@ -11,8 +11,9 @@ import * as PortOne from "@portone/browser-sdk/v2";
 const OrderProcess = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
+  const [isSamsungPayChecked, setIsSamsungPayChecked] = useState(false);
   const [isVirtualAccountChecked, setIsVirtualAccountChecked] = useState(false);
-const [isRealTimeAccountChecked, setIsRealTimeAccountChecked] = useState(false);
+  const [isRealTimeAccountChecked, setIsRealTimeAccountChecked] = useState(false);
   const [isCreditCardChecked, setIsCreditCardChecked] = useState(false);
   const [isBankTransferChecked, setIsBankTransferChecked] = useState(false);
   const [isKakaoPayChecked, setIsKakaoPayChecked] = useState(false);
@@ -187,6 +188,7 @@ const [isRealTimeAccountChecked, setIsRealTimeAccountChecked] = useState(false);
   const getPaymentOptions = (payMethod, productInfo, paymentId, orderId) => {
     const today = getTodayDate();
     let baseOptions = {
+      pg: "nice_v2",
       channelKey: "channel-key-0c462650-5c1a-4f74-86d5-80a67cb512c2",
       storeId: "store-a85691d3-8516-48fe-985b-03d01942b7d7",
       pay_method: payMethod,
@@ -251,14 +253,24 @@ const [isRealTimeAccountChecked, setIsRealTimeAccountChecked] = useState(false);
       alert("주문 생성에 실패했습니다. 결제를 진행할 수 없습니다.");
       return;
     }
-  
+
     const payMethod = isCreditCardChecked
     ? "card"
-    : isBankTransferChecked
-    ? "vbank"
-    : isKakaopayChecked
+    : isVirtualAccountChecked
+    ? "V_BANK"
+    : isRealTimeAccountChecked
+    ? "BANK_TRANSFER"
+    : isKakaoPayChecked
     ? "kakaopay"
-    : "trans";
+    : isSamsungPayChecked 
+    ? "samsungpay"
+    : null;
+  
+  if (!payMethod) {
+    alert("결제 방법을 선택해주세요.");
+    return;
+  }
+  
   
   
     const paymentId = `payment-${new Date().getTime()}`;
@@ -269,7 +281,7 @@ const [isRealTimeAccountChecked, setIsRealTimeAccountChecked] = useState(false);
     IMP.init("imp06338577");
   
     IMP.request_pay(paymentOptions, async (rsp) => {
-      if (rsp.imp_uid) {
+      if (!rsp.error_code) {
         try {
           const verifyResponse = await axios.post(
             `https://api.telegro.kr/api/v1/order/payment/${rsp.imp_uid}`,
@@ -475,35 +487,51 @@ const [isRealTimeAccountChecked, setIsRealTimeAccountChecked] = useState(false);
             <O.CheckboxLabel>신용카드</O.CheckboxLabel>
           </O.PaymentOption>
           <O.PaymentOption>
-  <img
-    src={isVirtualAccountChecked ? checked : check}
-    alt="가상 계좌"
-    onClick={() => {
-      setIsVirtualAccountChecked(true);
-      setIsRealTimeAccountChecked(false);
-      setIsCreditCardChecked(false);
-      setIsKakaoPayChecked(false);
-    }}
-    style={{ cursor: 'pointer', width: '20px', height: '20px' }}
-  />
-  <O.CheckboxLabel>가상 계좌(세금계산서 발행 - 업체)</O.CheckboxLabel>
-</O.PaymentOption>
+            <img
+              src={isVirtualAccountChecked ? checked : check}
+              alt="가상 계좌"
+              onClick={() => {
+                setIsVirtualAccountChecked(true);
+                setIsRealTimeAccountChecked(false);
+                setIsCreditCardChecked(false);
+                setIsKakaoPayChecked(false);
+              }}
+              style={{ cursor: 'pointer', width: '20px', height: '20px' }}
+            />
+            <O.CheckboxLabel>가상 계좌(세금계산서 발행 - 업체)</O.CheckboxLabel>
+          </O.PaymentOption>
 
-<O.PaymentOption>
-  <img
-    src={isRealTimeAccountChecked ? checked : check}
-    alt="실시간 계좌이체"
-    onClick={() => {
-      setIsRealTimeAccountChecked(true);
-      setIsVirtualAccountChecked(false);
-      setIsCreditCardChecked(false);
-      setIsKakaoPayChecked(false);
-    }}
-    style={{ cursor: 'pointer', width: '20px', height: '20px' }}
-  />
-  <O.CheckboxLabel>실시간 계좌이체</O.CheckboxLabel>
-</O.PaymentOption>
+          <O.PaymentOption>
+            <img
+              src={isRealTimeAccountChecked ? checked : check}
+              alt="실시간 계좌이체"
+              onClick={() => {
+                setIsRealTimeAccountChecked(true);
+                setIsVirtualAccountChecked(false);
+                setIsCreditCardChecked(false);
+                setIsKakaoPayChecked(false);
+              }}
+              style={{ cursor: 'pointer', width: '20px', height: '20px' }}
+            />
+            <O.CheckboxLabel>실시간 계좌이체</O.CheckboxLabel>
+          </O.PaymentOption>
 
+          <O.PaymentOption>
+            <img
+              src={isSamsungPayChecked ? checked : check}
+              alt="삼성페이"
+              onClick={() => {
+                setIsSamsungPayChecked(true);
+                setIsCreditCardChecked(false);
+                setIsBankTransferChecked(false);
+                setIsKakaoPayChecked(false);
+                setIsVirtualAccountChecked(false);
+                setIsRealTimeAccountChecked(false);
+              }}
+              style={{ cursor: "pointer", width: "20px", height: "20px" }}
+            />
+            <O.CheckboxLabel>삼성페이</O.CheckboxLabel>
+          </O.PaymentOption>
 
           <O.PaymentOption>
             <img
