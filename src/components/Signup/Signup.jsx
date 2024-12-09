@@ -177,8 +177,8 @@ function Signup() {
                 />
                 {errors.phoneNumber && <L.ErrorText>{errors.phoneNumber}</L.ErrorText>}
               </L.InputBox>
-              <L.InputBox>
-                <label htmlFor="addressText">주소</label>
+              <L.SecondInputBox>
+                <label style={{alignItems: 'center'}} htmlFor="addressText">주소  <span style={{color: '#777', fontSize: '1.1rem'}}>* 기본 배송지로 설정됩니다.</span></label>
                 <input
                   id="addressText"
                   value={roadAddress}
@@ -187,10 +187,10 @@ function Signup() {
                   readOnly
                 />
                 {errors.roadAddress && <L.ErrorText>{errors.roadAddress}</L.ErrorText>}
-              </L.InputBox>
-              <L.AddressBox>
+              </L.SecondInputBox>
+              <L.InputBox>
                 <label htmlFor="zipCodeText">우편번호</label>
-              </L.AddressBox>
+              </L.InputBox>
               <div style={{ width: '100%', whiteSpace: 'nowrap', display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                 <L.SearchInput 
                   id="zipCodeText"

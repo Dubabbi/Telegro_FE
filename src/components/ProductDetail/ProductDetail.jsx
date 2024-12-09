@@ -62,7 +62,6 @@ const ProductDetail = () => {
     try {
       const accessToken = localStorage.getItem("token");
   
-      // Step 1: 장바구니에 담기
       const cartResponse = await axios.post(
         `https://api.telegro.kr/api/carts/${productId}`,
         {
@@ -76,13 +75,12 @@ const ProductDetail = () => {
       );
   
       if (cartResponse.status === 200) {
-        const cartId = cartResponse.data.data.id; // 정확한 키 확인 필요
+        const cartId = cartResponse.data.data.id; 
         console.log("Cart added successfully:", cartId);
   
-        // Step 2: 주문 임시 생성
         const orderResponse = await axios.post(
           `https://api.telegro.kr/api/orders/create`,
-          [cartId], // 서버에서 배열 형태로 ID를 받는지 확인
+          [cartId],
           {
             headers: { Authorization: `Bearer ${accessToken}` },
             withCredentials: true,
@@ -92,7 +90,6 @@ const ProductDetail = () => {
         if (orderResponse.data.code === 20000) {
           console.log("Order created successfully:", orderResponse.data);
   
-          // Step 3: 주문 데이터를 세션 스토리지에 저장 및 페이지 이동
           sessionStorage.setItem(
             "tempOrder",
             JSON.stringify(orderResponse.data.data)
