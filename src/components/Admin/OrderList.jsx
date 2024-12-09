@@ -18,7 +18,6 @@ const OrderList = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [size, setSize] = useState(3);
-  // 주문 목록 조회 API 호출
   useEffect(() => {
     const fetchOrders = async () => {
       try {

@@ -7,7 +7,7 @@ import MainPage from './pages/Main';
 import LoginPage from './pages/Login';
 import NoticePage from './pages/Notice';
 import NoticeDetailPage from './pages/NoticeDetail';
-import OrderPage from './pages/Order';
+
 import OrderProcessPage from './components/OrderProcess/OrderProcess';
 import Headset from './components/Product/Headset';
 import LineCord from './components/Product/LineCord';
@@ -36,7 +36,6 @@ export default function User() {
           <Route path="/notice" element={<NoticePage />} />
           <Route path="/noticedetail/:noticeId" element={<NoticeDetailPage />} />
           <Route path="/productdetail/:productId" element={<ProductDetailPage />} />
-          <Route path="/order" element={<OrderPage />} />
           <Route path="/headset" element={<Headset />} />
           <Route path="/lineCord" element={<LineCord />} />
           <Route path="/recording" element={<Recording />} />
