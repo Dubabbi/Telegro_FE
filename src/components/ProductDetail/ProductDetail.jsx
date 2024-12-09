@@ -55,55 +55,77 @@ const ProductDetail = () => {
 
   const handlePurchase = async () => {
     if (!selectedOption) {
-      alert('옵션을 선택해주세요.');
+      alert("옵션을 선택해주세요.");
       return;
     }
+  
     try {
-      const accessToken = localStorage.getItem('token');
+      const accessToken = localStorage.getItem("token");
+  
+      // Step 1: 장바구니에 담기
       const cartResponse = await axios.post(
         `https://api.telegro.kr/api/carts/${productId}`,
         {
           selectOption: selectedOption,
           quantity: quantity,
-          inputOption: inputOption
+          inputOption: inputOption,
         },
         {
           headers: { Authorization: `Bearer ${accessToken}` },
         }
       );
+  
       if (cartResponse.status === 200) {
-        const cartId = cartResponse.data.data.id;
+        const cartId = cartResponse.data.data.id; // 정확한 키 확인 필요
+        console.log("Cart added successfully:", cartId);
+  
+        // Step 2: 주문 임시 생성
         const orderResponse = await axios.post(
           `https://api.telegro.kr/api/orders/create`,
-          [cartId],
+          [cartId], // 서버에서 배열 형태로 ID를 받는지 확인
           {
             headers: { Authorization: `Bearer ${accessToken}` },
-            withCredentials: true
+            withCredentials: true,
           }
         );
+  
         if (orderResponse.data.code === 20000) {
-          sessionStorage.setItem('tempOrder', JSON.stringify(response.data.data));
-          navigate('/orderprocess', 
-          { state: { orderData: orderResponse.data.data,
-            userDetails: {
-              userName: orderResponse.data.data.userName,
-              userEmail: orderResponse.data.data.userEmail,
-              totalPrice: orderResponse.data.data.totalPrice,
-              totalPoint: orderResponse.data.data.totalPoint,
-              pointToEarn: orderResponse.data.data.pointToEarn
-            }
-           } });
+          console.log("Order created successfully:", orderResponse.data);
+  
+          // Step 3: 주문 데이터를 세션 스토리지에 저장 및 페이지 이동
+          sessionStorage.setItem(
+            "tempOrder",
+            JSON.stringify(orderResponse.data.data)
+          );
+  
+          navigate("/orderprocess", {
+            state: {
+              orderData: orderResponse.data.data,
+              userDetails: {
+                userName: orderResponse.data.data.userName,
+                userEmail: orderResponse.data.data.userEmail,
+                totalPrice: orderResponse.data.data.totalPrice,
+                totalPoint: orderResponse.data.data.totalPoint,
+                pointToEarn: orderResponse.data.data.pointToEarn,
+              },
+            },
+          });
         } else {
-          alert('주문 생성에 실패했습니다.');
+          alert(
+            "주문 생성에 실패했습니다. 오류 메시지: " +
+              orderResponse.data.message
+          );
         }
       } else {
-        alert('장바구니에 담기 실패: ' + cartResponse.data.message);
+        alert("장바구니에 담기 실패: " + cartResponse.data.message);
       }
     } catch (error) {
-      console.error('Error handling purchase:', error);
-      alert('구매 처리 중 오류가 발생했습니다.');
+      console.error("Error handling purchase:", error);
+      alert("구매 처리 중 오류가 발생했습니다.");
     }
   };
+  
+  
 
   useEffect(() => {
     const fetchProduct = async () => {
