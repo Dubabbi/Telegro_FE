@@ -233,7 +233,6 @@ const Cart = () => {
         const response = await axios(config);
         if (response.data.code === 20000) {
             console.log('Order created:', response.data);
-            sessionStorage.setItem('tempOrder', JSON.stringify(response.data.data));
             navigate('/orderprocess', {
                 state: {
                     orderData: response.data.data,

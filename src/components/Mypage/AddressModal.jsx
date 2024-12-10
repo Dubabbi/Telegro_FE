@@ -45,7 +45,7 @@ export default function AddressModal({ isOpen, toggleModal, onAddAddress }) {
   
       if (response.data.code === 20000) {
         console.log('기본 배송지 설정 완료');
-        setIsDefault(true); // 기본 배송지 설정 상태를 업데이트합니다.
+        setIsDefault(true);
       } else {
         alert('기본 배송지 설정에 실패했습니다.');
       }
@@ -83,8 +83,8 @@ export default function AddressModal({ isOpen, toggleModal, onAddAddress }) {
           await setAsDefault(addedAddress.id);
         }
   
-        onAddAddress(addedAddress); // 새로 추가된 주소를 부모 컴포넌트에 전달
-        toggleModal(); // 모달 닫기
+        onAddAddress(addedAddress); 
+        toggleModal();
       } else {
         alert('주소 추가에 실패했습니다.');
       }

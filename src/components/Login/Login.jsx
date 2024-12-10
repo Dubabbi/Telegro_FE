@@ -16,16 +16,12 @@ function Login() {
         password: password,
       }, {withCredentials: true});
       
-      console.log('Response:', response); 
-      console.log('Response Data:', response.data); 
   
       if (response.status === 200 && response.data.data.accessToken) {
-        console.log('Login successful, accessToken:', response.data.data.accessToken);
         localStorage.setItem('token', response.data.data.accessToken);
         navigate('/main'); 
         alert("로그인에 성공했습니다.");
       } else if (response.status === 401) {
-        console.log('Invalid credentials');
         alert("잘못된 인증입니다."); 
       } 
     } catch (error) {

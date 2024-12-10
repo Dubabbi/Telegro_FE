@@ -193,7 +193,7 @@ const OrderProcess = () => {
       storeId: "store-a85691d3-8516-48fe-985b-03d01942b7d7",
       pay_method: payMethod,
       merchant_uid: paymentId,
-      amount: productInfo.total - pointsToUse,
+      amount: productInfo.total + shippingCost - pointsToUse,
       name: productInfo.name.trim(),
       buyer_name: formData.name,
       buyer_tel: formData.phone,
@@ -481,6 +481,7 @@ const OrderProcess = () => {
                 setIsCreditCardChecked(true);
                 setIsBankTransferChecked(false);
                 setIsKakaoPayChecked(false);
+                setIsRealTimeAccountChecked(false);
               }}
               style={{ cursor: 'pointer', width: '20px', height: '20px' }}
             />
@@ -495,6 +496,7 @@ const OrderProcess = () => {
                 setIsRealTimeAccountChecked(false);
                 setIsCreditCardChecked(false);
                 setIsKakaoPayChecked(false);
+                setIsSamsungPayChecked(false);
               }}
               style={{ cursor: 'pointer', width: '20px', height: '20px' }}
             />
@@ -510,6 +512,7 @@ const OrderProcess = () => {
                 setIsVirtualAccountChecked(false);
                 setIsCreditCardChecked(false);
                 setIsKakaoPayChecked(false);
+                setIsSamsungPayChecked(false);
               }}
               style={{ cursor: 'pointer', width: '20px', height: '20px' }}
             />
@@ -532,20 +535,6 @@ const OrderProcess = () => {
             />
             <O.CheckboxLabel>삼성페이</O.CheckboxLabel>
           </O.PaymentOption>
-
-          <O.PaymentOption>
-            <img
-              src={isKakaoPayChecked ? checked : check}
-              alt="간편결제"
-              onClick={() => {
-                setIsKakaoPayChecked(true);
-                setIsCreditCardChecked(false);
-                setIsBankTransferChecked(false);
-              }}
-              style={{ cursor: 'pointer', width: '20px', height: '20px' }}
-            />
-            <O.CheckboxLabel>간편결제</O.CheckboxLabel>
-          </O.PaymentOption>
           <O.PaymentOption>
             <img
               src={isKakaopayChecked ? checked : check}
@@ -554,6 +543,8 @@ const OrderProcess = () => {
                 setIsKakaopayChecked(true);
                 setIsCreditCardChecked(false);
                 setIsBankTransferChecked(false);
+                setIsSamsungPayChecked(false);
+                setIsRealTimeAccountChecked(false);
               }}
               style={{ cursor: "pointer", width: "20px", height: "20px" }}
             />

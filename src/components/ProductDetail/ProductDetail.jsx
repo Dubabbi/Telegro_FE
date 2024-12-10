@@ -89,11 +89,7 @@ const ProductDetail = () => {
   
         if (orderResponse.data.code === 20000) {
           console.log("Order created successfully:", orderResponse.data);
-  
-          sessionStorage.setItem(
-            "tempOrder",
-            JSON.stringify(orderResponse.data.data)
-          );
+
   
           navigate("/orderprocess", {
             state: {
