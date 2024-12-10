@@ -27,7 +27,8 @@ const OrderProcess = () => {
   const [isKakaopayChecked, setIsKakaopayChecked] = useState(false);
   const [pointsToUse, setPointsToUse] = useState(0);
   const [formData, setFormData] = useState({
-    name: '',
+    userName: userDetails?.userName || '',
+    email: userDetails?.email || '',
     phone: '',
     address: '',
     postalCode: '',
@@ -35,8 +36,14 @@ const OrderProcess = () => {
     request: ''
   });
   const shippingCost = 3000; 
-  const totalProductPrice = orderData.cartProductDTOS.reduce((acc, product, shippingCost) => shippingCost + acc + product.totalPrice, 0);
-  const totalPayable = totalProductPrice + shippingCost - pointsToUse; 
+  const totalProductPrice = orderData.cartProductDTOS.reduce(
+    (acc, product) => acc + product.totalPrice,
+    0
+  );
+  
+  
+  const totalPayable = totalProductPrice + shippingCost - pointsToUse;
+
   const getTodayDate = () => {
     const today = new Date();
     const year = today.getFullYear();
@@ -135,15 +142,20 @@ const OrderProcess = () => {
     return new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(price);
   }
   const handlePointsToUseChange = (e) => {
-    const inputPoints = Math.min(parseInt(e.target.value || '0', 10), point);
-    setPointsToUse(inputPoints);
+    const inputPoints = parseInt(e.target.value || '0', 10);
+    const maxUsablePoints = Math.min(point, totalProductPrice - shippingCost); 
+    setPointsToUse(Math.min(inputPoints, maxUsablePoints));
   };
+  
+  
+  
   
   const handleAgreementChange = () => {
     setIsAgreementChecked(!isAgreementChecked);
   };
   const confirmOrder = async () => {
     try {
+      const pointsToEarn = state.orderData.pointToEarn;
       const response = await axios.post(
         'https://api.telegro.kr/api/orders/done', 
         {
@@ -154,8 +166,8 @@ const OrderProcess = () => {
           },
           request: formData.request,
           shoppingCost: 3000,
-          pointsToUse: 0,
-          pointsToEarn: 100,
+          pointsToUse,
+          pointsToEarn,
           paymentMethod: isCreditCardChecked
           ? "CREDIT_CARD"
           : isVirtualAccountChecked
@@ -177,7 +189,8 @@ const OrderProcess = () => {
   
       if (response.status === 200) {
         console.log('주문이 생성되었습니다.');
-        return response.data.data.id;
+        const { id, pointsToEarn } = response.data.data;
+        return { orderId: id, pointsToEarn };
       } 
     } catch (error) {
       console.error('Order confirmation error:', error);
@@ -193,9 +206,9 @@ const OrderProcess = () => {
       storeId: "store-a85691d3-8516-48fe-985b-03d01942b7d7",
       pay_method: payMethod,
       merchant_uid: paymentId,
-      amount: productInfo.total + shippingCost - pointsToUse,
+      amount: totalPayable,
       name: productInfo.name.trim(),
-      buyer_name: formData.name,
+      buyer_name: formData.userName,
       buyer_tel: formData.phone,
       buyer_email: formData.email || "user@example.com",
       buyer_addr: formData.address,
@@ -247,6 +260,8 @@ const OrderProcess = () => {
       },
       { name: "", total: 0 }
     );
+
+    const pointsToEarn = state.orderData.pointToEarn;
     const orderId = await confirmOrder();
   
     if (!orderId) {
@@ -257,9 +272,9 @@ const OrderProcess = () => {
     const payMethod = isCreditCardChecked
     ? "card"
     : isVirtualAccountChecked
-    ? "V_BANK"
+    ? "vbank"
     : isRealTimeAccountChecked
-    ? "BANK_TRANSFER"
+    ? "trans"
     : isKakaoPayChecked
     ? "kakaopay"
     : isSamsungPayChecked 
@@ -283,12 +298,12 @@ const OrderProcess = () => {
     IMP.request_pay(paymentOptions, async (rsp) => {
       if (!rsp.error_code) {
         try {
+          const calculatedPrice = totalProductPrice + shippingCost - pointsToUse;
           const verifyResponse = await axios.post(
             `https://api.telegro.kr/api/v1/order/payment/${rsp.imp_uid}`,
             {
               orderId,
-              price: productInfo.total - pointsToUse,
-              cartIds: orderData.cartProductDTOS.map((p) => p.id),
+              price: calculatedPrice, 
             },
             {
               headers: {
@@ -298,9 +313,9 @@ const OrderProcess = () => {
               withCredentials: true,
             }
           );
-  
+    
           const { code, response } = verifyResponse.data;
-  
+    
           if (code === 0 && response.status === "paid") {
             alert("결제가 완료되었습니다.");
             navigate("/completeorder", {
@@ -308,11 +323,14 @@ const OrderProcess = () => {
                 orderDetails: orderData,
                 userDetails: formData,
                 pointsToUse: pointsToUse,
-                pointsToEarn: 100,
+                pointsToEarn: pointsToEarn,
               },
             });
+          } else if (response.status === "failed") {
+            console.error("결제 실패 사유:", response.failReason);
+            alert(`결제가 실패했습니다: ${response.failReason}`);
           } else {
-            alert("결제 검증에 실패했습니다.");
+            alert("결제 검증에 실패했습니다. 관리자에게 문의하세요.");
           }
         } catch (error) {
           console.error("결제 검증 중 오류:", error);
@@ -323,6 +341,7 @@ const OrderProcess = () => {
         alert(`결제 실패: ${rsp.error_msg || "알 수 없는 오류"}`);
       }
     });
+    
   };  
   
 
@@ -450,25 +469,28 @@ const OrderProcess = () => {
             <span>{formatPrice(shippingCost)}</span>
           </O.PriceDetail>
           <O.PriceDetail>
-            <span>적립금 할인</span>
+            <span>적립금 할인 금액</span>
             <span style={{ color: 'red' }}>-{formatPrice(pointsToUse)}</span>
           </O.PriceDetail>
           <O.PriceDetailsWrapper>
             <input
               type="number"
-              placeholder={`사용할 적립금 입력 (0 / ${point})`}
+              placeholder={`사용 가능 적립금 (0 / ${Math.min(point, totalProductPrice - shippingCost)})p`}
               value={pointsToUse === 0 ? '' : pointsToUse}
               onChange={handlePointsToUseChange}
             />
-            <button onClick={() => setPointsToUse(point)}>모두 사용</button>
+            <button onClick={() => setPointsToUse(Math.min(point, totalProductPrice - shippingCost))}>
+              모두 사용
+            </button>
           </O.PriceDetailsWrapper>
+
           <O.PriceDetail style={{ marginTop: '10px' }}>
             <O.TotalPrice>총 결제금액</O.TotalPrice>
             <O.TotalPrice>{formatPrice(totalPayable)}</O.TotalPrice>
             </O.PriceDetail>
             <O.PriceDetail>
               <span>포인트 적립 예정</span>
-              <span>700P</span>
+              <span>{orderData.pointToEarn}p</span>
             </O.PriceDetail>
         </O.BoxSection>
           <O.BoxSection>
