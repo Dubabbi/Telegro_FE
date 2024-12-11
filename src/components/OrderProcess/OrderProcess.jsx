@@ -435,7 +435,7 @@ const OrderProcess = () => {
   
           const { code, response } = verifyResponse.data;
   
-          if (code === 0 && response.status === "paid") {
+          if (code === 0 ) {
             alert("결제가 완료되었습니다.");
             navigate("/completeorder", {
               state: {
@@ -462,9 +462,6 @@ const OrderProcess = () => {
                 shippingCost: currentShippingCost,
               },
             });
-          } else if (response.status === "failed") {
-            console.error("결제 실패 사유:", response.failReason);
-            alert(`결제가 실패했습니다: ${response.failReason}`);
           } else {
             alert("결제 검증에 실패했습니다. 관리자에게 문의하세요.");
           }
