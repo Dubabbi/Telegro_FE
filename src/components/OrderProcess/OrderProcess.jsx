@@ -412,7 +412,12 @@ const OrderProcess = () => {
       alert("결제 방법을 선택해주세요.");
       return;
     }
-  
+    const currentShippingCost =
+    userRole === 'MEMBER' || userRole === 'ADMIN'
+      ? 3000
+      : isConsignmentChecked
+      ? 4000
+      : 0;
     const paymentId = `payment-${new Date().getTime()}`;
     const paymentOptions = getPaymentOptions(payMethod, productInfo, paymentId, orderId);
   
