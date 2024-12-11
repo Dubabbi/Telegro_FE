@@ -142,12 +142,18 @@ const OrderProcess = () => {
     return new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(price);
   }
   const handlePointsToUseChange = (e) => {
-    const inputPoints = parseInt(e.target.value || '0', 10);
-    const maxUsablePoints = Math.min(point, totalProductPrice - shippingCost); 
-    setPointsToUse(Math.min(inputPoints, maxUsablePoints));
+    const inputPoints = parseInt(e.target.value || '0', 10); // 입력된 포인트 값
+    const maxUsablePoints = Math.min(point, totalProductPrice + shippingCost); // 사용 가능 포인트 계산
+    if (inputPoints > maxUsablePoints) {
+      alert(`최대 사용 가능한 포인트는 ${maxUsablePoints}p입니다.`);
+    }
+    setPointsToUse(Math.min(inputPoints, maxUsablePoints)); 
   };
   
-  
+  const handleUseAllPoints = () => {
+    const maxUsablePoints = Math.min(point, totalProductPrice + shippingCost);
+    setPointsToUse(maxUsablePoints); 
+  };
   
   
   const handleAgreementChange = () => {
@@ -475,15 +481,14 @@ const OrderProcess = () => {
           <O.PriceDetailsWrapper>
             <input
               type="number"
-              placeholder={`사용 가능 적립금 (0 / ${Math.min(point, totalProductPrice - shippingCost)})p`}
+              placeholder={`사용 가능 적립금 (0 / ${Math.min(point, totalProductPrice + shippingCost)})`}
               value={pointsToUse === 0 ? '' : pointsToUse}
               onChange={handlePointsToUseChange}
             />
-            <button onClick={() => setPointsToUse(Math.min(point, totalProductPrice - shippingCost))}>
+            <button onClick={handleUseAllPoints}>
               모두 사용
             </button>
           </O.PriceDetailsWrapper>
-
           <O.PriceDetail style={{ marginTop: '10px' }}>
             <O.TotalPrice>총 결제금액</O.TotalPrice>
             <O.TotalPrice>{formatPrice(totalPayable)}</O.TotalPrice>
