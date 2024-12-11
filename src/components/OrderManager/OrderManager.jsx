@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
 import Pagination from '../Pagination/Pagination';
@@ -9,6 +10,7 @@ import { FaSearch } from 'react-icons/fa';
 import Form from 'react-bootstrap/Form';
 
 const OrderManager = () => {
+  const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
   const [searchValue, setSearchValue] = useState('');
   const [startDate, setStartDate] = useState('');
@@ -232,7 +234,7 @@ const OrderManager = () => {
           {orders.map((order, index) => (
             <React.Fragment key={order.id}>
               {order.products.map((product, productIndex) => (
-                <TableRow className={`order-${order.id} ${productIndex === 0 ? 'highlight-row' : ''}`} key={product.id}>
+                <TableRow onClick={() => navigate('/ordermanager/:orderId')} className={`order-${order.id} ${productIndex === 0 ? 'highlight-row' : ''}`} key={product.id}>
                   {productIndex === 0 && (
                     <TableCell rowSpan={order.products.length}>
                       {index + 1 + (currentPage - 1) * size}
