@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as L from '../Login/LoginStyle';
+import { useDispatch } from 'react-redux';
+import { setUserRole } from '../../store/slices/authSlice'; 
 import axios from 'axios';
 
 function GeneralLogin() {
   const navigate = useNavigate();
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
-  
+  const dispatch = useDispatch();
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
@@ -16,21 +18,25 @@ function GeneralLogin() {
         password: password,
       }, {withCredentials: true});
   
-      console.log('Response:', response);
-      console.log('Response Data:', response.data); 
 
-      if (response.status === 200 && response.data.data.accessToken) {
-        console.log('Login successful, accessToken:', response.data.data.accessToken);
-        localStorage.setItem('token', response.data.data.accessToken); 
-        navigate('/main'); 
-        alert("로그인에 성공했습니다.");
-      } else if (response.status === 401) {
-        console.log('Invalid credentials');
-        alert("잘못된 인증입니다."); 
-      } 
+      if (response.status === 200) {
+        const { data } = response.data;
+          console.log("UserRole from API:", data.userRole);
+          
+          dispatch(setUserRole(data.userRole)); 
+          console.log("Dispatched setUserRole successfully");
+          
+          localStorage.setItem('token', data.accessToken);
+
+          navigate('/main');
+          alert("로그인에 성공했습니다.");
+      } else {
+        console.error("Unexpected response status:", response.status);
+        alert("로그인에 실패했습니다.");
+      }
     } catch (error) {
-      console.error('Login error:', error); // 에러 로그 추가
-      alert("로그인 실패: " + (error.response?.data?.message || "네트워크 오류")); 
+      console.error('Login error:', error);
+      alert("로그인 실패: " + (error.response?.data?.message || "네트워크 오류"));
     }
   };
 

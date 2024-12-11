@@ -1,32 +1,42 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as L from './LoginStyle';
+import { useDispatch } from 'react-redux';
+import { setUserRole } from '../../store/slices/authSlice'; 
 import axios from 'axios';
 
 function Login() {
   const navigate = useNavigate();
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
-
+  const dispatch = useDispatch();
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
       const response = await axios.post("https://api.telegro.kr/auth/login", {
-        id: id,
-        password: password,
-      }, {withCredentials: true});
-      
+        id,
+        password,
+      }, { withCredentials: true });
   
-      if (response.status === 200 && response.data.data.accessToken) {
-        localStorage.setItem('token', response.data.data.accessToken);
-        navigate('/main'); 
-        alert("로그인에 성공했습니다.");
-      } else if (response.status === 401) {
-        alert("잘못된 인증입니다."); 
-      } 
+  
+      if (response.status === 200) {
+        const { data } = response.data;
+          console.log("UserRole from API:", data.userRole);
+          
+          dispatch(setUserRole(data.userRole)); 
+          console.log("Dispatched setUserRole successfully");
+          
+          localStorage.setItem('token', data.accessToken);
+
+          navigate('/main');
+          alert("로그인에 성공했습니다.");
+      } else {
+        console.error("Unexpected response status:", response.status);
+        alert("로그인에 실패했습니다.");
+      }
     } catch (error) {
       console.error('Login error:', error);
-      alert("로그인 실패: " + (error.response?.data?.message || "네트워크 오류")); 
+      alert("로그인 실패: " + (error.response?.data?.message || "네트워크 오류"));
     }
   };
   

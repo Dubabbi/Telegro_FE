@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Postcode } from '../Postcode/Postcode'; 
 import * as C from '../Cart/Cart';
 import check from '/src/assets/icon/Admin/check.svg';
@@ -10,6 +11,7 @@ import * as PortOne from "@portone/browser-sdk/v2";
 
 const OrderProcess = () => {
   const navigate = useNavigate();
+  const userRole = useSelector((state) => state.auth.userRole);
   const { state } = useLocation();
   const [isSamsungPayChecked, setIsSamsungPayChecked] = useState(false);
   const [isVirtualAccountChecked, setIsVirtualAccountChecked] = useState(false);
@@ -498,23 +500,24 @@ const OrderProcess = () => {
               <span>{orderData.pointToEarn}p</span>
             </O.PriceDetail>
         </O.BoxSection>
-          <O.BoxSection>
-          <O.PaymentTitle>결제 방법</O.PaymentTitle>
-          <O.PaymentOption>
-            <img
-              src={isCreditCardChecked ? checked : check}
-              alt="신용카드 결제"
-              onClick={() => {
-                setIsCreditCardChecked(true);
-                setIsBankTransferChecked(false);
-                setIsKakaoPayChecked(false);
-                setIsRealTimeAccountChecked(false);
-              }}
-              style={{ cursor: 'pointer', width: '20px', height: '20px' }}
-            />
-            <O.CheckboxLabel>신용카드</O.CheckboxLabel>
-          </O.PaymentOption>
-          <O.PaymentOption>
+          {userRole === 'MEMBER' || userRole === 'ADMIN' ? (
+            <O.BoxSection>
+              <O.PaymentTitle>결제 방법</O.PaymentTitle>
+              <O.PaymentOption>
+                <img
+                  src={isCreditCardChecked ? checked : check}
+                  alt="신용카드 결제"
+                  onClick={() => {
+                    setIsCreditCardChecked(true);
+                    setIsBankTransferChecked(false);
+                    setIsKakaoPayChecked(false);
+                    setIsRealTimeAccountChecked(false);
+                  }}
+                  style={{ cursor: 'pointer', width: '20px', height: '20px' }}
+                />
+                <O.CheckboxLabel>신용카드</O.CheckboxLabel>
+              </O.PaymentOption>
+              <O.PaymentOption>
             <img
               src={isVirtualAccountChecked ? checked : check}
               alt="가상 계좌"
@@ -577,19 +580,26 @@ const OrderProcess = () => {
             />
             <O.CheckboxLabel>카카오페이</O.CheckboxLabel>
           </O.PaymentOption>
-
-            <hr />
-            <O.CheckboxWrapper>
-              <img
-                src={isAgreementChecked ? checked : check} 
-                alt="구매 조건 동의"
-                onClick={handleAgreementChange}
-                style={{ cursor: 'pointer', width: '20px', height: '20px' }}
-              />
-              <O.CheckboxLabel>구매조건 확인 및 결제진행에 동의</O.CheckboxLabel>
-            </O.CheckboxWrapper>
-            <C.ConfirmButton onClick={handlePayment}>결제하기</C.ConfirmButton>
-          </O.BoxSection>
+              <hr />
+              <O.CheckboxWrapper>
+                <img
+                  src={isAgreementChecked ? checked : check}
+                  alt="구매 조건 동의"
+                  onClick={handleAgreementChange}
+                  style={{ cursor: 'pointer', width: '20px', height: '20px' }}
+                />
+                <O.CheckboxLabel>구매조건 확인 및 결제진행에 동의</O.CheckboxLabel>
+              </O.CheckboxWrapper>
+              <C.ConfirmButton onClick={handlePayment}>결제하기</C.ConfirmButton>
+            </O.BoxSection>
+          ) : (
+            <O.BoxSection>
+              <O.SectionTitle>입금 계좌 안내</O.SectionTitle>
+              <p>우리은행 540-263910-02-001</p>
+              <p>예금주: 연경진(서연전자)</p>
+              <C.ConfirmButton onClick={confirmOrder}>결제하기(주문완료)</C.ConfirmButton>
+            </O.BoxSection>
+          )}
         </O.RightSection>
       </O.OrderPageWrapper>
     </>

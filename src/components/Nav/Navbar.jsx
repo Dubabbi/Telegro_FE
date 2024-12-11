@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import * as N from './NavbarStyle';
 import { FaSearch } from 'react-icons/fa';
 import { useNavigate, Link } from 'react-router-dom';
-import Avvvatars from 'avvvatars-react';
+import { useDispatch } from 'react-redux';
+import { clearUserRole } from '../../store/slices/authSlice';
 import profile from '/src/assets/icon/mypage/profile.svg';
 import axios from 'axios';
 
 export default function Navbar() {
+  const dispatch = useDispatch(); 
   const [searchValue, setSearchValue] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [products, setProducts] = useState([]);  
@@ -71,6 +73,7 @@ export default function Navbar() {
   }, []);
   
   const handleLogout = () => {
+    dispatch(clearUserRole());
     localStorage.removeItem('token');
     setIsLoggedIn(false);
     navigate('/');

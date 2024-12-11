@@ -3,10 +3,15 @@ import styled from 'styled-components';
 import { FaSearch, FaCog, FaSignOutAlt, FaChevronDown, FaChevronRight, FaBars, FaTimes } from 'react-icons/fa';
 import { useNavigate, useLocation } from 'react-router-dom';
 import LogoImage from '/src/assets/image/Landing/logo.svg'; 
+import { useDispatch } from 'react-redux';
+import { clearUserRole } from '../../store/slices/authSlice';
+import { useSelector } from 'react-redux';
 import Avvvatars from 'avvvatars-react';
 import axios from 'axios';
 
 export default function MobileNavbar() {
+  const dispatch = useDispatch(); 
+  const userRole = useSelector((state) => state.auth.userRole);
   const [searchValue, setSearchValue] = useState('');
   const [isSubMenuOpen, setIsSubMenuOpen] = useState(false);
   const [isMobileSidebarVisible, setIsMobileSidebarVisible] = useState(false);
@@ -100,6 +105,7 @@ export default function MobileNavbar() {
 
   const handleLogout = () => {
     localStorage.removeItem('token');
+    dispatch(clearUserRole());
     setIsLoggedIn(false);
     navigate('/'); 
   };
@@ -197,7 +203,7 @@ export default function MobileNavbar() {
           <Avvvatars value={userInfo.id} size={40} />
           <ProfileInfo style={{ marginLeft: '10px' }}>
             <div>{userInfo.name}</div>
-            <div style={{ fontSize: '0.8rem', color: '#FFD700' }}>일반회원</div>
+            <div style={{ fontSize: '0.8rem', color: '#FFD700' }}>{userRole}</div>
           </ProfileInfo>
           <LogoutButton onClick={(e) => { 
             e.stopPropagation();
