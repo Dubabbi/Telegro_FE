@@ -169,11 +169,16 @@ const OrderProcess = () => {
   const handlePointsToUseChange = (e) => {
     const inputPoints = parseInt(e.target.value || '0', 10); 
     const maxUsablePoints = Math.min(point, totalProductPrice + shippingCost);
-    if (inputPoints > maxUsablePoints) {
-      alert(`최대 사용 가능한 포인트는 ${maxUsablePoints}p입니다.`);
+  
+    if (inputPoints < 0 || inputPoints > maxUsablePoints) {
+      alert(`사용 가능한 적립금 범위는 0 ~ ${maxUsablePoints}p 입니다.`);
+      setPointsToUse(Math.min(pointsToUse, maxUsablePoints));
+      return;
     }
-    setPointsToUse(Math.min(inputPoints, maxUsablePoints)); 
+  
+    setPointsToUse(inputPoints);
   };
+  
   
   const handleUseAllPoints = () => {
     const maxUsablePoints = Math.min(point, totalProductPrice + shippingCost);
@@ -621,7 +626,9 @@ const OrderProcess = () => {
           <O.PriceDetailsWrapper>
             <input
               type="number"
-              placeholder={`사용 가능 적립금 (0 / ${Math.min(point, totalProductPrice + shippingCost)})`}
+              min="0" 
+              max={Math.min(point, totalProductPrice)} 
+              placeholder={`사용 가능 적립금 (0 / ${Math.min(point, totalProductPrice)})`}
               value={pointsToUse === 0 ? '' : pointsToUse}
               onChange={handlePointsToUseChange}
             />
