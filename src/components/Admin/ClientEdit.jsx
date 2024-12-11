@@ -223,7 +223,6 @@ function ClientEdit() {
       },
     };
   
-    // role이 'MEMBER'가 아닌 경우에만 회사 정보를 추가
     if (payload.user.role !== 'MEMBER') {
       payload.company = {
         managerName: form.managerName,

@@ -166,8 +166,8 @@ const OrderProcess = () => {
     return new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(price);
   }
   const handlePointsToUseChange = (e) => {
-    const inputPoints = parseInt(e.target.value || '0', 10); // 입력된 포인트 값
-    const maxUsablePoints = Math.min(point, totalProductPrice + shippingCost); // 사용 가능 포인트 계산
+    const inputPoints = parseInt(e.target.value || '0', 10); 
+    const maxUsablePoints = Math.min(point, totalProductPrice + shippingCost);
     if (inputPoints > maxUsablePoints) {
       alert(`최대 사용 가능한 포인트는 ${maxUsablePoints}p입니다.`);
     }
@@ -284,7 +284,7 @@ const OrderProcess = () => {
             orderDetails: orderData,
             userDetails: formData,
             pointsToUse,
-            pointsToEarn,
+            pointsToEarn: state.orderData.pointToEarn,
           },
         });
       } else {
