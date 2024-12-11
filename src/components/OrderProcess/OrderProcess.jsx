@@ -7,6 +7,7 @@ import checked from '/src/assets/icon/Admin/checked.svg';
 import * as O from './OrderProcessStyle'
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
+import Logen from '/src/assets/image/OrderProcess/logen.svg';
 import * as PortOne from "@portone/browser-sdk/v2";
 
 const OrderProcess = () => {
@@ -163,9 +164,8 @@ const OrderProcess = () => {
   };
   const confirmOrder = async () => {
     try {
-      const pointsToEarn = state.orderData.pointToEarn;
       const response = await axios.post(
-        'https://api.telegro.kr/api/orders/done', 
+        'https://api.telegro.kr/api/orders/done',
         {
           deliveryAddress: {
             address: formData.address,
@@ -175,36 +175,98 @@ const OrderProcess = () => {
           request: formData.request,
           shoppingCost: 3000,
           pointsToUse,
-          pointsToEarn,
+          pointsToEarn: state.orderData.pointToEarn,
           paymentMethod: isCreditCardChecked
-          ? "CREDIT_CARD"
-          : isVirtualAccountChecked
-          ? "V_BANK"
-          : isRealTimeAccountChecked
-          ? "BANK_TRANSFER"
-          : isKakaoPayChecked
-          ? "EASY_PAYMENT"
-          : null,
+            ? "CREDIT_CARD"
+            : isVirtualAccountChecked
+            ? "V_BANK"
+            : isRealTimeAccountChecked
+            ? "BANK_TRANSFER"
+            : isKakaoPayChecked
+            ? "EASY_PAYMENT"
+            : null,
         },
-        { 
+        {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json',
           },
-          withCredentials: true
+          withCredentials: true,
         }
       );
   
-      if (response.status === 200) {
-        console.log('주문이 생성되었습니다.');
-        const { id, pointsToEarn } = response.data.data;
-        return { orderId: id, pointsToEarn };
-      } 
+      if (response.status === 200 && response.data.code === 20000) {
+        console.log('주문이 생성되었습니다:', response.data.data);
+        const { id: orderId, pointsToEarn } = response.data.data;
+        return { orderId, pointsToEarn };
+      } else {
+        console.error('응답 오류:', response.data.message);
+        alert('주문 생성 중 오류가 발생했습니다.');
+        return null;
+      }
     } catch (error) {
       console.error('Order confirmation error:', error);
       alert('주문 확정 중 오류가 발생했습니다.');
+      return null;
     }
   };
+
+  const BankOrder = async () => {
+    try {
+      const response = await axios.post(
+        'https://api.telegro.kr/api/orders/done',
+        {
+          deliveryAddress: {
+            address: formData.address,
+            addressDetail: formData.detailedAddress,
+            zipcode: formData.postalCode,
+          },
+          request: formData.request,
+          shoppingCost: 3000,
+          pointsToUse,
+          pointsToEarn: state.orderData.pointToEarn,
+          paymentMethod: isCreditCardChecked
+            ? "CREDIT_CARD"
+            : isVirtualAccountChecked
+            ? "V_BANK"
+            : isRealTimeAccountChecked
+            ? "BANK_TRANSFER"
+            : isKakaoPayChecked
+            ? "EASY_PAYMENT"
+            : null,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true,
+        }
+      );
+  
+      if (response.status === 200 && response.data.code === 20000) {
+        console.log('주문이 생성되었습니다:', response.data.data);
+        navigate("/completeorder", {
+          state: {
+            orderDetails: orderData,
+            userDetails: formData,
+            pointsToUse,
+            pointsToEarn,
+          },
+        });
+      } else {
+        console.error('응답 오류:', response.data.message);
+        alert('주문 생성 중 오류가 발생했습니다.');
+        return null;
+      }
+    } catch (error) {
+      console.error('Order confirmation error:', error);
+      alert('주문 확정 중 오류가 발생했습니다.');
+      return null;
+    }
+  };
+  
+  
   
   const getPaymentOptions = (payMethod, productInfo, paymentId, orderId) => {
     const today = getTodayDate();
@@ -247,8 +309,6 @@ const OrderProcess = () => {
   };
   
   
-  
-
   const handlePayment = async () => {
     if (!isAgreementChecked) {
       alert("구매 조건에 동의하셔야 합니다.");
@@ -268,36 +328,33 @@ const OrderProcess = () => {
       },
       { name: "", total: 0 }
     );
-
-    const pointsToEarn = state.orderData.pointToEarn;
-    const orderId = await confirmOrder();
   
-    if (!orderId) {
+    const confirmOrderResult = await confirmOrder();
+  
+    if (!confirmOrderResult || typeof confirmOrderResult.orderId !== 'number') {
       alert("주문 생성에 실패했습니다. 결제를 진행할 수 없습니다.");
       return;
     }
-
+  
+    const { orderId, pointsToEarn } = confirmOrderResult;
     const payMethod = isCreditCardChecked
-    ? "card"
-    : isVirtualAccountChecked
-    ? "vbank"
-    : isRealTimeAccountChecked
-    ? "trans"
-    : isKakaoPayChecked
-    ? "kakaopay"
-    : isSamsungPayChecked 
-    ? "samsungpay"
-    : null;
+      ? "card"
+      : isVirtualAccountChecked
+      ? "vbank"
+      : isRealTimeAccountChecked
+      ? "trans"
+      : isKakaoPayChecked
+      ? "kakaopay"
+      : isSamsungPayChecked
+      ? "samsungpay"
+      : null;
   
-  if (!payMethod) {
-    alert("결제 방법을 선택해주세요.");
-    return;
-  }
-  
-  
+    if (!payMethod) {
+      alert("결제 방법을 선택해주세요.");
+      return;
+    }
   
     const paymentId = `payment-${new Date().getTime()}`;
-  
     const paymentOptions = getPaymentOptions(payMethod, productInfo, paymentId, orderId);
   
     const { IMP } = window;
@@ -310,8 +367,8 @@ const OrderProcess = () => {
           const verifyResponse = await axios.post(
             `https://api.telegro.kr/api/v1/order/payment/${rsp.imp_uid}`,
             {
-              orderId,
-              price: calculatedPrice, 
+              orderId, // 이 부분에 숫자 orderId가 전달됩니다.
+              price: calculatedPrice,
             },
             {
               headers: {
@@ -321,17 +378,17 @@ const OrderProcess = () => {
               withCredentials: true,
             }
           );
-    
+  
           const { code, response } = verifyResponse.data;
-    
+  
           if (code === 0 && response.status === "paid") {
             alert("결제가 완료되었습니다.");
             navigate("/completeorder", {
               state: {
                 orderDetails: orderData,
                 userDetails: formData,
-                pointsToUse: pointsToUse,
-                pointsToEarn: pointsToEarn,
+                pointsToUse,
+                pointsToEarn,
               },
             });
           } else if (response.status === "failed") {
@@ -349,8 +406,11 @@ const OrderProcess = () => {
         alert(`결제 실패: ${rsp.error_msg || "알 수 없는 오류"}`);
       }
     });
-    
-  };  
+  };
+  
+  
+  
+   
   
 
   const orderCustomerInfo = userDetails ? (
@@ -595,9 +655,19 @@ const OrderProcess = () => {
           ) : (
             <O.BoxSection>
               <O.SectionTitle>입금 계좌 안내</O.SectionTitle>
-              <p>우리은행 540-263910-02-001</p>
-              <p>예금주: 연경진(서연전자)</p>
-              <C.ConfirmButton onClick={confirmOrder}>결제하기(주문완료)</C.ConfirmButton>
+              <O.Text>
+              <h3>우리은행 540-263910-02-001</h3>
+              <h4>예금주: 연경진(서연전자)</h4>
+              </O.Text>
+              <O.Logen>
+                <img src={Logen} />
+                <p>제품 기본 배송 로젠 택배</p>
+              </O.Logen>
+              <div style={{textAlign: 'center', margin: '6px 0'}}>
+              <p>세금 계산서 발행은 매월 말일에 발행됩니다.</p>
+              <p>기타 문의사항은 담당자 문의 부탁드립니다.</p>
+              </div>
+              <C.ConfirmButton onClick={BankOrder}>결제하기(주문완료)</C.ConfirmButton>
             </O.BoxSection>
           )}
         </O.RightSection>

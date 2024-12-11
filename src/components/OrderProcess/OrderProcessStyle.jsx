@@ -338,3 +338,37 @@ export const Button = styled.button`
     color: #fff;    
   }
 `;
+
+
+export const Logen = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  margin: 17px 0;
+  border-bottom: 1px solid #aaa; 
+  img{
+    max-width: 20%;
+    margin-bottom: 13px;
+  }
+  p{
+    font-size: 1.6rem;
+    color: #aaa;
+    margin-bottom: 10px;
+  }
+`;
+
+
+export const Text = styled.div`
+h3{
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: 5px 0;
+  color: #0000ff;
+}
+h4{
+  font-size: 1.1rem;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+`;
