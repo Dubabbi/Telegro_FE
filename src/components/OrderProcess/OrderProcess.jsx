@@ -281,10 +281,27 @@ const OrderProcess = () => {
         console.log('주문이 생성되었습니다:', response.data.data);
         navigate("/completeorder", {
           state: {
-            orderDetails: orderData,
-            userDetails: formData,
+            orderDetails: {
+              products: orderData.cartProductDTOS.map((product) => ({
+                name: product.productName,
+                quantity: product.quantity,
+                coverImage: product.coverImage,
+                totalPrice: product.totalPrice,
+              })),
+              total: totalProductPrice,
+            },
+            userDetails: {
+              name: formData.userName,
+              phone: formData.phone,
+            },
+            shippingInfo: {
+              postalCode: formData.postalCode,
+              address: formData.address,
+              detailedAddress: formData.detailedAddress,
+            },
             pointsToUse,
             pointsToEarn: state.orderData.pointToEarn,
+            shippingCost: currentShippingCost,
           },
         });
       } else {
@@ -418,10 +435,27 @@ const OrderProcess = () => {
             alert("결제가 완료되었습니다.");
             navigate("/completeorder", {
               state: {
-                orderDetails: orderData,
-                userDetails: formData,
+                orderDetails: {
+                  products: orderData.cartProductDTOS.map((product) => ({
+                    name: product.productName,
+                    quantity: product.quantity,
+                    coverImage: product.coverImage,
+                    totalPrice: product.totalPrice,
+                  })),
+                  total: totalProductPrice,
+                },
+                userDetails: {
+                  name: formData.userName,
+                  phone: formData.phone,
+                },
+                shippingInfo: {
+                  postalCode: formData.postalCode,
+                  address: formData.address,
+                  detailedAddress: formData.detailedAddress,
+                },
                 pointsToUse,
-                pointsToEarn,
+                pointsToEarn: state.orderData.pointToEarn,
+                shippingCost: currentShippingCost,
               },
             });
           } else if (response.status === "failed") {
