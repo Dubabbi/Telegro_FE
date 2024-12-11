@@ -37,8 +37,9 @@ const OrderProcess = () => {
     address: '',
     postalCode: '',
     detailedAddress: '',
-    request: ''
+    request: '',
   });
+  
   const shippingCost =
   userRole === 'MEMBER' || userRole === 'ADMIN'
     ? 3000 
@@ -110,14 +111,14 @@ const OrderProcess = () => {
   const updateAddressFormData = (addressData, phone = formData.phone) => {
     setFormData((prev) => ({
       ...prev,
-      name: addressData.name,
       phone: phone,
       address: addressData.address,
       postalCode: addressData.zipcode,
       detailedAddress: addressData.addressDetail,
-      request: prev.request
+      request: prev.request,
     }));
   };
+  
 
   const handleAddressChange = (e) => {
     const selectedId = e.target.value;
@@ -198,6 +199,7 @@ const OrderProcess = () => {
             address: formData.address,
             addressDetail: formData.detailedAddress,
             zipcode: formData.postalCode,
+            recipientName: formData.name,
           },
           request: formData.request,
           shoppingCost: currentShippingCost,
@@ -253,6 +255,7 @@ const OrderProcess = () => {
             address: formData.address,
             addressDetail: formData.detailedAddress,
             zipcode: formData.postalCode,
+            recipientName: formData.name,
           },
           request: formData.request,
           shoppingCost: currentShippingCost,
@@ -293,6 +296,7 @@ const OrderProcess = () => {
             userDetails: {
               name: formData.userName,
               phone: formData.phone,
+              recipientName: formData.name
             },
             shippingInfo: {
               postalCode: formData.postalCode,
@@ -553,14 +557,13 @@ const OrderProcess = () => {
               </O.CheckboxWrapper>
             )}
             <O.DeliveryInfoForm>
-              {/* 배송 정보 입력 필드 */}
               <O.FormRow>
-                <O.FormInput
-                  type="text"
-                  placeholder="받는 분 이름 *"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                />
+              <O.FormInput
+                type="text"
+                placeholder="받는 분 이름 *"
+                value={formData.name} 
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              />
                 <O.FormInput
                   type="text"
                   placeholder="전화번호 *"
@@ -742,7 +745,7 @@ const OrderProcess = () => {
                 <p>제품 기본 배송 로젠 택배</p>
               </O.Logen>
               <O.Text style={{textAlign: 'center', margin: '6px 0'}}>
-              <p style={{fontWeight: 'bold'}}>위탁배송시 택배비 4000원 부과됩니다.</p>
+              <p style={{fontWeight: 'bold', color: '#0000ff', fontSize: '1.1rem'}}>위탁배송시 택배비 4000원 부과됩니다.</p>
               <p>세금 계산서 발행은 매월 말일에 발행됩니다.</p>
               <p>기타 문의사항은 담당자 문의 부탁드립니다.</p>
               </O.Text>

@@ -20,9 +20,7 @@ const OrderManager = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [size, setSize] = useState(3);
 
-  useEffect(() => {
-    fetchOrders();
-  }, [startDate, endDate, page, size]);
+
   const getIamportToken = async () => {
     try {
       const response = await axios.post("https://api.iamport.kr/users/getToken", {
@@ -36,7 +34,6 @@ const OrderManager = () => {
       });
   
       if (response.data.code === 0) {
-        console.log("토큰 발급 성공:", response.data.response.access_token);
         return response.data.response.access_token;
       } else {
         console.error("토큰 발급 실패:", response.data.message);
@@ -86,7 +83,7 @@ const OrderManager = () => {
   };
   
   
-  
+  useEffect(() => {
   const fetchOrders = async () => {
     try {
       const formatDate = (date) => {
@@ -105,24 +102,25 @@ const OrderManager = () => {
         size,
       };
   
-      console.log("Request parameters:", params); 
-  
-      const response = await axios.get('https://api.telegro.kr/api/orders', {
+      const accessToken = localStorage.getItem('token');
+      const response = await axios.get(`https://api.telegro.kr/api/orders`, {
+        params: { startDate, endDate, page: currentPage - 1, size },
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`
-        },
-        params,
+          Authorization: `Bearer ${accessToken}`
+        }
       });
   
       const { data } = response.data;
       if (data) {
         setOrders(data.orders);
+        setTotalPages(response.data.data.totalPage);
       }
     } catch (error) {
       console.error('Error fetching orders:', error);
     }
   };
-  
+  fetchOrders();
+}, [startDate, endDate, currentPage, size]);
   const handlePageChange = newPage => {
     setCurrentPage(newPage);
   };
@@ -174,6 +172,7 @@ const OrderManager = () => {
             order.id === orderId ? { ...order, orderStatus: newStatus } : order
           )
         );
+        setTotalPages(response.data.data.totalPage);
         alert('주문 상태가 변경되었습니다.');
       } else {
         alert('주문 상태 변경에 실패했습니다.');

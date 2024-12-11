@@ -86,7 +86,7 @@ const OrderDetail = () => {
           <DetailItem>수령인: {orderData.shipping.name}</DetailItem>
           <DetailItem>연락처: {orderData.shipping.contact}</DetailItem>
           <DetailItem>배송지: {orderData.shipping.address}</DetailItem>
-          <DetailItem>배송메모: {orderData.shipping.memo}</DetailItem>
+          <DetailItem>요청사항: {orderData.shipping.memo}</DetailItem>
         </Details>
       </Section>
       <Separator />
@@ -102,6 +102,7 @@ const OrderDetail = () => {
         </Details>
       </Section>
       <Separator />
+      <DetailButton>영수증 보기</DetailButton>
     </Container>
     </MainWrapper>
   );
@@ -111,27 +112,6 @@ const Container = styled.div`
   width: 90%;
   margin: 0 auto;
   font-family: Arial, sans-serif;
-`;
-
-const Header = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-`;
-
-const UserInfo = styled.div`
-  h1 {
-    font-size: 1.5rem;
-  }
-`;
-
-const Points = styled.div`
-  text-align: center;
-`;
-
-const Coupons = styled.div`
-  text-align: center;
 `;
 
 const Section = styled.div`
@@ -228,4 +208,21 @@ const Separator = styled.hr`
   margin: 10px 0;
 `;
 
+const DetailButton = styled.button`
+  margin-top: 5px;
+  padding: 5px 10px;
+  background-color: #ff6b6b;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1.4rem;
+
+  &:hover {
+    background-color: #ff4d4d;
+  }
+`;
+
+
 export default OrderDetail;
+

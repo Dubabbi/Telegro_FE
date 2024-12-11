@@ -1,25 +1,29 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import * as O from './OrderProcessStyle';
-import img from '../Check/image.svg';
+import defaultImg from '../Check/image.svg';
 
 const CompleteOrder = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
 
+
   const {
     orderDetails = { products: [], total: 0 },
-    userDetails = { name: '', phone: '' },
+    userDetails = { name: '', phone: '', recipientName: '' },
     shippingInfo = { postalCode: '', address: '', detailedAddress: '' },
     pointsToUse = 0,
     pointsToEarn = 0,
     shippingCost = 0,
     orderId = 'N/A',
     orderDate = new Date().toISOString().slice(0, 10),
-  } = state || {};
+  } = state || {}; 
 
   const formatPrice = (price) =>
     new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(price);
+  const orderImage =
+  orderDetails.products.length > 0 ? orderDetails.products[0].coverImage : defaultImg;
+
 
   if (!state) {
     return (
@@ -32,7 +36,7 @@ const CompleteOrder = () => {
 
   return (
     <O.CompleteOrderWrapper>
-      <img src={img} alt="Order Complete" />
+      <O.CompleteImage src={orderImage} alt="Order Complete" />
       <O.Title>주문이 완료되었습니다</O.Title>
       <O.OrderInfo>
         {orderDate}에 주문하신 상품의 주문번호는 <span>{orderId}</span>입니다.
@@ -60,12 +64,12 @@ const CompleteOrder = () => {
           ))}
         </tbody>
       </O.Table>
-
-      <O.SectionTitle style={{ marginTop: '30px' }}>배송지 정보</O.SectionTitle>
+        <div style={{textAlign: 'left'}}>
+      <O.SectionTitle style={{ marginTop: '30px' }}>배송지 정보</O.SectionTitle></div>
       <O.InfoBox>
         <div>
           <h4>이름</h4>
-          <p>{userDetails.name}</p>
+          <p>{userDetails.recipientName}</p>
           <h4>휴대전화번호</h4>
           <p>{userDetails.phone}</p>
           <h4>배송지 주소</h4>

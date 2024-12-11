@@ -375,3 +375,7 @@ h4{
   font-weight: bold;
 }
 `;
+
+export const CompleteImage = styled.img`
+  max-width: 200px;
+`;
