@@ -360,6 +360,9 @@ export const Logen = styled.div`
 
 
 export const Text = styled.div`
+p{
+  margin: 5px 0;
+}
 h3{
   font-size: 1.2rem;
   font-weight: bold;

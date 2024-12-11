@@ -14,6 +14,7 @@ const OrderProcess = () => {
   const navigate = useNavigate();
   const userRole = useSelector((state) => state.auth.userRole);
   const { state } = useLocation();
+  const [isConsignmentChecked, setIsConsignmentChecked] = useState(false);
   const [isSamsungPayChecked, setIsSamsungPayChecked] = useState(false);
   const [isVirtualAccountChecked, setIsVirtualAccountChecked] = useState(false);
   const [isRealTimeAccountChecked, setIsRealTimeAccountChecked] = useState(false);
@@ -38,14 +39,20 @@ const OrderProcess = () => {
     detailedAddress: '',
     request: ''
   });
-  const shippingCost = 3000; 
+  const shippingCost =
+  userRole === 'MEMBER' || userRole === 'ADMIN'
+    ? 3000 
+    : isConsignmentChecked
+    ? 4000 
+    : 0; 
+
   const totalProductPrice = orderData.cartProductDTOS.reduce(
     (acc, product) => acc + product.totalPrice,
     0
   );
   
   
-  const totalPayable = totalProductPrice + shippingCost - pointsToUse;
+  const totalPayable = totalProductPrice + shippingCost - pointsToUse
 
   const getTodayDate = () => {
     const today = new Date();
@@ -141,6 +148,20 @@ const OrderProcess = () => {
       });
     }
   };
+
+  useEffect(() => {
+    if (userRole !== 'MEMBER' && userRole !== 'ADMIN') {
+      setFormData({
+        name: '',
+        phone: '',
+        address: '',
+        postalCode: '',
+        detailedAddress: '',
+        request: ''
+      });
+    }
+  }, [userRole]);
+
   function formatPrice(price) {
     return new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(price);
   }
@@ -163,6 +184,12 @@ const OrderProcess = () => {
     setIsAgreementChecked(!isAgreementChecked);
   };
   const confirmOrder = async () => {
+    const currentShippingCost =
+    userRole === 'MEMBER' || userRole === 'ADMIN'
+      ? 3000
+      : isConsignmentChecked
+      ? 4000
+      : 0;
     try {
       const response = await axios.post(
         'https://api.telegro.kr/api/orders/done',
@@ -173,7 +200,7 @@ const OrderProcess = () => {
             zipcode: formData.postalCode,
           },
           request: formData.request,
-          shoppingCost: 3000,
+          shoppingCost: currentShippingCost,
           pointsToUse,
           pointsToEarn: state.orderData.pointToEarn,
           paymentMethod: isCreditCardChecked
@@ -212,6 +239,12 @@ const OrderProcess = () => {
   };
 
   const BankOrder = async () => {
+    const currentShippingCost =
+    userRole === 'MEMBER' || userRole === 'ADMIN'
+      ? 3000
+      : isConsignmentChecked
+      ? 4000
+      : 0;
     try {
       const response = await axios.post(
         'https://api.telegro.kr/api/orders/done',
@@ -222,7 +255,7 @@ const OrderProcess = () => {
             zipcode: formData.postalCode,
           },
           request: formData.request,
-          shoppingCost: 3000,
+          shoppingCost: currentShippingCost,
           pointsToUse,
           pointsToEarn: state.orderData.pointToEarn,
           paymentMethod: isCreditCardChecked
@@ -367,8 +400,8 @@ const OrderProcess = () => {
           const verifyResponse = await axios.post(
             `https://api.telegro.kr/api/v1/order/payment/${rsp.imp_uid}`,
             {
-              orderId, // 이 부분에 숫자 orderId가 전달됩니다.
-              price: calculatedPrice,
+              orderId,
+              price: totalPayable, 
             },
             {
               headers: {
@@ -474,6 +507,17 @@ const OrderProcess = () => {
                 ))}
               </O.Select>
             </div>
+            {userRole !== 'MEMBER' && userRole !== 'ADMIN' && (
+              <O.CheckboxWrapper>
+                <img
+                src={isConsignmentChecked ? checked : check} 
+                alt="consignmentDelivery"
+                onClick={() => setIsConsignmentChecked((prevState) => !prevState)}
+                style={{ cursor: 'pointer', width: '20px', height: '20px' }}
+              />
+                <O.CheckboxLabel htmlFor="consignmentDelivery">위탁 배송(배송비 4,000원)</O.CheckboxLabel>
+              </O.CheckboxWrapper>
+            )}
             <O.DeliveryInfoForm>
               {/* 배송 정보 입력 필드 */}
               <O.FormRow>
@@ -663,10 +707,11 @@ const OrderProcess = () => {
                 <img src={Logen} />
                 <p>제품 기본 배송 로젠 택배</p>
               </O.Logen>
-              <div style={{textAlign: 'center', margin: '6px 0'}}>
+              <O.Text style={{textAlign: 'center', margin: '6px 0'}}>
+              <p style={{fontWeight: 'bold'}}>위탁배송시 택배비 4000원 부과됩니다.</p>
               <p>세금 계산서 발행은 매월 말일에 발행됩니다.</p>
               <p>기타 문의사항은 담당자 문의 부탁드립니다.</p>
-              </div>
+              </O.Text>
               <C.ConfirmButton onClick={BankOrder}>결제하기(주문완료)</C.ConfirmButton>
             </O.BoxSection>
           )}
