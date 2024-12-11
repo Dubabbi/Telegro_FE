@@ -472,18 +472,14 @@ const OrderProcess = () => {
           }
         } catch (error) {
           console.error("결제 검증 중 오류:", error);
-          alert("결제 검증 중 오류가 발생했습니다.");
+          alert("결제 검증에 실패했습니다. 관리자에게 문의하세요.");
         }
       } else {
         console.error("결제 실패:", rsp);
-        alert(`결제 실패: ${rsp.error_msg || "알 수 없는 오류"}`);
+        alert(`결제 검증에 실패했습니다. 관리자에게 문의하세요.`);
       }
     });
-  };
-  
-  
-  
-   
+  };  
   
 
   const orderCustomerInfo = userDetails ? (
@@ -660,7 +656,7 @@ const OrderProcess = () => {
                   }}
                   style={{ cursor: 'pointer', width: '20px', height: '20px' }}
                 />
-                <O.CheckboxLabel>신용카드</O.CheckboxLabel>
+                <O.CheckboxLabel>신용카드 / 간편결제</O.CheckboxLabel>
               </O.PaymentOption>
               <O.PaymentOption>
             <img
@@ -694,37 +690,6 @@ const OrderProcess = () => {
             <O.CheckboxLabel>실시간 계좌이체</O.CheckboxLabel>
           </O.PaymentOption>
 
-          <O.PaymentOption>
-            <img
-              src={isSamsungPayChecked ? checked : check}
-              alt="삼성페이"
-              onClick={() => {
-                setIsSamsungPayChecked(true);
-                setIsCreditCardChecked(false);
-                setIsBankTransferChecked(false);
-                setIsKakaoPayChecked(false);
-                setIsVirtualAccountChecked(false);
-                setIsRealTimeAccountChecked(false);
-              }}
-              style={{ cursor: "pointer", width: "20px", height: "20px" }}
-            />
-            <O.CheckboxLabel>삼성페이</O.CheckboxLabel>
-          </O.PaymentOption>
-          <O.PaymentOption>
-            <img
-              src={isKakaopayChecked ? checked : check}
-              alt="카카오페이"
-              onClick={() => {
-                setIsKakaopayChecked(true);
-                setIsCreditCardChecked(false);
-                setIsBankTransferChecked(false);
-                setIsSamsungPayChecked(false);
-                setIsRealTimeAccountChecked(false);
-              }}
-              style={{ cursor: "pointer", width: "20px", height: "20px" }}
-            />
-            <O.CheckboxLabel>카카오페이</O.CheckboxLabel>
-          </O.PaymentOption>
               <hr />
               <O.CheckboxWrapper>
                 <img

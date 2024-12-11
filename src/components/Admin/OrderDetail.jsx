@@ -44,6 +44,11 @@ const OrderDetail = () => {
     },
   };
 
+  const handleViewReceipt = () => {
+    const receiptUrl = `https://developers.nicepay.co.kr/receipt.php?tid=${orderData.payment.transactionId}`;
+    window.open(receiptUrl, "_blank"); 
+  };
+
   return (
     <MainWrapper>
     <Container>

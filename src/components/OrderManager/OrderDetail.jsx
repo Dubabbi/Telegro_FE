@@ -43,7 +43,11 @@ const OrderDetail = () => {
       cardInfo: "BC카드 (**** **** **** 1234)",
     },
   };
-
+  const handleViewReceipt = () => {
+    {/*TID 받아오기*/}
+    const receiptUrl = `https://developers.nicepay.co.kr/receipt.php?tid=${orderData.payment.transactionId}`;
+    window.open(receiptUrl, "_blank"); 
+  };
   return (
     <MainWrapper>
     <Container>
@@ -102,7 +106,7 @@ const OrderDetail = () => {
         </Details>
       </Section>
       <Separator />
-      <DetailButton>영수증 보기</DetailButton>
+      <DetailButton onClick={handleViewReceipt}>매출전표</DetailButton> {/*현금영수증 있는 경우에 영수증 보기로 뜨도록 추후 수정*/}
     </Container>
     </MainWrapper>
   );
