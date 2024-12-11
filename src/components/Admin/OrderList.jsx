@@ -181,7 +181,7 @@ const OrderList = () => {
           {orders.map((order, index) => (
             <React.Fragment key={order.id}>
               {order.products.map((product, productIndex) => (
-                <TableRow  onClick={() => navigate('/admin/orderlist/:orderId')} className={`order-${order.id} ${productIndex === 0 ? 'highlight-row' : ''}`} key={product.id}>
+                <TableRow onClick={() => navigate('/admin/orderlist/:orderId')} className={`order-${order.id} ${productIndex === 0 ? 'highlight-row' : ''}`} key={product.id}>
                   {productIndex === 0 && (
                     <TableCell rowSpan={order.products.length}>
                       {index + 1 + (currentPage - 1) * size}
@@ -361,7 +361,7 @@ const SelectBar = styled.select`
   margin-right: 10px;
 `;
 const TableRow = styled.tr`
-
+  cursor: pointer;
 `;
 
 const TableCell = styled.td`

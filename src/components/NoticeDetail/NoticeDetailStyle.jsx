@@ -207,3 +207,19 @@ export const Checkbox = styled.input`
     border-radius: 5px;
   }
 `;
+
+export const FileList = styled.div`
+  margin: 5px 0;
+  flex-direction: column;
+  button{
+    font-size: 1rem;
+    margin-right: 5px;
+    text-align: right;
+    margin-top: 5px;
+    padding: 5px 10px;
+    background: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+  }
+`;

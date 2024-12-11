@@ -69,13 +69,14 @@ const NoticeDetail = () => {
             <div style={{ marginTop: '20px' }}>
             <h4>첨부 파일</h4>
             <ul>
+            <D.FileList>
               {notice.noticeFiles.map(file => (
-                <li key={file.id}>
+                <button key={file.id}>
                   <a href={file.fileUrl} download={file.fileName} target="_blank" rel="noopener noreferrer">
                     {file.fileName}
                   </a>
-                </li>
-              ))}
+                </button>
+              ))}</D.FileList>
             </ul>
           </div>
           </D.BoardView>

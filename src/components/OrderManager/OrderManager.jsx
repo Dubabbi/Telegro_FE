@@ -352,7 +352,7 @@ const StatusSelect = styled.select`
 
 
 const TableRow = styled.tr`
-
+  cursor: pointer;
 `;
 
 const TableCell = styled.td`
