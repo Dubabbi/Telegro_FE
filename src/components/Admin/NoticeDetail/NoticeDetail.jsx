@@ -8,7 +8,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios'; 
 import '@toast-ui/editor/dist/toastui-editor.css';
 import '@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css';
-const NoticeDetail = () => {
+const AdminNoticeDetail = () => {
   const { noticeId } = useParams(); 
   const [notice, setNotice] = useState(null);  
   const [isPopup, setIsPopup] = useState(false);
@@ -85,7 +85,7 @@ const NoticeDetail = () => {
 
         if (response.status === 200 && response.data.code === 20000) {
           alert('공지사항이 성공적으로 삭제되었습니다.');
-          navigate('/admin/adminnotice'); 
+          navigate('/admin/notice'); 
         }
       } catch (error) {
         if (error.response && error.response.status === 403) {
@@ -109,7 +109,7 @@ const NoticeDetail = () => {
           <N.PageTitle>
             <N.TitleText>공지사항</N.TitleText>
           </N.PageTitle>
-          <D.EditImg src={edit} onClick={() => navigate(`/admin/adminnoticeedit/${notice.id}`)} />
+          <D.EditImg src={edit} onClick={() => navigate(`/admin/noticeedit/${notice.id}`)} />
         </div>
 
         <D.BoardViewWrap>
@@ -143,13 +143,14 @@ const NoticeDetail = () => {
             <div style={{ marginTop: '20px' }}>
             <h4>첨부 파일</h4>
             <ul>
+              <D.FileList>
               {notice.noticeFiles.map(file => (
-                <li key={file.id}>
+                <button key={file.id}>
                   <a href={file.fileUrl} download={file.fileName} target="_blank" rel="noopener noreferrer">
                     {file.fileName}
                   </a>
-                </li>
-              ))}
+                </button>
+              ))}</D.FileList>
             </ul>
           </div>
             <div style={{ display: 'flex', alignItems: 'center', marginTop: '10px' }}>
@@ -169,7 +170,7 @@ const NoticeDetail = () => {
       </N.Section2>
     </N.MainWrapper>
       <D.BtWrap>
-        <D.BtLink as={Link} to="/admin/adminnotice">
+        <D.BtLink as={Link} to="/admin/notice">
           목록
         </D.BtLink>
         <D.DeleteBtLink as={Link} onClick={handleDelete}>
@@ -180,4 +181,4 @@ const NoticeDetail = () => {
   );
 }
 
-export default NoticeDetail;
+export default AdminNoticeDetail;

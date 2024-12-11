@@ -77,17 +77,17 @@ const NoticeCreate = () => {
   const handleAddFile = async (event) => {
     const selectedFiles = Array.from(event.target.files);
     const fileNamesArray = selectedFiles.map(file => file.name);
-    
+  
     setFileNames(prev => [...prev, ...fileNamesArray]);
-
+  
     try {
       const uploadedFiles = await Promise.all(
         selectedFiles.map(async (file) => {
           const formData = new FormData();
           formData.append('file', file);
-
+  
           const presignedUrlResponse = await axios.post(
-            'https://api.telegro.kr/api/file?prefix=notice',
+            `https://api.telegro.kr/api/file?prefix=notice&fileName=${encodeURIComponent(file.name)}`, 
             {
               metadata: {
                 description: '파일 설명',
@@ -103,7 +103,7 @@ const NoticeCreate = () => {
           );
   
           const presignedUrl = presignedUrlResponse.data.data.url;
-
+  
           await axios.put(presignedUrl, file, {
             headers: {
               'Content-Type': file.type,
@@ -111,22 +111,23 @@ const NoticeCreate = () => {
           });
   
           const fileUrl = presignedUrl.split('?')[0];
-
+  
           return {
             fileName: file.name,
-            fileUrl: fileUrl
+            fileUrl: fileUrl,
           };
         })
       );
-
+  
       setNoticeFiles((prev) => [...prev, ...uploadedFiles]);
-
+  
       console.log('파일 업로드에 성공했습니다.');
     } catch (error) {
       console.error('파일 업로드 중 오류가 발생했습니다:', error);
       alert(`파일 업로드 중 오류가 발생했습니다: ${error.message}`);
     }
   };
+  
   const handleDeleteFile = (indexToDelete) => {
     setNoticeFiles(prevFiles => prevFiles.filter((_, index) => index !== indexToDelete));
     setFileNames(prevNames => prevNames.filter((_, index) => index !== indexToDelete));
@@ -185,7 +186,7 @@ const NoticeCreate = () => {
       });
 
       if (response.status === 200) {
-        navigate('/admin/adminnotice');
+        navigate('/admin/notice');
       }
     } catch (error) {
       if (error.response && error.response.status === 403) {

@@ -176,7 +176,7 @@ export const EditImg = styled.img`
   padding: 1%;
   text-align: center;
   align-items: center;
-  height: 60px;
+  height: 50px;
   cursor: pointer;
 
   @media(max-width: 780px){
@@ -188,11 +188,12 @@ export const PopupImg = styled.img`
   padding: 1%;
   text-align: center;
   align-items: center;
-  height: 46px;
+  max-height: 35px;
+  height: 35px;
   cursor: pointer;
 
   @media(max-width: 780px){
-    height: 44px;
+    max-height: 35px;
   }
 `;
 
@@ -265,3 +266,20 @@ export const FileInput = styled.input`
   font-size: 1rem;
   box-sizing: border-box;
 `;
+
+export const FileList = styled.div`
+  margin: 5px 0;
+  flex-direction: column;
+  button{
+    font-size: 1rem;
+    margin-right: 5px;
+    text-align: right;
+    margin-top: 5px;
+    padding: 5px 10px;
+    background: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+  }
+`;
+

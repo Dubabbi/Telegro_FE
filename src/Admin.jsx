@@ -20,6 +20,7 @@ import AdminProductEditPage from './pages/AdminProductEdit';
 import ClientEditPage from'./pages/ClientEdit';
 import ScrollToTop from './ScrollToTop';
 import AdminSearchResult from './components/AdminNav/AdminSearchResult';
+import AdminOrderDetailPage from './pages/AdminOrderDetail';
 
 export default function Admin() {
   return (
@@ -29,10 +30,10 @@ export default function Admin() {
       <Routes>
         <Route path="clientmanagement" element={<ClientManagementPage />} />
         <Route path="clientdetail/:clientId" element={<ClientDetail />} />
-        <Route path="adminnotice" element={<AdminNoticePage />} />
+        <Route path="notice" element={<AdminNoticePage />} />
         <Route path="noticecreate" element={<NoticeCreatePage />} />
-        <Route path="adminnoticeedit/:noticeId" element={<AdminNoticeEditPage />} />
-        <Route path="adminnoticedetail/:noticeId" element={<AdminNoticeDetailPage />} />
+        <Route path="noticeedit/:noticeId" element={<AdminNoticeEditPage />} />
+        <Route path="noticedetail/:noticeId" element={<AdminNoticeDetailPage />} />
         <Route path="stat" element={<StatPage />} /> 
         <Route path="productcreate" element={<ProductCreatePage />} />
         <Route path="headset" element={<Headset />} />
@@ -41,10 +42,11 @@ export default function Admin() {
         <Route path="accessory" element={<Accessory />} />
         <Route path="adminproductdetail/:productId" element={<AdminProductDetailPage />} /> 
         <Route path="adminproductedit/:productId" element={<AdminProductEditPage />} />
-        <Route path="adminorderlist" element={<AdminOrderListPage />} />
+        <Route path="orderlist" element={<AdminOrderListPage />} />
         <Route path="addclient" element={<AddClientPage />} />
         <Route path="clientedit/:clientId" element={<ClientEditPage />} />
         <Route path="adminsearch" element={<AdminSearchResult />} />
+        <Route path="orderlist/:orderId" element={<AdminOrderDetailPage />} />
       </Routes>
     </div>
   );

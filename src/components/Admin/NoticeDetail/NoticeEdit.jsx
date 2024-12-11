@@ -154,7 +154,7 @@ const NoticeEdit = () => {
       });
   
       if (response.status === 200) {
-        navigate('/admin/adminnotice');
+        navigate('/admin/notice');
       }
     } catch (error) {
       console.error('공지사항 수정 중 오류가 발생했습니다:', error);
@@ -232,7 +232,7 @@ const NoticeEdit = () => {
         </D.FormWrapper>
       </N.MainWrapper>
       <D.BtWrap>
-        <D.BtLink as={Link} to="/admin/adminnotice">취소</D.BtLink>
+        <D.BtLink as={Link} to="/admin/notice">취소</D.BtLink>
         <D.BtLink as={Link} onClick={handleSubmit}>수정</D.BtLink>
       </D.BtWrap>
     </>

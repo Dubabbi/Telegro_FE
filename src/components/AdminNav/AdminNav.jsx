@@ -134,7 +134,7 @@ const AdminNav = () => {
             상점 접속 현황
           </MenuItem>
 
-          <MenuItem onClick={() => navigate('/admin/adminnotice')}>
+          <MenuItem onClick={() => navigate('/admin/notice')}>
             <FaCog />
             자료실
           </MenuItem>
@@ -161,7 +161,7 @@ const AdminNav = () => {
             </SubMenu>
           </SubMenuWrapper>
 
-          <MenuItem onClick={() => navigate('/admin/adminorderlist')}>
+          <MenuItem onClick={() => navigate('/admin/orderlist')}>
             <FaCog />
             주문 현황
           </MenuItem>
