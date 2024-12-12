@@ -2,25 +2,25 @@ import React from 'react';
 import * as P from './PaginationStyle';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 
-const Pagination = ({ currentPage, totalPages, onPageChange }) => {
+const Pagination = ({ currentPage, totalPages, startPage, endPage, onPageChange, onGroupChange }) => {
   return (
     <P.PaginationWrapper>
-      <P.ArrowButton onClick={() => onPageChange(currentPage - 1)} disabled={currentPage === 1}>
+      <P.ArrowButton onClick={() => onGroupChange('prev')} disabled={startPage === 1}>
         <FaArrowLeft />
         <span style={{ marginLeft: '8px' }}>이전</span>
       </P.ArrowButton>
 
-      {[...Array(totalPages)].map((_, index) => (
+      {Array.from({ length: endPage - startPage + 1 }, (_, index) => startPage + index).map((page) => (
         <P.PageButton
-          key={index}
-          onClick={() => onPageChange(index + 1)}
-          className={currentPage === index + 1 ? 'active' : ''}
+          key={page}
+          onClick={() => onPageChange(page)}
+          className={currentPage === page ? 'active' : ''}
         >
-          {index + 1}
+          {page}
         </P.PageButton>
       ))}
 
-      <P.ArrowButton onClick={() => onPageChange(currentPage + 1)} disabled={currentPage === totalPages}>
+      <P.ArrowButton onClick={() => onGroupChange('next')} disabled={endPage === totalPages}>
         <span style={{ marginRight: '8px' }}>다음</span>
         <FaArrowRight />
       </P.ArrowButton>

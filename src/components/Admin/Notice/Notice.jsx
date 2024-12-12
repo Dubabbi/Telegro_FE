@@ -20,7 +20,20 @@ const AdminNotice = ({ page = 0, size = 20 }) => {
   const [filteredNotice, setFilteredNotice] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const pagesPerGroup = 5; 
+  const startPage = Math.floor((currentPage - 1) / pagesPerGroup) * pagesPerGroup + 1;
+  const endPage = Math.min(startPage + pagesPerGroup - 1, totalPages);
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
 
+  const handleGroupChange = (direction) => {
+    if (direction === 'prev' && startPage > 1) {
+      setCurrentPage(startPage - 1);
+    } else if (direction === 'next' && endPage < totalPages) {
+      setCurrentPage(endPage + 1);
+    }
+  };
   useEffect(() => {
     const fetchNotices = async () => {
       try {
@@ -90,9 +103,6 @@ const AdminNotice = ({ page = 0, size = 20 }) => {
     }
   };
 
-  const handlePageChange = (page) => {
-    setCurrentPage(page); 
-  };
 
   const items = filteredNotice.map((notice, index) => (
     <CommonTableRow key={notice.id}>
@@ -140,10 +150,13 @@ const AdminNotice = ({ page = 0, size = 20 }) => {
       </N.Section2>
     </N.MainWrapper>
     <P.Pagediv>
-      <Pagination 
-        currentPage={currentPage} 
-        totalPages={totalPages} 
-        onPageChange={handlePageChange} 
+    <Pagination
+      currentPage={currentPage}
+      totalPages={totalPages}
+      startPage={startPage}
+      endPage={endPage}
+      onPageChange={handlePageChange}
+      onGroupChange={handleGroupChange}
       />
     </P.Pagediv>
     </>

@@ -14,7 +14,20 @@ const Headset = ({ category = 'HEADSET', initialPage = 1, size = 12 }) => {
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [totalPages, setTotalPages] = useState(0);
   const [error, setError] = useState('');
+  const pagesPerGroup = 5; 
+  const startPage = Math.floor((currentPage - 1) / pagesPerGroup) * pagesPerGroup + 1;
+  const endPage = Math.min(startPage + pagesPerGroup - 1, totalPages);
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
 
+  const handleGroupChange = (direction) => {
+    if (direction === 'prev' && startPage > 1) {
+      setCurrentPage(startPage - 1);
+    } else if (direction === 'next' && endPage < totalPages) {
+      setCurrentPage(endPage + 1);
+    }
+  };
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -45,12 +58,6 @@ const Headset = ({ category = 'HEADSET', initialPage = 1, size = 12 }) => {
   
     fetchProducts();
   }, [category, currentPage, size]);
-  
-
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
-
 
   if (error) {
     return <div>{error}</div>;
@@ -81,7 +88,14 @@ const Headset = ({ category = 'HEADSET', initialPage = 1, size = 12 }) => {
       </P.GalleryGrid>
     </P.PageContainer>
     <P.Pagediv>
-      <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
+    <Pagination
+      currentPage={currentPage}
+      totalPages={totalPages}
+      startPage={startPage}
+      endPage={endPage}
+      onPageChange={handlePageChange}
+      onGroupChange={handleGroupChange}
+      />
       </P.Pagediv>
     </>
   );

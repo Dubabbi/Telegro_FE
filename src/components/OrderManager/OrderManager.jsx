@@ -20,7 +20,9 @@ const OrderManager = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [size, setSize] = useState(3);
 
-
+  const pagesPerGroup = 5; 
+  const startPage = Math.floor((currentPage - 1) / pagesPerGroup) * pagesPerGroup + 1;
+  const endPage = Math.min(startPage + pagesPerGroup - 1, totalPages);
   const getIamportToken = async () => {
     try {
       const response = await axios.post("https://api.iamport.kr/users/getToken", {
@@ -121,9 +123,17 @@ const OrderManager = () => {
   };
   fetchOrders();
 }, [startDate, endDate, currentPage, size]);
-  const handlePageChange = newPage => {
-    setCurrentPage(newPage);
-  };
+const handlePageChange = (newPage) => {
+  setCurrentPage(newPage);
+};
+
+const handleGroupChange = (direction) => {
+  if (direction === 'prev' && startPage > 1) {
+    setCurrentPage(startPage - 1);
+  } else if (direction === 'next' && endPage < totalPages) {
+    setCurrentPage(endPage + 1);
+  }
+};
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -281,11 +291,14 @@ const OrderManager = () => {
         </OrderTable>
 
       <R.TotalAmount>총 주문 금액: ₩{calculateTotalAmount(filteredOrders).toLocaleString()}</R.TotalAmount>
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={handlePageChange}
-        />
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        startPage={startPage}
+        endPage={endPage}
+        onPageChange={handlePageChange}
+        onGroupChange={handleGroupChange}
+      />
     </R.MainWrapper>
   );
 };
