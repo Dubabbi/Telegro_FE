@@ -5,9 +5,9 @@ import axios from 'axios';
 import Pagination from '../Pagination/Pagination';
 import * as P from './ProductList/ProductStyle';
 import * as N from './Notice/NoticeStyle';
-import { FaSearch } from 'react-icons/fa';
+import { FaSearch, FaFileExcel } from 'react-icons/fa';
 import Form from 'react-bootstrap/Form';
-
+import * as XLSX from 'xlsx';
 
 const OrderList = () => {
   const navigate = useNavigate();
@@ -177,18 +177,17 @@ const OrderList = () => {
     });
   };
 
-  const filterOrdersBySearch = (filteredOrders) => {
-    if (!searchValue) {
-      return filteredOrders;
-    }
-    return filteredOrders.filter(order =>
+  const filterOrdersBySearch = (ordersToFilter) => {
+    if (!searchValue.trim()) return ordersToFilter;
+  
+    return ordersToFilter.filter(order =>
       order.products.some(product =>
-        product.productName.toLowerCase().includes(searchValue.toLowerCase())
+        product.productName.toLowerCase().includes(searchValue.toLowerCase()) ||
+        product.selectOption?.toLowerCase().includes(searchValue.toLowerCase())
       )
     );
   };
-
-  const filteredOrders = filterOrdersBySearch(orders);
+  const filteredOrders = filterOrdersBySearch(filterOrdersByDate());
 
 
   const handleStatusChange = async (orderId, newStatus) => {
@@ -224,7 +223,27 @@ const OrderList = () => {
       alert('주문 상태 변경 중 오류가 발생했습니다.');
     }
   };
+  const exportToExcel = () => {
+    const excelData = allOrders.map((order, index) => ({
+      'No': index + 1,
+      '주문번호': order.id,
+      '상품명': order.products.map(product => product.productName).join(', '),
+      '옵션 선택': order.products.map(product => product.selectOption || 'N/A').join(', '),
+      '수량': order.products.map(product => product.quantity).join(', '),
+      '단가': order.products.map(product => product.productPrice).join(', '),
+      '총 금액': `${order.products.reduce((acc, product) => acc + product.totalPrice, 0)}원`,
+      '주문 상태': order.orderStatus,
+      '주문 일자': formatDate(order.createdAt),
+    }));
   
+    const worksheet = XLSX.utils.json_to_sheet(excelData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "주문목록");
+  
+    XLSX.writeFile(workbook, `주문목록_${new Date().toISOString().slice(0, 10)}.xlsx`);
+  };
+  
+    
   return (
     <>
       <MainWrapper>
@@ -278,7 +297,7 @@ const OrderList = () => {
             </tr>
           </TableHead>
           <tbody>
-          {orders.map((order, index) => (
+          {filteredOrders.map((order, index) => (
             <React.Fragment key={order.id}>
               {order.products.map((product, productIndex) => (
                 <TableRow onClick={() => navigate(`/admin/orderlist/${order.id}`)} className={`order-${order.id} ${productIndex === 0 ? 'highlight-row' : ''}`} key={product.id}>
@@ -340,7 +359,12 @@ const OrderList = () => {
         <TotalAmount>
           총 주문 금액: ₩{calculateTotalAmount(allOrders).toLocaleString()}
         </TotalAmount>
+        <StyledButton onClick={exportToExcel} style={{ padding: '10px', margin: '10px', backgroundColor: '#4CAF50', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
+          <FaFileExcel style={{ marginRight: "8px" }} /> 엑셀 다운로드
+        </StyledButton>
       </MainWrapper>
+
+
       <P.Pagediv>
           <Pagination
             currentPage={currentPage}
@@ -356,7 +380,35 @@ const OrderList = () => {
 };
 
 export default OrderList;
+const StyledButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(90deg, #34a853, #0a8f08);
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 
+  &:hover {
+    background: linear-gradient(90deg, #0a8f08, #34a853);
+    transform: scale(1.05);
+  }
+
+  &:active {
+    background: #0a8f08;
+    transform: scale(0.95);
+  }
+
+  &:focus {
+    outline: none;
+  }
+`;
 
 const MainWrapper = styled.div`
   width: 70%; 
