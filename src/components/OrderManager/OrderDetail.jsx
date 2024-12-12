@@ -8,7 +8,12 @@ const OrderDetail = () => {
   const [loading, setLoading] = useState(true); 
   const [error, setError] = useState(null);
   const { orderId } = useParams(); 
- {/*추후 커버 이미지, paymentMethod 한글로 바꾸는 로직 추가 예정 */}
+  const paymentMethodMap = {
+    'card': '카드',
+    'vbank': '가상계좌',
+    'trans': '계좌이체'
+  };
+
   useEffect(() => {
     const fetchOrderDetails = async () => {
       try {
@@ -73,11 +78,11 @@ const OrderDetail = () => {
         
         <Section>
           <SectionTitle>주문 상세 내역</SectionTitle>
-          <OrderInfo>
-            <div>주문일자: {formatDate(orderData.orderDate)}</div>
-            <div>주문번호: {orderData.imp_uid || '정보 없음'}</div>
-            <div>주문상태: {orderData.orderStatus || '정보 없음'}</div>
-          </OrderInfo>
+          <Details>
+            <DetailItem>주문일자: {formatDate(orderData.orderDate)}</DetailItem>
+            <DetailItem>주문번호: {orderData.imp_uid || '정보 없음'}</DetailItem>
+            <DetailItem>주문상태: {orderData.orderStatus || '정보 없음'}</DetailItem>
+          </Details>
           <Separator />
           
           {orderData.products && orderData.products.map((product) => (
@@ -134,7 +139,7 @@ const OrderDetail = () => {
             <DetailItem>할인금액: {formatNumber(orderData.discountPrice)}원</DetailItem>
             <DetailItem>배송비: {formatNumber(orderData.shippingCost)}원</DetailItem>
             <DetailItem>총 주문금액: {formatNumber(orderData.totalPrice)}원</DetailItem>
-            <DetailItem>결제수단: {orderData.paymentMethod?.paymentMethod || '정보 없음'}</DetailItem>
+            <DetailItem>결제수단: {paymentMethodMap[orderData.paymentMethod?.paymentMethod] || orderData.paymentMethod?.paymentMethod}</DetailItem>
           </Details>
         </Section>
         <Separator />
@@ -146,7 +151,6 @@ const OrderDetail = () => {
             </Details>
           </Section>
         )}
-
         <Separator />
         <DetailButton onClick={handleViewReceipt}>매출전표 보기</DetailButton>
       </Container>
@@ -185,7 +189,7 @@ const Item = styled.div`
   padding: 10px 0;
 `;
 
-const ItemImage = styled.div`
+const ItemImage = styled.img`
   width: 60px;
   height: 60px;
   background: #ccc;
