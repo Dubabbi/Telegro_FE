@@ -19,7 +19,7 @@ const OrderManager = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [size, setSize] = useState(3);
-
+  const [allOrders, setAllOrders] = useState([]); 
   const pagesPerGroup = 5; 
   const startPage = Math.floor((currentPage - 1) / pagesPerGroup) * pagesPerGroup + 1;
   const endPage = Math.min(startPage + pagesPerGroup - 1, totalPages);
@@ -84,45 +84,56 @@ const OrderManager = () => {
     }
   };
   
-  
   useEffect(() => {
-  const fetchOrders = async () => {
-    try {
-      const formatDate = (date) => {
-        const d = new Date(date);
-        const year = d.getFullYear();
-        const month = String(d.getMonth() + 1).padStart(2, '0');
-        const day = String(d.getDate()).padStart(2, '0');
-        return `${year}-${month}-${day}`;
-      };
+    const fetchOrders = async () => {
+      try {
+        const formatDate = (date) => {
+          const d = new Date(date);
+          const year = d.getFullYear();
+          const month = String(d.getMonth() + 1).padStart(2, '0');
+          const day = String(d.getDate()).padStart(2, '0');
+          return `${year}-${month}-${day}`;
+        };
   
-      const params = {
-        startDate: startDate ? formatDate(startDate) : undefined,
-        endDate: endDate ? formatDate(endDate) : undefined,
-        search: searchValue || undefined,
-        page,
-        size,
-      };
+        const accessToken = localStorage.getItem('token');
+
+        const allDataResponse = await axios.get(`https://api.telegro.kr/api/orders`, {
+          params: {
+            startDate: startDate ? formatDate(startDate) : undefined,
+            endDate: endDate ? formatDate(endDate) : undefined,
+            search: searchValue || undefined,
+            page: 0, 
+            size: 1000,
+          },
+          headers: { Authorization: `Bearer ${accessToken}` },
+        });
   
-      const accessToken = localStorage.getItem('token');
-      const response = await axios.get(`https://api.telegro.kr/api/orders`, {
-        params: { startDate, endDate, page: currentPage - 1, size },
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        }
-      });
+        const { data: allData } = allDataResponse.data;
+        setAllOrders(allData.orders);
+        
+        const paginatedResponse = await axios.get(`https://api.telegro.kr/api/orders`, {
+          params: {
+            startDate: startDate ? formatDate(startDate) : undefined,
+            endDate: endDate ? formatDate(endDate) : undefined,
+            page: currentPage - 1,
+            search: searchValue || undefined,
+            size,
+          },
+          headers: { Authorization: `Bearer ${accessToken}` },
+        });
   
-      const { data } = response.data;
-      if (data) {
-        setOrders(data.orders);
-        setTotalPages(response.data.data.totalPage);
+        const { data: paginatedData } = paginatedResponse.data;
+        setOrders(paginatedData.orders);
+        setTotalPages(paginatedData.totalPage); 
+      } catch (error) {
+        console.error('Error fetching orders:', error);
       }
-    } catch (error) {
-      console.error('Error fetching orders:', error);
-    }
-  };
-  fetchOrders();
-}, [startDate, endDate, currentPage, size]);
+    };
+  
+    fetchOrders();
+  }, [startDate, endDate, currentPage, size, searchValue]); 
+  
+
 const handlePageChange = (newPage) => {
   setCurrentPage(newPage);
 };
@@ -151,8 +162,8 @@ const handleGroupChange = (direction) => {
     );
   };
 
-  const calculateTotalAmount = (filteredOrders) => {
-    return filteredOrders.reduce((acc, order) => {
+  const calculateTotalAmount = (allOrders) => {
+    return allOrders.reduce((acc, order) => {
       return acc + order.products.reduce((sum, product) => sum + product.totalPrice, 0);
     }, 0);
   };
@@ -289,8 +300,11 @@ const handleGroupChange = (direction) => {
           ))}
           </tbody>
         </OrderTable>
-
-      <R.TotalAmount>총 주문 금액: ₩{calculateTotalAmount(filteredOrders).toLocaleString()}</R.TotalAmount>
+      <R.TotalAmount>
+      <R.TotalAmount>
+        총 주문 금액: ₩{calculateTotalAmount(allOrders).toLocaleString()}
+      </R.TotalAmount>
+      </R.TotalAmount>
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}

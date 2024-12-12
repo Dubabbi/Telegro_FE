@@ -38,7 +38,6 @@ const Recording = ({ category = 'RECORDER', initialPage = 1, size = 12 }) => {
         const productsArray = Array.isArray(productsData) ? productsData : Object.values(productsData);
         const sortedProducts = productsArray.sort((a, b) => b.id - a.id);
   
-        console.log('Sorted Products before setting state:', sortedProducts);
   
         setProducts(sortedProducts);
   
@@ -48,7 +47,6 @@ const Recording = ({ category = 'RECORDER', initialPage = 1, size = 12 }) => {
   
         setTotalPages(response.data.data.totalPage); 
       } catch (error) {
-        console.error('Error fetching data:', error);
         setError(`Failed to load products: ${error.message}`);
       }
     };
