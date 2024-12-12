@@ -1,113 +1,155 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
+import axios from "axios";
 
 const OrderDetail = () => {
-  const orderData = {
-    orderDate: "2022-04-11",
-    orderNumber: "202215483214",
-    customer: {
-      name: "홍길동",
-      contact: "010-1234-5678",
-      email: "example@example.com",
-    },
-    shipping: {
-      name: "홍길동",
-      contact: "010-1234-5678",
-      address: "주소",
-      memo: "문 앞에 놓아주세요.",
-      shippingCost: 3000,
-    },
-    items: [
-      {
-        id: 1,
-        name: "상품명",
-        option: "Dark / Small",
-        price: 142000,
-        quantity: 1,
-        status: "배송완료",
-      },
-      {
-        id: 2,
-        name: "상품명",
-        option: "Gift - 1개",
-        price: 2000,
-        quantity: 1,
-        status: "배송완료",
-      },
-    ],
-    payment: {
-      totalAmount: 146500,
-      discount: 4000,
-      finalAmount: 142500,
-      method: "신용카드",
-      cardInfo: "BC카드 (**** **** **** 1234)",
-    },
-  };
+  const [orderData, setOrderData] = useState(null);
+  const [loading, setLoading] = useState(true); 
+  const [error, setError] = useState(null);
+  const { orderId } = useParams(); 
+ {/*추후 커버 이미지, paymentMethod 한글로 바꾸는 로직 추가 예정 */}
+  useEffect(() => {
+    const fetchOrderDetails = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(`https://api.telegro.kr/api/orders/${orderId}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        
+        if (response.data.code === 20000 && response.data.data) {
+          setOrderData(response.data.data);
+        } else {
+          throw new Error("Invalid response format");
+        }
+      } catch (err) {
+        setError("주문 상세 정보를 가져오는 데 실패했습니다.");
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOrderDetails();
+  }, [orderId]);
+
   const handleViewReceipt = () => {
-    {/*TID 받아오기*/}
-    const receiptUrl = `https://developers.nicepay.co.kr/receipt.php?tid=${orderData.payment.transactionId}`;
-    window.open(receiptUrl, "_blank"); 
+    if (orderData?.paymentMethod?.receipt_url) {
+      const TID = orderData.paymentMethod.receipt_url; 
+      window.open(TID, "_blank"); 
+    } else {
+      alert("영수증을 볼 수 없습니다. TID가 누락되었습니다.");
+    }
   };
+
+  const formatNumber = (value) => {
+    return value !== undefined && value !== null 
+      ? Number(value).toLocaleString()
+      : '0';
+  };
+
+  const formatDate = (dateString) => {
+    return dateString 
+      ? new Date(dateString).toLocaleString('ko-KR', {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit'
+        })
+      : '정보 없음';
+  };
+
+  if (loading) return <Loading>로딩 중...</Loading>;
+  if (error) return <Error>{error}</Error>;
+  if (!orderData) return null;
+
   return (
     <MainWrapper>
-    <Container>
-    <Title>주문확인</Title>
-      <Section>
-        <SectionTitle>주문 상세 내역</SectionTitle>
-        <OrderInfo>
-          <div>주문일자: {orderData.orderDate}</div>
-          <div>주문번호: {orderData.orderNumber}</div>
-        </OrderInfo>
+      <Container>
+        <Title>주문확인</Title>
+        
+        <Section>
+          <SectionTitle>주문 상세 내역</SectionTitle>
+          <OrderInfo>
+            <div>주문일자: {formatDate(orderData.orderDate)}</div>
+            <div>주문번호: {orderData.imp_uid || '정보 없음'}</div>
+            <div>주문상태: {orderData.orderStatus || '정보 없음'}</div>
+          </OrderInfo>
+          <Separator />
+          
+          {orderData.products && orderData.products.map((product) => (
+            <Item key={product.productId}>
+              <ItemImage src={product.coverImage} alt={product.productName} />
+              <ItemDetails>
+                <ItemName>{product.productName || '상품명 없음'}</ItemName>
+                <ItemOption>
+                  모델: {product.productModel || '정보 없음'}
+                  <br />
+                  옵션: {product.selectOption || '옵션 없음'}
+                </ItemOption>
+                <ItemPrice>
+                  {formatNumber(product.productPrice)}원 / 수량 {product.quantity || 0}
+                </ItemPrice>
+              </ItemDetails>
+            </Item>
+          ))}
+        </Section>
+
+        <Section>
+          <SectionTitle>구매자 정보</SectionTitle>
+          {orderData.user && (
+            <Details>
+              <DetailItem>주문자: {orderData.user.name || '정보 없음'}</DetailItem>
+              <DetailItem>연락처: {orderData.user.phone || '정보 없음'}</DetailItem>
+              <DetailItem>이메일: {orderData.user.email || '정보 없음'}</DetailItem>
+              <DetailItem>담당자 연락처: {orderData.user.managerPhone || '연락처 없음'}</DetailItem>
+            </Details>
+          )}
+        </Section>
         <Separator />
-        {orderData.items.map((item) => (
-          <Item key={item.id}>
-            <ItemImage />
-            <ItemDetails>
-              <ItemName>{item.name}</ItemName>
-              <ItemOption>{item.option}</ItemOption>
-              <ItemPrice>
-                {item.price.toLocaleString()}원 / 수량 {item.quantity}
-              </ItemPrice>
-            </ItemDetails>
-            <ItemStatus>
-              <div>{item.status}</div>
-            </ItemStatus>
-          </Item>
-        ))}
-      </Section>
-      <Section>
-        <SectionTitle>구매자 정보</SectionTitle>
-        <Details>
-          <DetailItem>주문자: {orderData.customer.name}</DetailItem>
-          <DetailItem>연락처: {orderData.customer.contact}</DetailItem>
-          <DetailItem>이메일: {orderData.customer.email}</DetailItem>
-        </Details>
-      </Section>
-     <Separator />
-      <Section>
-        <SectionTitle>배송지 정보</SectionTitle>
-        <Details>
-          <DetailItem>수령인: {orderData.shipping.name}</DetailItem>
-          <DetailItem>연락처: {orderData.shipping.contact}</DetailItem>
-          <DetailItem>배송지: {orderData.shipping.address}</DetailItem>
-          <DetailItem>요청사항: {orderData.shipping.memo}</DetailItem>
-        </Details>
-      </Section>
-      <Separator />
-      <Section>
-        <SectionTitle>주문 금액 상세</SectionTitle>
-        <Details>
-          <DetailItem>주문금액: {orderData.payment.totalAmount.toLocaleString()}원</DetailItem>
-          <DetailItem>할인금액: {orderData.payment.discount.toLocaleString()}원</DetailItem>
-          <DetailItem>배송비: {orderData.shipping.shippingCost.toLocaleString()}원</DetailItem>
-          <DetailItem>총 주문금액: {orderData.payment.finalAmount.toLocaleString()}원</DetailItem>
-          <DetailItem>결제수단: {orderData.payment.method}</DetailItem>
-          <DetailItem>{orderData.payment.cardInfo}</DetailItem>
-        </Details>
-      </Section>
-      <Separator />
-      <DetailButton onClick={handleViewReceipt}>매출전표</DetailButton> {/*현금영수증 있는 경우에 영수증 보기로 뜨도록 추후 수정*/}
-    </Container>
+
+        {orderData.deliveryAddress && (
+          <Section>
+            <SectionTitle>배송지 정보</SectionTitle>
+            <Details>
+              <DetailItem>수령인: {orderData.deliveryAddress.name || '정보 없음'}</DetailItem>
+              <DetailItem>연락처: {orderData.deliveryAddress.phone || '연락처 없음'}</DetailItem>
+              <DetailItem>
+                배송지: {orderData.deliveryAddress.address || '정보 없음'} 
+                ({orderData.deliveryAddress.zipcode || '우편번호 없음'}), ({orderData.deliveryAddress.addressDetail || '상세주소 없음'})
+              </DetailItem>
+              <DetailItem>상세 주소: {orderData.deliveryAddress.addressDetail || '정보 없음'}</DetailItem>
+            </Details>
+          </Section>
+        )}
+        <Separator />
+
+        <Section>
+          <SectionTitle>주문 금액 상세</SectionTitle>
+          <Details>
+            <DetailItem>주문금액: {formatNumber(orderData.price)}원</DetailItem>
+            <DetailItem>할인금액: {formatNumber(orderData.discountPrice)}원</DetailItem>
+            <DetailItem>배송비: {formatNumber(orderData.shippingCost)}원</DetailItem>
+            <DetailItem>총 주문금액: {formatNumber(orderData.totalPrice)}원</DetailItem>
+            <DetailItem>결제수단: {orderData.paymentMethod?.paymentMethod || '정보 없음'}</DetailItem>
+          </Details>
+        </Section>
+        <Separator />
+        {orderData.request && (
+          <Section>
+            <SectionTitle>배송 요청사항</SectionTitle>
+            <Details>
+              <DetailItem>{orderData.request}</DetailItem>
+            </Details>
+          </Section>
+        )}
+
+        <Separator />
+        <DetailButton onClick={handleViewReceipt}>매출전표 보기</DetailButton>
+      </Container>
     </MainWrapper>
   );
 };
@@ -185,6 +227,7 @@ const Details = styled.div`
 const DetailItem = styled.div`
   margin-bottom: 5px;
 `;
+
 const MainWrapper = styled.div`
   width: 80%;
   margin-left: 10%;
@@ -206,6 +249,7 @@ const Title = styled.h2`
     margin-top: 10%;
   }
 `;
+
 const Separator = styled.hr`
   border: none;
   border-top: 1px solid #ddd;
@@ -227,6 +271,17 @@ const DetailButton = styled.button`
   }
 `;
 
+const Loading = styled.div`
+  text-align: center;
+  padding: 20px;
+  font-size: 1.5rem;
+`;
+
+const Error = styled.div`
+  text-align: center;
+  padding: 20px;
+  color: red;
+  font-size: 1.2rem;
+`;
 
 export default OrderDetail;
-
