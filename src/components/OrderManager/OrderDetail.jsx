@@ -56,16 +56,19 @@ const OrderDetail = () => {
   };
 
   const formatDate = (dateString) => {
-    return dateString 
-      ? new Date(dateString).toLocaleString('ko-KR', {
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit',
-          hour: '2-digit',
-          minute: '2-digit'
-        })
-      : '정보 없음';
+    if (!dateString) return '정보 없음';
+    
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
+    
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
   };
+  
 
   if (loading) return <Loading>로딩 중...</Loading>;
   if (error) return <Error>{error}</Error>;
@@ -236,6 +239,7 @@ const MainWrapper = styled.div`
   width: 80%;
   margin-left: 10%;
   padding: 20px;
+  user-select: text;
   @media (max-width: 780px) {
     width: 90%;
     margin-left: 5%;
