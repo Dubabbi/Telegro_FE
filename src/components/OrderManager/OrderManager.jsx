@@ -18,7 +18,7 @@ const OrderManager = () => {
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const [size, setSize] = useState(3);
+  const [size, setSize] = useState(7);
   const [allOrders, setAllOrders] = useState([]); 
   const pagesPerGroup = 5; 
   const startPage = Math.floor((currentPage - 1) / pagesPerGroup) * pagesPerGroup + 1;
