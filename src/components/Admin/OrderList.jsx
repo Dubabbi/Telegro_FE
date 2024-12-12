@@ -224,24 +224,30 @@ const OrderList = () => {
     }
   };
   const exportToExcel = () => {
-    const excelData = allOrders.map((order, index) => ({
-      'No': index + 1,
-      '주문번호': order.id,
-      '상품명': order.products.map(product => product.productName).join(', '),
-      '옵션 선택': order.products.map(product => product.selectOption || 'N/A').join(', '),
-      '수량': order.products.map(product => product.quantity).join(', '),
-      '단가': order.products.map(product => product.productPrice).join(', '),
-      '총 금액': `${order.products.reduce((acc, product) => acc + product.totalPrice, 0)}원`,
-      '주문 상태': order.orderStatus,
-      '주문 일자': formatDate(order.createdAt),
-    }));
+    const excelData = allOrders.map((order, index) => {
+      return order.products.map((product) => ({
+        'No': index + 1,
+        '주문번호': order.id,
+        '수령인 이름': order.deliveryAddress?.name || '정보 없음',
+        '전화번호': order.deliveryAddress?.phoneNumber || '정보 없음',
+        '주소': order.deliveryAddress?.address || '정보 없음',
+        '상세 주소/우편번호': `${order.deliveryAddress?.addressDetail || '정보 없음'} / ${order.deliveryAddress?.zipcode || '정보 없음'}`,
+        '상품명': product.productName || '정보 없음',
+        '상품 수량': product.quantity || 0,
+        '상품 옵션': product.selectOption || 'N/A',
+        '상품 단가': `${product.productPrice}원`,
+        '총 금액': `${product.totalPrice}원`,
+        '주문 상태': order.orderStatus,
+        '주문 일자': formatDate(order.createdAt),
+      }));
+    }).flat(); 
   
     const worksheet = XLSX.utils.json_to_sheet(excelData);
     const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "주문목록");
-  
+    XLSX.utils.book_append_sheet(workbook, worksheet, '주문목록');
     XLSX.writeFile(workbook, `주문목록_${new Date().toISOString().slice(0, 10)}.xlsx`);
   };
+  
   
     
   return (
