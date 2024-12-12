@@ -1,5 +1,6 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import AdminNav from './components/AdminNav/AdminNav'; 
 import ClientManagementPage from './pages/ClientManagement';
 import ClientDetail from './components/Admin/ClientDetail';
@@ -23,6 +24,11 @@ import AdminSearchResult from './components/AdminNav/AdminSearchResult';
 import AdminOrderDetailPage from './pages/AdminOrderDetail';
 
 export default function Admin() {
+  const isAdmin = useSelector((state) => state.auth.userRole === 'ADMIN');
+  if (!isAdmin) {
+    alert('관리자 권한이 없습니다.');
+    return <Navigate to="/" replace />;
+  }
   return (
     <div>
       <AdminNav /> 

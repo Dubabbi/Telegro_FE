@@ -12,6 +12,9 @@ const authSlice = createSlice({
     clearUserRole(state) {
       state.userRole = null;
     },
+    checkAdminRole(state) {
+      return state.userRole === 'ADMIN';
+    }
   },
 });
 
