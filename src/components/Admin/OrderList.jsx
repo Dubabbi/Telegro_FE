@@ -21,6 +21,7 @@ const OrderList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [size, setSize] = useState(3);
   const pagesPerGroup = 5; 
+  const [allOrders, setAllOrders] = useState([]); 
   const startPage = Math.floor((currentPage - 1) / pagesPerGroup) * pagesPerGroup + 1;
   const endPage = Math.min(startPage + pagesPerGroup - 1, totalPages);
   const handlePageChange = (newPage) => {
@@ -38,17 +39,32 @@ const OrderList = () => {
     const fetchOrders = async () => {
       try {
         const accessToken = localStorage.getItem('token');
-        const response = await axios.get(`https://api.telegro.kr/api/orders`, {
-          params: { startDate, endDate, page: currentPage - 1, size },
-          headers: {
-            Authorization: `Bearer ${accessToken}`
-          }
+  
+        const allOrdersResponse = await axios.get(`https://api.telegro.kr/api/orders`, {
+          params: {
+            startDate,
+            endDate,
+            searchCategory,
+            searchValue,
+            page: 0,
+            size: 1000,
+          },
+          headers: { Authorization: `Bearer ${accessToken}` },
         });
   
-        if (response.data.code === 20000) {
-          const sortedOrders = response.data.data.orders.sort((a, b) => b.id - a.id);
+        if (allOrdersResponse.data.code === 20000) {
+          setAllOrders(allOrdersResponse.data.data.orders);
+        }
+  
+        const paginatedResponse = await axios.get(`https://api.telegro.kr/api/orders`, {
+          params: { startDate, endDate, searchCategory, searchValue, page: currentPage - 1, size },
+          headers: { Authorization: `Bearer ${accessToken}` },
+        });
+  
+        if (paginatedResponse.data.code === 20000) {
+          const sortedOrders = paginatedResponse.data.data.orders.sort((a, b) => b.id - a.id);
           setOrders(sortedOrders);
-          setTotalPages(response.data.data.totalPage);
+          setTotalPages(paginatedResponse.data.data.totalPage);
         } else {
           alert('주문 목록을 불러오는 데 실패했습니다.');
         }
@@ -59,7 +75,14 @@ const OrderList = () => {
     };
   
     fetchOrders();
-  }, [startDate, endDate, currentPage, size]);
+  }, [startDate, endDate, currentPage, size, searchCategory, searchValue]);
+  
+  const calculateTotalAmount = (allOrders) => {
+    return allOrders.reduce((acc, order) => {
+      return acc + order.products.reduce((sum, product) => sum + product.totalPrice, 0);
+    }, 0);
+  };
+  
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -90,12 +113,6 @@ const OrderList = () => {
         product.productName.toLowerCase().includes(searchValue.toLowerCase())
       )
     );
-  };
-
-  const calculateTotalAmount = (filteredOrders) => {
-    return filteredOrders.reduce((acc, order) => {
-      return acc + order.products.reduce((sum, product) => sum + product.totalPrice, 0);
-    }, 0);
   };
 
   const filteredOrders = filterOrdersBySearch(orders);
@@ -191,7 +208,7 @@ const OrderList = () => {
           {orders.map((order, index) => (
             <React.Fragment key={order.id}>
               {order.products.map((product, productIndex) => (
-                <TableRow onClick={() => navigate('/admin/orderlist/:orderId')} className={`order-${order.id} ${productIndex === 0 ? 'highlight-row' : ''}`} key={product.id}>
+                <TableRow onClick={() => navigate(`/admin/orderlist/${order.id}`)} className={`order-${order.id} ${productIndex === 0 ? 'highlight-row' : ''}`} key={product.id}>
                   {productIndex === 0 && (
                     <TableCell rowSpan={order.products.length}>
                       {index + 1 + (currentPage - 1) * size}
@@ -234,7 +251,9 @@ const OrderList = () => {
           ))}
           </tbody>
         </OrderTable>
-        <TotalAmount>총 주문 금액: ₩{calculateTotalAmount(filteredOrders).toLocaleString()}</TotalAmount>
+        <TotalAmount>
+          총 주문 금액: ₩{calculateTotalAmount(allOrders).toLocaleString()}
+        </TotalAmount>
       </MainWrapper>
       <P.Pagediv>
           <Pagination
