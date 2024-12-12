@@ -271,20 +271,21 @@ const handleGroupChange = (direction) => {
                   {productIndex === 0 && (
                     <>
                       <TableCell rowSpan={order.products.length}>{order.createdAt}</TableCell>
-                      <TableCell rowSpan={order.products.length}>
+                      <TableCell onClick={(e) => e.stopPropagation()}  rowSpan={order.products.length}>
                         <div>
                           <span>{order.orderStatus}</span>
                           {order.orderStatus === "ORDER_COMPLETED" && (
                             <>
                             <br />
                             <CancelButton
-                              onClick={() =>
-                                handleCancelRequest(order.id, order.impUid, "고객 요청", {
-                                  holder: "예금주 이름",
-                                  bankCode: "은행 코드",
-                                  account: "환불 계좌 번호",
-                                })
-                              }
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleCancelRequest(order.id, order.impUid, '고객 요청', {
+                                  holder: '예금주 이름',
+                                  bankCode: '은행 코드',
+                                  account: '환불 계좌 번호',
+                                });
+                              }}
                             >
                               취소 요청
                             </CancelButton>

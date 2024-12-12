@@ -24,6 +24,67 @@ const OrderList = () => {
   const [allOrders, setAllOrders] = useState([]); 
   const startPage = Math.floor((currentPage - 1) / pagesPerGroup) * pagesPerGroup + 1;
   const endPage = Math.min(startPage + pagesPerGroup - 1, totalPages);
+  const getIamportToken = async () => {
+    try {
+      const response = await axios.post("https://api.iamport.kr/users/getToken", {
+        imp_key: "7540428574040455",
+        imp_secret: "N3gflhvzjeD6LRRMTqOLJRCYn3HyJgoBjpkZk6JQJY8c0jPtXjS0wRVvmR5eAJLm8ezBWUnxXIoNH6j9",
+      }, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        },
+      });
+  
+      if (response.data.code === 0) {
+        return response.data.response.access_token;
+      } else {
+        console.error("토큰 발급 실패:", response.data.message);
+      }
+    } catch (error) {
+      console.error("토큰 발급 중 오류 발생:", error);
+    }
+    return null;
+  };
+  
+  const handleCancelRequest = async (orderId, impUid, reason, refundDetails) => {
+    const iamportToken = await getIamportToken();
+  
+    if (!iamportToken) {
+      alert("결제 취소를 위한 인증 토큰 발급에 실패했습니다.");
+      return;
+    }
+  
+    try {
+      const response = await axios.post(
+        `https://api.iamport.kr/payments/cancel`,
+        {
+          imp_uid: impUid,
+          merchant_uid: orderId,
+          reason: reason,
+          refund_holder: refundDetails.holder,
+          refund_bank: refundDetails.bankCode,
+          refund_account: refundDetails.account,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${iamportToken}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+  
+      if (response.data.code === 0) {
+        alert("결제가 성공적으로 취소되었습니다.");
+      } else {
+        alert(`결제 취소 요청에 실패했습니다: ${response.data.message}`);
+      }
+    } catch (error) {
+      console.error("결제 취소 요청 중 오류 발생:", error);
+      alert("결제 취소 요청 중 오류가 발생했습니다.");
+    }
+  };
+  
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
   };
@@ -232,9 +293,10 @@ const OrderList = () => {
                         <br/>
                         <small>{order.deliveryAddress.addressDetail}({order.deliveryAddress.zipcode})</small>
                       </TableCell>
-                      <TableCell rowSpan={order.products.length}>
+                      <TableCell onClick={(e) => e.stopPropagation()}  rowSpan={order.products.length}>
                         <StatusSelect
                           value={order.orderStatus}
+                          onClick={(e) => e.stopPropagation()} 
                           onChange={(e) => handleStatusChange(order.id, e.target.value)}
                         >
                           <option value="ORDER_COMPLETED">주문 완료</option>
@@ -242,6 +304,19 @@ const OrderList = () => {
                           <option value="SHIPPING">배송 중</option>
                           <option value="DELIVERED">배송 완료</option>
                         </StatusSelect>
+                            <br />
+                            <CancelButton
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleCancelRequest(order.id, order.impUid, '고객 요청', {
+                                  holder: '예금주 이름',
+                                  bankCode: '은행 코드',
+                                  account: '환불 계좌 번호',
+                                });
+                              }}
+                            >
+                              취소 요청
+                            </CancelButton>
                       </TableCell>
                     </>
                   )}
@@ -401,4 +476,19 @@ const TableCell = styled.td`
   padding: 10px;
   text-align: center;
   vertical-align: middle;
+`;
+
+const CancelButton = styled.button`
+  margin-top: 5px;
+  padding: 5px 10px;
+  background-color: #ff6b6b;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+
+  &:hover {
+    background-color: #ff4d4d;
+  }
 `;

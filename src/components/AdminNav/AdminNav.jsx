@@ -90,7 +90,23 @@ const AdminNav = () => {
   const toggleSubMenu = () => {
     setIsSubMenuOpen(!isSubMenuOpen);
   };
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 780) {
+        setIsMobileSidebarVisible(true);
+      } else {
+        setIsMobileSidebarVisible(false);
+      }
+    };
 
+    handleResize();
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
   useEffect(() => {
     setIsMobileSidebarVisible(false);
     setIsSubMenuOpen(false);
