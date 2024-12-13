@@ -180,13 +180,24 @@ const OrderList = () => {
   const filterOrdersBySearch = (ordersToFilter) => {
     if (!searchValue.trim()) return ordersToFilter;
   
-    return ordersToFilter.filter(order =>
-      order.products.some(product =>
-        product.productName.toLowerCase().includes(searchValue.toLowerCase()) ||
-        product.selectOption?.toLowerCase().includes(searchValue.toLowerCase())
-      )
-    );
+    return ordersToFilter.filter(order => {
+      if (searchCategory === 'customer') {
+        // 주문자 정보로 검색
+        return order.userInfo.username.toLowerCase().includes(searchValue.toLowerCase());
+      }
+  
+      if (searchCategory === 'productName') {
+        // 상품명으로 검색
+        return order.products.some(product =>
+          product.productName.toLowerCase().includes(searchValue.toLowerCase()) ||
+          product.selectOption?.toLowerCase().includes(searchValue.toLowerCase())
+        );
+      }
+  
+      return true;
+    });
   };
+  
   const filteredOrders = filterOrdersBySearch(filterOrdersByDate());
 
 
@@ -276,7 +287,7 @@ const OrderList = () => {
               <option value="productName">상품명</option>
               <option value="customer">주문자 정보</option>
             </SelectBar>
-            <N.StyledForm onSubmit={handleSubmit}>
+            <N.StyledForm onSubmit={(e) => e.preventDefault()}>
               <Form.Control
                 type="text"
                 placeholder="검색어 입력"

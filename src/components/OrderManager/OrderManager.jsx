@@ -15,14 +15,15 @@ const OrderManager = () => {
   const [searchValue, setSearchValue] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
-  const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [size, setSize] = useState(7);
-  const [allOrders, setAllOrders] = useState([]); 
-  const pagesPerGroup = 5; 
+  const [allOrders, setAllOrders] = useState([]);
+  const [filteredOrders, setFilteredOrders] = useState([]); // 검색 결과를 저장
+  const pagesPerGroup = 5;
   const startPage = Math.floor((currentPage - 1) / pagesPerGroup) * pagesPerGroup + 1;
   const endPage = Math.min(startPage + pagesPerGroup - 1, totalPages);
+
   const getIamportToken = async () => {
     try {
       const response = await axios.post("https://api.iamport.kr/users/getToken", {
@@ -34,7 +35,7 @@ const OrderManager = () => {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         },
       });
-  
+
       if (response.data.code === 0) {
         return response.data.response.access_token;
       } else {
@@ -45,15 +46,15 @@ const OrderManager = () => {
     }
     return null;
   };
-  
+
   const handleCancelRequest = async (orderId, impUid, reason, refundDetails) => {
     const iamportToken = await getIamportToken();
-  
+
     if (!iamportToken) {
       alert("결제 취소를 위한 인증 토큰 발급에 실패했습니다.");
       return;
     }
-  
+
     try {
       const response = await axios.post(
         `https://api.iamport.kr/payments/cancel`,
@@ -72,7 +73,7 @@ const OrderManager = () => {
           },
         }
       );
-  
+
       if (response.data.code === 0) {
         alert("결제가 성공적으로 취소되었습니다.");
       } else {
@@ -83,87 +84,66 @@ const OrderManager = () => {
       alert("결제 취소 요청 중 오류가 발생했습니다.");
     }
   };
-  
+
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const formatDate = (date) => {
-          const d = new Date(date);
-          const year = d.getFullYear();
-          const month = String(d.getMonth() + 1).padStart(2, '0');
-          const day = String(d.getDate()).padStart(2, '0');
-          return `${year}-${month}-${day}`;
-        };
-  
         const accessToken = localStorage.getItem('token');
-
-        const allDataResponse = await axios.get(`https://api.telegro.kr/api/orders`, {
-          params: {
-            startDate: startDate ? formatDate(startDate) : undefined,
-            endDate: endDate ? formatDate(endDate) : undefined,
-            search: searchValue || undefined,
-            page: 0, 
-            size: 1000,
-          },
-          headers: { Authorization: `Bearer ${accessToken}` },
-        });
-  
-        const { data: allData } = allDataResponse.data;
-        setAllOrders(allData.orders);
-        
         const paginatedResponse = await axios.get(`https://api.telegro.kr/api/orders`, {
           params: {
-            startDate: startDate ? formatDate(startDate) : undefined,
-            endDate: endDate ? formatDate(endDate) : undefined,
+            startDate: startDate || undefined,
+            endDate: endDate || undefined,
             page: currentPage - 1,
-            search: searchValue || undefined,
             size,
           },
           headers: { Authorization: `Bearer ${accessToken}` },
         });
-  
+
         const { data: paginatedData } = paginatedResponse.data;
-        setOrders(paginatedData.orders);
-        setTotalPages(paginatedData.totalPage); 
+        setOrders(paginatedData.orders || []);
+        setTotalPages(paginatedData.totalPage || 0);
       } catch (error) {
         console.error('Error fetching orders:', error);
+        setOrders([]);
       }
     };
-  
+
     fetchOrders();
-  }, [startDate, endDate, currentPage, size, searchValue]); 
-  
+  }, [startDate, endDate, currentPage, size]);
 
-const handlePageChange = (newPage) => {
-  setCurrentPage(newPage);
-};
+  useEffect(() => {
+    // 검색 필터링 로직을 분리
+    const applySearchFilter = () => {
+      if (!searchValue) {
+        setFilteredOrders(orders);
+      } else {
+        const filtered = orders.filter(order =>
+          order.products.some(product =>
+            product.productName.toLowerCase().includes(searchValue.toLowerCase())
+          )
+        );
+        setFilteredOrders(filtered);
+      }
+    };
 
-const handleGroupChange = (direction) => {
-  if (direction === 'prev' && startPage > 1) {
-    setCurrentPage(startPage - 1);
-  } else if (direction === 'next' && endPage < totalPages) {
-    setCurrentPage(endPage + 1);
-  }
-};
+    applySearchFilter();
+  }, [searchValue, orders]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    fetchOrders();
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
   };
 
-  const filterOrdersByName = (filteredOrders) => {
-    if (!searchValue) {
-      return filteredOrders;
+  const handleGroupChange = (direction) => {
+    if (direction === 'prev' && startPage > 1) {
+      setCurrentPage(startPage - 1);
+    } else if (direction === 'next' && endPage < totalPages) {
+      setCurrentPage(endPage + 1);
     }
-    return filteredOrders.filter(order =>
-      order.products.some(product =>
-        product.productName.toLowerCase().includes(searchValue.toLowerCase())
-      )
-    );
   };
+
   const formatDate = (dateString) => {
     if (!dateString) return '정보 없음';
-  
+
     const date = new Date(dateString);
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -171,51 +151,16 @@ const handleGroupChange = (direction) => {
     const hours = String(date.getHours()).padStart(2, '0');
     const minutes = String(date.getMinutes()).padStart(2, '0');
     const seconds = String(date.getSeconds()).padStart(2, '0');
-  
+
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
   };
-  
+
   const calculateTotalAmount = (allOrders) => {
     return allOrders.reduce((acc, order) => {
       return acc + order.products.reduce((sum, product) => sum + product.totalPrice, 0);
     }, 0);
   };
 
-  const filteredOrders = filterOrdersByName(orders);
-  const handleStatusChange = async (orderId, newStatus) => {
-    const token = localStorage.getItem('token');
-  
-    try {
-      const response = await axios.patch(
-        `https://api.telegro.kr/api/orders/${orderId}`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-          params: {
-            status: newStatus,
-          },
-        }
-      );
-  
-      if (response.data.code === 20000) {
-        setOrders((prevOrders) =>
-          prevOrders.map((order) =>
-            order.id === orderId ? { ...order, orderStatus: newStatus } : order
-          )
-        );
-        setTotalPages(response.data.data.totalPage);
-        alert('주문 상태가 변경되었습니다.');
-      } else {
-        alert('주문 상태 변경에 실패했습니다.');
-      }
-    } catch (error) {
-      console.error("Error updating order status:", error);
-      alert('주문 상태 변경 중 오류가 발생했습니다.');
-    }
-  };
   return (
     <R.MainWrapper>
       <O.Div />
@@ -236,7 +181,7 @@ const handleGroupChange = (direction) => {
           />
         </div>
         <N.SearchWrap style={{ marginLeft: '20%' }}>
-          <N.StyledForm onSubmit={handleSubmit}>
+          <N.StyledForm onSubmit={(e) => e.preventDefault()}>
             <Form.Control
               type="text"
               placeholder="주문명 검색"
@@ -251,72 +196,83 @@ const handleGroupChange = (direction) => {
       </R.SearchSection>
 
       <OrderTable>
-          <TableHead>
-            <tr>
-              <TableCell>No</TableCell>
-              <TableCell>상품명</TableCell>
-              <TableCell>옵션 선택</TableCell>
-              <TableCell>수량</TableCell>
-              <TableCell>단가</TableCell>
-              <TableCell>총 금액(적립금)</TableCell>
-              <TableCell>주문정보</TableCell>
-              <TableCell>주문 상태</TableCell>
-            </tr>
-          </TableHead>
-          <tbody>
-          {orders.map((order, index) => (
-            <React.Fragment key={order.id}>
-              {order.products.map((product, productIndex) => (
-                <TableRow onClick={() => navigate(`/ordermanager/${order.id}`)} className={`order-${order.id} ${productIndex === 0 ? 'highlight-row' : ''}`} key={product.id}>
-                  {productIndex === 0 && (
-                    <TableCell rowSpan={order.products.length}>
-                      {index + 1 + (currentPage - 1) * size}
-                    </TableCell>
-                  )}
-                  <TableCell>
-                    <p>{product.productName}</p>
-                  </TableCell>
-                  <TableCell>{product.selectOption || 'N/A'}</TableCell>
-                  <TableCell>{product.quantity}</TableCell>
-                  <TableCell>{`${product.productPrice}원`}</TableCell>
-                  <TableCell>{`${product.totalPrice}원 (${product.point || 0}원)`}</TableCell>
-                  {productIndex === 0 && (
-                    <>
-                      <TableCell rowSpan={order.products.length}>{formatDate(order.createdAt)}</TableCell>
-                      <TableCell onClick={(e) => e.stopPropagation()}  rowSpan={order.products.length}>
-                        <div>
-                          <span>{order.orderStatus}</span>
-                          {order.orderStatus === "ORDER_COMPLETED" && (
-                            <>
-                            <br />
-                            <CancelButton
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleCancelRequest(order.id, order.impUid, '고객 요청', {
-                                  holder: '예금주 이름',
-                                  bankCode: '은행 코드',
-                                  account: '환불 계좌 번호',
-                                });
-                              }}
-                            >
-                              취소 요청
-                            </CancelButton>
-                            </>
-                          )}
-                        </div>
+        <TableHead>
+          <tr>
+            <TableCell>No</TableCell>
+            <TableCell>상품명</TableCell>
+            <TableCell>옵션 선택</TableCell>
+            <TableCell>수량</TableCell>
+            <TableCell>단가</TableCell>
+            <TableCell>총 금액(적립금)</TableCell>
+            <TableCell>주문정보</TableCell>
+            <TableCell>주문 상태</TableCell>
+          </tr>
+        </TableHead>
+        <tbody>
+          {filteredOrders.length > 0 ? (
+            filteredOrders.map((order, index) => (
+              <React.Fragment key={order.id}>
+                {order.products.map((product, productIndex) => (
+                  <TableRow
+                    onClick={() => navigate(`/ordermanager/${order.id}`)}
+                    className={`order-${order.id} ${productIndex === 0 ? 'highlight-row' : ''}`}
+                    key={product.id}
+                  >
+                    {productIndex === 0 && (
+                      <TableCell rowSpan={order.products.length}>
+                        {index + 1 + (currentPage - 1) * size}
                       </TableCell>
-                    </>
-                  )}
-                </TableRow>
-              ))}
-            </React.Fragment>
-          ))}
-          </tbody>
-        </OrderTable>
-      <R.TotalAmount>
+                    )}
+                    <TableCell>
+                      <p>{product.productName}</p>
+                    </TableCell>
+                    <TableCell>{product.selectOption || 'N/A'}</TableCell>
+                    <TableCell>{product.quantity}</TableCell>
+                    <TableCell>{`${product.productPrice}원`}</TableCell>
+                    <TableCell>{`${product.totalPrice}원 (${product.point || 0}원)`}</TableCell>
+                    {productIndex === 0 && (
+                      <>
+                        <TableCell rowSpan={order.products.length}>{formatDate(order.createdAt)}</TableCell>
+                        <TableCell
+                          onClick={(e) => e.stopPropagation()}
+                          rowSpan={order.products.length}
+                        >
+                          <div>
+                            <span>{order.orderStatus}</span>
+                            {order.orderStatus === "ORDER_COMPLETED" && (
+                              <>
+                                <br />
+                                <CancelButton
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleCancelRequest(order.id, order.impUid, '고객 요청', {
+                                      holder: '예금주 이름',
+                                      bankCode: '은행 코드',
+                                      account: '환불 계좌 번호',
+                                    });
+                                  }}
+                                >
+                                  취소 요청
+                                </CancelButton>
+                              </>
+                            )}
+                          </div>
+                        </TableCell>
+                      </>
+                    )}
+                  </TableRow>
+                ))}
+              </React.Fragment>
+            ))
+          ) : (
+            <tr>
+              <TableCell colSpan={8}>주문 데이터가 없습니다.</TableCell>
+            </tr>
+          )}
+        </tbody>
+      </OrderTable>
       <R.TotalAmount>
         총 주문 금액: ₩{calculateTotalAmount(allOrders).toLocaleString()}
-      </R.TotalAmount>
       </R.TotalAmount>
       <Pagination
         currentPage={currentPage}
@@ -331,6 +287,8 @@ const handleGroupChange = (direction) => {
 };
 
 export default OrderManager;
+
+
 
 
 export const SearchWrap = styled.div`
