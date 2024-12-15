@@ -112,7 +112,6 @@ const OrderManager = () => {
   }, [startDate, endDate, currentPage, size]);
 
   useEffect(() => {
-    // 검색 필터링 로직을 분리
     const applySearchFilter = () => {
       if (!searchValue) {
         setFilteredOrders(orders);
@@ -211,11 +210,11 @@ const OrderManager = () => {
         <tbody>
           {filteredOrders.length > 0 ? (
             filteredOrders.map((order, index) => (
-              <React.Fragment key={order.id}>
+              <React.Fragment key={order.orderId}>
                 {order.products.map((product, productIndex) => (
                   <TableRow
-                    onClick={() => navigate(`/ordermanager/${order.id}`)}
-                    className={`order-${order.id} ${productIndex === 0 ? 'highlight-row' : ''}`}
+                    onClick={() => navigate(`/ordermanager/${order.orderId}`)}
+                    className={`order-${order.orderId} ${productIndex === 0 ? 'highlight-row' : ''}`}
                     key={product.id}
                   >
                     {productIndex === 0 && (
@@ -245,7 +244,7 @@ const OrderManager = () => {
                                 <CancelButton
                                   onClick={(e) => {
                                     e.stopPropagation();
-                                    handleCancelRequest(order.id, order.impUid, '고객 요청', {
+                                    handleCancelRequest(order.orderId, order.impUid, '고객 요청', {
                                       holder: '예금주 이름',
                                       bankCode: '은행 코드',
                                       account: '환불 계좌 번호',

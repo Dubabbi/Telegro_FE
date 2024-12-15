@@ -75,30 +75,38 @@ const OrderProcess = () => {
       try {
         const response = await axios.get('https://api.telegro.kr/api/users/my', {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-          }
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
         });
-        
+  
         if (response.data.code === 20000) {
           const userPhone = response.data.data.phone;
-          const addresses = response.data.data.addressList;
           const userPoints = response.data.data.point;
+  
+          // addressList 데이터 처리
+          const addresses = response.data.data.addressList.map((address) => ({
+            ...address,
+            deliveryAddressId: address.deliveryAddressId || -1, // 기본값 설정
+          }));
+  
           setAddressList(addresses);
           setPoint(userPoints);
+  
           const defaultAddress = addresses.find((addr) => addr.isDefault);
           if (defaultAddress) {
             updateAddressFormData(defaultAddress, userPhone);
           } else {
-            setFormData((prev) => ({ ...prev, phone: userPhone })); 
+            setFormData((prev) => ({ ...prev, phone: userPhone }));
           }
         }
       } catch (error) {
-        console.error("Error fetching address list:", error);
+        console.error('Error fetching address list:', error);
       }
     };
-    
+  
     fetchAddressList();
   }, []);
+  
 
   const handleAddressComplete = ({ fullAddress, zonecode }) => {
     setFormData({
@@ -109,25 +117,47 @@ const OrderProcess = () => {
   };
 
   const updateAddressFormData = (addressData, phone = formData.phone) => {
+    if (!addressData) {
+      console.error("주소 데이터가 없습니다.");
+      return;
+    }
+  
     setFormData((prev) => ({
       ...prev,
       phone: phone,
-      address: addressData.address,
-      postalCode: addressData.zipcode,
-      detailedAddress: addressData.addressDetail,
+      address: addressData.address || '',
+      postalCode: addressData.zipcode || '',
+      detailedAddress: addressData.addressDetail || '',
       request: prev.request,
     }));
   };
   
-
+  
   const handleAddressChange = (e) => {
     const selectedId = e.target.value;
-    const selectedAddressData = addressList.find((addr) => addr.id.toString() === selectedId);
+  
+    if (!addressList || !Array.isArray(addressList)) {
+      console.error("addressList가 유효하지 않습니다:", addressList);
+      return;
+    }
+  
+    const selectedAddressData = addressList.find(
+      (addr) => addr.deliveryAddressId && addr.deliveryAddressId.toString() === selectedId
+    );
+  
     if (selectedAddressData) {
-      updateAddressFormData(selectedAddressData);
-      setSelectedAddress(selectedId);
+      setFormData((prev) => ({
+        ...prev,
+        address: selectedAddressData.address || "",
+        postalCode: selectedAddressData.zipcode || "",
+        detailedAddress: selectedAddressData.addressDetail || "",
+      }));
+    } else {
+      console.error("선택한 ID에 해당하는 주소 데이터를 찾을 수 없습니다:", selectedId);
     }
   };
+  
+  
 
   const handleLoadDefaultAddress = () => {
     setIsDefaultAddressChecked((prev) => !prev);
@@ -162,7 +192,17 @@ const OrderProcess = () => {
       });
     }
   }, [userRole]);
-
+  useEffect(() => {
+    if (selectedAddress) {
+      const selectedAddressData = addressList.find(
+        (addr) => addr.id.toString() === selectedAddress
+      );
+      if (selectedAddressData) {
+        updateAddressFormData(selectedAddressData);
+      }
+    }
+  }, [selectedAddress, addressList]);
+  
   function formatPrice(price) {
     return new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(price);
   }
@@ -535,18 +575,20 @@ const OrderProcess = () => {
               />
               <O.CheckboxLabel>기본 배송지 불러오기</O.CheckboxLabel>
             </O.CheckboxWrapper>
-              <O.Select
-                name="AddressList"
-                value={selectedAddress}
-                onChange={handleAddressChange}
-              >
-                <option value="">배송지 선택</option>
-                {addressList.map((address) => (
-                  <option key={address.id} value={address.id}>
-                    {address.name}
-                  </option>
-                ))}
-              </O.Select>
+            <O.Select
+  name="AddressList"
+  value={selectedAddress || ''}
+  onChange={handleAddressChange}
+>
+  <option value="">배송지 선택</option>
+  {addressList.map((address) => (
+    <option key={address.deliveryAddressId} value={address.deliveryAddressId}>
+      {address.name}
+    </option>
+  ))}
+</O.Select>
+
+
             </div>
             {userRole !== 'MEMBER' && userRole !== 'ADMIN' && (
               <O.CheckboxWrapper>

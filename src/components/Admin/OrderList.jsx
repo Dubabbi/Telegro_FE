@@ -12,6 +12,7 @@ import * as XLSX from 'xlsx';
 const OrderList = () => {
   const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
+  const [filteredOrders, setFilteredOrders] = useState([]); 
   const [searchValue, setSearchValue] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
@@ -112,44 +113,45 @@ const OrderList = () => {
     const fetchOrders = async () => {
       try {
         const accessToken = localStorage.getItem('token');
-  
-        const allOrdersResponse = await axios.get(`https://api.telegro.kr/api/orders`, {
+        const paginatedResponse = await axios.get(`https://api.telegro.kr/api/orders`, {
           params: {
-            startDate,
-            endDate,
-            searchCategory,
-            searchValue,
-            page: 0,
-            size: 1000,
+            startDate: startDate || undefined,
+            endDate: endDate || undefined,
+            page: currentPage - 1,
+            size,
           },
           headers: { Authorization: `Bearer ${accessToken}` },
         });
-  
-        if (allOrdersResponse.data.code === 20000) {
-          setAllOrders(allOrdersResponse.data.data.orders);
-        }
-  
-        const paginatedResponse = await axios.get(`https://api.telegro.kr/api/orders`, {
-          params: { startDate, endDate, searchCategory, searchValue, page: currentPage - 1, size },
-          headers: { Authorization: `Bearer ${accessToken}` },
-        });
-  
-        if (paginatedResponse.data.code === 20000) {
-          const sortedOrders = paginatedResponse.data.data.orders.sort((a, b) => b.id - a.id);
-          setOrders(sortedOrders);
-          setTotalPages(paginatedResponse.data.data.totalPage);
-        } else {
-          alert('주문 목록을 불러오는 데 실패했습니다.');
-        }
+
+        const { data: paginatedData } = paginatedResponse.data;
+        setOrders(paginatedData.orders || []);
+        setTotalPages(paginatedData.totalPage || 0);
       } catch (error) {
-        console.error("Error fetching order list:", error);
-        alert('주문 목록을 불러오는 중 오류가 발생했습니다.');
+        console.error('Error fetching orders:', error);
+        setOrders([]);
       }
     };
-  
+
     fetchOrders();
-  }, [startDate, endDate, currentPage, size, searchCategory, searchValue]);
+  }, [startDate, endDate, currentPage, size]);
   
+  useEffect(() => {
+    const applySearchFilter = () => {
+      if (!searchValue) {
+        setFilteredOrders(orders);
+      } else {
+        const filtered = orders.filter(order =>
+          order.products.some(product =>
+            product.productName.toLowerCase().includes(searchValue.toLowerCase())
+          )
+        );
+        setFilteredOrders(filtered);
+      }
+    };
+
+    applySearchFilter();
+  }, [searchValue, orders]);
+
   const calculateTotalAmount = (allOrders) => {
     return allOrders.reduce((acc, order) => {
       return acc + order.products.reduce((sum, product) => sum + product.totalPrice, 0);
@@ -198,8 +200,6 @@ const OrderList = () => {
     });
   };
   
-  const filteredOrders = filterOrdersBySearch(filterOrdersByDate());
-
 
   const handleStatusChange = async (orderId, newStatus) => {
     const token = localStorage.getItem('token');
@@ -222,7 +222,7 @@ const OrderList = () => {
       if (response.data.code === 20000) {
         setOrders((prevOrders) =>
           prevOrders.map((order) =>
-            order.id === orderId ? { ...order, orderStatus: newStatus } : order
+            order.orderId === orderId ? { ...order, orderStatus: newStatus } : order
           )
         );
         alert('주문 상태가 변경되었습니다.');
@@ -238,7 +238,7 @@ const OrderList = () => {
     const excelData = allOrders.map((order, index) => {
       return order.products.map((product) => ({
         'No': index + 1,
-        '주문번호': order.id,
+        '주문번호': order.orderId,
         '수령인 이름': order.deliveryAddress?.name || '정보 없음',
         '전화번호': order.deliveryAddress?.phoneNumber || '정보 없음',
         '주소': order.deliveryAddress?.address || '정보 없음',
@@ -315,9 +315,9 @@ const OrderList = () => {
           </TableHead>
           <tbody>
           {filteredOrders.map((order, index) => (
-            <React.Fragment key={order.id}>
+            <React.Fragment key={order.orderId}>
               {order.products.map((product, productIndex) => (
-                <TableRow onClick={() => navigate(`/admin/orderlist/${order.id}`)} className={`order-${order.id} ${productIndex === 0 ? 'highlight-row' : ''}`} key={product.id}>
+                <TableRow onClick={() => navigate(`/admin/orderlist/${order.orderId}`)} className={`order-${order.orderId} ${productIndex === 0 ? 'highlight-row' : ''}`} key={product.id}>
                   {productIndex === 0 && (
                     <TableCell rowSpan={order.products.length}>
                       {index + 1 + (currentPage - 1) * size}
@@ -344,7 +344,7 @@ const OrderList = () => {
                         <StatusSelect
                           value={order.orderStatus}
                           onClick={(e) => e.stopPropagation()} 
-                          onChange={(e) => handleStatusChange(order.id, e.target.value)}
+                          onChange={(e) => handleStatusChange(order.orderId, e.target.value)}
                         >
                           <option value="ORDER_COMPLETED">주문 완료</option>
                           <option value="ORDER_CANCELED">주문 취소</option>
@@ -355,7 +355,7 @@ const OrderList = () => {
                             <CancelButton
                               onClick={(e) => {
                                 e.stopPropagation();
-                                handleCancelRequest(order.id, order.impUid, '고객 요청', {
+                                handleCancelRequest(order.orderId, order.impUid, '고객 요청', {
                                   holder: '예금주 이름',
                                   bankCode: '은행 코드',
                                   account: '환불 계좌 번호',

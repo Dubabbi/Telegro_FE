@@ -113,7 +113,6 @@ const OrderDetail = () => {
               <DetailItem>주문자: {orderData.user.name || '정보 없음'}</DetailItem>
               <DetailItem>연락처: {orderData.user.phone || '정보 없음'}</DetailItem>
               <DetailItem>이메일: {orderData.user.email || '정보 없음'}</DetailItem>
-              <DetailItem>담당자 연락처: {orderData.user.managerPhone || '연락처 없음'}</DetailItem>
             </Details>
           )}
         </Section>
