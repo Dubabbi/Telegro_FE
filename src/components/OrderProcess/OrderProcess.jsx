@@ -387,8 +387,7 @@ const OrderProcess = () => {
       digital: "false",
       escrow: "true",
       custom_data: {
-        orderId,
-        items: orderData.cartProductDTOS.map((p) => p.id),
+        orderId
       },
     };
   
@@ -430,12 +429,13 @@ const OrderProcess = () => {
   
     const confirmOrderResult = await confirmOrder();
   
-    if (!confirmOrderResult || typeof confirmOrderResult.orderId !== 'number') {
+    if (!confirmOrderResult || typeof confirmOrderResult.orderId !== "number") {
       alert("주문 생성에 실패했습니다. 결제를 진행할 수 없습니다.");
       return;
     }
   
-    const { orderId, pointsToEarn } = confirmOrderResult;
+    const { orderId } = confirmOrderResult;
+  
     const payMethod = isCreditCardChecked
       ? "card"
       : isVirtualAccountChecked
@@ -452,12 +452,16 @@ const OrderProcess = () => {
       alert("결제 방법을 선택해주세요.");
       return;
     }
+  
+    const status = payMethod === "vbank" ? "ready" : "paid";
+  
     const currentShippingCost =
-    userRole === 'MEMBER' || userRole === 'ADMIN'
-      ? 3000
-      : isConsignmentChecked
-      ? 4000
-      : 0;
+      userRole === "MEMBER" || userRole === "ADMIN"
+        ? 3000
+        : isConsignmentChecked
+        ? 4000
+        : 0;
+  
     const paymentId = `payment-${new Date().getTime()}`;
     const paymentOptions = getPaymentOptions(payMethod, productInfo, paymentId, orderId);
   
@@ -466,65 +470,68 @@ const OrderProcess = () => {
   
     IMP.request_pay(paymentOptions, async (rsp) => {
       if (!rsp.error_code) {
-        try {
-          const calculatedPrice = totalProductPrice + shippingCost - pointsToUse;
-          const verifyResponse = await axios.post(
-            `https://api.telegro.kr/api/v1/order/payment/${rsp.imp_uid}`,
-            {
-              orderId,
-              price: totalPayable, 
+      try {
+        const verifyResponse = await axios.post(
+          `https://api.telegro.kr/payments/update`,
+          {
+            imp_uid: rsp.imp_uid,
+            status, 
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+              "Content-Type": "application/json",
             },
-            {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
-                "Content-Type": "application/json",
-              },
-              withCredentials: true,
-            }
-          );
-  
-          const { code, response } = verifyResponse.data;
-  
-          if (code === 0 ) {
-            alert("결제가 완료되었습니다.");
-            navigate("/completeorder", {
-              state: {
-                orderDetails: {
-                  products: orderData.cartProductDTOS.map((product) => ({
-                    name: product.productName,
-                    quantity: product.quantity,
-                    coverImage: product.coverImage,
-                    totalPrice: product.totalPrice,
-                  })),
-                  total: totalProductPrice,
-                },
-                userDetails: {
-                  name: formData.userName,
-                  phone: formData.phone,
-                },
-                shippingInfo: {
-                  postalCode: formData.postalCode,
-                  address: formData.address,
-                  detailedAddress: formData.detailedAddress,
-                },
-                pointsToUse,
-                pointsToEarn: state.orderData.pointToEarn,
-                shippingCost: currentShippingCost,
-              },
-            });
-          } else {
-            alert("결제 검증에 실패했습니다. 관리자에게 문의하세요.");
+            withCredentials: true,
           }
-        } catch (error) {
-          console.error("결제 검증 중 오류:", error);
+        );
+  
+        const { code } = verifyResponse.data;
+  
+        if (code === 20000) {
+          alert("결제가 완료되었습니다.");
+          navigate("/completeorder", {
+            state: {
+              orderDetails: {
+                products: orderData.cartProductDTOS.map((product) => ({
+                  name: product.productName,
+                  quantity: product.quantity,
+                  coverImage: product.coverImage,
+                  totalPrice: product.totalPrice,
+                })),
+                total: totalProductPrice,
+              },
+              userDetails: {
+                name: formData.userName,
+                phone: formData.phone,
+              },
+              shippingInfo: {
+                postalCode: formData.postalCode,
+                address: formData.address,
+                detailedAddress: formData.detailedAddress,
+              },
+              pointsToUse,
+              pointsToEarn: state.orderData.pointToEarn,
+              shippingCost: currentShippingCost,
+            },
+          });
+        } else {
           alert("결제 검증에 실패했습니다. 관리자에게 문의하세요.");
         }
+      } catch (error) {
+        console.error("결제 검증 중 오류:", error);
+        alert("결제 검증에 실패했습니다. 관리자에게 문의하세요.");        }
       } else {
         console.error("결제 실패:", rsp);
-        alert(`결제 검증에 실패했습니다. 관리자에게 문의하세요.`);
+        alert("결제가 실패했습니다. 관리자에게 문의하세요.");
       }
     });
-  };  
+    
+  };
+  
+  
+  
+  
   
 
   const orderCustomerInfo = userDetails ? (
@@ -700,6 +707,7 @@ const OrderProcess = () => {
                     setIsBankTransferChecked(false);
                     setIsKakaoPayChecked(false);
                     setIsRealTimeAccountChecked(false);
+                    setIsVirtualAccountChecked(false);
                   }}
                   style={{ cursor: 'pointer', width: '20px', height: '20px' }}
                 />
