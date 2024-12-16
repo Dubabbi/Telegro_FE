@@ -9,9 +9,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import Logen from '/src/assets/image/OrderProcess/logen.svg';
 import * as PortOne from "@portone/browser-sdk/v2";
-
-const OrderProcess = () => {
-  const navigate = useNavigate();
+const OrderProcess = () => {  const navigate = useNavigate();
   const userRole = useSelector((state) => state.auth.userRole);
   const { state } = useLocation();
   const [isConsignmentChecked, setIsConsignmentChecked] = useState(false);
@@ -31,15 +29,13 @@ const OrderProcess = () => {
   const [isKakaopayChecked, setIsKakaopayChecked] = useState(false);
   const [pointsToUse, setPointsToUse] = useState(0);
   const [formData, setFormData] = useState({
-    userName: userDetails?.userName || '',
-    email: userDetails?.email || '',
-    phone: '',
-    address: '',
-    postalCode: '',
-    detailedAddress: '',
-    request: '',
+    userName: "",
+    phoneNumber: "",
+    address: "",
+    postalCode: "",
+    detailedAddress: "",
+    request: "",
   });
-  
   const shippingCost =
   userRole === 'MEMBER' || userRole === 'ADMIN'
     ? 3000 
@@ -69,44 +65,48 @@ const OrderProcess = () => {
       navigate(-1); 
     }
   }, [orderData, navigate]);
-  
+
   useEffect(() => {
     const fetchAddressList = async () => {
       try {
-        const response = await axios.get('https://api.telegro.kr/api/users/my', {
+        const response = await axios.get("https://api.telegro.kr/api/users/my", {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         });
   
         if (response.data.code === 20000) {
-          const userPhone = response.data.data.phone;
-          const userPoints = response.data.data.point;
-  
-          // addressList 데이터 처리
-          const addresses = response.data.data.addressList.map((address) => ({
-            ...address,
-            deliveryAddressId: address.deliveryAddressId || -1, // 기본값 설정
-          }));
-  
+          const addresses = response.data.data.addressList || [];
           setAddressList(addresses);
-          setPoint(userPoints);
-  
-          const defaultAddress = addresses.find((addr) => addr.isDefault);
-          if (defaultAddress) {
-            updateAddressFormData(defaultAddress, userPhone);
-          } else {
-            setFormData((prev) => ({ ...prev, phone: userPhone }));
-          }
+          setSelectedAddress(""); // 초기 선택된 주소 없음
+          setFormData({
+            userName: "",
+            phoneNumber: "",
+            address: "",
+            postalCode: "",
+            detailedAddress: "",
+            request: "",
+          });
         }
       } catch (error) {
-        console.error('Error fetching address list:', error);
+        console.error("Error fetching address list:", error);
       }
     };
   
     fetchAddressList();
   }, []);
   
+
+  const updateAddressFormData = (addressData) => {
+    setFormData({
+      userName: addressData.recipientName || "",
+      phoneNumber: addressData.phoneNumber || "",
+      address: addressData.address || "",
+      postalCode: addressData.zipcode || "",
+      detailedAddress: addressData.addressDetail || "",
+      request: "",
+    });
+  };
 
   const handleAddressComplete = ({ fullAddress, zonecode }) => {
     setFormData({
@@ -116,75 +116,40 @@ const OrderProcess = () => {
     });
   };
 
-  const updateAddressFormData = (addressData, phone = formData.phone) => {
-    if (!addressData) {
-      console.error("주소 데이터가 없습니다.");
-      return;
-    }
-  
-    setFormData((prev) => ({
-      ...prev,
-      phone: phone,
-      address: addressData.address || '',
-      postalCode: addressData.zipcode || '',
-      detailedAddress: addressData.addressDetail || '',
-      request: prev.request,
-    }));
-  };
-  
-  
-  const handleAddressChange = (e) => {
-    const selectedId = e.target.value;
-  
-    if (!addressList || !Array.isArray(addressList)) {
-      console.error("addressList가 유효하지 않습니다:", addressList);
-      return;
-    }
-  
-    const selectedAddressData = addressList.find(
-      (addr) => addr.deliveryAddressId && addr.deliveryAddressId.toString() === selectedId
-    );
-  
-    if (selectedAddressData) {
-      setFormData((prev) => ({
-        ...prev,
-        address: selectedAddressData.address || "",
-        postalCode: selectedAddressData.zipcode || "",
-        detailedAddress: selectedAddressData.addressDetail || "",
-      }));
-    } else {
-      console.error("선택한 ID에 해당하는 주소 데이터를 찾을 수 없습니다:", selectedId);
-    }
-  };
-  
-  
-
   const handleLoadDefaultAddress = () => {
+    // 체크박스 상태를 반전
     setIsDefaultAddressChecked((prev) => !prev);
-    if (!isDefaultAddressChecked) { 
+  
+    if (!isDefaultAddressChecked) {
+      // 체크박스가 선택된 경우: 기본 배송지 불러오기
       const defaultAddress = addressList.find((addr) => addr.isDefault);
       if (defaultAddress) {
-        updateAddressFormData(defaultAddress);
+        setSelectedAddress(defaultAddress.deliveryAddressId.toString());
+        updateAddressFormData(defaultAddress); // 기본 배송지 데이터를 formData에 업데이트
       } else {
         alert("기본 배송지가 없습니다.");
       }
     } else {
+      // 체크박스가 해제된 경우: 배송지 초기화
+      setSelectedAddress("");
       setFormData({
-        name: '',
-        phone: '',
-        address: '',
-        postalCode: '',
-        detailedAddress: '',
-        request: ''
+        userName: "",
+        phoneNumber: "",
+        address: "",
+        postalCode: "",
+        detailedAddress: "",
+        request: "",
       });
     }
   };
+  
+  
 
   useEffect(() => {
     if (userRole !== 'MEMBER' && userRole !== 'ADMIN') {
       setFormData({
         name: '',
-        phone: '',
+        phoneNumber: '',
         address: '',
         postalCode: '',
         detailedAddress: '',
@@ -192,17 +157,21 @@ const OrderProcess = () => {
       });
     }
   }, [userRole]);
-  useEffect(() => {
-    if (selectedAddress) {
-      const selectedAddressData = addressList.find(
-        (addr) => addr.id.toString() === selectedAddress
-      );
-      if (selectedAddressData) {
-        updateAddressFormData(selectedAddressData);
-      }
+
+  const handleAddressChange = (e) => {
+    const selectedId = e.target.value;
+    setSelectedAddress(selectedId);
+
+    const selectedAddressData = addressList.find(
+      (addr) => addr.deliveryAddressId.toString() === selectedId
+    );
+
+    if (selectedAddressData) {
+      updateAddressFormData(selectedAddressData);
+    } else {
+      console.error("선택한 주소를 찾을 수 없습니다:", selectedId);
     }
-  }, [selectedAddress, addressList]);
-  
+  };
   function formatPrice(price) {
     return new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(price);
   }
@@ -340,7 +309,7 @@ const OrderProcess = () => {
             },
             userDetails: {
               name: formData.userName,
-              phone: formData.phone,
+              phone: formData.phoneNumber,
               recipientName: formData.name
             },
             shippingInfo: {
@@ -378,7 +347,7 @@ const OrderProcess = () => {
       amount: totalPayable,
       name: productInfo.name.trim(),
       buyer_name: formData.userName,
-      buyer_tel: formData.phone,
+      buyer_tel: formData.phoneNumber,
       buyer_email: formData.email || "user@example.com",
       buyer_addr: formData.address,
       buyer_postcode: formData.postalCode,
@@ -503,7 +472,7 @@ const OrderProcess = () => {
               },
               userDetails: {
                 name: formData.userName,
-                phone: formData.phone,
+                phone: formData.phoneNumber,
               },
               shippingInfo: {
                 postalCode: formData.postalCode,
@@ -546,7 +515,7 @@ const OrderProcess = () => {
   );
 
   return (
-    <>
+      <>
       <O.Div></O.Div>
       <C.Title style={{width: '70%'}}><h1>결제하기</h1></C.Title>
       <O.OrderPageWrapper>
@@ -571,32 +540,30 @@ const OrderProcess = () => {
               <div>{orderCustomerInfo}</div>
           </O.BoxSection>
           <O.BoxSection>
-            <O.SectionTitle>배송 정보</O.SectionTitle>
-            <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-            <O.CheckboxWrapper>
-              <img
-                src={isDefaultAddressChecked ? checked : check} 
-                alt="기본 배송지 불러오기"
-                onClick={handleLoadDefaultAddress}
-                style={{ cursor: 'pointer', width: '20px', height: '20px' }}
-              />
-              <O.CheckboxLabel>기본 배송지 불러오기</O.CheckboxLabel>
-            </O.CheckboxWrapper>
-            <O.Select
-  name="AddressList"
-  value={selectedAddress || ''}
-  onChange={handleAddressChange}
->
-  <option value="">배송지 선택</option>
-  {addressList.map((address) => (
-    <option key={address.deliveryAddressId} value={address.deliveryAddressId}>
-      {address.name}
-    </option>
-  ))}
-</O.Select>
-
-
-            </div>
+          <O.SectionTitle>배송 정보</O.SectionTitle>
+          <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+          <O.CheckboxWrapper>
+            <img
+              src={isDefaultAddressChecked ? checked : check}
+              alt="기본 배송지"
+              onClick={handleLoadDefaultAddress}
+              style={{ cursor: "pointer", width: "20px", height: "20px" }}
+            />
+            <O.CheckboxLabel>기본 배송지 불러오기</O.CheckboxLabel>
+          </O.CheckboxWrapper>
+          <O.Select
+            name="AddressList"
+            value={selectedAddress}
+            onChange={handleAddressChange}
+          >
+            <option value="">배송지 선택</option>
+            {addressList.map((address) => (
+              <option key={address.deliveryAddressId} value={address.deliveryAddressId}>
+                {address.name} ({address.address})
+              </option>
+            ))}
+          </O.Select>
+          </div>
             {userRole !== 'MEMBER' && userRole !== 'ADMIN' && (
               <O.CheckboxWrapper>
                 <img
@@ -609,54 +576,59 @@ const OrderProcess = () => {
               </O.CheckboxWrapper>
             )}
             <O.DeliveryInfoForm>
-              <O.FormRow>
+            <O.FormRow>
               <O.FormInput
                 type="text"
-                placeholder="받는 분 이름 *"
-                value={formData.name} 
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                placeholder="받는 분 이름"
+                value={formData.userName}
+                onChange={(e) =>
+                  setFormData({ ...formData, userName: e.target.value })
+                }
               />
-                <O.FormInput
-                  type="text"
-                  placeholder="전화번호 *"
-                  value={formData.phone}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                />
-              </O.FormRow>
-              <O.AddressSearchRow>
-                <O.AddressInput
-                  type="text"
-                  placeholder="주소 *"
-                  value={formData.address}
-                  readOnly
-                />
+              <O.FormInput
+                type="text"
+                placeholder="전화번호"
+                value={formData.phoneNumber}
+                onChange={(e) =>
+                  setFormData({ ...formData, phoneNumber: e.target.value })
+                }
+              />
+            </O.FormRow>
+            <O.AddressSearchRow>
+              <O.AddressInput
+                type="text"
+                placeholder="주소"
+                value={formData.address}
+                readOnly
+              />
                 <O.AddressButton onClick={handleAddressComplete}>
                   <Postcode onComplete={handleAddressComplete} />
                 </O.AddressButton>
               </O.AddressSearchRow>
               <O.FormRow>
-                <O.FormInput
-                  type="text"
-                  placeholder="우편번호 *"
-                  value={formData.postalCode}
-                  readOnly
-                />
-                <O.FormInput
-                  type="text"
-                  placeholder="상세 주소 *"
-                  value={formData.detailedAddress}
-                  onChange={(e) => setFormData({ ...formData, detailedAddress: e.target.value })}
-                />
+              <O.FormInput
+                type="text"
+                placeholder="우편번호"
+                value={formData.postalCode}
+                readOnly
+              />
+              <O.FormInput
+                type="text"
+                placeholder="상세 주소"
+                value={formData.detailedAddress}
+                onChange={(e) =>
+                  setFormData({ ...formData, detailedAddress: e.target.value })
+                }
+              />
               </O.FormRow>
               <O.TextArea
                 placeholder="요청 사항 (선택 사항)"
                 value={formData.request}
                 onChange={(e) => setFormData({ ...formData, request: e.target.value })}
               />
-            </O.DeliveryInfoForm>
-          </O.BoxSection>
-        </O.LeftSection>
-
+          </O.DeliveryInfoForm>
+        </O.BoxSection>
+      </O.LeftSection>
         {/* 우측 결제 및 총 결제금액 */}
         <O.RightSection>
         <O.BoxSection>
