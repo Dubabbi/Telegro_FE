@@ -132,13 +132,12 @@ const OrderManager = () => {
     }, 0);
   };
   const orderStatusMap = {
-    ORDER_CREATE: "주문 생성",
+    ORDER_CREATED: "주문 생성",
     PAYMENT_COMPLETED: "결제 완료",
     ORDER_COMPLETED: "주문 완료",
-    ORDER_CANCELED: "주문 취소",
-    ORDER_PENDING: "주문 대기",
+    ORDER_CANCELLED: "주문 취소",
     SHIPPING: "배송 중",
-    DELIVERED: "배송 완료"
+    DELIVERY_COMPLETED: "배송 완료"
   };
   return (
     <R.MainWrapper>

@@ -175,7 +175,9 @@ const OrderDetail = () => {
         )}
         <Separator />
         <ReceiptButton onClick={handleViewReceipt}>매출전표 보기</ReceiptButton>
-        <CashReceiptButton onClick={handleViewCashReceipt}>현금 영수증 보기</CashReceiptButton>
+        {orderData.cash_receipt_url && (
+          <CashReceiptButton onClick={handleViewCashReceipt}>현금 영수증 보기</CashReceiptButton>
+        )}
       </Container>
     </MainWrapper>
   );

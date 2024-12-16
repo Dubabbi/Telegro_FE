@@ -339,10 +339,12 @@ const OrderList = () => {
                           onClick={(e) => e.stopPropagation()} 
                           onChange={(e) => handleStatusChange(order.orderId, e.target.value)}
                         >
+                          <option value="ORDER_CREATED">주문 생성</option>
+                          <option value="PAYMENT_COMPLETED">결제 완료</option>
                           <option value="ORDER_COMPLETED">주문 완료</option>
-                          <option value="ORDER_CANCELED">주문 취소</option>
+                          <option value="ORDER_CANCELLED">주문 취소</option>
                           <option value="SHIPPING">배송 중</option>
-                          <option value="DELIVERED">배송 완료</option>
+                          <option value="DELIVERY_COMPLETED">배송 완료</option>
                         </StatusSelect>
                             <br />
                             <CancelButton

@@ -41,8 +41,8 @@ const OrderDetail = () => {
   }, [orderId]);
 
   const handleViewReceipt = () => {
-    if (orderData?.paymentMethod?.receipt_url) {
-      const TID = orderData.paymentMethod.receipt_url; 
+    if (orderData?.receipt_url) {
+      const TID = orderData.receipt_url; 
       window.open(TID, "_blank"); 
     } else {
       alert("영수증을 볼 수 없습니다. TID가 누락되었습니다.");
@@ -50,8 +50,8 @@ const OrderDetail = () => {
   };
 
   const handleViewCashReceipt = () => {
-    if (orderData?.paymentMethod?.receipt_url) {
-      const TID = orderData.paymentMethod.receipt_url; 
+    if (orderData?.cash_receipt_url) {
+      const TID = orderData.cash_receipt_url; 
       window.open(TID, "_blank"); 
     } else {
       alert("현금영수증을 볼 수 없습니다. TID가 누락되었습니다.");
@@ -164,7 +164,9 @@ const OrderDetail = () => {
         <Separator />
         <div style={{display: 'flex', justifyContent: 'flex-start', flexDirection: 'row', gap: '10px'}}>
         <ReceiptButton onClick={handleViewReceipt}>매출전표 보기</ReceiptButton>
-        <CashReceiptButton onClick={handleViewCashReceipt}>현금 영수증 보기</CashReceiptButton>
+        {orderData.cash_receipt_url && (
+          <CashReceiptButton onClick={handleViewCashReceipt}>현금 영수증 보기</CashReceiptButton>
+        )}
         </div>
       </Container>
     </MainWrapper>
