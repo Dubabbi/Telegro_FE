@@ -49,6 +49,15 @@ const OrderDetail = () => {
     }
   };
 
+  const handleViewCashReceipt = () => {
+    if (orderData?.paymentMethod?.receipt_url) {
+      const TID = orderData.paymentMethod.receipt_url; 
+      window.open(TID, "_blank"); 
+    } else {
+      alert("현금영수증을 볼 수 없습니다. TID가 누락되었습니다.");
+    }
+  };
+
   const formatNumber = (value) => {
     return value !== undefined && value !== null 
       ? Number(value).toLocaleString()
@@ -122,8 +131,8 @@ const OrderDetail = () => {
           <Section>
             <SectionTitle>배송지 정보</SectionTitle>
             <Details>
-              <DetailItem>수령인: {orderData.deliveryAddress.name || '정보 없음'}</DetailItem>
-              <DetailItem>연락처: {orderData.deliveryAddress.phone || '연락처 없음'}</DetailItem>
+              <DetailItem>수령인: {orderData.deliveryAddress.recipientName || '정보 없음'}</DetailItem>
+              <DetailItem>연락처: {orderData.deliveryAddress.phoneNumber || '연락처 없음'}</DetailItem>
               <DetailItem>
                 배송지: {orderData.deliveryAddress.address || '정보 없음'} 
                 ({orderData.deliveryAddress.zipcode || '우편번호 없음'}), ({orderData.deliveryAddress.addressDetail || '상세주소 없음'})
@@ -144,7 +153,6 @@ const OrderDetail = () => {
             <DetailItem>결제수단: {paymentMethodMap[orderData.paymentMethod?.paymentMethod] || orderData.paymentMethod?.paymentMethod}</DetailItem>
           </Details>
         </Section>
-        <Separator />
         {orderData.request && (
           <Section>
             <SectionTitle>배송 요청사항</SectionTitle>
@@ -154,7 +162,10 @@ const OrderDetail = () => {
           </Section>
         )}
         <Separator />
-        <DetailButton onClick={handleViewReceipt}>매출전표 보기</DetailButton>
+        <div style={{display: 'flex', justifyContent: 'flex-start', flexDirection: 'row', gap: '10px'}}>
+        <ReceiptButton onClick={handleViewReceipt}>매출전표 보기</ReceiptButton>
+        <CashReceiptButton onClick={handleViewCashReceipt}>현금 영수증 보기</CashReceiptButton>
+        </div>
       </Container>
     </MainWrapper>
   );
@@ -263,10 +274,10 @@ const Separator = styled.hr`
   margin: 10px 0;
 `;
 
-const DetailButton = styled.button`
+const ReceiptButton = styled.button`
   margin-top: 5px;
   padding: 5px 10px;
-  background-color: #ff6b6b;
+  background-color: #28a745; 
   color: white;
   border: none;
   border-radius: 4px;
@@ -274,9 +285,26 @@ const DetailButton = styled.button`
   font-size: 1.4rem;
 
   &:hover {
-    background-color: #ff4d4d;
+    background-color: #218838; 
   }
 `;
+
+const CashReceiptButton = styled.button`
+  margin-top: 5px;
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1.4rem;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+`;
+
+
 
 const Loading = styled.div`
   text-align: center;

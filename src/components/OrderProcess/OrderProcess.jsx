@@ -117,20 +117,17 @@ const OrderProcess = () => {  const navigate = useNavigate();
   };
 
   const handleLoadDefaultAddress = () => {
-    // 체크박스 상태를 반전
     setIsDefaultAddressChecked((prev) => !prev);
   
     if (!isDefaultAddressChecked) {
-      // 체크박스가 선택된 경우: 기본 배송지 불러오기
       const defaultAddress = addressList.find((addr) => addr.isDefault);
       if (defaultAddress) {
         setSelectedAddress(defaultAddress.deliveryAddressId.toString());
-        updateAddressFormData(defaultAddress); // 기본 배송지 데이터를 formData에 업데이트
+        updateAddressFormData(defaultAddress); 
       } else {
         alert("기본 배송지가 없습니다.");
       }
     } else {
-      // 체크박스가 해제된 경우: 배송지 초기화
       setSelectedAddress("");
       setFormData({
         userName: "",
@@ -199,6 +196,7 @@ const OrderProcess = () => {  const navigate = useNavigate();
     setIsAgreementChecked(!isAgreementChecked);
   };
   const confirmOrder = async () => {
+    console.log("axios.post 실행 직전");
     const currentShippingCost =
     userRole === 'MEMBER' || userRole === 'ADMIN'
       ? 3000
@@ -206,6 +204,7 @@ const OrderProcess = () => {  const navigate = useNavigate();
       ? 4000
       : 0;
     try {
+      console.log("axios.post 실행 중");
       const response = await axios.post(
         'https://api.telegro.kr/api/orders/done',
         {
@@ -213,7 +212,7 @@ const OrderProcess = () => {  const navigate = useNavigate();
             address: formData.address,
             addressDetail: formData.detailedAddress,
             zipcode: formData.postalCode,
-            recipientName: formData.name,
+            recipientName: formData.userName, 
           },
           request: formData.request,
           shoppingCost: currentShippingCost,
@@ -269,7 +268,7 @@ const OrderProcess = () => {  const navigate = useNavigate();
             address: formData.address,
             addressDetail: formData.detailedAddress,
             zipcode: formData.postalCode,
-            recipientName: formData.name,
+            recipientName: formData.userName, 
           },
           request: formData.request,
           shoppingCost: currentShippingCost,
@@ -398,12 +397,12 @@ const OrderProcess = () => {  const navigate = useNavigate();
   
     const confirmOrderResult = await confirmOrder();
   
-    if (!confirmOrderResult || typeof confirmOrderResult.orderId !== "number") {
+    if (!confirmOrderResult || typeof confirmOrderResult.orderId !== 'number') {
       alert("주문 생성에 실패했습니다. 결제를 진행할 수 없습니다.");
       return;
     }
   
-    const { orderId } = confirmOrderResult;
+    const { orderId, pointsToEarn } = confirmOrderResult;
   
     const payMethod = isCreditCardChecked
       ? "card"
@@ -429,8 +428,7 @@ const OrderProcess = () => {  const navigate = useNavigate();
         ? 3000
         : isConsignmentChecked
         ? 4000
-        : 0;
-  
+        : 0;    
     const paymentId = `payment-${new Date().getTime()}`;
     const paymentOptions = getPaymentOptions(payMethod, productInfo, paymentId, orderId);
   
@@ -439,65 +437,96 @@ const OrderProcess = () => {  const navigate = useNavigate();
   
     IMP.request_pay(paymentOptions, async (rsp) => {
       if (!rsp.error_code) {
-      try {
-        const verifyResponse = await axios.post(
-          `https://api.telegro.kr/payments/update`,
-          {
-            imp_uid: rsp.imp_uid,
-            status, 
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-              "Content-Type": "application/json",
+        try {
+          const verifyResponse = await axios.post(
+            `https://api.telegro.kr/payments/update`,
+            {
+              imp_uid: rsp.imp_uid,
+              status,
             },
-            withCredentials: true,
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+                "Content-Type": "application/json",
+              },
+              withCredentials: true,
+            }
+          );
+  
+          const { code } = verifyResponse.data;
+  
+          if (code === 20000) {
+            alert("결제가 완료되었습니다.");
+            navigate("/completeorder", {
+              state: {
+                orderDetails: {
+                  products: orderData.cartProductDTOS.map((product) => ({
+                    name: product.productName,
+                    quantity: product.quantity,
+                    coverImage: product.coverImage,
+                    totalPrice: product.totalPrice,
+                  })),
+                  total: totalProductPrice,
+                },
+                userDetails: {
+                  name: formData.userName,
+                  phone: formData.phoneNumber,
+                },
+                shippingInfo: {
+                  postalCode: formData.postalCode,
+                  address: formData.address,
+                  detailedAddress: formData.detailedAddress,
+                },
+                pointsToUse,
+                pointsToEarn: state.orderData.pointToEarn,
+                shippingCost: currentShippingCost,
+              },
+            });
+          } else {
+            console.error("결제 상태 확인 실패:", verifyResponse.data.message);
+            await CanclePayment(rsp.imp_uid);
           }
-        );
-  
-        const { code } = verifyResponse.data;
-  
-        if (code === 20000) {
-          alert("결제가 완료되었습니다.");
-          navigate("/completeorder", {
-            state: {
-              orderDetails: {
-                products: orderData.cartProductDTOS.map((product) => ({
-                  name: product.productName,
-                  quantity: product.quantity,
-                  coverImage: product.coverImage,
-                  totalPrice: product.totalPrice,
-                })),
-                total: totalProductPrice,
-              },
-              userDetails: {
-                name: formData.userName,
-                phone: formData.phoneNumber,
-              },
-              shippingInfo: {
-                postalCode: formData.postalCode,
-                address: formData.address,
-                detailedAddress: formData.detailedAddress,
-              },
-              pointsToUse,
-              pointsToEarn: state.orderData.pointToEarn,
-              shippingCost: currentShippingCost,
-            },
-          });
-        } else {
-          alert("결제 검증에 실패했습니다. 관리자에게 문의하세요.");
+        } catch (error) {
+          console.error("결제 검증 중 오류:", error);
+          await CanclePayment(rsp.imp_uid); 
         }
-      } catch (error) {
-        console.error("결제 검증 중 오류:", error);
-        alert("결제 검증에 실패했습니다. 관리자에게 문의하세요.");        }
       } else {
-        console.error("결제 실패:", rsp);
-        alert("결제가 실패했습니다. 관리자에게 문의하세요.");
+        // 결제 실패 또는 취소 처리
+        console.error("결제 실패 또는 취소:", rsp.error_msg);
+        await CanclePayment(rsp.imp_uid); 
       }
     });
-    
   };
   
+  const CanclePayment = async (imp_uid = null) => {
+    try {
+      const response = await axios.post(
+        `https://api.telegro.kr/payments/update`,
+        {
+          imp_uid: imp_uid,
+          status: "null", 
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+  
+      if (response.data.code === 20000) {
+        alert("결제가 취소되었습니다.");
+        console.log("결제 취소 데이터가 성공적으로 전송되었습니다.");
+      } else {
+        console.error("결제 취소 데이터 전송 실패:", response.data.message);
+      }
+    } catch (error) {
+      console.error("결제 취소 처리 중 오류:", error);
+    }
+  };
+  
+
   
   
   
