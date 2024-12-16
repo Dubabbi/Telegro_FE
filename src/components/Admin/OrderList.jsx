@@ -60,35 +60,28 @@ const OrderList = () => {
     
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
   };
-  const handleCancelRequest = async (orderId, impUid, reason, refundDetails) => {
-    const iamportToken = await getIamportToken();
-  
-    if (!iamportToken) {
-      alert("결제 취소를 위한 인증 토큰 발급에 실패했습니다.");
-      return;
-    }
+  const handleCancelRequest = async (orderId) => {
+    const accessToken = localStorage.getItem("token");
   
     try {
       const response = await axios.post(
-        `https://api.iamport.kr/payments/cancel`,
-        {
-          imp_uid: impUid,
-          merchant_uid: orderId,
-          reason: reason,
-          refund_holder: refundDetails.holder,
-          refund_bank: refundDetails.bankCode,
-          refund_account: refundDetails.account,
-        },
+        `https://api.telegro.kr/api/payments/cancel/${orderId}`,
+        {},
         {
           headers: {
-            Authorization: `Bearer ${iamportToken}`,
+            Authorization: `Bearer ${accessToken}`,
             "Content-Type": "application/json",
           },
         }
       );
   
-      if (response.data.code === 0) {
+      if (response.data.code === 20000) {
         alert("결제가 성공적으로 취소되었습니다.");
+        // 데이터 갱신
+        const updatedOrders = orders.map((order) =>
+          order.orderId === orderId ? { ...order, orderStatus: "CANCELED" } : order
+        );
+        setOrders(updatedOrders);
       } else {
         alert(`결제 취소 요청에 실패했습니다: ${response.data.message}`);
       }

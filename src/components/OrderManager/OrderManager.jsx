@@ -19,63 +19,34 @@ const OrderManager = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [size, setSize] = useState(7);
   const [allOrders, setAllOrders] = useState([]);
-  const [filteredOrders, setFilteredOrders] = useState([]); // 검색 결과를 저장
+  const [filteredOrders, setFilteredOrders] = useState([]);
   const pagesPerGroup = 5;
   const startPage = Math.floor((currentPage - 1) / pagesPerGroup) * pagesPerGroup + 1;
   const endPage = Math.min(startPage + pagesPerGroup - 1, totalPages);
 
-  const getIamportToken = async () => {
-    try {
-      const response = await axios.post("https://api.iamport.kr/users/getToken", {
-        imp_key: "7540428574040455",
-        imp_secret: "N3gflhvzjeD6LRRMTqOLJRCYn3HyJgoBjpkZk6JQJY8c0jPtXjS0wRVvmR5eAJLm8ezBWUnxXIoNH6j9",
-      }, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem('token')}`
-        },
-      });
 
-      if (response.data.code === 0) {
-        return response.data.response.access_token;
-      } else {
-        console.error("토큰 발급 실패:", response.data.message);
-      }
-    } catch (error) {
-      console.error("토큰 발급 중 오류 발생:", error);
-    }
-    return null;
-  };
-
-  const handleCancelRequest = async (orderId, impUid, reason, refundDetails) => {
-    const iamportToken = await getIamportToken();
-
-    if (!iamportToken) {
-      alert("결제 취소를 위한 인증 토큰 발급에 실패했습니다.");
-      return;
-    }
-
+  const handleCancelRequest = async (orderId) => {
+    const accessToken = localStorage.getItem("token");
+  
     try {
       const response = await axios.post(
-        `https://api.iamport.kr/payments/cancel`,
-        {
-          imp_uid: impUid,
-          merchant_uid: orderId,
-          reason: reason,
-          refund_holder: refundDetails.holder,
-          refund_bank: refundDetails.bankCode,
-          refund_account: refundDetails.account,
-        },
+        `https://api.telegro.kr/api/payments/cancel/${orderId}`,
+        {},
         {
           headers: {
-            Authorization: `Bearer ${iamportToken}`,
+            Authorization: `Bearer ${accessToken}`,
             "Content-Type": "application/json",
           },
         }
       );
-
-      if (response.data.code === 0) {
+  
+      if (response.data.code === 20000) {
         alert("결제가 성공적으로 취소되었습니다.");
+        // 데이터 갱신
+        const updatedOrders = orders.map((order) =>
+          order.orderId === orderId ? { ...order, orderStatus: "CANCELED" } : order
+        );
+        setOrders(updatedOrders);
       } else {
         alert(`결제 취소 요청에 실패했습니다: ${response.data.message}`);
       }
@@ -84,6 +55,7 @@ const OrderManager = () => {
       alert("결제 취소 요청 중 오류가 발생했습니다.");
     }
   };
+  
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -159,7 +131,15 @@ const OrderManager = () => {
       return acc + order.products.reduce((sum, product) => sum + product.totalPrice, 0);
     }, 0);
   };
-
+  const orderStatusMap = {
+    ORDER_CREATE: "주문 생성",
+    PAYMENT_COMPLETED: "결제 완료",
+    ORDER_COMPLETED: "주문 완료",
+    ORDER_CANCELED: "주문 취소",
+    ORDER_PENDING: "주문 대기",
+    SHIPPING: "배송 중",
+    DELIVERED: "배송 완료"
+  };
   return (
     <R.MainWrapper>
       <O.Div />
@@ -237,18 +217,16 @@ const OrderManager = () => {
                           rowSpan={order.products.length}
                         >
                           <div>
-                            <span>{order.orderStatus}</span>
-                            {order.orderStatus === "ORDER_COMPLETED" && (
+                          <span>{orderStatusMap[order.orderStatus] || order.orderStatus}</span>
+                            {(order.orderStatus === "ORDER_CREATE" ||
+                              order.orderStatus === "PAYMENT_COMPLETED" ||
+                              order.orderStatus === "ORDER_COMPLETED") && (
                               <>
                                 <br />
                                 <CancelButton
                                   onClick={(e) => {
                                     e.stopPropagation();
-                                    handleCancelRequest(order.orderId, order.impUid, '고객 요청', {
-                                      holder: '예금주 이름',
-                                      bankCode: '은행 코드',
-                                      account: '환불 계좌 번호',
-                                    });
+                                    handleCancelRequest(order.orderId);
                                   }}
                                 >
                                   취소 요청
