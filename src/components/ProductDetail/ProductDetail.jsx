@@ -7,6 +7,7 @@ import img from './example.svg';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import Modal from 'react-modal';
+import store from '../../store';
 
 const ProductDetail = () => {
   const navigate = useNavigate();
@@ -16,9 +17,32 @@ const ProductDetail = () => {
   const [quantity, setQuantity] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [activeTab, setActiveTab] = useState('description'); // Default tab
+  const [activeTab, setActiveTab] = useState('description'); 
   const { productId } = useParams();
-
+  const apiClient = axios.create({
+    baseURL: 'https://api.telegro.kr', 
+    timeout: 5000,
+  });
+  
+  // 응답 인터셉터 설정
+  apiClient.interceptors.response.use(
+    (response) => {
+      return response;
+    },
+    (error) => {
+      const { response } = error;
+  
+      if (response && (response.status === 401 || response.data.code === 40100)) {
+        const state = store.getState();
+        const userRole = state.auth.userRole;
+  
+        if (!userRole) {
+          alert('먼저 로그인을 해주세요.');
+        }
+      }
+      return Promise.reject(error);
+    }
+  );
   const handleInputOptionChange = (e) => {
     setInputOption(e.target.value);
   };
@@ -30,8 +54,8 @@ const ProductDetail = () => {
     }
     try {
       const accessToken = localStorage.getItem('token');
-      const response = await axios.post(
-        `https://api.telegro.kr/api/carts/${productId}`,
+      const response = await apiClient.post(
+        `/api/carts/${productId}`,
         {
           selectOption: selectedOption,
           quantity: quantity,
@@ -48,8 +72,10 @@ const ProductDetail = () => {
         alert('장바구니에 담기 실패: ' + response.data.message);
       }
     } catch (error) {
+      if (error.status === 401){
+        alert('로그인을 먼저 진행해주세요.');
+      }
       console.error('Error adding to cart:', error);
-      alert('장바구니에 물건을 담는 중 오류가 발생했습니다.');
     }
   };
 
@@ -62,8 +88,8 @@ const ProductDetail = () => {
     try {
       const accessToken = localStorage.getItem("token");
   
-      const cartResponse = await axios.post(
-        `https://api.telegro.kr/api/carts/${productId}`,
+      const cartResponse = await apiClient.post(
+        `/api/carts/${productId}`,
         {
           selectOption: selectedOption,
           quantity: quantity,
@@ -78,8 +104,8 @@ const ProductDetail = () => {
         const cartId = cartResponse.data.data.id; 
         console.log("Cart added successfully:", cartId);
   
-        const orderResponse = await axios.post(
-          `https://api.telegro.kr/api/orders/create`,
+        const orderResponse = await apiClient.post(
+          `/api/orders/create`,
           [cartId],
           {
             headers: { Authorization: `Bearer ${accessToken}` },
@@ -113,8 +139,10 @@ const ProductDetail = () => {
         alert("장바구니에 담기 실패: " + cartResponse.data.message);
       }
     } catch (error) {
-      console.error("Error handling purchase:", error);
-      alert("구매 처리 중 오류가 발생했습니다.");
+      if (error.status === 401){
+        alert('로그인을 먼저 진행해주세요.');
+      }
+      console.error('Error adding to cart:', error);
     }
   };
   
