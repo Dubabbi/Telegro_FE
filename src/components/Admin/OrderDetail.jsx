@@ -151,7 +151,13 @@ const OrderDetail = () => {
             </Details>
           </Section>
         )}
-
+        <Separator />
+          <Section>
+            <SectionTitle>배송 요청사항</SectionTitle>
+            <Details>
+              <DetailItem>{orderData.request  || '요청사항이 없습니다.'}</DetailItem>
+            </Details>
+          </Section>
         <Separator />
 
         <Section>
@@ -164,15 +170,6 @@ const OrderDetail = () => {
             <DetailItem>결제수단: {paymentMethodMap[orderData.paymentMethod] || orderData.paymentMethod?.paymentMethod}</DetailItem>
           </Details>
         </Section>
-        <Separator />
-        {orderData.request && (
-          <Section>
-            <SectionTitle>배송 요청사항</SectionTitle>
-            <Details>
-              <DetailItem>{orderData.request}</DetailItem>
-            </Details>
-          </Section>
-        )}
         <Separator />
         <ReceiptButton onClick={handleViewReceipt}>매출전표 보기</ReceiptButton>
         {orderData.cash_receipt_url && (

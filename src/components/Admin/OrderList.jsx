@@ -77,7 +77,6 @@ const OrderList = () => {
   
       if (response.data.code === 20000) {
         alert("결제가 성공적으로 취소되었습니다.");
-        // 데이터 갱신
         const updatedOrders = orders.map((order) =>
           order.orderId === orderId ? { ...order, orderStatus: "CANCELED" } : order
         );

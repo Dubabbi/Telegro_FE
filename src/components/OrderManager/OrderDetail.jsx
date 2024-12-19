@@ -142,7 +142,13 @@ const OrderDetail = () => {
           </Section>
         )}
         <Separator />
-
+          <Section>
+            <SectionTitle>배송 요청사항</SectionTitle>
+            <Details>
+              <DetailItem>{orderData.request  || '요청사항이 없습니다.'}</DetailItem>
+            </Details>
+          </Section>
+        <Separator />
         <Section>
           <SectionTitle>주문 금액 상세</SectionTitle>
           <Details>
@@ -153,14 +159,6 @@ const OrderDetail = () => {
             <DetailItem>결제수단: {paymentMethodMap[orderData.paymentMethod?.paymentMethod] || orderData.paymentMethod?.paymentMethod}</DetailItem>
           </Details>
         </Section>
-        {orderData.request && (
-          <Section>
-            <SectionTitle>배송 요청사항</SectionTitle>
-            <Details>
-              <DetailItem>{orderData.request}</DetailItem>
-            </Details>
-          </Section>
-        )}
         <Separator />
         <div style={{display: 'flex', justifyContent: 'flex-start', flexDirection: 'row', gap: '10px'}}>
         <ReceiptButton onClick={handleViewReceipt}>매출전표 보기</ReceiptButton>
