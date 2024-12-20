@@ -161,8 +161,7 @@ const ProductEdit = () => {
 
   const handleUpdateProduct = async () => {
     const updatedProduct = {};
-    
-    // 가격 정보 업데이트 시 숫자로 변환하여 비교
+  
     const updateIfChanged = (key, newValue, oldValue) => {
       const newNum = parseFloat(newValue);
       const oldNum = parseFloat(oldValue);
@@ -171,55 +170,64 @@ const ProductEdit = () => {
       }
     };
   
+    const updateStringIfChanged = (key, newValue, oldValue) => {
+      if (newValue !== oldValue) {
+        updatedProduct[key] = newValue;
+      }
+    };
+  
     updateIfChanged('priceBussiness', product.priceBussiness, originalProduct.priceBussiness);
     updateIfChanged('priceBest', product.priceBest, originalProduct.priceBest);
     updateIfChanged('priceDealer', product.priceDealer, originalProduct.priceDealer);
     updateIfChanged('priceCustomer', product.priceCustomer, originalProduct.priceCustomer);
   
-    // 다른 필드에 대해서도 동일한 로직을 적용
-    if (product.productName !== originalProduct.productName) {
-      updatedProduct.productName = product.productName;
-    }
-    if (product.category !== originalProduct.category) {
-      updatedProduct.category = product.category;
-    }
-    if (product.options.join(',') !== originalProduct.options.join(',')) {
-      updatedProduct.options = product.options;
-    }
-    if (product.content !== originalProduct.content) {
-      updatedProduct.content = product.content; // 상품 설명 추가
-    }
-    if (product.pictures !== originalProduct.pictures) {
-      updatedProduct.pictures = product.pictures; // 이미지 업데이트
-    }
-    if (product.coverImage !== originalProduct.coverImage) {
-      updatedProduct.coverImage = product.coverImage; // 대표 이미지 업데이트
-    }
-  
-    // 수정된 부분이 없으면 업데이트하지 않음
-    if (Object.keys(updatedProduct).length === 0) {
-      alert('수정된 내용이 없습니다.');
-      return;
-    }
-  
-    try {
-      const response = await axios.patch(
-        `https://api.telegro.kr/api/products/${productId}`,
-        updatedProduct,
-        {
-          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-        }
-      );
-  
-      if (response.status === 200) {
-        alert('상품이 성공적으로 수정되었습니다.');
-        navigate(`/admin/headset`);
+    updateStringIfChanged('productModel', product.productModel, originalProduct.productModel);
+    updateStringIfChanged('productName', product.productName, originalProduct.productName);
+    updateStringIfChanged('category', product.category, originalProduct.category);
+     
+      if (product.productName !== originalProduct.productName) {
+        updatedProduct.productName = product.productName;
       }
-    } catch (error) {
-      console.error('Error while updating product:', error);
-      alert('상품 수정에 실패했습니다.');
-    }
-  };
+      if (product.category !== originalProduct.category) {
+        updatedProduct.category = product.category;
+      }
+      if (product.options.join(',') !== originalProduct.options.join(',')) {
+        updatedProduct.options = product.options;
+      }
+      if (product.content !== originalProduct.content) {
+        updatedProduct.content = product.content;
+      }
+      if (product.pictures !== originalProduct.pictures) {
+        updatedProduct.pictures = product.pictures;
+      }
+      if (product.coverImage !== originalProduct.coverImage) {
+        updatedProduct.coverImage = product.coverImage; 
+      }
+    
+      if (Object.keys(updatedProduct).length === 0) {
+        alert('수정된 내용이 없습니다.');
+        return;
+      }
+    
+      try {
+        const response = await axios.patch(
+          `https://api.telegro.kr/api/products/${productId}`,
+          updatedProduct,
+          {
+            headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+          }
+        );
+    
+        if (response.status === 200) {
+          alert('상품이 성공적으로 수정되었습니다.');
+          navigate(`/admin/headset`);
+        }
+      } catch (error) {
+        console.error('Error while updating product:', error);
+        alert('상품 수정에 실패했습니다.');
+      }
+    };
+  
 
   if (isLoading) {
     return <div>로딩 중...</div>;
@@ -233,7 +241,6 @@ const ProductEdit = () => {
     }
   
     try {
-      // 백엔드에서 프리사인 URL 가져오기
       const response = await axios.post(`https://api.telegro.kr/api/file?prefix=product`, {
         metadata: {
           description: "새로운 이미지 설명",
@@ -248,14 +255,12 @@ const ProductEdit = () => {
   
       const presignedUrl = response.data.data.url;
   
-      // 이미지 업로드
       await axios.put(presignedUrl, blob, {
         headers: {
           'Content-Type': blob.type,
         }
       });
   
-      // 업로드 완료 후 콜백 호출
       callback(presignedUrl.split('?')[0], 'Image');
     } catch (error) {
       console.error('Image upload failed:', error.response ? error.response.data : error.message);
