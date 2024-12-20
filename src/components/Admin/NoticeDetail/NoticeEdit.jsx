@@ -99,7 +99,10 @@ const NoticeEdit = () => {
       console.error('파일 업로드 중 오류가 발생했습니다:', error);
     }
   };
-
+  const handleDeleteExistingFile = (indexToDelete) => {
+    setNoticeFiles((prevFiles) => prevFiles.filter((_, index) => index !== indexToDelete));
+  };
+  
   const addImageBlobHook = async (blob, callback) => {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -195,16 +198,24 @@ const NoticeEdit = () => {
               multiple
               onChange={handleAddFile}
             />
-            {fileNames.length > 0 && (
-              <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', gap: '20px', alignItems: 'center'}}>
-                {fileNames.map((fileName, index) => (
-                  <li key={index}>
-                    {fileName}
-                    <button style={{color: '#ff0000', fontSize: '1.2rem', marginLeft: '2px'}} onClick={() => handleDeleteFile(index)}>X</button>
-                  </li>
-                ))}
-              </div>
-            )}
+{noticeFiles.length > 0 && (
+  <div style={{ display: 'flex', flexDirection: 'row', gap: '20px', alignItems: 'center', flexWrap: 'wrap' }}>
+    {noticeFiles.map((file, index) => (
+      <div key={index} style={{ display: 'flex', alignItems: 'center' }}>
+        <a href={file.fileUrl} download={file.fileName} target="_blank" rel="noopener noreferrer">
+          {file.fileName}
+        </a>
+        <button
+          style={{ color: '#ff0000', fontSize: '1.2rem', marginLeft: '10px' }}
+          onClick={() => handleDeleteExistingFile(index)}
+        >
+          X
+        </button>
+      </div>
+    ))}
+  </div>
+)}
+
 
             <D.Label htmlFor="content">내용 *</D.Label>
             <div>
