@@ -17,7 +17,7 @@ const OrderManager = () => {
   const [endDate, setEndDate] = useState('');
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const [size, setSize] = useState(7);
+  const [size, setSize] = useState(10);
   const [allOrders, setAllOrders] = useState([]);
   const [filteredOrders, setFilteredOrders] = useState([]);
   const pagesPerGroup = 5;
