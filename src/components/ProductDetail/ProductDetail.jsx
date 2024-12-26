@@ -55,7 +55,7 @@ const ProductDetail = () => {
     try {
       const accessToken = localStorage.getItem('token');
       const response = await apiClient.post(
-        `/api/carts/${productId}`,
+        `https://api.telegro.kr/api/carts/${productId}`,
         {
           selectOption: selectedOption,
           quantity: quantity,
@@ -89,7 +89,7 @@ const ProductDetail = () => {
       const accessToken = localStorage.getItem("token");
   
       const cartResponse = await apiClient.post(
-        `/api/carts/${productId}`,
+        `https://api.telegro.kr/api/carts/${productId}`,
         {
           selectOption: selectedOption,
           quantity: quantity,
