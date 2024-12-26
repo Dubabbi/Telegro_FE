@@ -67,7 +67,7 @@ const OrderProcess = () => {  const navigate = useNavigate();
   }, [orderData, navigate]);
 
   useEffect(() => {
-    const fetchAddressList = async () => {
+    const fetchUserData = async () => {
       try {
         const response = await axios.get("https://api.telegro.kr/api/users/my", {
           headers: {
@@ -76,8 +76,9 @@ const OrderProcess = () => {  const navigate = useNavigate();
         });
   
         if (response.data.code === 20000) {
-          const addresses = response.data.data.addressList || [];
-          setAddressList(addresses);
+          const { point, addressList } = response.data.data;
+          setPoint(point); 
+          setAddressList(addressList || []);
           setSelectedAddress(""); // 초기 선택된 주소 없음
           setFormData({
             userName: "",
@@ -89,12 +90,13 @@ const OrderProcess = () => {  const navigate = useNavigate();
           });
         }
       } catch (error) {
-        console.error("Error fetching address list:", error);
+        console.error("Error fetching user data:", error);
       }
     };
   
-    fetchAddressList();
+    fetchUserData();
   }, []);
+  
   
 
   const updateAddressFormData = (addressData) => {
@@ -172,26 +174,28 @@ const OrderProcess = () => {  const navigate = useNavigate();
   function formatPrice(price) {
     return new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(price);
   }
-  const handlePointsToUseChange = (e) => {
-    const inputPoints = parseInt(e.target.value || '0', 10); 
-    const maxUsablePoints = Math.min(point, totalProductPrice + shippingCost);
+// 포인트 입력 핸들러
+const handlePointsToUseChange = (e) => {
+  const inputPoints = parseInt(e.target.value || '0', 10); 
+  const maxUsablePoints = Math.min(point, totalProductPrice + shippingCost);
+
+  if (inputPoints < 0 || inputPoints > maxUsablePoints) {
+    alert(`사용 가능한 적립금 범위는 0 ~ ${maxUsablePoints}p 입니다.`);
+    setPointsToUse(Math.min(pointsToUse, maxUsablePoints));
+    return;
+  }
+
+  setPointsToUse(inputPoints);
+};
+
+// 모든 포인트 사용
+const handleUseAllPoints = () => {
+  const maxUsablePoints = Math.min(point, totalProductPrice);
+  setPointsToUse(maxUsablePoints); 
+};
+
   
-    if (inputPoints < 0 || inputPoints > maxUsablePoints) {
-      alert(`사용 가능한 적립금 범위는 0 ~ ${maxUsablePoints}p 입니다.`);
-      setPointsToUse(Math.min(pointsToUse, maxUsablePoints));
-      return;
-    }
-  
-    setPointsToUse(inputPoints);
-  };
-  
-  
-  const handleUseAllPoints = () => {
-    const maxUsablePoints = Math.min(point, totalProductPrice + shippingCost);
-    setPointsToUse(maxUsablePoints); 
-  };
-  
-  
+
   const handleAgreementChange = () => {
     setIsAgreementChecked(!isAgreementChecked);
   };
