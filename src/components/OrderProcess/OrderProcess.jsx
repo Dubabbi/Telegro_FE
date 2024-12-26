@@ -196,7 +196,6 @@ const OrderProcess = () => {  const navigate = useNavigate();
     setIsAgreementChecked(!isAgreementChecked);
   };
   const confirmOrder = async () => {
-    console.log("axios.post 실행 직전");
     const currentShippingCost =
     userRole === 'MEMBER' || userRole === 'ADMIN'
       ? 3000
@@ -204,7 +203,6 @@ const OrderProcess = () => {  const navigate = useNavigate();
       ? 4000
       : 0;
     try {
-      console.log("axios.post 실행 중");
       const response = await axios.post(
         'https://api.telegro.kr/api/orders/done',
         {
@@ -376,6 +374,27 @@ const OrderProcess = () => {  const navigate = useNavigate();
   
   
   const handlePayment = async () => {
+    if (!formData.userName.trim()) {
+      alert("받는 분 이름을 입력해주세요.");
+      return;
+    }
+    if (!formData.phoneNumber.trim()) {
+      alert("전화번호를 입력해주세요.");
+      return;
+    }
+    if (!formData.address.trim()) {
+      alert("주소를 입력해주세요.");
+      return;
+    }
+    if (!formData.postalCode.trim()) {
+      alert("우편번호를 입력해주세요.");
+      return;
+    }
+    if (!formData.detailedAddress.trim()) {
+      alert("상세 주소를 입력해주세요.");
+      return;
+    }
+    
     if (!isAgreementChecked) {
       alert("구매 조건에 동의하셔야 합니다.");
       return;
@@ -439,11 +458,7 @@ const OrderProcess = () => {  const navigate = useNavigate();
       if (!rsp.error_code) {
         try {
           const verifyResponse = await axios.post(
-            `https://api.telegro.kr/payments/update`,
-            {
-              imp_uid: rsp.imp_uid,
-              status,
-            },
+            `https://api.telegro.kr/api/payments/${rsp.imp_uid}`,{},
             {
               headers: {
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -491,40 +506,43 @@ const OrderProcess = () => {  const navigate = useNavigate();
           await CanclePayment(rsp.imp_uid); 
         }
       } else {
-        // 결제 실패 또는 취소 처리
         console.error("결제 실패 또는 취소:", rsp.error_msg);
+        alert(`결제 실패: ${rsp.error_msg}`);
         await CanclePayment(rsp.imp_uid); 
       }
-    });
-  };
-  
-  const CanclePayment = async (imp_uid = null) => {
-    try {
-      const response = await axios.post(
-        `https://api.telegro.kr/payments/update`,
-        {
-          imp_uid: imp_uid,
-          status: "null", 
+    })};
+
+const CanclePayment = async (imp_uid = null) => {
+  if (!imp_uid) {
+    console.error("유효하지 않은 imp_uid입니다.");
+    return;
+  }
+
+  try {
+    const response = await axios.post(
+      `https://api.telegro.kr/api/payments/${imp_uid}`, 
+      {
+        status: "null", 
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "application/json",
         },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-            "Content-Type": "application/json",
-          },
-          withCredentials: true,
-        }
-      );
-  
-      if (response.data.code === 20000) {
-        alert("결제가 취소되었습니다.");
-        console.log("결제 취소 데이터가 성공적으로 전송되었습니다.");
-      } else {
-        console.error("결제 취소 데이터 전송 실패:", response.data.message);
+        withCredentials: true,
       }
-    } catch (error) {
-      console.error("결제 취소 처리 중 오류:", error);
+    );
+
+    if (response.data.code === 20000) {
+      alert("결제가 취소되었습니다.");
+      console.log("결제 취소 데이터가 성공적으로 전송되었습니다.");
+    } else {
+      console.error("결제 취소 데이터 전송 실패:", response.data.message);
     }
-  };
+  } catch (error) {
+    console.error("결제 취소 처리 중 오류:", error);
+  }
+};
   
 
   
