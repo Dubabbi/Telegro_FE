@@ -144,12 +144,36 @@ const OrderList = () => {
     applySearchFilter();
   }, [searchValue, orders]);
 
-  const calculateTotalAmount = (allOrders) => {
-    return allOrders.reduce((acc, order) => {
-      return acc + order.products.reduce((sum, product) => sum + product.totalPrice, 0);
+  const calculateTotalAmount = (orders) => {
+    return orders.reduce((acc, order) => {
+      const productTotal = order.products.reduce((sum, product) => sum + product.totalPrice, 0);
+      const shoppingCost = order.shoppingCost || 0;
+      return acc + productTotal + shoppingCost;
     }, 0);
   };
+  useEffect(() => {
+    const fetchAllOrders = async () => {
+      try {
+        const accessToken = localStorage.getItem('token');
+        const response = await axios.get(`https://api.telegro.kr/api/orders`, {
+          params: {
+            startDate: startDate || undefined,
+            endDate: endDate || undefined,
+            size: 1000, // 모든 주문 가져오기
+          },
+          headers: { Authorization: `Bearer ${accessToken}` },
+        });
   
+        const { data } = response.data;
+        setAllOrders(data.orders || []);
+      } catch (error) {
+        console.error('전체 주문 목록 불러오기 실패:', error);
+        setAllOrders([]);
+      }
+    };
+  
+    fetchAllOrders();
+  }, [startDate, endDate]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -299,7 +323,7 @@ const OrderList = () => {
               <TableCell>옵션 선택</TableCell>
               <TableCell>수량</TableCell>
               <TableCell>단가</TableCell>
-              <TableCell>총 금액(적립금)</TableCell>
+              <TableCell>총 금액</TableCell>
               <TableCell>주문정보</TableCell>
               <TableCell>주문자 정보</TableCell>
               <TableCell>주문 상태</TableCell>
@@ -320,8 +344,8 @@ const OrderList = () => {
                   </TableCell>
                   <TableCell>{product.selectOption || 'N/A'}</TableCell>
                   <TableCell>{product.quantity}</TableCell>
-                  <TableCell>{`${product.productPrice}원`}</TableCell>
-                  <TableCell>{`${product.totalPrice}원 (${product.point || 0}원)`}</TableCell>
+                  <TableCell>{`${(product.productPrice).toLocaleString()}원`}</TableCell>
+                  <TableCell>{`${(product.totalPrice + (productIndex === 0 ? order.shoppingCost : 0)).toLocaleString()}원`}</TableCell>
                   {productIndex === 0 && (
                     <>
                       <TableCell rowSpan={order.products.length}>{formatDate(order.createdAt)}</TableCell>
