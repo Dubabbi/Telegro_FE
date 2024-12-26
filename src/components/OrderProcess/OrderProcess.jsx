@@ -478,6 +478,7 @@ const handleUseAllPoints = () => {
             alert("결제가 완료되었습니다.");
             navigate("/completeorder", {
               state: {
+                orderId,
                 orderDetails: {
                   products: orderData.cartProductDTOS.map((product) => ({
                     name: product.productName,

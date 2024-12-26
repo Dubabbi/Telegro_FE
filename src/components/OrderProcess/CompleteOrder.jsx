@@ -69,7 +69,7 @@ const CompleteOrder = () => {
       <O.InfoBox>
         <div>
           <h4>이름</h4>
-          <p>{userDetails.recipientName}</p>
+          <p>{userDetails.name}</p>
           <h4>휴대전화번호</h4>
           <p>{userDetails.phone}</p>
           <h4>배송지 주소</h4>
