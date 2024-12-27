@@ -90,7 +90,7 @@ const OrderManager = () => {
             startDate: startDate || undefined,
             endDate: endDate || undefined,
             page: currentPage - 1,
-            size,
+            size: 10000,
           },
           headers: { Authorization: `Bearer ${accessToken}` },
         });
@@ -134,7 +134,7 @@ const OrderManager = () => {
           params: {
             q: searchValue,
             filterBy: 'product',
-            size,
+            size: 10000,
           },
           headers: { Authorization: `Bearer ${accessToken}` },
         });
@@ -243,7 +243,9 @@ const OrderManager = () => {
         </TableHead>
         <tbody>
         {(searchValue ? filteredOrders : orders).length > 0 ? (
-          (searchValue ? filteredOrders : orders).map((order, index) => (
+          (searchValue ? filteredOrders : orders)
+          .filter((order) => order.products && order.products.length > 0)
+          .map((order, index) => (
             <React.Fragment key={order.orderId}>
               {order.products?.length > 0 ? (
                 order.products.map((product, productIndex) => (

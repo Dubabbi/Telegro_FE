@@ -159,7 +159,7 @@ const OrderList = () => {
           params: {
             startDate: startDate || undefined,
             endDate: endDate || undefined,
-            size: 1000, // 모든 주문 가져오기
+            size: 10000, // 모든 주문 가져오기
           },
           headers: { Authorization: `Bearer ${accessToken}` },
         });
@@ -204,7 +204,7 @@ const OrderList = () => {
           params: {
             q: searchValue,
             filterBy: searchCategory === 'productName' ? 'product' : 'user',
-            size,
+            size: 10000,
           },
           headers: { Authorization: `Bearer ${accessToken}` },
         });
