@@ -349,7 +349,7 @@ const handleUseAllPoints = () => {
       name: productInfo.name.trim(),
       buyer_name: formData.userName,
       buyer_tel: formData.phoneNumber,
-      buyer_email: formData.email || "user@example.com",
+      buyer_email: userDetails.userEmail || "user@example.com",
       buyer_addr: formData.address,
       buyer_postcode: formData.postalCode,
       m_redirect_url: "https://www.telegro.kr/completeorder",
