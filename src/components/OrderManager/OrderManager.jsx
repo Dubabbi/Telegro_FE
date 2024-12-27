@@ -124,6 +124,34 @@ const OrderManager = () => {
     applySearchFilter();
   }, [searchValue, orders]);
 
+  useEffect(() => {
+    const fetchSearchOrders = async () => {
+      if (!searchValue) return; // 검색어가 없으면 API 호출 안 함
+  
+      try {
+        const accessToken = localStorage.getItem('token');
+        const response = await axios.get('https://api.telegro.kr/api/orders', {
+          params: {
+            q: searchValue,
+            filterBy: 'product',
+            size,
+          },
+          headers: { Authorization: `Bearer ${accessToken}` },
+        });
+  
+        const { data: searchData } = response.data;
+        setFilteredOrders(searchData.orders || []);
+        setTotalPages(searchData.totalPage || 0);
+      } catch (error) {
+        console.error('Error fetching search orders:', error);
+        setFilteredOrders([]);
+      }
+    };
+  
+    fetchSearchOrders();
+  }, [searchValue , size]);
+
+  
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
   };
@@ -214,14 +242,15 @@ const OrderManager = () => {
           </tr>
         </TableHead>
         <tbody>
-          {filteredOrders.length > 0 ? (
-            filteredOrders.map((order, index) => (
-              <React.Fragment key={order.orderId}>
-                {order.products.map((product, productIndex) => (
+        {(searchValue ? filteredOrders : orders).length > 0 ? (
+          (searchValue ? filteredOrders : orders).map((order, index) => (
+            <React.Fragment key={order.orderId}>
+              {order.products?.length > 0 ? (
+                order.products.map((product, productIndex) => (
                   <TableRow
                     onClick={() => navigate(`/ordermanager/${order.orderId}`)}
                     className={`order-${order.orderId} ${productIndex === 0 ? 'highlight-row' : ''}`}
-                    key={product.id}
+                    key={product.id || `${order.orderId}-${productIndex}`}
                   >
                     {productIndex === 0 && (
                       <TableCell rowSpan={order.products.length}>
@@ -229,12 +258,12 @@ const OrderManager = () => {
                       </TableCell>
                     )}
                     <TableCell>
-                      <p>{product.productName}</p>
+                      <p>{product.productName || '상품 정보 없음'}</p>
                     </TableCell>
                     <TableCell>{product.selectOption || 'N/A'}</TableCell>
-                    <TableCell>{product.quantity}</TableCell>
-                    <TableCell>{`${(product.productPrice).toLocaleString()}원`}</TableCell>
-                    <TableCell>{`${(product.totalPrice + (productIndex === 0 ? order.shoppingCost : 0)).toLocaleString()}원`}</TableCell>
+                    <TableCell>{product.quantity || 0}</TableCell>
+                    <TableCell>{`${(product.productPrice || 0).toLocaleString()}원`}</TableCell>
+                    <TableCell>{`${(product.totalPrice || 0).toLocaleString()}원`}</TableCell>
                     {productIndex === 0 && (
                       <>
                         <TableCell rowSpan={order.products.length}>{formatDate(order.createdAt)}</TableCell>
@@ -243,7 +272,7 @@ const OrderManager = () => {
                           rowSpan={order.products.length}
                         >
                           <div>
-                          <span>{orderStatusMap[order.orderStatus] || order.orderStatus}</span>
+                            <span>{orderStatusMap[order.orderStatus] || order.orderStatus}</span>
                             {(order.orderStatus === "ORDER_CREATE" ||
                               order.orderStatus === "PAYMENT_COMPLETED" ||
                               order.orderStatus === "ORDER_COMPLETED") && (
@@ -264,15 +293,20 @@ const OrderManager = () => {
                       </>
                     )}
                   </TableRow>
-                ))}
-              </React.Fragment>
-            ))
-          ) : (
-            <tr>
-              <TableCell colSpan={8}>주문 데이터가 없습니다.</TableCell>
-            </tr>
-          )}
-        </tbody>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={8}>상품 정보가 없습니다.</TableCell>
+                </TableRow>
+              )}
+            </React.Fragment>
+          ))
+        ) : (
+          <tr>
+            <TableCell colSpan={8}>주문 데이터가 없습니다.</TableCell>
+          </tr>
+        )}
+      </tbody>
       </OrderTable>
       <R.TotalAmount>
         총 주문 금액: ₩{calculateTotalAmount(allOrders).toLocaleString()}

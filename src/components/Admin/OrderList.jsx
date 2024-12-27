@@ -194,27 +194,33 @@ const OrderList = () => {
       return orderDate >= start && orderDate <= end;
     });
   };
+  useEffect(() => {
+    const fetchSearchOrders = async () => {
+      if (!searchValue) return; // 검색어가 없으면 API 호출 안 함
+  
+      try {
+        const accessToken = localStorage.getItem('token');
+        const response = await axios.get('https://api.telegro.kr/api/orders', {
+          params: {
+            q: searchValue,
+            filterBy: searchCategory === 'productName' ? 'product' : 'user',
+            size,
+          },
+          headers: { Authorization: `Bearer ${accessToken}` },
+        });
+  
+        const { data: searchData } = response.data;
+        setFilteredOrders(searchData.orders || []);
+        setTotalPages(searchData.totalPage || 0);
+      } catch (error) {
+        console.error('Error fetching search orders:', error);
+        setFilteredOrders([]);
+      }
+    };
+  
+    fetchSearchOrders();
+  }, [searchValue, size]);
 
-  const filterOrdersBySearch = (ordersToFilter) => {
-    if (!searchValue.trim()) return ordersToFilter;
-  
-    return ordersToFilter.filter(order => {
-      if (searchCategory === 'customer') {
-        // 주문자 정보로 검색
-        return order.userInfo.username.toLowerCase().includes(searchValue.toLowerCase());
-      }
-  
-      if (searchCategory === 'productName') {
-        // 상품명으로 검색
-        return order.products.some(product =>
-          product.productName.toLowerCase().includes(searchValue.toLowerCase()) ||
-          product.selectOption?.toLowerCase().includes(searchValue.toLowerCase())
-        );
-      }
-  
-      return true;
-    });
-  };
   
 
   const handleStatusChange = async (orderId, newStatus) => {
