@@ -11,6 +11,8 @@ import * as XLSX from 'xlsx';
 
 const OrderList = () => {
   const navigate = useNavigate();
+  const [isSearching, setIsSearching] = useState(false);
+  const [totalPrice, setTotalPrice] = useState(0);
   const [orders, setOrders] = useState([]);
   const [filteredOrders, setFilteredOrders] = useState([]); 
   const [searchValue, setSearchValue] = useState('');
@@ -144,13 +146,6 @@ const OrderList = () => {
     applySearchFilter();
   }, [searchValue, orders]);
 
-  const calculateTotalAmount = (orders) => {
-    return orders.reduce((acc, order) => {
-      const productTotal = order.products.reduce((sum, product) => sum + product.totalPrice, 0);
-      const shoppingCost = order.shoppingCost || 0;
-      return acc + productTotal + shoppingCost;
-    }, 0);
-  };
   useEffect(() => {
     const fetchAllOrders = async () => {
       try {
@@ -160,12 +155,14 @@ const OrderList = () => {
             startDate: startDate || undefined,
             endDate: endDate || undefined,
             size: 10000, // 모든 주문 가져오기
+            filterBy: searchCategory === 'productName' ? 'product' : 'user',
           },
           headers: { Authorization: `Bearer ${accessToken}` },
         });
   
         const { data } = response.data;
         setAllOrders(data.orders || []);
+        setTotalPrice(data.totalPrice);
       } catch (error) {
         console.error('전체 주문 목록 불러오기 실패:', error);
         setAllOrders([]);
@@ -175,43 +172,31 @@ const OrderList = () => {
     fetchAllOrders();
   }, [startDate, endDate]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("검색어:", searchValue);
-    setSearchValue('');
-  };
- 
-
-  const filterOrdersByDate = () => {
-    if (!startDate || !endDate) {
-      return orders; 
-    }
-
-    return orders.filter(order => {
-      const orderDate = new Date(order.orderDate);
-      const start = new Date(startDate);
-      const end = new Date(endDate);
-      return orderDate >= start && orderDate <= end;
-    });
-  };
   useEffect(() => {
     const fetchSearchOrders = async () => {
-      if (!searchValue) return; // 검색어가 없으면 API 호출 안 함
+      if (!searchValue) {
+        setIsSearching(false); // 검색 상태 해제
+        return;
+      }
   
+      setIsSearching(true); // 검색 상태 활성화
       try {
         const accessToken = localStorage.getItem('token');
         const response = await axios.get('https://api.telegro.kr/api/orders', {
           params: {
             q: searchValue,
             filterBy: searchCategory === 'productName' ? 'product' : 'user',
-            size: 10000,
+            size: 10000, // 검색 시 모든 결과 가져오기
+            startDate: startDate || undefined,
+            endDate: endDate || undefined,
           },
           headers: { Authorization: `Bearer ${accessToken}` },
         });
   
         const { data: searchData } = response.data;
         setFilteredOrders(searchData.orders || []);
-        setTotalPages(searchData.totalPage || 0);
+        setTotalPages(1); // 페이지네이션 무시
+        setTotalPrice(searchData.totalPrice);
       } catch (error) {
         console.error('Error fetching search orders:', error);
         setFilteredOrders([]);
@@ -219,8 +204,45 @@ const OrderList = () => {
     };
   
     fetchSearchOrders();
-  }, [searchValue, size]);
+  }, [searchValue, startDate, endDate]);
 
+  useEffect(() => {
+    const fetchSearchOrders = async () => {
+      // 날짜나 검색어 둘 중 하나라도 있을 경우 API 호출
+      if (!searchValue && !startDate && !endDate) {
+        setIsSearching(false); 
+        return;
+      }
+  
+      setIsSearching(true);
+      try {
+        const accessToken = localStorage.getItem('token');
+        const filterBy = searchCategory === 'productName' ? 'product' : 'user';
+  
+        const response = await axios.get('https://api.telegro.kr/api/orders', {
+          params: {
+            q: searchValue || undefined,
+            filterBy, 
+            size: 10000,
+            startDate: startDate || undefined,
+            endDate: endDate || undefined,
+          },
+          headers: { Authorization: `Bearer ${accessToken}` },
+        });
+  
+        const { data: searchData } = response.data;
+        setFilteredOrders(searchData.orders || []);
+        setTotalPages(1); // 검색 시 페이지네이션 무시
+      } catch (error) {
+        console.error('Error fetching search orders:', error);
+        setFilteredOrders([]);
+      } finally {
+        setIsSearching(false); 
+      }
+    };
+  
+    fetchSearchOrders();
+  }, [searchValue, searchCategory, startDate, endDate]);
   
 
   const handleStatusChange = async (orderId, newStatus) => {
@@ -398,7 +420,7 @@ const OrderList = () => {
           </tbody>
         </OrderTable>
         <TotalAmount>
-          총 주문 금액: ₩{calculateTotalAmount(allOrders).toLocaleString()}
+          총 주문 금액: ₩{totalPrice.toLocaleString()}
         </TotalAmount>
         <StyledButton onClick={exportToExcel} style={{ padding: '10px', margin: '10px', backgroundColor: '#4CAF50', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
           <FaFileExcel style={{ marginRight: "8px" }} /> 엑셀 다운로드

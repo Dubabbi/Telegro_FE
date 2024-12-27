@@ -11,11 +11,13 @@ import Form from 'react-bootstrap/Form';
 
 const OrderManager = () => {
   const navigate = useNavigate();
+  const [isSearching, setIsSearching] = useState(false);
   const [orders, setOrders] = useState([]);
   const [searchValue, setSearchValue] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [totalPages, setTotalPages] = useState(0);
+  const [totalPrice, setTotalPrice] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [size, setSize] = useState(10);
   const [allOrders, setAllOrders] = useState([]);
@@ -64,13 +66,14 @@ const OrderManager = () => {
           params: {
             startDate: startDate || undefined,
             endDate: endDate || undefined,
-            size: 1000, // 모든 주문 가져오기
+            size: 10000, // 모든 주문 가져오기
           },
           headers: { Authorization: `Bearer ${accessToken}` },
         });
   
         const { data } = response.data;
         setAllOrders(data.orders || []);
+        setTotalPrice(data.totalPrice);
       } catch (error) {
         console.error('전체 주문 목록 불러오기 실패:', error);
         setAllOrders([]);
@@ -90,7 +93,7 @@ const OrderManager = () => {
             startDate: startDate || undefined,
             endDate: endDate || undefined,
             page: currentPage - 1,
-            size: 10000,
+            size,
           },
           headers: { Authorization: `Bearer ${accessToken}` },
         });
@@ -126,22 +129,29 @@ const OrderManager = () => {
 
   useEffect(() => {
     const fetchSearchOrders = async () => {
-      if (!searchValue) return; // 검색어가 없으면 API 호출 안 함
+      if (!searchValue) {
+        setIsSearching(false); // 검색 상태 해제
+        return;
+      }
   
+      setIsSearching(true); // 검색 상태 활성화
       try {
         const accessToken = localStorage.getItem('token');
         const response = await axios.get('https://api.telegro.kr/api/orders', {
           params: {
             q: searchValue,
             filterBy: 'product',
-            size: 10000,
+            size: 10000, // 검색 시 모든 결과 가져오기
+            startDate: startDate || undefined,
+            endDate: endDate || undefined,
           },
           headers: { Authorization: `Bearer ${accessToken}` },
         });
   
         const { data: searchData } = response.data;
         setFilteredOrders(searchData.orders || []);
-        setTotalPages(searchData.totalPage || 0);
+        setTotalPages(1); // 페이지네이션 무시
+        setTotalPrice(searchData.totalPrice);
       } catch (error) {
         console.error('Error fetching search orders:', error);
         setFilteredOrders([]);
@@ -149,7 +159,8 @@ const OrderManager = () => {
     };
   
     fetchSearchOrders();
-  }, [searchValue , size]);
+  }, [searchValue, startDate, endDate]);
+  
 
   
   const handlePageChange = (newPage) => {
@@ -178,13 +189,6 @@ const OrderManager = () => {
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
   };
 
-  const calculateTotalAmount = (orders) => {
-    return orders.reduce((acc, order) => {
-      const productTotal = order.products.reduce((sum, product) => sum + product.totalPrice, 0);
-      const shoppingCost = order.shoppingCost || 0;
-      return acc + productTotal + shoppingCost;
-    }, 0);
-  };
   
   const orderStatusMap = {
     ORDER_CREATED: "주문 생성",
@@ -311,7 +315,7 @@ const OrderManager = () => {
       </tbody>
       </OrderTable>
       <R.TotalAmount>
-        총 주문 금액: ₩{calculateTotalAmount(allOrders).toLocaleString()}
+        총 주문 금액: ₩{totalPrice.toLocaleString()}
       </R.TotalAmount>
       <Pagination
         currentPage={currentPage}
