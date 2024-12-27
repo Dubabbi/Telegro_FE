@@ -19,10 +19,49 @@ export default function MobileNavbar() {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);   
   const [userInfo, setUserInfo] = useState({
-    id: 'Justin Hope',
-    name: '홍길동',
-    avatarUrl: 'https://example.com/avatar.jpg', 
+    id: '',
+    phone: '',
+    email: '',
+    name: '',
   });
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        navigate('/login');
+        return;
+      }
+
+      try {
+        const response = await axios.get('https://api.telegro.kr/api/users/my', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (response.status === 200) {
+          const userData = response.data.data;
+          setUserInfo({
+            id: userData.userId,
+            phone: userData.phone,
+            email: userData.email,
+            name: userData.userName,
+            point: userData.point
+          });
+          const sortedAddressList = userData.addressList.sort((a, b) => b.isDefault - a.isDefault);
+          setAddressList(sortedAddressList);
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+        if (error.response && error.response.status === 401) {
+          navigate('/login');
+        }
+      }
+    };
+
+    fetchUserData();
+  }, []);
   const navigate = useNavigate();
   const location = useLocation();
 
