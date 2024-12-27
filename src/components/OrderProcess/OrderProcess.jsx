@@ -215,6 +215,7 @@ const handleUseAllPoints = () => {
             addressDetail: formData.detailedAddress,
             zipcode: formData.postalCode,
             recipientName: formData.userName, 
+            phoneNumber: formData.phoneNumber, 
           },
           request: formData.request,
           shoppingCost: currentShippingCost,

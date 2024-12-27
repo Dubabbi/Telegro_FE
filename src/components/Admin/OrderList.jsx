@@ -261,7 +261,7 @@ const OrderList = () => {
       return order.products.map((product) => ({
         'No': index + 1,
         '주문번호': order.orderId,
-        '수령인 이름': order.deliveryAddress?.name || '정보 없음',
+        '수령인 이름': order.deliveryAddress?.recipientName || '정보 없음',
         '전화번호': order.deliveryAddress?.phoneNumber || '정보 없음',
         '주소': order.deliveryAddress?.address || '정보 없음',
         '상세 주소/우편번호': `${order.deliveryAddress?.addressDetail || '정보 없음'} / ${order.deliveryAddress?.zipcode || '정보 없음'}`,
