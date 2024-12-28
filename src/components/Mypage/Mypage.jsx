@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FaPhone, FaEnvelope, FaUser, FaMapMarkerAlt, FaEdit, FaTrash } from 'react-icons/fa';
 import * as M from './MypageStyle';
-import Avvvatars from 'avvvatars-react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import add from '/src/assets/icon/mypage/addaddress.svg';
@@ -34,44 +33,48 @@ const Mypage = () => {
   const boxRefs = useRef([]);
   const [inView, setInView] = useState([]);
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        navigate('/login');
-        return;
-      }
-
-      try {
-        const response = await axios.get('https://api.telegro.kr/api/users/my', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
+  const fetchUserData = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      navigate('/login');
+      return;
+    }
+  
+    try {
+      const response = await axios.get('https://api.telegro.kr/api/users/my', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      if (response.status === 200) {
+        const userData = response.data.data;
+        setUserInfo({
+          id: userData.userId,
+          phone: userData.phone,
+          email: userData.email,
+          name: userData.userName,
+          point: userData.point
         });
-
-        if (response.status === 200) {
-          const userData = response.data.data;
-          setUserInfo({
-            id: userData.userId,
-            phone: userData.phone,
-            email: userData.email,
-            name: userData.userName,
-            point: userData.point
-          });
-          const sortedAddressList = userData.addressList.sort((a, b) => b.isDefault - a.isDefault);
-          setAddressList(sortedAddressList);
-        }
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-        if (error.response && error.response.status === 401) {
-          navigate('/login');
-        }
+        const sortedAddressList = userData.addressList.sort((a, b) => b.isDefault - a.isDefault);
+        setAddressList(sortedAddressList.map(address => ({
+          ...address,
+          id: address.deliveryAddressId 
+        })));
       }
-    };
-
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+      if (error.response && error.response.status === 401) {
+        navigate('/login');
+      }
+    }
+  };
+  
+  useEffect(() => {
     fetchUserData();
   }, []);
+  
   const handleDeleteAddress = async (addressId) => {
     const confirmDelete = window.confirm('정말 이 배송지를 삭제하시겠습니까?'); 
     if (!confirmDelete) {
@@ -133,14 +136,25 @@ const Mypage = () => {
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
+    if (isModalOpen) {
+      fetchUserData(); 
+    }
     if (!isModalOpen) {
       resetModalFields();
     }
   };
-  const toggleEditModal = (address) => {
-    setSelectedAddress(address); 
-    setIsEditModalOpen(!isEditModalOpen);
-  };
+
+const toggleEditModal = (address) => {
+  setSelectedAddress(address); 
+  setIsEditModalOpen(!isEditModalOpen);
+  if (isEditModalOpen) {
+    fetchUserData(); 
+  }
+};
+const forceReload = () => {
+  window.location.reload();
+};
+
 
     const handleAddAddress = (newAddress) => {
       setAddressList((prevAddressList) => [...prevAddressList, newAddress]);
