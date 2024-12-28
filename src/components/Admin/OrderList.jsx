@@ -155,7 +155,6 @@ const OrderList = () => {
             startDate: startDate || undefined,
             endDate: endDate || undefined,
             size: 10000, // 모든 주문 가져오기
-            filterBy: searchCategory === 'productName' ? 'product' : 'user',
           },
           headers: { Authorization: `Bearer ${accessToken}` },
         });
@@ -175,11 +174,11 @@ const OrderList = () => {
   useEffect(() => {
     const fetchSearchOrders = async () => {
       if (!searchValue) {
-        setIsSearching(false); // 검색 상태 해제
+        setIsSearching(false); 
         return;
       }
   
-      setIsSearching(true); // 검색 상태 활성화
+      setIsSearching(true); 
       try {
         const accessToken = localStorage.getItem('token');
         const response = await axios.get('https://api.telegro.kr/api/orders', {
@@ -233,6 +232,7 @@ const OrderList = () => {
         const { data: searchData } = response.data;
         setFilteredOrders(searchData.orders || []);
         setTotalPages(1); // 검색 시 페이지네이션 무시
+        setTotalPrice(data.totalPrice);
       } catch (error) {
         console.error('Error fetching search orders:', error);
         setFilteredOrders([]);
@@ -294,6 +294,7 @@ const OrderList = () => {
         '총 금액': `${product.totalPrice}원`,
         '주문 상태': order.orderStatus,
         '주문 일자': formatDate(order.createdAt),
+        '요청 사항': order.request,
       }));
     }).flat(); 
   

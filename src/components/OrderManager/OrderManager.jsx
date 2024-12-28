@@ -66,7 +66,7 @@ const OrderManager = () => {
           params: {
             startDate: startDate || undefined,
             endDate: endDate || undefined,
-            size, // 모든 주문 가져오기
+            size: 10000, // 모든 주문 가져오기
           },
           headers: { Authorization: `Bearer ${accessToken}` },
         });
@@ -141,7 +141,7 @@ const OrderManager = () => {
           params: {
             q: searchValue,
             filterBy: 'product',
-            size, // 검색 시 모든 결과 가져오기
+            size: 10000, // 검색 시 모든 결과 가져오기
             startDate: startDate || undefined,
             endDate: endDate || undefined,
           },
