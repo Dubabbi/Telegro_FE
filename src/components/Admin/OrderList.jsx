@@ -27,6 +27,25 @@ const OrderList = () => {
   const [allOrders, setAllOrders] = useState([]); 
   const startPage = Math.floor((currentPage - 1) / pagesPerGroup) * pagesPerGroup + 1;
   const endPage = Math.min(startPage + pagesPerGroup - 1, totalPages);
+  const getStatusLabel = (status) => {
+    switch (status) {
+      case 'ORDER_CREATED':
+        return '주문 생성';
+      case 'PAYMENT_COMPLETED':
+        return '결제 완료';
+      case 'ORDER_COMPLETED':
+        return '주문 완료';
+      case 'SHIPPING':
+        return '배송 중';
+      case 'DELIVERY_COMPLETED':
+        return '배송 완료';
+      case 'ORDER_CANCELLED':
+        return '주문 취소됨';
+      default:
+        return '알 수 없는 상태';
+    }
+  };
+  
   const getIamportToken = async () => {
     try {
       const response = await axios.post("https://api.iamport.kr/users/getToken", {
@@ -247,6 +266,12 @@ const OrderList = () => {
 
   const handleStatusChange = async (orderId, newStatus) => {
     const token = localStorage.getItem('token');
+    const selectedOrder = orders.find(order => order.orderId === orderId);
+  
+    if (selectedOrder?.orderStatus === 'ORDER_CANCELLED') {
+      alert('취소된 주문은 상태를 변경할 수 없습니다.');
+      return;
+    }
   
     try {
       const response = await axios.patch(
@@ -278,6 +303,7 @@ const OrderList = () => {
       alert('주문 상태 변경 중 오류가 발생했습니다.');
     }
   };
+  
   const exportToExcel = () => {
     const excelData = allOrders.map((order, index) => {
       return order.products.map((product) => ({
@@ -386,18 +412,32 @@ const OrderList = () => {
                         <small>{order.deliveryAddress.addressDetail}({order.deliveryAddress.zipcode})</small>
                       </TableCell>
                       <TableCell onClick={(e) => e.stopPropagation()}  rowSpan={order.products.length}>
-                        <StatusSelect
+                        {order.orderStatus === 'ORDER_CANCELLED' ? (
+                          <>
+                            <p style={{ color: 'red' }}>주문 취소됨</p>
+                          </>
+                        ) : (
+                          <StatusSelect
                           value={order.orderStatus}
-                          onClick={(e) => e.stopPropagation()} 
+                          onClick={(e) => e.stopPropagation()}
                           onChange={(e) => handleStatusChange(order.orderId, e.target.value)}
                         >
-                          <option value="ORDER_CREATED">주문 생성</option>
-                          <option value="PAYMENT_COMPLETED">결제 완료</option>
-                          <option value="ORDER_COMPLETED">주문 완료</option>
-                          <option value="ORDER_CANCELLED">주문 취소</option>
+                          {/* 현재 상태는 항상 첫 번째 옵션으로 표시 */}
+                          <option value={order.orderStatus}>
+                            {getStatusLabel(order.orderStatus)}
+                          </option>
+                    
+                          {/* 선택 가능한 옵션: 배송 중, 배송 완료 */}
                           <option value="SHIPPING">배송 중</option>
                           <option value="DELIVERY_COMPLETED">배송 완료</option>
                         </StatusSelect>
+                        )}
+                        {order.orderStatus === 'ORDER_CANCELLED' ? (
+                          <>
+                            
+                          </>
+                        ) : (
+                          <>
                             <br />
                             <CancelButton
                               onClick={(e) => {
@@ -411,6 +451,7 @@ const OrderList = () => {
                             >
                               취소 요청
                             </CancelButton>
+                            </>)}
                       </TableCell>
                     </>
                   )}
