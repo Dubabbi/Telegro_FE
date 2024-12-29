@@ -190,76 +190,41 @@ const OrderList = () => {
     fetchAllOrders();
   }, [startDate, endDate]);
 
+  const fetchSearchOrders = async () => {
+    if (!searchValue && !startDate && !endDate) {
+      setIsSearching(false); 
+      return;
+    }
+  
+    setIsSearching(true);
+    try {
+      const accessToken = localStorage.getItem('token');
+      const filterBy = searchCategory === 'productName' ? 'product' : 'user';
+  
+      const response = await axios.get('https://api.telegro.kr/api/orders', {
+        params: {
+          q: searchValue || undefined,
+          filterBy, 
+          size: 10000,
+          startDate: startDate || undefined,
+          endDate: endDate || undefined,
+        },
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+  
+      const { data: searchData } = response.data;
+      setFilteredOrders(searchData.orders || []);
+      setTotalPages(1); 
+      setTotalPrice(searchData.totalPrice || 0); // 수정된 부분
+    } catch (error) {
+      console.error('Error fetching search orders:', error.response?.data || error.message);
+      setFilteredOrders([]);
+    } finally {
+      setIsSearching(false); 
+    }
+  };
+  
   useEffect(() => {
-    const fetchSearchOrders = async () => {
-      if (!searchValue) {
-        setIsSearching(false); 
-        return;
-      }
-  
-      setIsSearching(true); 
-      try {
-        const accessToken = localStorage.getItem('token');
-        const response = await axios.get('https://api.telegro.kr/api/orders', {
-          params: {
-            q: searchValue,
-            filterBy: searchCategory === 'productName' ? 'product' : 'user',
-            size: 10000, // 검색 시 모든 결과 가져오기
-            startDate: startDate || undefined,
-            endDate: endDate || undefined,
-          },
-          headers: { Authorization: `Bearer ${accessToken}` },
-        });
-  
-        const { data: searchData } = response.data;
-        setFilteredOrders(searchData.orders || []);
-        setTotalPages(1); // 페이지네이션 무시
-        setTotalPrice(searchData.totalPrice);
-      } catch (error) {
-        console.error('Error fetching search orders:', error);
-        setFilteredOrders([]);
-      }
-    };
-  
-    fetchSearchOrders();
-  }, [searchValue, startDate, endDate]);
-
-  useEffect(() => {
-    const fetchSearchOrders = async () => {
-      // 날짜나 검색어 둘 중 하나라도 있을 경우 API 호출
-      if (!searchValue && !startDate && !endDate) {
-        setIsSearching(false); 
-        return;
-      }
-  
-      setIsSearching(true);
-      try {
-        const accessToken = localStorage.getItem('token');
-        const filterBy = searchCategory === 'productName' ? 'product' : 'user';
-  
-        const response = await axios.get('https://api.telegro.kr/api/orders', {
-          params: {
-            q: searchValue || undefined,
-            filterBy, 
-            size: 10000,
-            startDate: startDate || undefined,
-            endDate: endDate || undefined,
-          },
-          headers: { Authorization: `Bearer ${accessToken}` },
-        });
-  
-        const { data: searchData } = response.data;
-        setFilteredOrders(searchData.orders || []);
-        setTotalPages(1); // 검색 시 페이지네이션 무시
-        setTotalPrice(data.totalPrice);
-      } catch (error) {
-        console.error('Error fetching search orders:', error);
-        setFilteredOrders([]);
-      } finally {
-        setIsSearching(false); 
-      }
-    };
-  
     fetchSearchOrders();
   }, [searchValue, searchCategory, startDate, endDate]);
   
