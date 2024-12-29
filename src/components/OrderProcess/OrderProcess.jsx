@@ -22,6 +22,7 @@ const OrderProcess = () => {  const navigate = useNavigate();
   const [isAgreementChecked, setIsAgreementChecked] = useState(false);
   const [selectedAddress, setSelectedAddress] = useState(''); 
   const [addressList, setAddressList] = useState([]);
+  const [buyerName, setBuyerName] = useState(''); 
   const [isDefaultAddressChecked, setIsDefaultAddressChecked] = useState(false);
   const [orderData, setOrderData] = useState(state.orderData);
   const [userDetails, setUserDetails] = useState(state.userDetails);
@@ -76,9 +77,10 @@ const OrderProcess = () => {  const navigate = useNavigate();
         });
   
         if (response.data.code === 20000) {
-          const { point, addressList } = response.data.data;
+          const { point, addressList, userName } = response.data.data;
           setPoint(point); 
           setAddressList(addressList || []);
+          setBuyerName(userName); 
           setSelectedAddress(""); // 초기 선택된 주소 없음
           setFormData({
             userName: "",
@@ -349,7 +351,7 @@ const handleUseAllPoints = () => {
       merchant_uid: paymentId,
       amount: totalPayable,
       name: productInfo.name.trim(),
-      buyer_name: formData.userName,
+      buyer_name: buyerName,
       buyer_tel: formData.phoneNumber,
       buyer_email: userDetails.userEmail || "user@example.com",
       buyer_addr: formData.address,
