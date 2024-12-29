@@ -268,9 +268,41 @@ const OrderList = () => {
       alert('주문 상태 변경 중 오류가 발생했습니다.');
     }
   };
+
+  useEffect(() => {
+    const applySearchFilter = () => {
+      if (!searchValue && !startDate && !endDate) {
+        setFilteredOrders(orders); // 검색 조건 없으면 전체 주문 사용
+      } else {
+        const filtered = orders.filter(order =>
+          order.products.some(product =>
+            product.productName.toLowerCase().includes(searchValue.toLowerCase())
+          )
+        );
+        setFilteredOrders(filtered);
+      }
+    };
+  
+    applySearchFilter();
+  }, [searchValue, orders, startDate, endDate]);
+  
   
   const exportToExcel = () => {
-    const excelData = allOrders.map((order, index) => {
+    let exportData;
+  
+    if (searchValue || startDate || endDate || isSearching) {
+
+      exportData = filteredOrders;
+    } else {
+      exportData = allOrders;
+    }
+  
+    if (!exportData || exportData.length === 0) {
+      alert('내보낼 데이터가 없습니다.');
+      return;
+    }
+  
+    const excelData = exportData.map((order, index) => {
       return order.products.map((product) => ({
         'No': index + 1,
         '주문번호': order.orderId,
@@ -287,13 +319,20 @@ const OrderList = () => {
         '주문 일자': formatDate(order.createdAt),
         '요청 사항': order.request,
       }));
-    }).flat(); 
+    }).flat();
   
     const worksheet = XLSX.utils.json_to_sheet(excelData);
     const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, '주문목록');
-    XLSX.writeFile(workbook, `주문목록_${new Date().toISOString().slice(0, 10)}.xlsx`);
+    XLSX.utils.book_append_sheet(workbook, worksheet, searchValue || startDate || endDate ? '검색_주문목록' : '전체_주문목록');
+  
+    const fileName = searchValue || startDate || endDate
+      ? `검색_주문목록_${new Date().toISOString().slice(0, 10)}.xlsx`
+      : `전체_주문목록_${new Date().toISOString().slice(0, 10)}.xlsx`;
+  
+    XLSX.writeFile(workbook, fileName);
   };
+  
+  
   
   
     
