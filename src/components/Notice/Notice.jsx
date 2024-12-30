@@ -13,6 +13,7 @@ import { FaFilePdf, FaFileImage, FaFileWord, FaFileExcel, FaFile } from 'react-i
 const Notice = ({ size = 10 }) => {
   const navigate = useNavigate();
   const [notice, setNotice] = useState([]);
+  const [allNotice, setAllNotice] = useState([]);
   const [error, setError] = useState('');
   const [searchValue, setSearchValue] = useState('');
   const [filteredNotice, setFilteredNotice] = useState([]);
@@ -60,6 +61,58 @@ const Notice = ({ size = 10 }) => {
     fetchNotices();
   }, [currentPage, size]); 
 
+  useEffect(() => {
+    const fetchAllNotices = async () => {
+      try {
+        const response = await axios.get('https://api.telegro.kr/notices', {
+          params: { page: 0, size: 10000 }, // 모든 데이터 불러오기
+        });
+
+        if (response.status === 200) {
+          const sortedNotices = response.data.data.notices.sort((a, b) => {
+            return new Date(b.noticeCreateDate) - new Date(a.noticeCreateDate);
+          });
+          setAllNotice(sortedNotices);
+          setFilteredNotice(sortedNotices);
+          setTotalPages(Math.ceil(sortedNotices.length / size));
+        } else {
+          throw new Error(response.data.message || 'Failed to fetch data');
+        }
+      } catch (error) {
+        console.error('Error fetching all notices:', error);
+      }
+    };
+
+    fetchAllNotices();
+  }, [size]);
+
+  useEffect(() => {
+    const filtered = searchValue
+      ? allNotice.filter((item) =>
+          item.noticeTitle.toLowerCase().includes(searchValue.toLowerCase())
+        )
+      : allNotice;
+  
+    setFilteredNotice(filtered);
+    setCurrentPage(1);
+    setTotalPages(Math.ceil(filtered.length / size));
+  }, [searchValue, allNotice, size]);
+  
+
+  useEffect(() => {
+    if (searchValue) {
+      const filtered = allNotice.filter((item) =>
+        item.noticeTitle.toLowerCase().includes(searchValue.toLowerCase())
+      );
+      setFilteredNotice(filtered);
+      setCurrentPage(1);
+      setTotalPages(Math.ceil(filtered.length / size));
+    } else {
+      setFilteredNotice(allNotice);
+      setTotalPages(Math.ceil(allNotice.length / size));
+    }
+  }, [searchValue, allNotice, size]);
+
   if (error) {
     return <div>{error}</div>;  
   }
@@ -86,17 +139,6 @@ const Notice = ({ size = 10 }) => {
     }
   };
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    if (searchValue) {
-      const filtered = notice.filter((item) => 
-        item.noticeTitle.toLowerCase().includes(searchValue.toLowerCase())
-      );
-      setFilteredNotice(filtered);  
-    } else {
-      setFilteredNotice(notice); 
-    }
-  };
   
 
   const items = filteredNotice.map((notice, index) => (
@@ -127,7 +169,7 @@ const Notice = ({ size = 10 }) => {
         <N.BoardSearchArea>
           <N.SearchWindow>
             <N.SearchWrap>
-            <N.StyledForm onSubmit={handleSearch}>
+            <N.StyledForm>
                 <Form.Control
                   type="text"
                   placeholder="게시글 검색"
