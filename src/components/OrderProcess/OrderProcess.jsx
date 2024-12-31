@@ -799,7 +799,7 @@ const CanclePayment = async (imp_uid = null) => {
               <O.Text style={{textAlign: 'center', margin: '6px 0'}}>
               <p style={{fontWeight: 'bold', color: '#0000ff', fontSize: '1.1rem'}}>위탁배송시 택배비 4000원 부과됩니다.</p>
               <p>세금 계산서 발행은 매월 말일에 발행됩니다.</p>
-              <p>기타 문의사항은 담당자 문의 부탁드립니다.</p>
+              <p>상기 금액은 <span style={{color: "red", fontWeight: "bold", fontSize: '1.07rem'}}>부가세 별도(VAT) 금액</span> 입니다.</p>
               </O.Text>
               <C.ConfirmButton onClick={BankOrder}>결제하기(주문완료)</C.ConfirmButton>
             </O.BoxSection>

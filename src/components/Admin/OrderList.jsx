@@ -466,7 +466,7 @@ const OrderList = () => {
           </tbody>
         </OrderTable>
         <TotalAmount>
-          총 주문 금액: ₩{totalPrice.toLocaleString()}
+          총 주문 금액(VAT 별도): ₩{totalPrice.toLocaleString()}
         </TotalAmount>
         <StyledButton onClick={exportToExcel} style={{ padding: '10px', margin: '10px', backgroundColor: '#4CAF50', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
           <FaFileExcel style={{ marginRight: "8px" }} /> 엑셀 다운로드

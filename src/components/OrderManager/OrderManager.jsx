@@ -315,7 +315,7 @@ const OrderManager = () => {
       </tbody>
       </OrderTable>
       <R.TotalAmount>
-        총 주문 금액: ₩{totalPrice.toLocaleString()}
+        총 주문 금액(VAT 별도): ₩{totalPrice.toLocaleString()}
       </R.TotalAmount>
       <Pagination
         currentPage={currentPage}
