@@ -146,14 +146,15 @@ const ClientManagement = () => {
   const [filteredClients, setFilteredClients] = useState([]);
   const pageSize = 20; 
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1); 
+  const [totalPages, setTotalPages] = useState(0); 
   const pagesPerGroup = 5; 
   const startPage = Math.floor((currentPage - 1) / pagesPerGroup) * pagesPerGroup + 1;
   const endPage = Math.min(startPage + pagesPerGroup - 1, totalPages);
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
   };
-
+  
+  const [error, setError] = useState('');
   const handleGroupChange = (direction) => {
     if (direction === 'prev' && startPage > 1) {
       setCurrentPage(startPage - 1);
@@ -179,7 +180,8 @@ const ClientManagement = () => {
         });
 
         if (response.status === 200) {
-          setClients(response.data.data.users); // 전체 사용자 데이터 저장
+          setClients(response.data.data.users);
+          setTotalPages(response.data.data.totalPage);
         } else {
           alert('사용자 데이터를 불러오는 데 실패했습니다.');
         }
@@ -317,13 +319,13 @@ const ClientManagement = () => {
       </Div>
       <P.Pagediv>
       <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            startPage={startPage}
-            endPage={endPage}
-            onPageChange={handlePageChange}
-            onGroupChange={handleGroupChange}
-          />
+          currentPage={currentPage}
+          totalPages={totalPages}
+          startPage={startPage}
+          endPage={endPage}
+          onPageChange={handlePageChange}
+          onGroupChange={handleGroupChange}
+        />
         </P.Pagediv>
     </>
   );
