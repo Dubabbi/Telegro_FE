@@ -404,13 +404,19 @@ const OrderList = () => {
                   <TableCell>{product.selectOption || 'N/A'}</TableCell>
                   <TableCell>{product.quantity}</TableCell>
                   <TableCell>{`${(product.productPrice).toLocaleString()}원`}</TableCell>
-                  <TableCell>{`${(product.totalPrice + (productIndex === 0 ? order.shoppingCost : 0)).toLocaleString()}원`}</TableCell>
+                  <TableCell>{`${(product.totalPrice + (productIndex === 0 ? order.shoppingCost : 0)).toLocaleString()}원`}
+                  {order.shoppingCost === 0 && (
+                    <>
+                      <br />
+                      (무료 배송)
+                    </>
+                  )}
+                  </TableCell>
                   {productIndex === 0 && (
                     <>
                       <TableCell rowSpan={order.products.length}>{formatDate(order.createdAt)}</TableCell>
                       <TableCell rowSpan={order.products.length}>
-                        {order.userInfo.username}
-                        <br/><br/>
+                        <p style={{fontWeight: 'semibold', color: '#444', marginBottom: '3px'}}>{order.userInfo.username}</p>
                         <small>{order.deliveryAddress.address}</small>
                         <br/>
                         <small>{order.deliveryAddress.addressDetail}({order.deliveryAddress.zipcode})</small>
