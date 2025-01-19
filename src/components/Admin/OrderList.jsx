@@ -411,6 +411,18 @@ const OrderList = () => {
                       (무료 배송)
                     </>
                   )}
+                  {order.shoppingCost === 3000 && (
+                    <>
+                      <br />
+                      (일반 배송)
+                    </>
+                  )}
+                  {order.shoppingCost === 4000 && (
+                    <>
+                      <br />
+                      (위탁 배송)
+                    </>
+                  )}
                   </TableCell>
                   {productIndex === 0 && (
                     <>

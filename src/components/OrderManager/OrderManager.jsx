@@ -269,7 +269,26 @@ const OrderManager = () => {
                     <TableCell>{product.selectOption || 'N/A'}</TableCell>
                     <TableCell>{product.quantity || 0}</TableCell>
                     <TableCell>{`${(product.productPrice || 0).toLocaleString()}원`}</TableCell>
-                    <TableCell>{`${(product.totalPrice || 0).toLocaleString()}원`}</TableCell>
+                    <TableCell>{`${(product.totalPrice || 0).toLocaleString()}원`}
+                    {order.shoppingCost === 0 && (
+                    <>
+                      <br />
+                      (무료 배송)
+                    </>
+                  )}
+                  {order.shoppingCost === 3000 && (
+                    <>
+                      <br />
+                      (일반 배송)
+                    </>
+                  )}
+                  {order.shoppingCost === 4000 && (
+                    <>
+                      <br />
+                      (위탁 배송)
+                    </>
+                  )}
+                    </TableCell>
                     {productIndex === 0 && (
                       <>
                         <TableCell rowSpan={order.products.length}>{formatDate(order.createdAt)}</TableCell>
