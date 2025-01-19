@@ -265,6 +265,11 @@ const handleUseAllPoints = () => {
       : isConsignmentChecked
       ? 4000
       : 0;
+    const hasValidAddress = selectedAddress || (formData.address && formData.detailedAddress && formData.postalCode);        
+    if (userRole !== 'MEMBER' && userRole !== 'ADMIN' && !isDefaultAddressChecked && !isConsignmentChecked && !hasValidAddress) {
+      alert("배송지 선택 또는 위탁 배송 중 하나를 선택해주세요.");
+      return;
+    }
     try {
       const response = await axios.post(
         'https://api.telegro.kr/api/orders/done',
@@ -412,7 +417,7 @@ const handleUseAllPoints = () => {
       alert("주문 데이터가 올바르지 않습니다.");
       return;
     }
-  
+
     const productInfo = orderData.cartProductDTOS.reduce(
       (acc, product) => {
         acc.name += `${product.productName} `;
@@ -421,7 +426,7 @@ const handleUseAllPoints = () => {
       },
       { name: "", total: 0 }
     );
-  
+
     const confirmOrderResult = await confirmOrder();
   
     if (!confirmOrderResult || typeof confirmOrderResult.orderId !== 'number') {
