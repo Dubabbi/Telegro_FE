@@ -22,20 +22,21 @@ export const GalleryItem = styled.div`
   background-color: #fff;
   border-radius: 10px;
   overflow: hidden;
-  padding-bottom: 7%;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
   text-align: center;
   cursor: pointer;
+  padding-bottom: 7%;
 
   &:hover {
-    transform: translateY(-10px);  
+    transform: translateY(-10px);
   }
 
   img {
     width: 100%;
-    height: 220px;
-    object-fit: cover;  
+    height: auto; 
+    aspect-ratio: 10 / 9;
+    object-fit: cover; 
     border-bottom: 2px solid #94A3D8;
   }
 
