@@ -167,6 +167,7 @@ const OrderDetail = () => {
         </Section>
         <Separator />
         {orderData.paymentMethod === 'V_BANK' && vbankInfo && (
+          <>
             <Section>
               <SectionTitle>가상계좌 정보</SectionTitle>
               <Details>
@@ -176,8 +177,9 @@ const OrderDetail = () => {
                 <DetailItem>입금기한: {vbankInfo.vbank_date || '정보 없음'}</DetailItem>
               </Details>
             </Section>
-          )}
-        <Separator />
+            <Separator />
+          </>
+        )}
         <div style={{display: 'flex', justifyContent: 'flex-start', flexDirection: 'row', gap: '10px'}}>
         <ReceiptButton onClick={handleViewReceipt}>매출전표 보기</ReceiptButton>
         {orderData.cash_receipt_url && (
