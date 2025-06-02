@@ -9,9 +9,9 @@ const OrderDetail = () => {
   const [error, setError] = useState(null);
   const { orderId } = useParams(); 
   const paymentMethodMap = {
-    'card': '카드',
-    'vbank': '가상계좌',
-    'trans': '계좌이체'
+    'CREDIT_CARD': '카드',
+    'V_BANK': '가상계좌',
+    'TRANS': '계좌이체'
   };
 
   useEffect(() => {

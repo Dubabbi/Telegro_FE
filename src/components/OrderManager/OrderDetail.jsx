@@ -9,9 +9,9 @@ const OrderDetail = () => {
   const [error, setError] = useState(null);
   const { orderId } = useParams(); 
   const paymentMethodMap = {
-    'card': '카드',
-    'vbank': '가상계좌',
-    'trans': '계좌이체'
+    'CREDIT_CARD': '카드',
+    'V_BANK': '가상계좌',
+    'TRANS': '계좌이체'
   };
 
   useEffect(() => {
@@ -156,7 +156,7 @@ const OrderDetail = () => {
             <DetailItem>할인금액: {formatNumber(orderData.discountPrice)}원</DetailItem>
             <DetailItem>배송비: {formatNumber(orderData.shippingCost)}원</DetailItem>
             <DetailItem>총 주문금액: {formatNumber(orderData.totalPrice)}원</DetailItem>
-            <DetailItem>결제수단: {paymentMethodMap[orderData.paymentMethod?.paymentMethod] || orderData.paymentMethod?.paymentMethod}</DetailItem>
+            <DetailItem>결제수단: {paymentMethodMap[orderData.paymentMethod] || orderData.paymentMethod?.paymentMethod}</DetailItem>
           </Details>
         </Section>
         <Separator />
