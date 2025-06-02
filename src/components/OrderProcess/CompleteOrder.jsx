@@ -1,12 +1,11 @@
-import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import * as O from './OrderProcessStyle';
 import defaultImg from '../Check/image.svg';
-
 const CompleteOrder = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { state } = useLocation();
-
+  const { vbankInfo } = location.state || {};
 
   const {
     orderDetails = { products: [], total: 0 },
@@ -83,13 +82,22 @@ const CompleteOrder = () => {
           <p>할인금액: <span style={{ color: 'red' }}>-{formatPrice(pointsToUse)}</span></p>
           <p>적립예정 포인트: <span>{pointsToEarn}P</span></p>
           <p>배송비: <span>{formatPrice(shippingCost)}</span></p>
-          <h4>총 결제 금액</h4>
+          <h4 style={{marginTop: "4vh"}}>총 결제 금액</h4>
           <p>
             <span style={{ fontWeight: 'bold' }}>
               {formatPrice(orderDetails.total - pointsToUse + shippingCost)}
             </span>
           </p>
         </div>
+          {vbankInfo && (
+            <div>
+              <h4>가상계좌 정보</h4>
+              <p>은행명: <strong>{vbankInfo.vbank_name}</strong></p>
+              <p>계좌번호: <strong>{vbankInfo.vbank_num}</strong></p>
+              <p>예금주: <strong>{vbankInfo.vbank_holder || '정보 없음'}</strong></p>
+              <p>입금기한: <strong>{vbankInfo.vbank_date}</strong></p>
+            </div>
+          )}
       </O.InfoBox>
 
       <O.Button onClick={() => navigate('/main')}>확인</O.Button>

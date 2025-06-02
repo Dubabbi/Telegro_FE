@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Postcode } from '../Postcode/Postcode'; 
 import * as C from '../Cart/Cart';
@@ -8,7 +8,8 @@ import * as O from './OrderProcessStyle'
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import Logen from '/src/assets/image/OrderProcess/logen.svg';
-import * as PortOne from "@portone/browser-sdk/v2";
+import { verifyPayment } from '../../api/verifyPayment';
+
 const OrderProcess = () => {  const navigate = useNavigate();
   const userRole = useSelector((state) => state.auth.userRole);
   const { state } = useLocation();
@@ -48,7 +49,6 @@ const OrderProcess = () => {  const navigate = useNavigate();
     (acc, product) => acc + product.totalPrice,
     0
   );
-  
   
   const totalPayable = totalProductPrice + shippingCost - pointsToUse
 
@@ -259,6 +259,7 @@ const handleUseAllPoints = () => {
   };
 
   const BankOrder = async () => {
+    const vbankInfo = await verifyPayment(imp_uid);
     const currentShippingCost =
     userRole === 'MEMBER' || userRole === 'ADMIN'
       ? 3000
@@ -330,6 +331,7 @@ const handleUseAllPoints = () => {
             pointsToUse,
             pointsToEarn: state.orderData.pointToEarn,
             shippingCost: currentShippingCost,
+            vbankInfo,
           },
         });
       } else {
@@ -484,6 +486,8 @@ const handleUseAllPoints = () => {
           const { code } = verifyResponse.data;
   
           if (code === 20000) {
+            const vbankInfo = await verifyPayment(rsp.imp_uid);
+
             alert("결제가 완료되었습니다.");
             navigate("/completeorder", {
               state: {
@@ -507,8 +511,9 @@ const handleUseAllPoints = () => {
                   detailedAddress: formData.detailedAddress,
                 },
                 pointsToUse,
-                pointsToEarn: state.orderData.pointToEarn,
-                shippingCost: currentShippingCost,
+                pointsToEarn,
+                shippingCost,
+                vbankInfo
               },
             });
           } else {
