@@ -6462,7 +6462,7 @@ PERFORMANCE OF THIS SOFTWARE.
   padding: 20px;
   color: red;
   font-size: 1.2rem;
-`;function iAt(){return c.jsx(c.Fragment,{children:c.jsx(qTt,{})})}function aAt(){return dC(t=>t.auth.userRole==="ADMIN")?c.jsxs("div",{children:[c.jsx(lAe,{}),c.jsx(j_,{}),c.jsxs(AC,{children:[c.jsx($t,{path:"clientmanagement",element:c.jsx(UAe,{})}),c.jsx($t,{path:"clientdetail/:clientId",element:c.jsx(VAe,{})}),c.jsx($t,{path:"notice",element:c.jsx(aLe,{})}),c.jsx($t,{path:"noticecreate",element:c.jsx(F8t,{})}),c.jsx($t,{path:"noticeedit/:noticeId",element:c.jsx(U8t,{})}),c.jsx($t,{path:"noticedetail/:noticeId",element:c.jsx(z8t,{})}),c.jsx($t,{path:"stat",element:c.jsx(eLe,{})}),c.jsx($t,{path:"productcreate",element:c.jsx(q8t,{})}),c.jsx($t,{path:"headset",element:c.jsx(W8t,{})}),c.jsx($t,{path:"lineCord",element:c.jsx(G8t,{})}),c.jsx($t,{path:"recording",element:c.jsx(K8t,{})}),c.jsx($t,{path:"accessory",element:c.jsx(X8t,{})}),c.jsx($t,{path:"adminproductdetail/:productId",element:c.jsx(v6t,{})}),c.jsx($t,{path:"adminproductedit/:productId",element:c.jsx(NTt,{})}),c.jsx($t,{path:"orderlist",element:c.jsx(xTt,{})}),c.jsx($t,{path:"addclient",element:c.jsx(_Tt,{})}),c.jsx($t,{path:"clientedit/:clientId",element:c.jsx(UTt,{})}),c.jsx($t,{path:"adminsearch",element:c.jsx(VTt,{})}),c.jsx($t,{path:"orderlist/:orderId",element:c.jsx(iAt,{})})]})]}):(alert("관리자 권한이 없습니다."),c.jsx(UCe,{to:"/",replace:!0}))}function oAt(){return c.jsx(ZCe,{children:c.jsxs(AC,{children:[c.jsx($t,{path:"/",element:c.jsx(cbe,{})}),c.jsx($t,{path:"/login",element:c.jsx(OO,{})}),c.jsx($t,{path:"/generallogin",element:c.jsx(B5e,{})}),c.jsx($t,{path:"/signup",element:c.jsx(mbe,{})}),c.jsx($t,{path:"/*",element:c.jsx(sAe,{})}),c.jsx($t,{path:"/admin",element:c.jsx(xbe,{})}),"  ",c.jsx($t,{path:"/admin/*",element:c.jsx(aAt,{})}),"  "]})})}const sAt=t6e`
+`;function iAt(){return c.jsx(c.Fragment,{children:c.jsx(qTt,{})})}function aAt(){return dC(t=>t.auth.userRole==="ADMIN")?c.jsxs("div",{children:[c.jsx(lAe,{}),c.jsx(j_,{}),c.jsxs(AC,{children:[c.jsx($t,{path:"clientmanagement",element:c.jsx(UAe,{})}),c.jsx($t,{path:"clientdetail/:clientId",element:c.jsx(VAe,{})}),c.jsx($t,{path:"notice",element:c.jsx(aLe,{})}),c.jsx($t,{path:"noticecreate",element:c.jsx(F8t,{})}),c.jsx($t,{path:"noticeedit/:noticeId",element:c.jsx(U8t,{})}),c.jsx($t,{path:"noticedetail/:noticeId",element:c.jsx(z8t,{})}),c.jsx($t,{path:"stat",element:c.jsx(eLe,{})}),c.jsx($t,{path:"productcreate",element:c.jsx(q8t,{})}),c.jsx($t,{path:"headset",element:c.jsx(W8t,{})}),c.jsx($t,{path:"lineCord",element:c.jsx(G8t,{})}),c.jsx($t,{path:"recording",element:c.jsx(K8t,{})}),c.jsx($t,{path:"accessory",element:c.jsx(X8t,{})}),c.jsx($t,{path:"adminproductdetail/:productId",element:c.jsx(v6t,{})}),c.jsx($t,{path:"adminproductedit/:productId",element:c.jsx(NTt,{})}),c.jsx($t,{path:"orderlist",element:c.jsx(xTt,{})}),c.jsx($t,{path:"addclient",element:c.jsx(_Tt,{})}),c.jsx($t,{path:"clientedit/:clientId",element:c.jsx(UTt,{})}),c.jsx($t,{path:"adminsearch",element:c.jsx(VTt,{})}),c.jsx($t,{path:"orderlist/:orderId",element:c.jsx(iAt,{})})]})]}):(alert("관리자 권한이 없습니다."),c.jsx(UCe,{to:"/",replace:!0}))}function oAt(){return c.jsx(ZCe,{children:c.jsxs(AC,{children:[c.jsx($t,{path:"/",element:c.jsx(cbe,{})}),c.jsx($t,{path:"/login",element:c.jsx(OO,{})}),c.jsx($t,{path:"/generallogin",element:c.jsx(B5e,{})}),c.jsx($t,{path:"/signup",element:c.jsx(mbe,{})}),c.jsx($t,{path:"/*",element:c.jsx(sAe,{})}),c.jsx($t,{path:"/admin",element:c.jsx(xbe,{})}),c.jsx($t,{path:"/admin/*",element:c.jsx(aAt,{})})]})})}const sAt=t6e`
   :root {
     --vh: 100%;
     background-color: #FFFFFF;
@@ -6487,7 +6487,7 @@ PERFORMANCE OF THIS SOFTWARE.
     font-size: 100%;
     vertical-align: baseline;
     font: inherit;
-    font-family: 'LINESeedKR-Bd';
+    font-family: 'Pretendard';
   }
 
   /* Style resets for common elements */
@@ -6533,15 +6533,13 @@ PERFORMANCE OF THIS SOFTWARE.
 
 
 `,lAt={title:rp`
-      font-family: 'Pretendard';
-      font-style: normal;
+      font-family: 'Pretendard', sans-serif;
       font-weight: 800;
       font-size: 4rem;
       letter-spacing: 0.07em;
     `,text:rp`
-      font-family: 'Pretendard';
-      font-style: normal;
+      font-family: 'Pretendard', sans-serif;
       font-weight: 500;
       font-size: 1.5rem;
       letter-spacing: 0.07em;
-    `},cAt={fonts:lAt};function uAt(){return c.jsxs(QA,{store:eg,children:[" ",c.jsxs(hC,{loading:null,persistor:CL,children:[" ",c.jsxs(J8e,{theme:cAt,children:[c.jsx(sAt,{}),c.jsx(oAt,{})]})]})]})}const fAt=a3.createRoot(document.getElementById("root"));fAt.render(c.jsx(QA,{store:eg,children:c.jsx(hC,{loading:null,persistor:CL,children:c.jsx(uAt,{})})}));
+    `},cAt={fonts:lAt};function uAt(){return c.jsx(QA,{store:eg,children:c.jsx(hC,{loading:null,persistor:CL,children:c.jsxs(J8e,{theme:cAt,children:[c.jsx(sAt,{}),c.jsx(oAt,{})]})})})}const fAt=a3.createRoot(document.getElementById("root"));fAt.render(c.jsx(QA,{store:eg,children:c.jsx(hC,{loading:null,persistor:CL,children:c.jsx(uAt,{})})}));

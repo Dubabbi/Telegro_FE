@@ -1,5 +1,5 @@
 import { createGlobalStyle } from "styled-components";
-
+import '../assets/fonts/index.css'
 export const GlobalStyle = createGlobalStyle`
   :root {
     --vh: 100%;
@@ -25,7 +25,7 @@ export const GlobalStyle = createGlobalStyle`
     font-size: 100%;
     vertical-align: baseline;
     font: inherit;
-    font-family: 'LINESeedKR-Bd';
+    font-family: 'Pretendard';
   }
 
   /* Style resets for common elements */

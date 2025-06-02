@@ -1,5 +1,4 @@
-import React from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import ResponseNav from './components/Nav/ResponseNav';
 import Footer from './components/Footer/Footer';
 import NotificationBar from './components/NotificationBar/NotificationBar';
