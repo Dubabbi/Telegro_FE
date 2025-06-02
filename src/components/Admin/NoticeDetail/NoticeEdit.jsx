@@ -37,11 +37,10 @@ const NoticeEdit = () => {
             editorRef.current.getInstance().setHTML(notice.noticeContent || '');  
           }
         }
-      } catch (error) {
-        console.error('Failed to fetch notice details:', error);
+      } catch {
+        alert('공지사항 상세 정보를 가져오는 데 실패했습니다.');
       }
     };
-  
     fetchNoticeDetail();
   }, [noticeId]);
 
@@ -95,8 +94,8 @@ const NoticeEdit = () => {
       );
 
       setNoticeFiles((prev) => [...prev, ...uploadedFiles]);
-    } catch (error) {
-      console.error('파일 업로드 중 오류가 발생했습니다:', error);
+    } catch {
+      alert('파일 업로드 중 오류가 발생했습니다');
     }
   };
   const handleDeleteExistingFile = (indexToDelete) => {
@@ -132,9 +131,8 @@ const NoticeEdit = () => {
       });
   
       callback(presignedUrl.split('?')[0], 'Image');
-    } catch (error) {
-      console.error('Image upload failed:', error.response ? error.response.data : error.message);
-      alert('이미지 업로드 실패: ' + (error.response ? error.response.data.message : error.message));
+    } catch {
+      alert('이미지 업로드에 실패했습니다.');
     }
   };
 
@@ -159,8 +157,8 @@ const NoticeEdit = () => {
       if (response.status === 200) {
         navigate('/admin/notice');
       }
-    } catch (error) {
-      console.error('공지사항 수정 중 오류가 발생했습니다:', error);
+    } catch {
+      alert('공지사항 수정 중 오류가 발생했습니다');
       if (error.response && error.response.status === 403) {
         setError('관리자 계정으로 로그인하십시오.');
       } else {
@@ -198,24 +196,23 @@ const NoticeEdit = () => {
               multiple
               onChange={handleAddFile}
             />
-{noticeFiles.length > 0 && (
-  <div style={{ display: 'flex', flexDirection: 'row', gap: '20px', alignItems: 'center', flexWrap: 'wrap' }}>
-    {noticeFiles.map((file, index) => (
-      <div key={index} style={{ display: 'flex', alignItems: 'center' }}>
-        <a href={file.fileUrl} download={file.fileName} target="_blank" rel="noopener noreferrer">
-          {file.fileName}
-        </a>
-        <button
-          style={{ color: '#ff0000', fontSize: '1.2rem', marginLeft: '10px' }}
-          onClick={() => handleDeleteExistingFile(index)}
-        >
-          X
-        </button>
-      </div>
-    ))}
-  </div>
-)}
-
+            {noticeFiles.length > 0 && (
+              <div style={{ display: 'flex', flexDirection: 'row', gap: '20px', alignItems: 'center', flexWrap: 'wrap' }}>
+                {noticeFiles.map((file, index) => (
+                  <div key={index} style={{ display: 'flex', alignItems: 'center' }}>
+                    <a href={file.fileUrl} download={file.fileName} target="_blank" rel="noopener noreferrer">
+                      {file.fileName}
+                    </a>
+                    <button
+                      style={{ color: '#ff0000', fontSize: '1.2rem', marginLeft: '10px' }}
+                      onClick={() => handleDeleteExistingFile(index)}
+                    >
+                      X
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
 
             <D.Label htmlFor="content">내용 *</D.Label>
             <div>

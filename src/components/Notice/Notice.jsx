@@ -39,9 +39,7 @@ const Notice = ({ size = 10 }) => {
         const response = await axios.get('https://api.telegro.kr/notices', {
           params: { page: currentPage - 1, size },
         });
-  
-        console.log('API Response:', response); 
-  
+    
         if (response.status === 200) {
           const sortedNotices = response.data.data.notices.sort((a, b) => {
             return new Date(b.noticeCreateDate) - new Date(a.noticeCreateDate);
@@ -53,7 +51,6 @@ const Notice = ({ size = 10 }) => {
           throw new Error(response.data.message || 'Failed to fetch data');
         }
       } catch (error) {
-        console.error('Error fetching data:', error);
         setError(`Failed to load products: ${error.message}`);
       }
     };
@@ -78,8 +75,8 @@ const Notice = ({ size = 10 }) => {
         } else {
           throw new Error(response.data.message || 'Failed to fetch data');
         }
-      } catch (error) {
-        console.error('Error fetching all notices:', error);
+      } catch {
+        alert('오류가 발생했습니다.');
       }
     };
 

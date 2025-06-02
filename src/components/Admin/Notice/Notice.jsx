@@ -42,8 +42,6 @@ const AdminNotice = ({ page = 0, size = 20 }) => {
           params: { page: currentPage - 1, size },
         });
   
-        console.log('API Response:', response); 
-  
         if (response.status === 200) {
           const sortedNotices = response.data.data.notices.sort((a, b) => {
             return new Date(b.noticeCreateDate) - new Date(a.noticeCreateDate);
@@ -55,7 +53,6 @@ const AdminNotice = ({ page = 0, size = 20 }) => {
           throw new Error(response.data.message || 'Failed to fetch data');
         }
       } catch (error) {
-        console.error('Error fetching data:', error);
         setError(`Failed to load products: ${error.message}`);
       }
     };

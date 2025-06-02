@@ -40,13 +40,11 @@ export default function EditAddressModal({ isOpen, toggleEditModal, address, onU
       );
 
       if (response.data.code === 20000) {
-        console.log('기본 배송지 설정 완료');
         window.location.reload();
       } else {
         alert('기본 배송지 설정에 실패했습니다.');
       }
     } catch (error) {
-      console.error('Error setting default address:', error);
       alert('기본 배송지 설정 중 오류가 발생했습니다.');
     }
   };

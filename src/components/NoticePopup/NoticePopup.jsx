@@ -22,7 +22,6 @@ const NoticePopup = () => {
         }
       }
     } catch (error) {
-      console.error('Failed to fetch popup notice details:', error);
       setError('공지사항 정보를 불러오는 중 오류가 발생했습니다.');
     }
   };

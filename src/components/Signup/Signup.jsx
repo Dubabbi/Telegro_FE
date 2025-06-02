@@ -83,7 +83,6 @@ function Signup() {
         alert("등록된 회원입니다."); 
       } 
     } catch (error) {
-      console.error("Error while signing up:", error);
       if (error.response && error.response.status === 409) {
         alert("이미 사용 중인 ID입니다.");
       }}

@@ -29,9 +29,8 @@ const OrderDetail = () => {
         } else {
           throw new Error("Invalid response format");
         }
-      } catch (err) {
+      } catch {
         setError("주문 상세 정보를 가져오는 데 실패했습니다.");
-        console.error(err);
       } finally {
         setLoading(false);
       }

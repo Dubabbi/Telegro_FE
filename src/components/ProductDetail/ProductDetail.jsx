@@ -75,7 +75,7 @@ const ProductDetail = () => {
       if (error.status === 401){
         alert('로그인을 먼저 진행해주세요.');
       }
-      console.error('Error adding to cart:', error);
+      console.error(error);
     }
   };
 
@@ -102,7 +102,6 @@ const ProductDetail = () => {
   
       if (cartResponse.status === 200) {
         const cartId = cartResponse.data.data.id; 
-        console.log("Cart added successfully:", cartId);
   
         const orderResponse = await apiClient.post(
           `/api/orders/create`,
@@ -114,9 +113,7 @@ const ProductDetail = () => {
         );
   
         if (orderResponse.data.code === 20000) {
-          console.log("Order created successfully:", orderResponse.data);
 
-  
           navigate("/orderprocess", {
             state: {
               orderData: orderResponse.data.data,
@@ -142,7 +139,7 @@ const ProductDetail = () => {
       if (error.status === 401){
         alert('로그인을 먼저 진행해주세요.');
       }
-      console.error('Error adding to cart:', error);
+      alert('장바구니에 상품을 담는 중 오류가 발생했습니다.');
     }
   };
   
@@ -159,8 +156,7 @@ const ProductDetail = () => {
         if (response.status === 200) {
           setProduct(response.data.data);
         }
-      } catch (error) {
-        console.error('Error fetching product:', error);
+      } catch {
         alert('상품 정보를 가져오는 데 실패했습니다.');
       }
     };

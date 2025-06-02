@@ -62,8 +62,7 @@ const AdminNoticeDetail = () => {
       } else {
         throw new Error('팝업 설정 변경에 실패했습니다.');
       }
-    } catch (error) {
-      console.error('Error while updating popup setting:', error);
+    } catch {
       alert('팝업 설정 변경 중 오류가 발생했습니다.');
     }
   };

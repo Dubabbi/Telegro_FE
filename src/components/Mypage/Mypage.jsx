@@ -64,7 +64,6 @@ const Mypage = () => {
         })));
       }
     } catch (error) {
-      console.error('Error fetching user data:', error);
       if (error.response && error.response.status === 401) {
         navigate('/login');
       }
@@ -102,8 +101,7 @@ const Mypage = () => {
       } else {
         alert('주소 삭제에 실패했습니다.');
       }
-    } catch (error) {
-      console.error('Error deleting address:', error);
+    } catch {
       alert('주소 삭제 중 오류가 발생했습니다.');
     }
   };

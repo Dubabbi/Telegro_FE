@@ -178,8 +178,7 @@ function ClientEdit() {
         } else {
           alert('회사 정보를 불러오는 데 실패했습니다.');
         }
-      } catch (error) {
-        console.error('Error fetching company data:', error);
+      } catch {
         alert('회사 정보를 불러오는 중 오류가 발생했습니다.');
       }
     };
@@ -251,8 +250,7 @@ function ClientEdit() {
         alert('회사 정보가 성공적으로 수정되었습니다.');
         navigate('/admin/clientmanagement');
       }
-    } catch (error) {
-      console.error('Error updating company information:', error);
+    } catch {
       alert('회사 정보를 수정하는 데 실패했습니다.');
     }
   };

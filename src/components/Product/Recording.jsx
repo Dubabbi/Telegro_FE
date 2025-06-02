@@ -32,12 +32,9 @@ const Recording = ({ category = 'RECORDER', initialPage = 1, size = 12 }) => {
           params: { category, page: currentPage - 1, size },
         });
   
-        console.log('API Response:', response);
-  
         const productsData = response.data.data.products;
         const productsArray = Array.isArray(productsData) ? productsData : Object.values(productsData);
         const sortedProducts = productsArray.sort((a, b) => b.id - a.id);
-  
   
         setProducts(sortedProducts);
   

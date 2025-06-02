@@ -44,13 +44,11 @@ export default function AddressModal({ isOpen, toggleModal, onAddAddress }) {
       );
   
       if (response.data.code === 20000) {
-        console.log('기본 배송지 설정 완료');
         setIsDefault(true);
       } else {
         alert('기본 배송지 설정에 실패했습니다.');
       }
     } catch (error) {
-      console.error('Error setting default address:', error);
       alert('기본 배송지 설정 중 오류가 발생했습니다.');
     }
   };
@@ -89,7 +87,6 @@ export default function AddressModal({ isOpen, toggleModal, onAddAddress }) {
         alert('주소 추가에 실패했습니다.');
       }
     } catch (error) {
-      console.error('Error adding address:', error);
       alert('주소 추가 중 오류가 발생했습니다.');
     }
   };

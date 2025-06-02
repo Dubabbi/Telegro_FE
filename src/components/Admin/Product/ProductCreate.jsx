@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import * as D from '../NoticeDetail/NoticeDetailStyle';
-import * as N from '../Notice/NoticeStyle';
 import { Editor } from '@toast-ui/react-editor'; 
 import '@toast-ui/editor/dist/toastui-editor.css'; 
 import axios from 'axios';
@@ -12,7 +11,7 @@ import '@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-sy
 
 const ProductCreate = () => {
   const navigate = useNavigate();
-  const [selectedImageIndex, setSelectedImageIndex] = useState(null); // 삭제 버튼 표시할 이미지
+  const [selectedImageIndex, setSelectedImageIndex] = useState(null);
   const [coverImage, setCoverImage] = useState(null); 
   const editorRef = useRef();
   const [product, setProduct] = useState({
@@ -31,15 +30,12 @@ const ProductCreate = () => {
   useEffect(() => {
     if (editorRef.current) {
       const editorInstance = editorRef.current.getInstance();
-
-      console.log(editorInstance.getHTML()); 
     }
   }, []);
   const handleChange = e => {
     const { name, value, files } = e.target;
   
     if (name === 'options') {
-      // optionsArray는 이제 options 조건문 안에서만 존재하지 않고, 전체 함수 범위에서 사용됩니다.
       const optionsArray = value.split(',').map(item => item.trim());
       setProduct(prev => ({
         ...prev,
@@ -51,7 +47,7 @@ const ProductCreate = () => {
       reader.onloadend = () => {
         setProduct(prev => ({
           ...prev,
-          previewImage: reader.result // 프리뷰 이미지 상태 업데이트
+          previewImage: reader.result
         }));
       };
       reader.readAsDataURL(file);
@@ -68,16 +64,13 @@ const ProductCreate = () => {
     }
   };
   const handleImageClick = (index) => {
-    setSelectedImageIndex(index); // 클릭한 이미지를 삭제할 이미지로 선택
+    setSelectedImageIndex(index);
   };
   
-
-  
-  // 다른 곳을 클릭했을 때 선택된 이미지 초기화
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (event.target.closest('.image-preview') === null) {
-        setSelectedImageIndex(null); // 이미지 외부를 클릭하면 선택 취소
+        setSelectedImageIndex(null);
       }
     };
   
@@ -98,7 +91,6 @@ const ProductCreate = () => {
   };
   const MAX_IMAGES = 4;
 
-
   const handleAddImage = async (event) => {
     const files = Array.from(event.target.files);
   
@@ -115,8 +107,6 @@ const ProductCreate = () => {
             reader.onloadend = () => resolve(reader.result);
             reader.readAsDataURL(file);
           });
-  
-          // presigned URL 가져오기
           const presignedUrlResponse = await axios.post(
             'https://api.telegro.kr/api/file?prefix=product',
             {
@@ -132,38 +122,27 @@ const ProductCreate = () => {
               },
             }
           );
-  
           const presignedUrl = presignedUrlResponse.data.data.url;
-  
-          // presigned URL로 이미지 업로드 (PUT)
           await axios.put(presignedUrl, file, {
             headers: {
               'Content-Type': file.type,
             },
           });
-  
-          const imageUrl = presignedUrl.split('?')[0]; // URL에서 쿼리스트링 제거
+          const imageUrl = presignedUrl.split('?')[0];
           return imageUrl;
         })
       );
   
-      // 새로 업로드된 이미지를 상태에 추가
       setProduct((prev) => ({
         ...prev,
         pictures: [...prev.pictures, ...newImages],
-        coverImage: prev.coverImage || newImages[0] // 대표 이미지가 없으면 새로 추가된 이미지 중 첫 번째를 대표 이미지로 설정
+        coverImage: prev.coverImage || newImages[0]
       }));
-  
-      console.log('이미지 업로드에 성공했습니다.');
-    } catch (error) {
-      console.error('이미지 업로드 중 오류가 발생했습니다:', error);
-      alert(`이미지 업로드 중 오류가 발생했습니다: ${error.message}`);
+    } catch {
+      alert('이미지 업로드 중 오류가 발생했습니다');
     }
   };
   
-  
-  
-
   const handleCoverImageSelect = (image) => {
     setProduct((prev) => ({
       ...prev,
@@ -171,7 +150,6 @@ const ProductCreate = () => {
     }));
   };
   
-
   const addImageBlobHook = async (blob, callback) => {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -180,7 +158,6 @@ const ProductCreate = () => {
     }
   
     try {
-      // 백엔드에서 프리사인 URL 가져오기
       const response = await axios.post(`https://api.telegro.kr/api/file?prefix=product`, {
         metadata: {
           description: "새로운 이미지 설명",
@@ -195,18 +172,15 @@ const ProductCreate = () => {
   
       const presignedUrl = response.data.data.url;
   
-      // 이미지 업로드
       await axios.put(presignedUrl, blob, {
         headers: {
           'Content-Type': blob.type,
         }
       });
   
-      // 업로드 완료 후 콜백 호출
       callback(presignedUrl.split('?')[0], 'Image');
-    } catch (error) {
-      console.error('Image upload failed:', error.response ? error.response.data : error.message);
-      alert('이미지 업로드 실패: ' + (error.response ? error.response.data.message : error.message));
+    } catch {
+      alert('이미지 업로드 중 오류가 발생했습니다.');
     }
   };
   
@@ -218,7 +192,6 @@ const ProductCreate = () => {
     setSelectedImageIndex(null); 
   };
   
-
   const handleCreateProduct = async () => {
     const formData = {
       productModel: product.productModel,  
@@ -250,7 +223,6 @@ const ProductCreate = () => {
     }
   };
   
-
   return (
     <>
     <C.MainWrapper>
@@ -260,7 +232,6 @@ const ProductCreate = () => {
         <C.SectionTitle2>상품 등록</C.SectionTitle2>
         </C.SectionTitleWrapper>
         <div style={{padding: '2%'}}>
-        {/* 모델명 & 상품명 한 줄로 배치 */}
         <C.NameRowContainer>
             <div>
               <C.Label htmlFor="productModel">모델명 *</C.Label>
@@ -399,7 +370,7 @@ const ProductCreate = () => {
                           borderRadius: '50%',
                         }}
                         onClick={(e) => {
-                          e.stopPropagation(); // 이벤트 버블링 방지
+                          e.stopPropagation();
                           setProduct((prev) => ({
                             ...prev,
                             coverImage: image,
@@ -409,7 +380,6 @@ const ProductCreate = () => {
                         {product.coverImage === image ? '✔' : '☆'}
                       </button>
 
-                      {/* 삭제 버튼 추가 */}
                       <button
                         style={{
                           position: 'absolute',
@@ -423,8 +393,8 @@ const ProductCreate = () => {
                           cursor: 'pointer',
                         }}
                         onClick={(e) => {
-                          e.stopPropagation(); // 이벤트 버블링 방지
-                          handleRemoveImage(index); // 이미지 삭제 함수 호출
+                          e.stopPropagation();
+                          handleRemoveImage(index);
                         }}
                       >
                         X
@@ -434,7 +404,6 @@ const ProductCreate = () => {
                 </div>
               </div>
             </C.RightColumn>
-            {/* Toast UI Editor */}
             <div>
               <div style={{marginBottom: '10px'}}><C.Label  htmlFor="content">상품 설명 *</C.Label></div>
               <Editor
@@ -456,9 +425,7 @@ const ProductCreate = () => {
                 plugins={[color]}
                 onChange={handleEditorChange}
             />
-
             </div>
-
             </div>
             </C.FormWrapper>
             </C.MainWrapper>
@@ -467,7 +434,7 @@ const ProductCreate = () => {
                   취소
               </D.BtLink>
             <D.BtLink as={Link} onClick={handleCreateProduct}>
-                등록
+              등록
             </D.BtLink>
           </D.BtWrap>
         </>

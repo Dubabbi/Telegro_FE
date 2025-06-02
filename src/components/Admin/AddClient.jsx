@@ -50,11 +50,9 @@ function AddClient() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Form Data:', form);
   };
 
   const handleSignupClick = async () => {
-    // 필수 입력 필드 확인
     const requiredFields = [
       'companyName', 'phone', 'id', 'password', 'email', 'role',
       'contactName', 'contactPhone', 'businessName', 'businessNumber', 

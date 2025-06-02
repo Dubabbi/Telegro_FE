@@ -14,7 +14,6 @@ const ProductEdit = () => {
   const { productId } = useParams();
   const navigate = useNavigate();
   const editorRef = useRef();
-  
   const [product, setProduct] = useState({
     productModel: '',
     productName: '',
@@ -29,10 +28,9 @@ const ProductEdit = () => {
     previewImage: '',
     coverImage: ''
   });
-
-  const [originalProduct, setOriginalProduct] = useState(null); // 원본 데이터를 저장
-  const [selectedImageIndex, setSelectedImageIndex] = useState(null); // 삭제 버튼 표시할 이미지
-  const MAX_IMAGES = 4; // 최대 업로드 가능한 이미지 수
+  const [originalProduct, setOriginalProduct] = useState(null);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(null); 
+  const MAX_IMAGES = 4;
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -42,11 +40,10 @@ const ProductEdit = () => {
         const response = await axios.get(`https://api.telegro.kr/products/${productId}`);
         if (response.status === 200) {
           setProduct(response.data.data);
-          setOriginalProduct(response.data.data); // 원본 데이터를 상태에 저장
+          setOriginalProduct(response.data.data);
           setIsLoading(false);
         }
-      } catch (error) {
-        console.error('Error fetching product:', error);
+      } catch {
         alert('상품 정보를 가져오는 데 실패했습니다.');
       }
     };
@@ -57,7 +54,6 @@ const ProductEdit = () => {
     const { name, value, files, type } = e.target;
   
     if (type === 'number' && !Number.isInteger(+value)) {
-      // 숫자 입력 필드에서 소수점 입력을 강제로 제거
       e.target.value = Math.floor(+value);
     }
   
@@ -71,7 +67,6 @@ const ProductEdit = () => {
     }
   };
 
-  // Editor 변경 사항을 상태에 반영
   const handleEditorChange = () => {
     if (editorRef.current) {
       const htmlContent = editorRef.current.getInstance().getHTML();
@@ -96,7 +91,6 @@ const ProductEdit = () => {
             reader.readAsDataURL(file);
           });
 
-          // presigned URL 가져오기
           const presignedUrlResponse = await axios.post(
             'https://api.telegro.kr/api/file?prefix=product',
             {
@@ -115,7 +109,6 @@ const ProductEdit = () => {
 
           const presignedUrl = presignedUrlResponse.data.data.url;
 
-          // presigned URL로 이미지 업로드 (PUT)
           await axios.put(presignedUrl, file, {
             headers: {
               'Content-Type': file.type,
@@ -127,7 +120,6 @@ const ProductEdit = () => {
         })
       );
 
-      // 새로 업로드된 이미지를 상태에 추가
       setProduct((prev) => ({
         ...prev,
         pictures: [...prev.pictures, ...newImages],
@@ -141,7 +133,6 @@ const ProductEdit = () => {
     }
   };
 
-  // 대표 이미지 선택
   const handleCoverImageSelect = (image) => {
     setProduct((prev) => ({
       ...prev,
@@ -149,7 +140,6 @@ const ProductEdit = () => {
     }));
   };
 
-  // 이미지 삭제 함수
   const handleRemoveImage = (index) => {
     setProduct((prev) => ({
       ...prev,
@@ -158,7 +148,6 @@ const ProductEdit = () => {
     setSelectedImageIndex(null); 
   };
   
-
   const handleUpdateProduct = async () => {
     const updatedProduct = {};
   
@@ -180,7 +169,6 @@ const ProductEdit = () => {
     updateIfChanged('priceBest', product.priceBest, originalProduct.priceBest);
     updateIfChanged('priceDealer', product.priceDealer, originalProduct.priceDealer);
     updateIfChanged('priceCustomer', product.priceCustomer, originalProduct.priceCustomer);
-  
     updateStringIfChanged('productModel', product.productModel, originalProduct.productModel);
     updateStringIfChanged('productName', product.productName, originalProduct.productName);
     updateStringIfChanged('category', product.category, originalProduct.category);
@@ -262,9 +250,8 @@ const ProductEdit = () => {
       });
   
       callback(presignedUrl.split('?')[0], 'Image');
-    } catch (error) {
-      console.error('Image upload failed:', error.response ? error.response.data : error.message);
-      alert('이미지 업로드 실패: ' + (error.response ? error.response.data.message : error.message));
+    } catch {
+      alert('이미지 업로드 중 오류가 발생했습니다.');
     }
   };
   return (
@@ -339,7 +326,7 @@ const ProductEdit = () => {
                       objectFit: 'cover',
                       border: product.coverImage === image ? '2px solid green' : 'none',
                     }}
-                    onClick={() => setSelectedImageIndex(index)} // 클릭 시 이미지를 선택 상태로 만듦
+                    onClick={() => setSelectedImageIndex(index)}
                   />
 
                   <button
@@ -353,8 +340,8 @@ const ProductEdit = () => {
                       borderRadius: '50%',
                     }}
                     onClick={(e) => {
-                      e.stopPropagation(); // 이벤트 버블링 방지
-                      handleCoverImageSelect(image); // 대표 이미지 선택
+                      e.stopPropagation();
+                      handleCoverImageSelect(image);
                     }}
                   >
                     {product.coverImage === image ? '✔' : '☆'}
@@ -410,7 +397,6 @@ const ProductEdit = () => {
               onInput={(e) => e.target.value = e.target.value.replace(/[^0-9]/g, '')} 
             />
           </div>
-
           <div>
             <C.Label htmlFor="priceDealer">Dealer *</C.Label>
             <C.Input
@@ -423,7 +409,6 @@ const ProductEdit = () => {
               onInput={(e) => e.target.value = e.target.value.replace(/[^0-9]/g, '')} 
             />
           </div>
-
           <div>
             <C.Label htmlFor="priceCustomer">Customer *</C.Label>
             <C.Input
@@ -437,7 +422,6 @@ const ProductEdit = () => {
             />
           </div>
         </C.RightColumn>
-
         <div style={{padding: '2%'}}>
           <C.Label style={{marginBottom: '20px'}} htmlFor="content">상품 설명 *</C.Label>
           <Editor
@@ -460,10 +444,7 @@ const ProductEdit = () => {
             onChange={handleEditorChange}
           />
         </div>
-
-
       </C.FormWrapper>
-
       <N.Section style={{ margin: '0' }}>
         <D.BtWrap>
           <D.BtLink as={Link} to={`/admin/headset`}>

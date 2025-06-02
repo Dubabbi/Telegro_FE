@@ -118,13 +118,9 @@ const NoticeCreate = () => {
           };
         })
       );
-  
       setNoticeFiles((prev) => [...prev, ...uploadedFiles]);
-  
-      console.log('파일 업로드에 성공했습니다.');
-    } catch (error) {
-      console.error('파일 업로드 중 오류가 발생했습니다:', error);
-      alert(`파일 업로드 중 오류가 발생했습니다: ${error.message}`);
+    } catch {
+      alert('파일 업로드 중 오류가 발생했습니다');
     }
   };
   
@@ -161,9 +157,8 @@ const NoticeCreate = () => {
       });
   
       callback(presignedUrl.split('?')[0], 'Image');
-    } catch (error) {
-      console.error('Image upload failed:', error.response ? error.response.data : error.message);
-      alert('이미지 업로드 실패: ' + (error.response ? error.response.data.message : error.message));
+    } catch {
+      alert('이미지 업로드에 실패했습니다.');
     }
   };
 

@@ -27,8 +27,7 @@ const AdminProductDetail = () => {
         if (response.status === 200) {
           setProduct(response.data.data);
         }
-      } catch (error) {
-        console.error('Error fetching product:', error);
+      } catch {
         alert('상품 정보를 가져오는 데 실패했습니다.');
       }
     };

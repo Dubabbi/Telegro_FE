@@ -21,21 +21,17 @@ function Login() {
   
       if (response.status === 200) {
         const { data } = response.data;
-          console.log("UserRole from API:", data.userRole);
           
           dispatch(setUserRole(data.userRole)); 
-          console.log("Dispatched setUserRole successfully");
           
           localStorage.setItem('token', data.accessToken);
 
           navigate('/main');
           alert("로그인에 성공했습니다.");
       } else {
-        console.error("Unexpected response status:", response.status);
         alert("로그인에 실패했습니다.");
       }
     } catch (error) {
-      console.error('Login error:', error);
       alert("로그인 실패: " + (error.response?.data?.message || "네트워크 오류"));
     }
   };

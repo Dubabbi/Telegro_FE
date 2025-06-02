@@ -140,7 +140,6 @@ const OrderList = () => {
         setOrders(paginatedData.orders || []);
         setTotalPages(paginatedData.totalPage || 0);
       } catch (error) {
-        console.error('Error fetching orders:', error);
         setOrders([]);
       }
     };
@@ -182,7 +181,6 @@ const OrderList = () => {
         setAllOrders(data.orders || []);
         setTotalPrice(data.totalPrice);
       } catch (error) {
-        console.error('전체 주문 목록 불러오기 실패:', error);
         setAllOrders([]);
       }
     };
@@ -216,8 +214,7 @@ const OrderList = () => {
       setFilteredOrders(searchData.orders || []);
       setTotalPages(1); 
       setTotalPrice(searchData.totalPrice || 0); // 수정된 부분
-    } catch (error) {
-      console.error('Error fetching search orders:', error.response?.data || error.message);
+    } catch {
       setFilteredOrders([]);
     } finally {
       setIsSearching(false); 
@@ -263,8 +260,7 @@ const OrderList = () => {
       } else {
         alert('주문 상태 변경에 실패했습니다.');
       }
-    } catch (error) {
-      console.error("Error updating order status:", error);
+    } catch {
       alert('주문 상태 변경 중 오류가 발생했습니다.');
     }
   };
@@ -272,7 +268,7 @@ const OrderList = () => {
   useEffect(() => {
     const applySearchFilter = () => {
       if (!searchValue && !startDate && !endDate) {
-        setFilteredOrders(orders); // 검색 조건 없으면 전체 주문 사용
+        setFilteredOrders(orders);
       } else {
         const filtered = orders.filter(order =>
           order.products.some(product =>

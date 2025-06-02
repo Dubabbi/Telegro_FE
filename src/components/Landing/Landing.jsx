@@ -26,9 +26,6 @@ export default function Landing() {
       axios.post('https://api.telegro.kr/hits', {}, {
         withCredentials: true
       })
-      .then(response => {
-        console.log('Server status:', response.data.message);
-      })
       .catch(error => {
         console.error('Error posting hits:', error);
       });

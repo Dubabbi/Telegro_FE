@@ -185,8 +185,7 @@ const ClientManagement = () => {
         } else {
           alert('사용자 데이터를 불러오는 데 실패했습니다.');
         }
-      } catch (error) {
-        console.error('Error fetching clients:', error);
+      } catch {
         alert('사용자 데이터를 불러오는 중 오류가 발생했습니다.');
       }
     };

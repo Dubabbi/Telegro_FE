@@ -29,13 +29,11 @@ const Cart = () => {
                     return product;
                 }));
                 setProducts(cartItems);
-                console.log('Loaded products with selectOption set:', cartItems);
             } else {
-                console.log('Failed to load cart items:', response);
-                alert('장바구니 정보를 불러오는 데 실패했습니다.');
+              alert('장바구니 정보를 불러오는 데 실패했습니다.');
             }
-        } catch (error) {
-            console.error('Error fetching cart items:', error);
+        } catch {
+          alert('장바구니 정보를 불러오는 데 실패했습니다.');
         }
     };
 
@@ -45,21 +43,15 @@ const Cart = () => {
   useEffect(() => {
     const total = products.reduce((acc, product) => acc + (product.productPrice * product.quantity), 0);
     const selectedTotal = products.reduce((acc, product) => product.selected ? acc + (product.productPrice * product.quantity) : acc, 0);
-  
     setTotalPrice(total);
     setSelectedTotalPrice(selectedTotal);
-  
-    console.log('Total price:', total);
-    console.log('Selected total price:', selectedTotal);
   }, [products]);
 
   const handleDelete = async (id) => {
     const confirmDelete = window.confirm('정말로 이 상품을 장바구니에서 삭제하시겠습니까?');
-
     if (!confirmDelete) {
       return;
     }
-
     try {
       const accessToken = localStorage.getItem('token');
       const response = await axios.delete(`https://api.telegro.kr/api/carts/${id}`, {
@@ -72,8 +64,7 @@ const Cart = () => {
       } else {
         alert('상품 삭제에 실패했습니다.');
       }
-    } catch (error) {
-      console.error('Error deleting cart item:', error);
+    } catch {
       alert('장바구니 항목을 삭제하는 중 오류가 발생했습니다.');
     }
   };
@@ -198,8 +189,7 @@ const Cart = () => {
       } else {
         alert('장바구니 업데이트 실패: ' + response.data.message);
       }
-    } catch (error) {
-      console.error('Error updating cart item:', error);
+    } catch {
       alert('장바구니 항목을 업데이트하는 중 오류가 발생했습니다.');
     }
   };
@@ -232,7 +222,6 @@ const Cart = () => {
 
         const response = await axios(config);
         if (response.data.code === 20000) {
-            console.log('Order created:', response.data);
             navigate('/orderprocess', {
                 state: {
                     orderData: response.data.data,
@@ -248,13 +237,10 @@ const Cart = () => {
         } else {
             alert('주문 생성에 실패했습니다. 오류 메시지: ' + response.data.message);
         }
-    } catch (error) {
-        console.error('Error creating order:', error);
-        alert('주문 생성 중 오류가 발생했습니다. 오류 로그를 확인해주세요.');
+    } catch {
+      alert('주문 생성 중 오류가 발생했습니다. 오류 로그를 확인해주세요.');
     }
 };
-
-
 
   return (
     <>

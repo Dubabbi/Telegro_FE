@@ -517,15 +517,12 @@ const handleUseAllPoints = () => {
               },
             });
           } else {
-            console.error("결제 상태 확인 실패:", verifyResponse.data.message);
             await CanclePayment(rsp.imp_uid);
           }
         } catch (error) {
-          console.error("결제 검증 중 오류:", error);
           await CanclePayment(rsp.imp_uid); 
         }
       } else {
-        console.error("결제 실패 또는 취소:", rsp.error_msg);
         alert(`결제 실패: ${rsp.error_msg}`);
         await CanclePayment(rsp.imp_uid); 
       }
@@ -554,7 +551,6 @@ const CanclePayment = async (imp_uid = null) => {
 
     if (response.data.code === 20000) {
       alert("결제가 취소되었습니다.");
-      console.log("결제 취소 데이터가 성공적으로 전송되었습니다.");
     } else {
       console.error("결제 취소 데이터 전송 실패:", response.data.message);
     }
