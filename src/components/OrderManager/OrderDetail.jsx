@@ -11,7 +11,7 @@ const OrderDetail = () => {
   const paymentMethodMap = {
     'CREDIT_CARD': '카드',
     'V_BANK': '가상계좌',
-    'TRANS': '계좌이체'
+    'BANK_TRANSFER': '계좌이체'
   };
 
   useEffect(() => {
