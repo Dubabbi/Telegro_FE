@@ -9,12 +9,14 @@ export const verifyPayment = async (imp_uid) => {
       vbank_num,
       vbank_holder,
       vbank_date,
+      buyer_name,
     } = paymentData;
 
     return {
       vbank_name,
       vbank_num,
       vbank_holder,
+      buyer_name,
       vbank_date: new Date(vbank_date * 1000).toLocaleString(),
     };
   } catch (error) {

@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
+import { verifyPayment } from "../../api/verifyPayment";
 
 const OrderDetail = () => {
   const [orderData, setOrderData] = useState(null);
   const [loading, setLoading] = useState(true); 
   const [error, setError] = useState(null);
   const { orderId } = useParams(); 
+  const [vbankInfo, setVbankInfo] = useState(null);
   const paymentMethodMap = {
     'CREDIT_CARD': '카드',
     'V_BANK': '가상계좌',
@@ -25,6 +27,10 @@ const OrderDetail = () => {
         });
         
         if (response.data.code === 20000 && response.data.data) {
+          if (response.data.data.imp_uid) {
+            const vbank = await verifyPayment(response.data.data.imp_uid);
+            setVbankInfo(vbank);
+          }
           setOrderData(response.data.data);
         } else {
           throw new Error("Invalid response format");
@@ -159,6 +165,18 @@ const OrderDetail = () => {
             <DetailItem>결제수단: {paymentMethodMap[orderData.paymentMethod] || orderData.paymentMethod?.paymentMethod}</DetailItem>
           </Details>
         </Section>
+        <Separator />
+        {orderData.paymentMethod === 'V_BANK' && vbankInfo && (
+            <Section>
+              <SectionTitle>가상계좌 정보</SectionTitle>
+              <Details>
+                <DetailItem>예금주: {vbankInfo.buyer_name || '정보 없음'}</DetailItem>
+                <DetailItem>은행명: {vbankInfo.vbank_name || '정보 없음'}</DetailItem>
+                <DetailItem>계좌번호: {vbankInfo.vbank_num || '정보 없음'}</DetailItem>
+                <DetailItem>입금기한: {vbankInfo.vbank_date || '정보 없음'}</DetailItem>
+              </Details>
+            </Section>
+          )}
         <Separator />
         <div style={{display: 'flex', justifyContent: 'flex-start', flexDirection: 'row', gap: '10px'}}>
         <ReceiptButton onClick={handleViewReceipt}>매출전표 보기</ReceiptButton>
