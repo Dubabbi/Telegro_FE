@@ -49,11 +49,8 @@ export default function MobileNavbar() {
             name: userData.userName,
             point: userData.point
           });
-          const sortedAddressList = userData.addressList.sort((a, b) => b.isDefault - a.isDefault);
-          setAddressList(sortedAddressList);
         }
       } catch (error) {
-        console.error('Error fetching user data:', error);
         if (error.response && error.response.status === 401) {
           navigate('/login');
         }
