@@ -97,7 +97,7 @@ export const Title = styled.h2`
   }
 `;
 
-const Separator = styled.hr`
+export const Separator = styled.hr`
   border: none;
   border-top: 1px solid #ddd;
   margin: 10px 0;
