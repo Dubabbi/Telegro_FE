@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const IMP_BASE_URL = 'https://thingproxy.freeboard.io/fetch/https://api.iamport.kr';
+const IMP_BASE_URL = 'https://api.iamport.kr';
 
 /**
  * 아임포트 액세스 토큰 발급
