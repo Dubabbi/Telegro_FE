@@ -92,3 +92,18 @@ export const TotalAmount = styled.div`
   font-weight: bold;
   text-align: right;
 `;
+
+export const CancelButton = styled.button`
+  margin-top: 5px;
+  padding: 5px 10px;
+  background-color: #ff6b6b;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+
+  &:hover {
+    background-color: #ff4d4d;
+  }
+`;

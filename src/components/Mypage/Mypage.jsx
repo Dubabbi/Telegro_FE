@@ -29,7 +29,6 @@ const Mypage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedAddress, setSelectedAddress] = useState(null); 
-
   const boxRefs = useRef([]);
   const [inView, setInView] = useState([]);
 
@@ -177,7 +176,6 @@ const forceReload = () => {
     <div style={{ backgroundColor: '#eee' }}>
       <M.Container>
         <M.ProfileWrapper>
-          {/* 사용자 정보 */}
           <M.TopBackground />
           <M.BottomBackground>
             <M.ProfileImage>

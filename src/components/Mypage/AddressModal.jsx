@@ -90,7 +90,6 @@ export default function AddressModal({ isOpen, toggleModal, onAddAddress }) {
       alert('주소 추가 중 오류가 발생했습니다.');
     }
   };
-  
 
   return isOpen ? (
     <M.ModalOverlay>
@@ -132,10 +131,14 @@ export default function AddressModal({ isOpen, toggleModal, onAddAddress }) {
         />
         <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
         <M.CheckboxContainer style={{alignItems: 'center'}}>
-            <img style={{width: '20px', cursor: 'pointer', marginRight: '5px', alignItems: 'center'}}
-             src={isDefault ? checked : check} alt="Check" onChange={() => setIsDefault(!isDefault)} onClick={handleCheckboxChange} />
-            <M.CheckboxLabel onClick={handleCheckboxChange}>기본 배송지로 설정</M.CheckboxLabel>
-          </M.CheckboxContainer>
+          <img
+            style={{width: '20px', cursor: 'pointer', marginRight: '5px', alignItems: 'center'}}
+            src={isDefault ? checked : check} alt="Check"
+            onChange={() => setIsDefault(!isDefault)}
+            onClick={handleCheckboxChange}
+          />
+          <M.CheckboxLabel onClick={handleCheckboxChange}>기본 배송지로 설정</M.CheckboxLabel>
+        </M.CheckboxContainer>
         </div>
         <div>
           <M.Button onClick={toggleModal}>취소</M.Button>

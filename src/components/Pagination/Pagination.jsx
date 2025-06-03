@@ -1,4 +1,3 @@
-import React from 'react';
 import * as P from './PaginationStyle';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import * as P from './ProductDetailStyle';
 import * as O from '../OrderProcess/OrderProcessStyle';
 import '@toast-ui/editor/dist/toastui-editor.css';
@@ -24,7 +24,6 @@ const ProductDetail = () => {
     timeout: 5000,
   });
   
-  // 응답 인터셉터 설정
   apiClient.interceptors.response.use(
     (response) => {
       return response;
@@ -141,9 +140,7 @@ const ProductDetail = () => {
       }
       alert('장바구니에 상품을 담는 중 오류가 발생했습니다.');
     }
-  };
-  
-  
+  };  
 
   useEffect(() => {
     const fetchProduct = async () => {

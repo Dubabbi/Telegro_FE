@@ -7,6 +7,8 @@ import * as N from '../Notice/NoticeStyle';
 import * as R from './OrderManagerStyle';
 import * as O from '../OrderProcess/OrderProcessStyle';
 import { FaSearch } from 'react-icons/fa';
+import { formatDate } from '../../utils/format';
+import { orderStatusMap } from '../../constants/orderStatus';
 import Form from 'react-bootstrap/Form';
 
 const OrderManager = () => {
@@ -26,7 +28,6 @@ const OrderManager = () => {
   const startPage = Math.floor((currentPage - 1) / pagesPerGroup) * pagesPerGroup + 1;
   const endPage = Math.min(startPage + pagesPerGroup - 1, totalPages);
 
-
   const handleCancelRequest = async (orderId) => {
     const accessToken = localStorage.getItem("token");
   
@@ -44,7 +45,6 @@ const OrderManager = () => {
   
       if (response.data.code === 20000) {
         alert("결제가 성공적으로 취소되었습니다.");
-        // 데이터 갱신
         const updatedOrders = orders.map((order) =>
           order.orderId === orderId ? { ...order, orderStatus: "CANCELED" } : order
         );
@@ -66,7 +66,7 @@ const OrderManager = () => {
           params: {
             startDate: startDate || undefined,
             endDate: endDate || undefined,
-            size: 10000, // 모든 주문 가져오기
+            size: 10000,
           },
           headers: { Authorization: `Bearer ${accessToken}` },
         });
@@ -79,7 +79,6 @@ const OrderManager = () => {
         setAllOrders([]);
       }
     };
-  
     fetchAllOrders();
   }, [startDate, endDate]);
   
@@ -101,8 +100,7 @@ const OrderManager = () => {
         const { data: paginatedData } = paginatedResponse.data;
         setOrders(paginatedData.orders || []);
         setTotalPages(paginatedData.totalPage || 0);
-      } catch (error) {
-        console.error('Error fetching orders:', error);
+      } catch {
         setOrders([]);
       }
     };
@@ -130,18 +128,18 @@ const OrderManager = () => {
   useEffect(() => {
     const fetchSearchOrders = async () => {
       if (!searchValue) {
-        setIsSearching(false); // 검색 상태 해제
+        setIsSearching(false);
         return;
       }
   
-      setIsSearching(true); // 검색 상태 활성화
+      setIsSearching(true);
       try {
         const accessToken = localStorage.getItem('token');
         const response = await axios.get('https://api.telegro.kr/api/orders', {
           params: {
             q: searchValue,
             filterBy: 'product',
-            size: 10000, // 검색 시 모든 결과 가져오기
+            size: 10000,
             startDate: startDate || undefined,
             endDate: endDate || undefined,
           },
@@ -150,7 +148,7 @@ const OrderManager = () => {
   
         const { data: searchData } = response.data;
         setFilteredOrders(searchData.orders || []);
-        setTotalPages(1); // 페이지네이션 무시
+        setTotalPages(1);
         setTotalPrice(searchData.totalPrice);
       } catch (error) {
         console.error('Error fetching search orders:', error);
@@ -160,9 +158,7 @@ const OrderManager = () => {
   
     fetchSearchOrders();
   }, [searchValue, startDate, endDate]);
-  
 
-  
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
   };
@@ -175,29 +171,6 @@ const OrderManager = () => {
     }
   };
 
-  const formatDate = (dateString) => {
-    if (!dateString) return '정보 없음';
-
-    const date = new Date(dateString);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    const hours = String(date.getHours()).padStart(2, '0');
-    const minutes = String(date.getMinutes()).padStart(2, '0');
-    const seconds = String(date.getSeconds()).padStart(2, '0');
-
-    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-  };
-
-  
-  const orderStatusMap = {
-    ORDER_CREATED: "주문 생성",
-    PAYMENT_COMPLETED: "결제 완료",
-    ORDER_COMPLETED: "주문 완료",
-    ORDER_CANCELLED: "주문 취소",
-    SHIPPING: "배송 중",
-    DELIVERY_COMPLETED: "배송 완료"
-  };
   return (
     <R.MainWrapper>
       <O.Div />
@@ -303,14 +276,14 @@ const OrderManager = () => {
                               order.orderStatus === "ORDER_COMPLETED") && (
                               <>
                                 <br />
-                                <CancelButton
+                                <R.CancelButton
                                   onClick={(e) => {
                                     e.stopPropagation();
                                     handleCancelRequest(order.orderId);
                                   }}
                                 >
                                   취소 요청
-                                </CancelButton>
+                                </R.CancelButton>
                               </>
                             )}
                           </div>
@@ -349,9 +322,6 @@ const OrderManager = () => {
 };
 
 export default OrderManager;
-
-
-
 
 export const SearchWrap = styled.div`
   position: relative;
@@ -402,14 +372,6 @@ const TableHead = styled.thead`
   text-align: left;
 `;
 
-
-const StatusSelect = styled.select`
-  padding: 4px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-`;
-
-
 const TableRow = styled.tr`
   cursor: pointer;
 `;
@@ -419,19 +381,4 @@ const TableCell = styled.td`
   padding: 10px;
   text-align: center;
   vertical-align: middle;
-`;
-
-const CancelButton = styled.button`
-  margin-top: 5px;
-  padding: 5px 10px;
-  background-color: #ff6b6b;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.9rem;
-
-  &:hover {
-    background-color: #ff4d4d;
-  }
 `;

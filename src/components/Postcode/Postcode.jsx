@@ -1,4 +1,3 @@
-import React from 'react';
 import { useDaumPostcodePopup } from 'react-daum-postcode';
 
 const scriptUrl = 'https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
@@ -10,7 +9,7 @@ export const Postcode = ({ onComplete }) => {
     const fullAddress = data.roadAddress;
     const zonecode = data.zonecode;
 
-    onComplete({ fullAddress, zonecode }); // 우편번호와 주소를 부모 컴포넌트로 전달
+    onComplete({ fullAddress, zonecode });
   };
 
   const handleClick = () => {

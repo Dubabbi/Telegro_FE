@@ -6,7 +6,6 @@ const CompleteOrder = () => {
   const location = useLocation();
   const { state } = useLocation();
   const { vbankInfo } = location.state || {};
-
   const {
     orderDetails = { products: [], total: 0 },
     userDetails = { name: '', phone: '', recipientName: '' },
@@ -22,7 +21,6 @@ const CompleteOrder = () => {
     new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(price);
   const orderImage =
   orderDetails.products.length > 0 ? orderDetails.products[0].coverImage : defaultImg;
-
 
   if (!state) {
     return (
@@ -99,7 +97,6 @@ const CompleteOrder = () => {
             </div>
           )}
       </O.InfoBox>
-
       <O.Button onClick={() => navigate('/main')}>확인</O.Button>
     </O.CompleteOrderWrapper>
   );

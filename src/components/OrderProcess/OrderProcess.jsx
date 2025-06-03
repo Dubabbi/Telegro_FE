@@ -9,6 +9,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import Logen from '/src/assets/image/OrderProcess/logen.svg';
 import { verifyPayment } from '../../api/verifyPayment';
+import { getTodayDate } from '../../utils/format';
 
 const OrderProcess = () => {  const navigate = useNavigate();
   const userRole = useSelector((state) => state.auth.userRole);
@@ -51,14 +52,6 @@ const OrderProcess = () => {  const navigate = useNavigate();
   );
   
   const totalPayable = totalProductPrice + shippingCost - pointsToUse
-
-  const getTodayDate = () => {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, "0"); 
-    const date = String(today.getDate()).padStart(2, "0");
-    return `${year}-${month}-${date}`; 
-  };
   
   useEffect(() => {
     if (!orderData) {
@@ -98,8 +91,6 @@ const OrderProcess = () => {  const navigate = useNavigate();
   
     fetchUserData();
   }, []);
-  
-  
 
   const updateAddressFormData = (addressData) => {
     setFormData({
@@ -143,8 +134,6 @@ const OrderProcess = () => {  const navigate = useNavigate();
       });
     }
   };
-  
-  
 
   useEffect(() => {
     if (userRole !== 'MEMBER' && userRole !== 'ADMIN') {
@@ -176,7 +165,7 @@ const OrderProcess = () => {  const navigate = useNavigate();
   function formatPrice(price) {
     return new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(price);
   }
-// 포인트 입력 핸들러
+
 const handlePointsToUseChange = (e) => {
   const inputPoints = parseInt(e.target.value || '0', 10); 
   const maxUsablePoints = Math.min(point, totalProductPrice + shippingCost);
@@ -190,13 +179,10 @@ const handlePointsToUseChange = (e) => {
   setPointsToUse(inputPoints);
 };
 
-// 모든 포인트 사용
 const handleUseAllPoints = () => {
   const maxUsablePoints = Math.min(point, totalProductPrice);
   setPointsToUse(maxUsablePoints); 
 };
-
-  
 
   const handleAgreementChange = () => {
     setIsAgreementChecked(!isAgreementChecked);
@@ -345,8 +331,6 @@ const handleUseAllPoints = () => {
       return null;
     }
   };
-  
-  
   
   const getPaymentOptions = (payMethod, productInfo, paymentId, orderId) => {
     const today = getTodayDate();
@@ -558,12 +542,6 @@ const CanclePayment = async (imp_uid = null) => {
     console.error("결제 취소 처리 중 오류:", error);
   }
 };
-  
-
-  
-  
-  
-  
 
   const orderCustomerInfo = userDetails ? (
     <>
@@ -581,7 +559,6 @@ const CanclePayment = async (imp_uid = null) => {
       <O.Div></O.Div>
       <C.Title style={{width: '70%'}}><h1>결제하기</h1></C.Title>
       <O.OrderPageWrapper>
-        {/* 좌측 섹션 */}
         <O.LeftSection>
           <O.BoxSection>
             <O.SectionTitle>주문 상품 정보</O.SectionTitle>
@@ -691,7 +668,6 @@ const CanclePayment = async (imp_uid = null) => {
           </O.DeliveryInfoForm>
         </O.BoxSection>
       </O.LeftSection>
-        {/* 우측 결제 및 총 결제금액 */}
         <O.RightSection>
         <O.BoxSection>
           <O.SectionTitle>최종 결제금액</O.SectionTitle>

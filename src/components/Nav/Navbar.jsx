@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import * as N from './NavbarStyle';
 import { FaSearch } from 'react-icons/fa';
 import { useNavigate, Link } from 'react-router-dom';
@@ -14,14 +14,6 @@ export default function Navbar() {
   const [products, setProducts] = useState([]);  
   const [isLoading, setIsLoading] = useState(true); 
   const navigate = useNavigate();
-  
-  const [userInfo, setUserInfo] = useState({
-    id: 'Justin Hope',
-    phone: '010-1234-5678',
-    email: 'example@email.com',
-    name: '홍길동',
-    avatarUrl: 'https://example.com/avatar.jpg' 
-  });
 
   const checkLoginStatus = () => {
     const token = localStorage.getItem('token');

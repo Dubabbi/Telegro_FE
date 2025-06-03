@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as L from '../Login/LoginStyle';
 import { Postcode } from '../Postcode/Postcode';
@@ -16,12 +16,10 @@ function Signup() {
   const [detailAddress, setDetailAddress] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [step, setStep] = useState(1);
-
   const [errors, setErrors] = useState({});
 
   const validateStep1 = () => {
     let errors = {};
-
     if (!id.trim()) {
       errors.id = '아이디를 입력하세요.';
     }
@@ -38,31 +36,8 @@ function Signup() {
     } else if (password.length < 10 || !/^(?=.*\d)(?=.*[a-zA-Z])(?=.*\W).{10,}$/.test(password)) {
       errors.password = '비밀번호는 숫자, 문자, 특수문자를 포함한 10자 이상이어야 합니다.';
     }
-
     return errors;
   };
-
-  const validateStep2 = () => {
-    let errors = {};
-
-    if (!phoneNumber.trim()) {
-      errors.phoneNumber = '휴대폰 번호를 입력하세요.';
-    } else if (!/^\d{3}-\d{3,4}-\d{4}$/.test(phoneNumber)) {
-      errors.phoneNumber = '유효한 휴대폰 번호를 입력하세요 (형식: 010-1234-5678).';
-    }
-    if (!roadAddress.trim()) {
-      errors.roadAddress = '주소를 입력하세요.';
-    }
-    if (!zipCode.trim()) {
-      errors.zipCode = '우편번호를 입력하세요.';
-    }
-    if (!detailAddress.trim()) {
-      errors.detailAddress = '상세 주소를 입력하세요.';
-    }
-
-    return errors;
-  };
-
 
   const handleSignupClick = async () => {
     try {
