@@ -17,7 +17,7 @@ export const verifyPayment = async (imp_uid) => {
       vbank_num,
       vbank_holder,
       buyer_name,
-      vbank_date: new Date(vbank_date * 1000).toLocaleString(),
+      vbank_date,
     };
   } catch (error) {
     console.error('결제 정보 조회 실패:', error);
