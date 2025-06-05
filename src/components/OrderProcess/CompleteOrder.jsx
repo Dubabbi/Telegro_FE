@@ -1,4 +1,5 @@
 import { useNavigate, useLocation } from 'react-router-dom';
+import { toKoreanTime } from '../../utils/format';
 import * as O from './OrderProcessStyle';
 import defaultImg from '../Check/image.svg';
 const CompleteOrder = () => {
@@ -93,7 +94,7 @@ const CompleteOrder = () => {
               <p>은행명: <strong>{vbankInfo.vbank_name}</strong></p>
               <p>계좌번호: <strong>{vbankInfo.vbank_num}</strong></p>
               <p>예금주: <strong>{vbankInfo.vbank_holder || '정보 없음'}</strong></p>
-              <p>입금기한: <strong>{vbankInfo.vbank_date}</strong></p>
+              <p>입금기한: <strong>{toKoreanTime(vbankInfo.vbank_date)}</strong></p>
             </div>
           )}
       </O.InfoBox>

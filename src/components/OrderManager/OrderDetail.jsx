@@ -5,7 +5,7 @@ import * as O from './OrderDetailStyle';
 import { verifyPayment } from "../../api/verifyPayment";
 import { paymentMethodMap } from "../../constants/payment";
 import { ERROR_MESSAGES } from "../../constants/errorMessage";
-import { formatNumber, formatDate } from "../../utils/format";
+import { formatNumber, formatDate, toKoreanTime } from "../../utils/format";
 
 const OrderDetail = () => {
   const [orderData, setOrderData] = useState(null);
@@ -146,7 +146,7 @@ const OrderDetail = () => {
                 <O.DetailItem>예금주: {vbankInfo.buyer_name || '정보 없음'}</O.DetailItem>
                 <O.DetailItem>은행명: {vbankInfo.vbank_name || '정보 없음'}</O.DetailItem>
                 <O.DetailItem>계좌번호: {vbankInfo.vbank_num || '정보 없음'}</O.DetailItem>
-                <O.DetailItem>입금기한: {vbankInfo.vbank_date || '정보 없음'}</O.DetailItem>
+                <O.DetailItem>입금기한: {toKoreanTime(vbankInfo.vbank_date) || '정보 없음'}</O.DetailItem>
               </O.Details>
             </O.Section>
             <O.Separator />
