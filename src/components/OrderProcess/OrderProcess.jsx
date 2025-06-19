@@ -245,7 +245,6 @@ const handleUseAllPoints = () => {
   };
 
   const BankOrder = async () => {
-    const vbankInfo = await verifyPayment(imp_uid);
     const currentShippingCost =
     userRole === 'MEMBER' || userRole === 'ADMIN'
       ? 3000
@@ -317,7 +316,6 @@ const handleUseAllPoints = () => {
             pointsToUse,
             pointsToEarn: state.orderData.pointToEarn,
             shippingCost: currentShippingCost,
-            vbankInfo,
           },
         });
       } else {
