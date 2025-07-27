@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react';
 import { FaSearch, FaCog, FaSignOutAlt, FaChevronDown, FaChevronRight, FaBars, FaTimes } from 'react-icons/fa';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { clearUserRole } from '../../store/slices/authSlice';
-import { useSelector } from 'react-redux';
 import Avvvatars from 'avvvatars-react';
-import * as M from './MobileNavbarStyle'
+import * as M from './MobileNavbarStyle';
 import LogoImage from '/src/assets/image/Landing/logo.svg'; 
 import axios from 'axios';
 
@@ -23,55 +22,58 @@ export default function MobileNavbar() {
     phone: '',
     email: '',
     name: '',
+    point: 0,
   });
-  useEffect(() => {
-    const fetchUserData = async () => {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        navigate('/login');
-        return;
-      }
 
-      try {
-        const response = await axios.get('https://api.telegro.kr/api/users/my', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        });
-
-        if (response.status === 200) {
-          const userData = response.data.data;
-          setUserInfo({
-            id: userData.userId,
-            phone: userData.phone,
-            email: userData.email,
-            name: userData.userName,
-            point: userData.point
-          });
-        }
-      } catch (error) {
-        if (error.response && error.response.status === 401) {
-          navigate('/login');
-        }
-      }
-    };
-
-    fetchUserData();
-  }, []);
   const navigate = useNavigate();
   const location = useLocation();
 
+  const checkLoginStatus = () => {
+    const token = localStorage.getItem('token');
+    setIsLoggedIn(!!token);
+  };
+
+  const fetchUserData = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+
+    try {
+      const response = await axios.get('https://api.telegro.kr/api/users/my', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.status === 200) {
+        const userData = response.data.data;
+        setUserInfo({
+          id: userData.userId,
+          phone: userData.phone,
+          email: userData.email,
+          name: userData.userName,
+          point: userData.point,
+        });
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        navigate('/login');
+      }
+    }
+  };
+
   const fetchProductsByCategory = async (category, page = 0) => {
     try {
+      const token = localStorage.getItem('token');
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+
       const response = await axios.get(`https://api.telegro.kr/products`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`
-        },
-        params: { category, page, size: 10 }
+        headers,
+        params: { category, page, size: 10 },
       });
+
       if (response.data.code === 20000) {
-        return response.data.data.products;s
+        return response.data.data.products;
       } else {
         console.error(`Error fetching products for ${category}:`, response.data.message);
         return [];
@@ -81,6 +83,7 @@ export default function MobileNavbar() {
       return [];
     }
   };
+
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth > 780) {
@@ -98,68 +101,48 @@ export default function MobileNavbar() {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
-  useEffect(() => {
-    const fetchAllProducts = async () => {
-      const categories = ['HEADSET', 'LINE_CORD', 'RECORDER', 'ACCESSORY'];
-      let allProducts = [];
-      
-      for (const category of categories) {
-        const productsArray = await fetchProductsByCategory(category);
-        allProducts = [...allProducts, ...productsArray];  
-      }
-  
-      setProducts(allProducts);
-      setIsLoading(false);  
-    };
-  
-    fetchAllProducts();
-  }, []);
+  const fetchAllProducts = async () => {
+    const categories = ['HEADSET', 'LINE_CORD', 'RECORDER', 'ACCESSORY'];
+    let allProducts = [];
+
+    for (const category of categories) {
+      const productsArray = await fetchProductsByCategory(category);
+      allProducts = [...allProducts, ...productsArray];
+    }
+
+    setProducts(allProducts);
+    setIsLoading(false);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-  
+
     let filtered = [];
     if (searchValue.trim() !== '') {
-      filtered = products.filter(product =>
-        product.productName.toLowerCase().includes(searchValue.toLowerCase())  
+      filtered = products.filter((product) =>
+        product.productName.toLowerCase().includes(searchValue.toLowerCase())
       );
     }
-  
+
     if (filtered.length > 0) {
-      filtered = filtered.sort((a, b) => b.id - a.id); 
-    }
-  
-    if (filtered.length === 0) {
-      alert('검색 결과가 없습니다.');
-    } else {
+      filtered = filtered.sort((a, b) => b.id - a.id);
       navigate('/search', { state: { filteredProducts: filtered } });
-    }
-  
-    setSearchValue(''); 
-  };
-
-  const checkLoginStatus = () => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      setIsLoggedIn(true);
     } else {
-      setIsLoggedIn(false);
+      alert('검색 결과가 없습니다.');
     }
-  };
 
-  useEffect(() => {
-    checkLoginStatus();
-  }, []);
-
-  const toggleSidebar = () => {
-    setIsMobileSidebarVisible(!isMobileSidebarVisible);
+    setSearchValue('');
   };
 
   const handleLogout = () => {
     localStorage.removeItem('token');
     dispatch(clearUserRole());
     setIsLoggedIn(false);
-    navigate('/'); 
+    navigate('/');
+  };
+
+  const toggleSidebar = () => {
+    setIsMobileSidebarVisible(!isMobileSidebarVisible);
   };
 
   const toggleSubMenu = () => {
@@ -167,8 +150,14 @@ export default function MobileNavbar() {
   };
 
   useEffect(() => {
+    checkLoginStatus();
+    fetchUserData();
+    fetchAllProducts();
+  }, []);
+
+  useEffect(() => {
     setIsMobileSidebarVisible(false);
-    setIsSubMenuOpen(false); 
+    setIsSubMenuOpen(false);
   }, [location.pathname]);
 
   return (
